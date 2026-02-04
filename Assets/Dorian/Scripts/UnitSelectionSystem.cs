@@ -23,7 +23,10 @@ public class UnitSelectionSystem : MonoBehaviour
             {
                 return;
             }
-            selectedUnit.HandleMovement(MouseWorld.GetPosition());
+            if ((MouseWorld.TryGetPosition(out Vector3 position)))
+            {
+                selectedUnit.HandleMovement(position);
+            }
         }
     }
 

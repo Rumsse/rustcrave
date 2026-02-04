@@ -27,8 +27,6 @@ public class UnitInteract : MonoBehaviour
                 return;
             }
         }
-
-        unit.HandleMovement(MouseWorld.GetPosition());
     }
 }
 
