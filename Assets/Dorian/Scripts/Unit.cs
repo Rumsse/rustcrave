@@ -1,60 +1,53 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Unit : MonoBehaviour
+public class Unit : UnitBase
 {
-    [SerializeField] private float rotateSpeed;
-    [SerializeField] private float stoppingDistance;
-    [SerializeField] private UnitSO unit;
-    [SerializeField] private Animator animator;
-
-    private NavMeshAgent agent;
-    private Vector3 targetPosition;
     private IInteractable currentInteractable;
-
-    private void Awake()
+    
+    protected override void Update()
     {
-        agent = GetComponent<NavMeshAgent>();
-        agent.speed = unit.moveSpeed;
-        agent.stoppingDistance = stoppingDistance;
+        base.Update();
+
+        if (isAttacking)
+            return;
+        
+        if (currentInteractable != null)
+            HandleInteraction();
     }
 
-    private void Update()
+    private void HandleInteraction()
     {
-        UpdateAnimation();
-
-        if (currentInteractable != null)
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
-            {
-                currentInteractable.Interact();
-                currentInteractable = null;
-                animator.SetBool("IsWalking", true);
-            }
-            else
-            {
-                animator.SetBool("IsWalking", false);
-            }
+            currentInteractable.Interact();
+            currentInteractable = null;
+            animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            animator.SetBool("IsWalking", false);
         }
     }
-
-    private void UpdateAnimation()
-    {
-        bool isWalking = agent.hasPath && agent.remainingDistance > agent.stoppingDistance && agent.velocity.sqrMagnitude > 0.01f;
-
-        animator.SetBool("IsWalking", isWalking);
-    }
-
-    public void HandleMovement(Vector3 position)
-    {
-        currentInteractable = null;
-        agent.SetDestination(position);
-    }
-
+    
     public void MoveToInteract(IInteractable interactable, Vector3 position)
     {
+        AttackTarget = null;
         currentInteractable = interactable;
         agent.SetDestination(position);
     }
 
+    public override void MoveToAttack(UnitBase enemy, Vector3 position)
+    {
+        currentInteractable = null;
+        
+        base.MoveToAttack(enemy, position);
+    }
+    
+    public override void HandleMovement(Vector3 position)
+    {
+        currentInteractable = null;
+        AttackTarget = null;
+        base.HandleMovement(position);
+    }
 }
