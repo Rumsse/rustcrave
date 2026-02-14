@@ -9,6 +9,7 @@ public class UnitSO : ScriptableObject
     [Header("Common Stats")]
     public float moveSpeed;
     public int maxHP;
+    public float energy;
 
     [Header("Warrior")]
     public int damage;
