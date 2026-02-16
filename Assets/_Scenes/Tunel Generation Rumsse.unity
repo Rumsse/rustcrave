@@ -233,6 +233,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39247308}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &45525951
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 45525952}
+  m_Layer: 0
+  m_Name: UnitSpawnParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &45525952
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45525951}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -200.11, y: 0, z: 34.65339}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &128185659
 GameObject:
   m_ObjectHideFlags: 0
@@ -1205,7 +1236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraZoom
   wideCamera: {fileID: 1418084058962493649}
-  speed: 7
+  speed: 2
 --- !u!1 &822375419
 GameObject:
   m_ObjectHideFlags: 0
@@ -2866,6 +2897,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1830855793}
   - component: {fileID: 1830855792}
+  - component: {fileID: 1830855794}
   m_Layer: 0
   m_Name: Tunnel Generation
   m_TagString: Untagged
@@ -2908,6 +2940,25 @@ Transform:
   - {fileID: 253964578}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1830855794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830855791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3cbcb16f7487d9419ef8e770ecf729c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitSpawner
+  generator: {fileID: 1830855792}
+  unitPrefab: {fileID: 8434320555201164451, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+  unitsToSpawn: 5
+  unitsParent: {fileID: 45525952}
+  spawnOrigin: {fileID: 45525952}
+  sampleRadius: 5
+  ringRadius: 2
 --- !u!1 &1938636555
 GameObject:
   m_ObjectHideFlags: 0
@@ -2922,7 +2973,7 @@ GameObject:
   - component: {fileID: 1938636558}
   - component: {fileID: 1938636557}
   m_Layer: 0
-  m_Name: Maina Camera
+  m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3518,3 +3569,4 @@ SceneRoots:
   - {fileID: 990394832}
   - {fileID: 1830855793}
   - {fileID: 1762193604}
+  - {fileID: 45525952}

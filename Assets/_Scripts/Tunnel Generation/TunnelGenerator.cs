@@ -1,9 +1,14 @@
 using System.Collections.Generic;
 using TunnelSystem;
+using System;
 using UnityEngine;
+using Unity.AI.Navigation;
+using UnityEngine.AI;
 
 public class TunnelGenerator : MonoBehaviour
 {
+    #region Configurations 
+
     [Header("Configuration")]
     [SerializeField] private TunnelGeneratorConfig config;
     [SerializeField] private Transform startPoint;
@@ -19,11 +24,15 @@ public class TunnelGenerator : MonoBehaviour
     [Header("Camera Target Reference")]
     [SerializeField] private CameraZoom cameraZoomTarget;
 
+    public event Action OnNavMeshReady;
+
     private GeneratorState currentState;
     private Transform currentExitSocket;
     private int generatedSegmentCount;
     private int currentSectionRemainingSegments;
     private readonly List<TunnelSegment> spawnedSegments = new List<TunnelSegment>();
+
+    #endregion
 
     private void Start()
     {
@@ -54,6 +63,7 @@ public class TunnelGenerator : MonoBehaviour
             }
         }
 
+        FinalizeNavigation();
         LogDebug($"Tunnel generation complete! Total segments: {spawnedSegments.Count}");
     }
 
@@ -252,6 +262,22 @@ public class TunnelGenerator : MonoBehaviour
         ConnectionSegment connection = segment.GetComponent<ConnectionSegment>();
         if (connection != null)
             connection.Initialize(cameraZoomTarget);
+    }
+
+    #endregion
+
+    #region NavMesh
+
+    private void FinalizeNavigation()
+    {
+        var target = segmentParent != null ? segmentParent.gameObject : gameObject;
+        var surface = target.GetComponent<NavMeshSurface>();
+
+        if (surface == null) surface = target.AddComponent<NavMeshSurface>();
+        surface.collectObjects = CollectObjects.Children;
+        surface.BuildNavMesh();
+
+        OnNavMeshReady?.Invoke();
     }
 
     #endregion
