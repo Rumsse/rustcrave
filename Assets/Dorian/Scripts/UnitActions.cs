@@ -4,15 +4,18 @@ using UnityEngine;
 public class UnitActions : MonoBehaviour
 {
     [SerializeField] private LayerMask interactableLayerMask;
+    [SerializeField] private LayerMask oreLayerMask;
     [SerializeField] private LayerMask unitLayerMask;
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            if(HandleInteraction())
+            if(HandleMining())
                 return;
-            
+            if (HandleInteraction())
+                return;
+
             HandleAttack();
         }
     }
@@ -54,6 +57,27 @@ public class UnitActions : MonoBehaviour
         {
             unit.MoveToAttack(enemy, hit.point);
         }
+    }
+
+    private bool HandleMining()
+    {
+        Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
+        if (unit == null) return false;
+
+        var hitCheck = GetRaycastHit(oreLayerMask);
+
+        if (!hitCheck.HasValue)
+            return false;
+
+        RaycastHit hit = hitCheck.Value;
+
+        if (hit.transform.TryGetComponent(out IMineable mineable))
+        {
+            unit.MoveToMine(mineable, hit.point);
+            return true;
+        }
+
+        return false;
     }
 
     private RaycastHit? GetRaycastHit(LayerMask mask)

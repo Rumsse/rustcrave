@@ -103,6 +103,7 @@ public abstract class UnitBase : MonoBehaviour
         attackTarget.HealthManager.onDeath += StopAttacking;
     }
 
+
     protected virtual void TryAttack()
     {
         if (CanAttack())
