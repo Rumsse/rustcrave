@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class HealthManager : MonoBehaviour
+public class HealthManager : MonoBehaviour, IDamageable
 {
     #region Events
 
@@ -50,7 +50,6 @@ public class HealthManager : MonoBehaviour
 
     #region Managing Health
 
-    
     public void Damage(int amount)
     {
         _hitEffect?.Play();

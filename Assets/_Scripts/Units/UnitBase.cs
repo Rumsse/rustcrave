@@ -9,7 +9,9 @@ public abstract class UnitBase : MonoBehaviour
     public UnitSO Stats => stats;
     public Animator Animator => animator;
     public HealthManager HealthManager => healthManager;
-
+    public Transform ProjectileSpawnT => projectileSpawnT;
+    public Transform ModelMidPoint => modelMidPoint;
+    
     public UnitBase AttackTarget
     {
         get => attackTarget;
@@ -30,10 +32,14 @@ public abstract class UnitBase : MonoBehaviour
 
     [SerializeField] protected float rotateSpeed;
     [SerializeField] protected float stoppingDistance;
+    
+    [Header("References")]
     [SerializeField] protected UnitSO stats;
     [SerializeField] protected Animator animator;
     [SerializeField] protected HealthManager healthManager;
-
+    [SerializeField] protected Transform projectileSpawnT;
+    [SerializeField] protected Transform modelMidPoint; // used for projectiles to aim at model chest / mid point instead of pivot
+    
     #endregion
     
     #region Private Fields

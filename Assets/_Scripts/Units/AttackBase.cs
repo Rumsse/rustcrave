@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class AttackBase : ScriptableObject
@@ -9,11 +10,13 @@ public abstract class AttackBase : ScriptableObject
     public AttackType type;
 
     public abstract void Execute(UnitBase target, UnitBase attacker);
+    
+    protected int GetFinalDamage(int initialDamage) => Mathf.RoundToInt(initialDamage * damageMult);
 }
 
 public enum AttackType
 {
-    Melee,
-    Ranged,
-    Magic
+    Physical,
+    Magic,
+    True // non blockable by anything
 }
