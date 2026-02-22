@@ -20,7 +20,7 @@ public class AOEAttack : AttackBase
         AOEProjectile proj = PoolManager.Instance.Get(projectilePrefab);
         proj.transform.position = targetPos;
         proj.transform.rotation = Quaternion.LookRotation(target.transform.position - attacker.transform.position);
-        proj.Init(finalDamage, projectilePrefab);
+        proj.Init(new DamageInfo(finalDamage, type), projectilePrefab);
         //Damage is applied on projectiles script
     }
 }

@@ -9,6 +9,7 @@ public class UnitSOEditor : Editor
     SerializedProperty moveSpeed;
     SerializedProperty maxHP;
     SerializedProperty possibleAttacks;
+    SerializedProperty immunities;
 
     SerializedProperty damage;
     SerializedProperty attacksPerSecond;
@@ -27,6 +28,7 @@ public class UnitSOEditor : Editor
         moveSpeed = serializedObject.FindProperty("moveSpeed");
         maxHP = serializedObject.FindProperty("maxHP");
         possibleAttacks = serializedObject.FindProperty("possibleAttacks");
+        immunities = serializedObject.FindProperty("immunities");
 
         damage = serializedObject.FindProperty("damage");
         attacksPerSecond = serializedObject.FindProperty("attacksPerSecond");
@@ -72,6 +74,7 @@ public class UnitSOEditor : Editor
         EditorGUILayout.LabelField("Common Stats", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(moveSpeed);
         EditorGUILayout.PropertyField(maxHP);
+        EditorGUILayout.PropertyField(immunities);
     }
 
     void DrawWarrior()

@@ -9,12 +9,12 @@ public class AOEProjectile : MonoBehaviour
     [SerializeField] private ParticleSystem _effect;
     [SerializeField] private Animation _animation;
     
-    private int _damage;
+    private DamageInfo _damage;
 
     private AOEProjectile _prefabOrigin;
     
     
-    public void Init(int damage, AOEProjectile prefabOrigin)
+    public void Init(DamageInfo damage, AOEProjectile prefabOrigin)
     {
         _damage = damage;
         _prefabOrigin = prefabOrigin;

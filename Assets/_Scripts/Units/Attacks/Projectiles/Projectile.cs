@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private int _damage;
+    private DamageInfo _damage;
     private UnitBase _target;
     private float _projectileSpeed;
 
@@ -10,7 +10,7 @@ public class Projectile : MonoBehaviour
 
     private Projectile _prefabOrigin;
     
-    public void Init(int damage, float projectileSpeed, UnitBase target, Projectile prefabOrigin)
+    public void Init(DamageInfo damage, float projectileSpeed, UnitBase target, Projectile prefabOrigin)
     {
         _damage = damage;
         _target = target;
