@@ -6,7 +6,7 @@ public abstract class UnitBase : MonoBehaviour
 {
     #region Properties
 
-    public UnitSO Stats => stats;
+    public StatsManager Stats => stats;
     public Animator Animator => animator;
     public HealthManager HealthManager => healthManager;
     public Transform ProjectileSpawnT => projectileSpawnT;
@@ -33,7 +33,7 @@ public abstract class UnitBase : MonoBehaviour
     [SerializeField] protected float stoppingDistance;
     
     [Header("References")]
-    [SerializeField] protected UnitSO stats;
+    [SerializeField] protected StatsManager stats;
     [SerializeField] protected Animator animator;
     [SerializeField] protected HealthManager healthManager;
     [SerializeField] protected Transform projectileSpawnT;
@@ -58,7 +58,7 @@ public abstract class UnitBase : MonoBehaviour
     protected virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        agent.speed = stats.moveSpeed;
+        agent.speed = stats.MoveSpeed;
         agent.stoppingDistance = stoppingDistance;
     }
 
@@ -98,12 +98,12 @@ public abstract class UnitBase : MonoBehaviour
 
     protected void RollAttack()
     {
-        currentAttack = stats.possibleAttacks[Random.Range(0, stats.possibleAttacks.Count)];
+        currentAttack = stats.PossibleAttacks[Random.Range(0, stats.PossibleAttacks.Count)];
     }
 
     protected virtual bool CanAttack()
     {
-        if (Time.time - lastAttackTime < 1 / stats.attacksPerSecond)
+        if (Time.time - lastAttackTime < 1 / stats.AttacksPerSecond)
             return false;
         
         // can add stuff like HasStun() etc.
@@ -127,5 +127,5 @@ public abstract class UnitBase : MonoBehaviour
         state?.EnterState();
     }
     
-    public void StatsChange(UnitSO newStats) => stats = newStats;
+    public void ChangeStats(UnitSO newStats) => stats.ChangeStats(newStats);
 }

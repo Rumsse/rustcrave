@@ -76,6 +76,8 @@ GameObject:
   - component: {fileID: 8434320555201164451}
   - component: {fileID: 8052947992562257757}
   - component: {fileID: 5093563737838924727}
+  - component: {fileID: 922850073143607543}
+  - component: {fileID: 3037494565041724492}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Unit
@@ -160,7 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   rotateSpeed: 10
   stoppingDistance: 0.2
-  stats: {fileID: 11400000, guid: 38f0c3753016095408b237199bc49c1e, type: 2}
+  stats: {fileID: 922850073143607543}
   animator: {fileID: 5959078463517248676}
   healthManager: {fileID: 5093563737838924727}
   projectileSpawnT: {fileID: 2765893817366105686}
@@ -198,9 +200,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c05d69698b3d8b47b97e3da99c45c69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthManager
-  _baseStats: {fileID: 11400000, guid: 38f0c3753016095408b237199bc49c1e, type: 2}
   _hitEffect: {fileID: 7753625389349084789}
   _healthBarRend: {fileID: 3838177573158468760}
+--- !u!114 &922850073143607543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7761914581179952719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0d17d87ec4e1a408ab81f2d21a5653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsManager
+  _baseData: {fileID: 11400000, guid: 38f0c3753016095408b237199bc49c1e, type: 2}
+--- !u!114 &3037494565041724492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7761914581179952719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 435830662db4457488c0d5ddd1bbdf77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitAffectable
 --- !u!1 &8507015656319960576
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,7 +1163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569643421186186, guid: 8dbb22b9d53a7664b8619d4c6888d92f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.20830338
+      value: -0.20830333
       objectReference: {fileID: 0}
     - target: {fileID: 4569643421186186, guid: 8dbb22b9d53a7664b8619d4c6888d92f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1145,7 +1171,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569643421186186, guid: 8dbb22b9d53a7664b8619d4c6888d92f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.0606697
+      value: 1.0606766
       objectReference: {fileID: 0}
     - target: {fileID: 4569643421186186, guid: 8dbb22b9d53a7664b8619d4c6888d92f, type: 3}
       propertyPath: m_LocalRotation.x
