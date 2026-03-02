@@ -11,7 +11,6 @@ public class UnitAffectable : MonoBehaviour, IAffectable
 
     public void ApplyEffect(EffectBase effect)
     {
-        Debug.Log($"{gameObject.name} happen");
         effect.ApplyEffect(_unit);
     }
 }

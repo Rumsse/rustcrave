@@ -8,7 +8,6 @@ public class SlowEffect : EffectBase
 
     public override void ApplyEffect(UnitBase target)
     {
-        Debug.Log($"happend");
         target.Stats.AddTimerStatModifier(StatsType.Speed, modifier, duration);
     }
 }

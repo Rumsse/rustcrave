@@ -79,12 +79,6 @@ public class StatsManager : MonoBehaviour
     private void RemoveStatModifier(StatsType stat, float modifier) => _statsModifiers[stat] /= modifier;
     public float GetStatModifier(StatsType stat) => _statsModifiers.GetValueOrDefault(stat, 1f);
 
-    [ContextMenu("xd")]
-    public void GetSpeedStat()
-    {
-        Debug.Log($"{gameObject.name} {GetStatModifier(StatsType.Speed)}");
-    }
-
     public void ChangeStats(UnitSO stats) => _baseData = stats;
 }
 

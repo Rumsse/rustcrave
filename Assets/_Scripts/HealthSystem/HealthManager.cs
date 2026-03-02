@@ -73,9 +73,9 @@ public class HealthManager : MonoBehaviour, IDamageable
     
     public void Death()
     {
-        gameObject.SetActive(false);
-        
         OnDeath();
+        
+        gameObject.SetActive(false);
     }
     
     #endregion
