@@ -17,12 +17,15 @@ public class TunnelGenerator : MonoBehaviour
     [Header("Modifiers")]
     [SerializeField] private List<TunnelModifierData> activeModifiers = new List<TunnelModifierData>();
 
-    [Header("Debug")]
-    [SerializeField] private bool generateOnStart = true;
-    [SerializeField] private bool showDebugLogs = false;
+    [Header("Optimization")]
+    [SerializeField] private TunnelCullingSystem cullingSystem;
 
     [Header("Camera Target Reference")]
     [SerializeField] private CameraZoom cameraZoomTarget;
+
+    [Header("Debug")]
+    [SerializeField] private bool generateOnStart = true;
+    [SerializeField] private bool showDebugLogs = false;
 
     public event Action OnNavMeshReady;
 
@@ -68,6 +71,10 @@ public class TunnelGenerator : MonoBehaviour
         }
 
         FinalizeNavigation();
+
+        if (cullingSystem != null)
+            cullingSystem.SetSegments(spawnedSegments);
+
         LogDebug($"Tunnel generation complete! Total segments: {spawnedSegments.Count}");
     }
 
@@ -97,6 +104,9 @@ public class TunnelGenerator : MonoBehaviour
 
     private void ClearExistingTunnel()
     {
+        if (cullingSystem != null)
+            cullingSystem.ClearSegments();
+
         foreach (var segment in spawnedSegments)
             if (segment != null)
                 DestroyImmediate(segment.gameObject);
