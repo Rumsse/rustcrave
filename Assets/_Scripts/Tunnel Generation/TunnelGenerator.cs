@@ -73,6 +73,7 @@ public class TunnelGenerator : MonoBehaviour
             }
         }
 
+        SpawnTunnelEnd();
         FinalizeNavigation();
 
         if (resourceSpawner != null)
@@ -159,6 +160,15 @@ public class TunnelGenerator : MonoBehaviour
         TunnelSegment segment = SpawnSegment(prefab, currentExitSocket);
 
         LogDebug($"[{generatedSegmentCount}] Spawned Single Tunnel | Remaining in section: {currentSectionRemainingSegments}");
+    }
+
+    private void SpawnTunnelEnd()
+    {
+        if (config.TunnelEndPrefab == null)
+            return;
+
+        SpawnSegment(config.TunnelEndPrefab, currentExitSocket);
+        LogDebug("Spawned Tunnel End segment");
     }
 
     #endregion
