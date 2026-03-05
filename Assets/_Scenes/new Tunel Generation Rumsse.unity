@@ -249,6 +249,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1830855793}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &672248862
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 672248864}
+  m_Layer: 0
+  m_Name: EnemySpawnParent (optional)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &672248864
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672248862}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -200.11, y: 0, z: 40.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &783335242
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,6 +791,7 @@ GameObject:
   - component: {fileID: 1830855794}
   - component: {fileID: 1830855795}
   - component: {fileID: 1830855796}
+  - component: {fileID: 1830855797}
   m_Layer: 0
   m_Name: Tunnel Generation
   m_TagString: Untagged
@@ -833,6 +865,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TunnelResourceSpawner
   resourceConfig: {fileID: 11400000, guid: 243ead687bca20643aabc6c45f516f92, type: 2}
+--- !u!114 &1830855797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830855791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e568143dfef21c54292bff4db7920dc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  generator: {fileID: 1830855794}
+  enemyConfig: {fileID: 11400000, guid: 9d69e117e8c7a6340819875148424475, type: 2}
+  enemiesParent: {fileID: 0}
+  navMeshSampleRadius: 8
 --- !u!1 &1938636555
 GameObject:
   m_ObjectHideFlags: 0
@@ -1443,4 +1491,5 @@ SceneRoots:
   - {fileID: 1830855793}
   - {fileID: 1762193604}
   - {fileID: 45525952}
+  - {fileID: 672248864}
   - {fileID: 2076411114}
