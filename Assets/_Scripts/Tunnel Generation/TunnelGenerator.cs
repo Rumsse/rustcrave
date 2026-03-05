@@ -23,6 +23,9 @@ public class TunnelGenerator : MonoBehaviour
     [Header("Camera Target Reference")]
     [SerializeField] private CameraZoom cameraZoomTarget;
 
+    [Header("Resources")]
+    [SerializeField] private TunnelResourceSpawner resourceSpawner;
+
     [Header("Debug")]
     [SerializeField] private bool generateOnStart = true;
     [SerializeField] private bool showDebugLogs = false;
@@ -71,6 +74,9 @@ public class TunnelGenerator : MonoBehaviour
         }
 
         FinalizeNavigation();
+
+        if (resourceSpawner != null)
+            resourceSpawner.SpawnResources(spawnedSegments);
 
         if (cullingSystem != null)
             cullingSystem.SetSegments(spawnedSegments);
