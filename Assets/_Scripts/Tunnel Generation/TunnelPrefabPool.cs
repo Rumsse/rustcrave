@@ -23,20 +23,6 @@ public class TunnelPrefabPool : ScriptableObject
         return prefabs[Random.Range(0, prefabs.Count)];
     }
 
-    public TunnelSegment GetRandomPrefabWithoutBlockedPaths()
-    {
-        List<TunnelSegment> validPrefabs = new List<TunnelSegment>();
-
-        foreach (var prefab in prefabs)
-            if (!prefab.HasAnyBlockedPath)
-                validPrefabs.Add(prefab);
-
-        if (validPrefabs.Count == 0)
-            return GetRandomPrefab();
-
-        return validPrefabs[Random.Range(0, validPrefabs.Count)];
-    }
-
     public bool Validate()
     {
         if (prefabs.Count == 0)

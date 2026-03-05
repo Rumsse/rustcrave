@@ -28,11 +28,15 @@ public class TunnelGenerator : MonoBehaviour
 
     private GeneratorState currentState;
     private Transform currentExitSocket;
+    private Transform leftExitSocket;
+    private Transform rightExitSocket;
     private int generatedSegmentCount;
     private int currentSectionRemainingSegments;
     private readonly List<TunnelSegment> spawnedSegments = new List<TunnelSegment>();
 
     #endregion
+
+    #region Unity Methods
 
     private void Start()
     {
@@ -66,6 +70,8 @@ public class TunnelGenerator : MonoBehaviour
         FinalizeNavigation();
         LogDebug($"Tunnel generation complete! Total segments: {spawnedSegments.Count}");
     }
+
+    #endregion
 
     #region Initialization
 
@@ -102,6 +108,8 @@ public class TunnelGenerator : MonoBehaviour
     {
         currentState = GeneratorState.GeneratingSingleTunnel;
         currentExitSocket = startPoint;
+        leftExitSocket = null;
+        rightExitSocket = null;
         generatedSegmentCount = 0;
         currentSectionRemainingSegments = config.GetRandomSingleTunnelLength();
 
@@ -119,7 +127,7 @@ public class TunnelGenerator : MonoBehaviour
             if (CanTransitionToDoubleTunnel())
                 TransitionToDoubleTunnel();
             else
-                StartNewSingleTunnelSection();
+                currentSectionRemainingSegments = config.GetRandomSingleTunnelLength();
 
             return;
         }
@@ -137,12 +145,6 @@ public class TunnelGenerator : MonoBehaviour
         LogDebug($"[{generatedSegmentCount}] Spawned Single Tunnel | Remaining in section: {currentSectionRemainingSegments}");
     }
 
-    private void StartNewSingleTunnelSection()
-    {
-        currentSectionRemainingSegments = config.GetRandomSingleTunnelLength();
-        LogDebug($"Starting new Single Tunnel section | Length: {currentSectionRemainingSegments}");
-    }
-
     #endregion
 
     #region Double Tunnel Generation
@@ -151,10 +153,13 @@ public class TunnelGenerator : MonoBehaviour
 
     private void TransitionToDoubleTunnel()
     {
-        TunnelSegment connectionStart = config.ConnectionStartPool.GetRandomPrefab();
-        TunnelSegment segment = SpawnSegment(connectionStart, currentExitSocket);
-        InitializeConnectionSegment(segment, TunnelType.ConnectionStart);
+        TunnelSegment linkStartPrefab = config.LinkStartPool.GetRandomPrefab();
+        TunnelSegment linkStart = SpawnSegment(linkStartPrefab, currentExitSocket, updateMainSocket: false);
+        InitializeLinkSegment(linkStart);
         generatedSegmentCount++;
+
+        leftExitSocket = linkStart.ExitSocketLeft;
+        rightExitSocket = linkStart.ExitSocketRight;
 
         currentState = GeneratorState.GeneratingDoubleTunnel;
         currentSectionRemainingSegments = config.GetRandomDoubleTunnelLength();
@@ -170,38 +175,34 @@ public class TunnelGenerator : MonoBehaviour
             return;
         }
 
-        SpawnDoubleTunnelSegment();
+        SpawnParallelSegments();
         currentSectionRemainingSegments--;
         generatedSegmentCount++;
     }
 
-    private void SpawnDoubleTunnelSegment()
+    private void SpawnParallelSegments()
     {
-        TunnelSegment prefab = currentSectionRemainingSegments == 1
-            ? config.DoubleTunnelPool.GetRandomPrefab()
-            : config.DoubleTunnelPool.GetRandomPrefabWithoutBlockedPaths();
+        TunnelSegment leftPrefab = config.TunnelPool.GetRandomPrefab();
+        TunnelSegment leftSegment = SpawnSegment(leftPrefab, leftExitSocket, updateMainSocket: false);
+        leftExitSocket = leftSegment.ExitSocket;
 
-        TunnelSegment segment = SpawnSegment(prefab, currentExitSocket);
+        TunnelSegment rightPrefab = config.TunnelPool.GetRandomPrefab();
+        TunnelSegment rightSegment = SpawnSegment(rightPrefab, rightExitSocket, updateMainSocket: false);
+        rightExitSocket = rightSegment.ExitSocket;
 
-        LogDebug($"[{generatedSegmentCount}] Spawned Double Tunnel | Remaining: {currentSectionRemainingSegments} | Blocked: {segment.HasAnyBlockedPath}");
+        LogDebug($"[{generatedSegmentCount}] Double Tunnel pair | Remaining: {currentSectionRemainingSegments}");
     }
 
     private void EndDoubleTunnelSection()
     {
-        TunnelSegment lastSegment = spawnedSegments[spawnedSegments.Count - 1];
-
-        if (lastSegment.HasAnyBlockedPath)
-            HandleBlockedPathTransition(lastSegment);
-        else
-            HandleNormalTransition();
-    }
-
-    private void HandleNormalTransition()
-    {
-        TunnelSegment connectionEnd = config.ConnectionEndPool.GetRandomPrefab();
-        TunnelSegment segment = SpawnSegment(connectionEnd, currentExitSocket);
-        InitializeConnectionSegment(segment, TunnelType.ConnectionEnd);
+        TunnelSegment linkEndPrefab = config.LinkEndPool.GetRandomPrefab();
+        TunnelSegment linkEnd = SpawnSegmentAtDualEntry(linkEndPrefab, leftExitSocket, rightExitSocket);
+        InitializeLinkSegment(linkEnd);
         generatedSegmentCount++;
+
+        currentExitSocket = linkEnd.ExitSocket;
+        leftExitSocket = null;
+        rightExitSocket = null;
 
         currentState = GeneratorState.GeneratingSingleTunnel;
         currentSectionRemainingSegments = config.GetRandomSingleTunnelLength();
@@ -209,34 +210,42 @@ public class TunnelGenerator : MonoBehaviour
         LogDebug($"=== Transition back to Single Tunnel | Length: {currentSectionRemainingSegments} ===");
     }
 
-    private void HandleBlockedPathTransition(TunnelSegment lastSegment)
-    {
-        bool useLeftPath = !lastSegment.LeftPathBlocked;
-        currentExitSocket = lastSegment.GetExitSocket(useLeftPath);
-
-        TunnelSegment singleTunnel = config.TunnelPool.GetRandomPrefab();
-        SpawnSegment(singleTunnel, currentExitSocket);
-        generatedSegmentCount++;
-
-        currentState = GeneratorState.GeneratingSingleTunnel;
-        currentSectionRemainingSegments = config.GetRandomSingleTunnelLength();
-
-        LogDebug($"=== Direct transition (blocked path) | Using {(useLeftPath ? "LEFT" : "RIGHT")} path ===");
-    }
-
     #endregion
 
     #region Segment Spawning
 
-    private TunnelSegment SpawnSegment(TunnelSegment prefab, Transform targetSocket)
+    private TunnelSegment SpawnSegment(TunnelSegment prefab, Transform targetSocket, bool updateMainSocket = true)
     {
         TunnelSegment segment = Instantiate(prefab, segmentParent != null ? segmentParent : transform);
         AlignSegmentToSocket(segment, targetSocket);
         spawnedSegments.Add(segment);
-
-        currentExitSocket = segment.ExitSocket != null ? segment.ExitSocket : segment.ExitSocketLeft != null ? segment.ExitSocketLeft : segment.ExitSocketRight;
+        
+        if (updateMainSocket)
+            currentExitSocket = ResolveExitSocket(segment);
 
         return segment;
+    }
+
+    private TunnelSegment SpawnSegmentAtDualEntry(TunnelSegment prefab, Transform leftSocket, Transform rightSocket)
+    {
+        TunnelSegment segment = Instantiate(prefab, segmentParent != null ? segmentParent : transform);
+
+        if (segment.EntrySocket != null)
+            AlignSegmentToSocket(segment, leftSocket);
+
+        spawnedSegments.Add(segment);
+        return segment;
+    }
+
+    private Transform ResolveExitSocket(TunnelSegment segment)
+    {
+        if (segment.ExitSocket != null)
+            return segment.ExitSocket;
+
+        if (segment.ExitSocketLeft != null)
+            return segment.ExitSocketLeft;
+
+        return segment.ExitSocketRight;
     }
 
     private void AlignSegmentToSocket(TunnelSegment segment, Transform targetSocket)
@@ -254,14 +263,14 @@ public class TunnelGenerator : MonoBehaviour
         segment.transform.rotation = targetSocket.rotation * rotationDifference;
     }
 
-    private void InitializeConnectionSegment(TunnelSegment segment, TunnelType type)
+    private void InitializeLinkSegment(TunnelSegment segment)
     {
         if (cameraZoomTarget == null)
             return;
 
-        ConnectionSegment connection = segment.GetComponent<ConnectionSegment>();
-        if (connection != null)
-            connection.Initialize(cameraZoomTarget);
+        LinkSegment link = segment.GetComponent<LinkSegment>();
+        if (link != null)
+            link.Initialize(cameraZoomTarget);
     }
 
     #endregion
@@ -274,6 +283,7 @@ public class TunnelGenerator : MonoBehaviour
         var surface = target.GetComponent<NavMeshSurface>();
 
         if (surface == null) surface = target.AddComponent<NavMeshSurface>();
+
         surface.collectObjects = CollectObjects.Children;
         surface.BuildNavMesh();
 

@@ -3,9 +3,8 @@ namespace TunnelSystem
     public enum TunnelType
     {
         Tunnel,
-        DoubleTunnel,
-        ConnectionStart,
-        ConnectionEnd
+        LinkStart,
+        LinkEnd
     }
 
     public enum GeneratorState
