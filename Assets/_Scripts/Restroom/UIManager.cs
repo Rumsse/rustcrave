@@ -6,6 +6,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument uiDocument;
     [SerializeField] VisualTreeAsset choosePathPanel;
+    [SerializeField] ChoosePathController choosePathController;
 
     VisualElement leftPanelSlot;
     VisualElement rightPanelSlot;
@@ -43,6 +44,7 @@ public class UIManager : MonoBehaviour
             panel = asset.CloneTree();
             panelCache[key] = panel;
             BindCloseButton(panel, slot);
+            InitializePanel(key, panel);
         }
 
         slot.Add(panel);
@@ -50,6 +52,12 @@ public class UIManager : MonoBehaviour
         slot.style.display = DisplayStyle.Flex;
         panelLayer.style.display = DisplayStyle.Flex;
         activePanelKey = key;
+    }
+
+    void InitializePanel(string key, VisualElement panel)
+    {
+        if (key == "choose-path")
+            choosePathController.Initialize(panel);
     }
 
     void BindCloseButton(VisualElement panel, VisualElement slot)
