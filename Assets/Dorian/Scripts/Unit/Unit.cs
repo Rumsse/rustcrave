@@ -3,9 +3,14 @@ using UnityEngine.AI;
 
 public class Unit : UnitBase
 {
+    public NavMeshAgent Agent => agent;
+
     [SerializeField] private UnitInventory inventory;
     [SerializeField] private EnergyManager energyManager;
+    [SerializeField] private float minMoveSpeedMultiplier;
+    [SerializeField, Range(0f, 1f)] private float lowEnergyThreshold;
 
+    private float baseMoveSpeed;
     private float miningTimer;
     private float miningInterval;
 
@@ -15,10 +20,23 @@ public class Unit : UnitBase
     protected override void Awake()
     {
         base.Awake();
-
-        miningInterval = stats.miningPower;
+        baseMoveSpeed = agent.speed;
         miningTimer = 0f;
     }
+
+    private void OnEnable()
+    {
+        energyManager.onEnergyPercentChange += HandleMoveSpeedBasedOnEnergy;
+        energyManager.onEnergyDepleted += HandleEnergyDepleted;
+    }
+
+    private void OnDisable()
+    {
+        energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
+        energyManager.onEnergyDepleted -= HandleEnergyDepleted;
+    }
+
+
 
     protected override void Update()
     {
@@ -34,6 +52,31 @@ public class Unit : UnitBase
 
         if (currentInteractable != null)
             HandleInteraction();
+    }
+
+    private void HandleMoveSpeedBasedOnEnergy(float energyPercent)
+    {
+        if (energyPercent < lowEnergyThreshold)
+        {
+            float t = energyPercent / lowEnergyThreshold;
+            agent.speed = Mathf.Lerp(minMoveSpeedMultiplier * baseMoveSpeed, baseMoveSpeed, t);
+        }
+        else
+        {
+            agent.speed = baseMoveSpeed;
+        }
+    }
+
+    private void HandleEnergyDepleted()
+    {
+        agent.isStopped = true;
+
+        currentMineable = null;
+        currentInteractable = null;
+        AttackTarget = null;
+
+        animator.SetBool("IsWalking", false);
+
     }
 
     private void HandleEnergyDrain()
@@ -60,7 +103,18 @@ public class Unit : UnitBase
     {
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            currentInteractable.Interact();
+            if (currentInteractable is OrePickUp pickup)
+            {
+                if (inventory.InventorySO.AddItem(pickup.item, pickup.amount))
+                {
+                    Destroy(pickup.gameObject);
+                }
+            }
+            else
+            {
+                currentInteractable.Interact();
+            }
+
             currentInteractable = null;
             animator.SetBool("IsWalking", false);
         }
@@ -74,18 +128,20 @@ public class Unit : UnitBase
     {
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
+            if (miningTimer == miningInterval)
+            {
+                animator.SetTrigger("Mining");
+            }
+
             miningTimer -= Time.deltaTime;
 
             if (miningTimer <= 0f)
             {
-                miningTimer = miningInterval;
-
                 ItemSO item = currentMineable.Mine();
 
                 if (item != null)
                 {
-                    inventory.InventorySO.AddItem(item,1);
-                    animator.SetTrigger("Mining");
+                    miningTimer = miningInterval;
                 }
                 else
                 {
@@ -113,6 +169,11 @@ public class Unit : UnitBase
         AttackTarget = null;
         currentInteractable = null;
         currentMineable = mineable;
+
+        float rawMiningTime = currentMineable.GetDurability() - stats.miningPower;
+        miningInterval = Mathf.Max(1f, rawMiningTime);
+        miningTimer = miningInterval;
+
         agent.SetDestination(position);
     }
 
@@ -123,7 +184,7 @@ public class Unit : UnitBase
 
         base.MoveToAttack(enemy, position);
     }
-    
+
     public override void HandleMovement(Vector3 position)
     {
         currentInteractable = null;
@@ -131,5 +192,4 @@ public class Unit : UnitBase
         AttackTarget = null;
         base.HandleMovement(position);
     }
-
 }

@@ -56,5 +56,12 @@ public class UnitPanel : MonoBehaviour
         energyBar.fillAmount = percent;
         int energyBarInt = Mathf.CeilToInt(energyManager.CurrentEnergy);
         energyText.text = $"Energy: {energyBarInt}/{unit.Stats.maxEnergy}\n";
+        UpdateMoveSpeed();
+    }
+
+    private void UpdateMoveSpeed()
+    {
+        float moveSpeed = unit.Agent.speed;
+        moveSpeedText.text = $"MoveSpeed: {moveSpeed:F2}";
     }
 }
