@@ -1502,8 +1502,6 @@ MonoBehaviour:
   sprite: {fileID: 574336162074811875}
   hpBar: {fileID: 8230645374721528018}
   energyBar: {fileID: 2018696477060485077}
-  miningProgressBar: {fileID: 3903862014901510655}
-  miningProgressBarGameObject: {fileID: 5710900271108586278}
   hpText: {fileID: 6741008564041367283}
   energyText: {fileID: 8890366946315678006}
   moveSpeedText: {fileID: 1714836954959728964}
@@ -1563,6 +1561,8 @@ GameObject:
   - component: {fileID: 7710145713479773504}
   - component: {fileID: 8749845555779088744}
   - component: {fileID: 8648488951125840122}
+  - component: {fileID: 7205836209904595361}
+  - component: {fileID: 6700254852817404819}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Unit
@@ -1675,16 +1675,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   rotateSpeed: 10
   stoppingDistance: 0.4
-  stats: {fileID: 11400000, guid: 38f0c3753016095408b237199bc49c1e, type: 2}
+  stats: {fileID: 7205836209904595361}
   animator: {fileID: 5959078463517248676}
   healthManager: {fileID: 5093563737838924727}
   projectileSpawnT: {fileID: 2765893817366105686}
   modelMidPoint: {fileID: 1329313488734827208}
   inventory: {fileID: 8749845555779088744}
   energyManager: {fileID: 7710145713479773504}
+  minMiningTime: 1
   minMoveSpeedMultiplier: 0.15
   lowEnergyThreshold: 0.4
-  minMiningTime: 1
 --- !u!114 &8052947992562257757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1764,6 +1764,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitInventoryUI
   unit: {fileID: 8434320555201164451}
   unitInventory: {fileID: 6870795714961032308}
+--- !u!114 &7205836209904595361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7761914581179952719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0d17d87ec4e1a408ab81f2d21a5653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsManager
+  _baseData: {fileID: 11400000, guid: c7cd6e4acf5850146998f5c63bda7c0d, type: 2}
+--- !u!114 &6700254852817404819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7761914581179952719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 435830662db4457488c0d5ddd1bbdf77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitAffectable
 --- !u!1 &8507015656319960576
 GameObject:
   m_ObjectHideFlags: 0

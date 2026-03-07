@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 1717848322129333663}
   - component: {fileID: 7729003987253317949}
   - component: {fileID: 9168819582757320533}
+  - component: {fileID: 8608675874507031299}
+  - component: {fileID: 5979298100982296472}
   m_Layer: 7
   m_Name: Unit Object
   m_TagString: Unit
@@ -162,6 +164,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 435830662db4457488c0d5ddd1bbdf77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAffectable
+--- !u!114 &8608675874507031299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2976941183502266486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce0e78cd695f2b46bdb01d96aa4a8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthManagerEvents
+  onHealthPercentChange:
+    m_PersistentCalls:
+      m_Calls: []
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5979298100982296472}
+        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5979298100982296472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2976941183502266486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e582dc371a08f254c88558ca1c628ddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
+  sceneToLoad: Restroom Rumsse
 --- !u!1 &6037390886704506308
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,7 +325,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 3
+  m_Radius: 15.817411
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &386177112195187448
 MonoBehaviour:

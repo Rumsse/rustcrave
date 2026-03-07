@@ -15,7 +15,7 @@ public class FallingRocksInteraction : InteractableBase
     {
         if(_isSingleUse && _used)
             return;
-            
+        
         var proj = PoolManager.Instance.Get(_projectile);
         proj.transform.position = _hitPoint.position;
         proj.Init(new DamageInfo(_damage, AttackType.Environmental), _projectile, _effects);

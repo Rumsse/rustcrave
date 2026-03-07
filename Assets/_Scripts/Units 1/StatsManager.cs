@@ -10,29 +10,22 @@ public class StatsManager : MonoBehaviour
 
     #region Properties
 
+    public string RobotName => _baseData.robotName;
+    public Sprite RobotSprite => _baseData.robotSprite;
     public UnitType UnitType => _baseData.unitType;
     public AttackType Immunities => _baseData.immunities;
     public int MaxHP => Mathf.RoundToInt(_baseData.maxHP * GetStatModifier(StatsType.MaxHP));
-    public int CurrentHP => _currentHP;
-    public float MoveSpeed => _currentMoveSpeed * GetStatModifier(StatsType.Speed);
-    public int Damage => Mathf.RoundToInt(_currentDamage * GetStatModifier(StatsType.Damage));
-    public float AttacksPerSecond => _currentAttacksPerSecond * GetStatModifier(StatsType.AttacksPerSecond);
-    public float Energy => _currentEnergy * GetStatModifier(StatsType.Energy);
-    public float MiningPower => _currentMiningPower *  GetStatModifier(StatsType.MiningPower);
-    public int CarryCapacity => Mathf.RoundToInt(_currentCarryCapacity * GetStatModifier(StatsType.CarryCapacity));
+    public float MoveSpeed => _baseData.moveSpeed * GetStatModifier(StatsType.Speed);
+    public int Damage => Mathf.RoundToInt(_baseData.damage * GetStatModifier(StatsType.Damage));
+    public float AttacksPerSecond => _baseData.attacksPerSecond * GetStatModifier(StatsType.AttacksPerSecond);
+    public float MiningPower => _baseData.miningPower *  GetStatModifier(StatsType.MiningPower);
+    public int CarryCapacity => Mathf.RoundToInt(_baseData.carryCapacity * GetStatModifier(StatsType.CarryCapacity));
     public List<AttackBase> PossibleAttacks => _baseData.possibleAttacks;
+    public int MaxEnergy => Mathf.RoundToInt(_baseData.maxEnergy * GetStatModifier(StatsType.MaxEnergy));
     
     #endregion
 
     #region Private Fields
-
-    private int _currentHP;
-    private float _currentMoveSpeed;
-    private int _currentDamage;
-    private float _currentAttacksPerSecond;
-    private float _currentEnergy;
-    private float _currentMiningPower;
-    private int _currentCarryCapacity;
 
     private Dictionary<StatsType, float> _statsModifiers = new();
     
@@ -52,19 +45,11 @@ public class StatsManager : MonoBehaviour
         {
             _statsModifiers[type] = 1.0f;
         }
-        
-        _currentHP = _baseData.maxHP;
-        _currentMoveSpeed = _baseData.moveSpeed;
-        _currentDamage = _baseData.damage;
-        _currentAttacksPerSecond = _baseData.attacksPerSecond;
-        _currentEnergy = _baseData.energy;
-        _currentMiningPower = _baseData.miningPower;
-        _currentCarryCapacity = _baseData.carryCapacity;
     }
 
     public void AddTimerStatModifier(StatsType stat, float modifier, float duration)
     {
-        if(modifier != 0)
+        if(modifier != 0 && gameObject.activeInHierarchy)
             StartCoroutine(TimedModifierC(stat, modifier, duration));
     }
 
@@ -88,7 +73,7 @@ public enum StatsType
     Speed,
     Damage,
     AttacksPerSecond,
-    Energy,
+    MaxEnergy,
     MiningPower,
     CarryCapacity,
     MaxHP
