@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81068b4968241b948a6de3b0ca7c5170, type: 3}
+  m_Name: TGC textures
+  m_EditorClassIdentifier: Assembly-CSharp::TunnelGeneratorConfig
+  tunnelPool: {fileID: 11400000, guid: e89db01befccbf444b04c854a9752f73, type: 2}
+  linkStartPool: {fileID: 11400000, guid: e63448976f8742043b81f7b89998ea8b, type: 2}
+  linkEndPool: {fileID: 11400000, guid: 522b927c60a819a428f6619bb436bdf2, type: 2}
+  tunnelEndPrefab: {fileID: 5996212714903222278, guid: d742f13e902ca654ca8d1c85419054b8, type: 3}
+  minSingleTunnelSegments: 2
+  maxSingleTunnelSegments: 5
+  singleTunnelLengthVariance: 2
+  minDoubleTunnelSegments: 2
+  maxDoubleTunnelSegments: 5
+  doubleTunnelLengthVariance: 3
+  doubleTunnelSpawnChance: 0.5
+  totalSegmentsToGenerate: 40
+  autoValidateOnLoad: 1
