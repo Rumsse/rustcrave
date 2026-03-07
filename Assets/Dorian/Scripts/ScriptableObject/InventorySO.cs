@@ -1,26 +1,58 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "InventorySO", menuName = "Scriptable Objects/InventorySO")]
 public class InventorySO : ScriptableObject
 {
+    public int maxCapacity;
+
     public List<InventorySlot> inventoryItemList = new List<InventorySlot>();
-    public void AddItem(ItemSO item, int amount)
+
+    public event EventHandler OnInventoryChanged;
+
+    public bool AddItem(ItemSO item, int amount)
     {
+        int currentAmount = GetTotalAmount();
+
+        if (currentAmount + amount > maxCapacity)
+        {
+            Debug.Log("Inventory is full!!!");
+            return false;
+        }
+
         bool hasItem = false;
+
         for (int i = 0; i < inventoryItemList.Count; i++)
         {
-            if (inventoryItemList[i].item == item) 
+            if (inventoryItemList[i].item == item)
             {
                 inventoryItemList[i].AddAmount(amount);
                 hasItem = true;
                 break;
             }
         }
+
         if (!hasItem)
         {
             inventoryItemList.Add(new InventorySlot(item, amount));
         }
+
+        OnInventoryChanged?.Invoke(this, EventArgs.Empty);
+
+        return true;
+    }
+
+    public int GetTotalAmount()
+    {
+        int total = 0;
+
+        for (int i = 0; i < inventoryItemList.Count; i++)
+        {
+            total += inventoryItemList[i].amount;
+        }
+
+        return total;
     }
 }
 

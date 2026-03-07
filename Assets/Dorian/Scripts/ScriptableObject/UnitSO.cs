@@ -6,11 +6,15 @@ public class UnitSO : ScriptableObject
 {
     public UnitType unitType;
 
+    [Header("Robot Informations")]
+    public string robotName;
+    public Sprite robotSprite;
+
     [Header("Common Stats")]
     public float moveSpeed;
+    public int maxEnergy;
     public int maxHP;
     public AttackType immunities;
-    public float energy;
 
     [Header("Warrior")]
     public int damage;

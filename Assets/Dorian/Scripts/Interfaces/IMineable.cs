@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IMineable
 {
-    public void Mine();
+    public ItemSO Mine();
 }
