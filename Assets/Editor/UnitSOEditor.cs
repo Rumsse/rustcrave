@@ -4,11 +4,16 @@ using UnityEngine;
 [CustomEditor(typeof(UnitSO))]
 public class UnitSOEditor : Editor
 {
+    SerializedProperty robotSprite;
+    SerializedProperty robotName;
+    
     SerializedProperty unitType;
 
     SerializedProperty moveSpeed;
     SerializedProperty maxHP;
     SerializedProperty possibleAttacks;
+    SerializedProperty immunities;
+    SerializedProperty maxEnergy;
 
     SerializedProperty damage;
     SerializedProperty attacksPerSecond;
@@ -22,11 +27,15 @@ public class UnitSOEditor : Editor
 
     void OnEnable()
     {
+        robotSprite = serializedObject.FindProperty("robotSprite");
+        robotName = serializedObject.FindProperty("robotName");
         unitType = serializedObject.FindProperty("unitType");
 
         moveSpeed = serializedObject.FindProperty("moveSpeed");
         maxHP = serializedObject.FindProperty("maxHP");
         possibleAttacks = serializedObject.FindProperty("possibleAttacks");
+        maxEnergy = serializedObject.FindProperty("maxEnergy");
+        immunities = serializedObject.FindProperty("immunities");
 
         damage = serializedObject.FindProperty("damage");
         attacksPerSecond = serializedObject.FindProperty("attacksPerSecond");
@@ -42,7 +51,11 @@ public class UnitSOEditor : Editor
     {
         serializedObject.Update();
 
+
         DrawUnitType();
+        Space();
+
+        DrawInformations();
         Space();
 
         DrawCommon();
@@ -67,11 +80,19 @@ public class UnitSOEditor : Editor
         EditorGUILayout.PropertyField(unitType);
     }
 
+    void DrawInformations()
+    {
+        EditorGUILayout.PropertyField(robotName);
+        EditorGUILayout.PropertyField(robotSprite);
+    }
+
     void DrawCommon()
     {
         EditorGUILayout.LabelField("Common Stats", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(moveSpeed);
         EditorGUILayout.PropertyField(maxHP);
+        EditorGUILayout.PropertyField(immunities);
+        EditorGUILayout.PropertyField(maxEnergy);
     }
 
     void DrawWarrior()

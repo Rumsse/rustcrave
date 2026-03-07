@@ -3,12 +3,28 @@ using UnityEngine.AI;
 
 public class Unit : UnitBase
 {
+    [SerializeField] private UnitInventory inventory;
+    [SerializeField] private EnergyManager energyManager;
+
+    private float miningTimer;
+    private float miningInterval;
+
     private IInteractable currentInteractable;
     private IMineable currentMineable;
-    
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        miningInterval = stats.miningPower;
+        miningTimer = 0f;
+    }
+
     protected override void Update()
     {
         base.Update();
+
+        HandleEnergyDrain();
 
         if (isAttacking)
             return;
@@ -18,6 +34,26 @@ public class Unit : UnitBase
 
         if (currentInteractable != null)
             HandleInteraction();
+    }
+
+    private void HandleEnergyDrain()
+    {
+        if (isAttacking)
+        {
+            energyManager.SetActionDrain();
+        }
+        else if (currentMineable != null || currentInteractable != null)
+        {
+            energyManager.SetActionDrain();
+        }
+        else if (agent.velocity.magnitude > 0.1f)
+        {
+            energyManager.SetMoveDrain();
+        }
+        else
+        {
+            energyManager.SetIdleDrain();
+        }
     }
 
     private void HandleInteraction()
@@ -38,10 +74,25 @@ public class Unit : UnitBase
     {
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            currentMineable.Mine();
-            currentMineable = null;
+            miningTimer -= Time.deltaTime;
+
+            if (miningTimer <= 0f)
+            {
+                miningTimer = miningInterval;
+
+                ItemSO item = currentMineable.Mine();
+
+                if (item != null)
+                {
+                    inventory.InventorySO.AddItem(item,1);
+                    animator.SetTrigger("Mining");
+                }
+                else
+                {
+                    currentMineable = null;
+                }
+            }
             animator.SetBool("IsWalking", false);
-            animator.SetTrigger("Mining");
         }
         else
         {

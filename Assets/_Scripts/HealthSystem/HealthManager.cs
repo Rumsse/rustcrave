@@ -1,13 +1,15 @@
 using System;
 using UnityEngine;
 
-public class HealthManager : MonoBehaviour
+public class HealthManager : MonoBehaviour, IDamageable
 {
     #region Events
 
+    public event Action<float> onHealthPercentChange;
     public event Action<int> onHit;
     public event Action onDeath;
 
+    private void OnHealthPercentChange(float percent) => onHealthPercentChange?.Invoke(percent);
     private void OnHit(int currentHealth) => onHit?.Invoke(currentHealth);
     private void OnDeath() => onDeath?.Invoke();
 
@@ -50,13 +52,17 @@ public class HealthManager : MonoBehaviour
 
     #region Managing Health
 
-    
-    public void Damage(int amount)
+    public void Damage(DamageInfo damage)
     {
+        if (_baseStats.immunities.HasFlag(damage.AttackType))
+            return;
+        
         _hitEffect?.Play();
         
-        _currentHP -= amount;
+        _currentHP -= damage.Value;
         UpdateHealthVisuals();
+        
+        OnHealthPercentChange((float)_currentHP / MaxHp);
         OnHit(_currentHP);
         
         if(_currentHP <= 0)
@@ -74,7 +80,7 @@ public class HealthManager : MonoBehaviour
 
     #region Hitable Itergration
 
-    public void Hit(int damage)
+    public void Hit(DamageInfo damage)
     {
         Damage(damage);
     }
