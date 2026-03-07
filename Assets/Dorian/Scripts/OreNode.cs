@@ -41,7 +41,7 @@ public class OreNode : MonoBehaviour, IMineable
             }
         }
 
-        if (amount == 0)
+        if (amount <= 0)
             Destroy(gameObject);
 
         return ore;
@@ -50,5 +50,10 @@ public class OreNode : MonoBehaviour, IMineable
     public float GetDurability()
     {
         return ore != null ? ore.oreDurability : 0f;
+    }
+
+    public bool IsDepleted()
+    {
+        return amount <= 0;
     }
 }
