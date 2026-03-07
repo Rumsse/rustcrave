@@ -8,6 +8,8 @@ public class UnitPanel : MonoBehaviour
     [SerializeField] private Image sprite;
     [SerializeField] private Image hpBar;
     [SerializeField] private Image energyBar;
+    [SerializeField] private Image miningProgressBar;
+    [SerializeField] private GameObject miningProgressBarGameObject;
     [SerializeField] private TextMeshProUGUI hpText;
     [SerializeField] private TextMeshProUGUI energyText;
     [SerializeField] private TextMeshProUGUI moveSpeedText;
@@ -33,6 +35,19 @@ public class UnitPanel : MonoBehaviour
         robotNameText.text = $"{unit.Stats.robotName}";
     }
 
+    private void Update()
+    {
+        if (unit != null && unit.IsMining())
+        {
+            miningProgressBarGameObject.SetActive(true);
+            miningProgressBar.fillAmount = unit.GetMiningProgress();
+        }
+        else
+        {
+            miningProgressBarGameObject.SetActive(false);
+        }
+    }
+
     private void OnEnable()
     {
         healthManager.onHealthPercentChange += UpdateHealthBar;
@@ -56,5 +71,12 @@ public class UnitPanel : MonoBehaviour
         energyBar.fillAmount = percent;
         int energyBarInt = Mathf.CeilToInt(energyManager.CurrentEnergy);
         energyText.text = $"Energy: {energyBarInt}/{unit.Stats.maxEnergy}\n";
+        UpdateMoveSpeed();
+    }
+
+    private void UpdateMoveSpeed()
+    {
+        float moveSpeed = unit.Agent.speed;
+        moveSpeedText.text = $"MoveSpeed: {moveSpeed:F2}";
     }
 }

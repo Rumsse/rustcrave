@@ -1,11 +1,27 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum UnitActivity
+{
+    Idle,
+    Moving,
+    Mining,
+    Fighting,
+    Interacting,
+    Disabled
+}
+
 public class Unit : UnitBase
 {
+    public NavMeshAgent Agent => agent;
+
     [SerializeField] private UnitInventory inventory;
     [SerializeField] private EnergyManager energyManager;
+    [SerializeField] private float minMiningTime;
+    [SerializeField] private float minMoveSpeedMultiplier;
+    [SerializeField, Range(0f, 1f)] private float lowEnergyThreshold;
 
+    private float baseMoveSpeed;
     private float miningTimer;
     private float miningInterval;
 
@@ -15,9 +31,20 @@ public class Unit : UnitBase
     protected override void Awake()
     {
         base.Awake();
-
-        miningInterval = stats.miningPower;
+        baseMoveSpeed = agent.speed;
         miningTimer = 0f;
+    }
+
+    private void OnEnable()
+    {
+        energyManager.onEnergyPercentChange += HandleMoveSpeedBasedOnEnergy;
+        energyManager.onEnergyDepleted += HandleEnergyDepleted;
+    }
+
+    private void OnDisable()
+    {
+        energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
+        energyManager.onEnergyDepleted -= HandleEnergyDepleted;
     }
 
     protected override void Update()
@@ -34,6 +61,40 @@ public class Unit : UnitBase
 
         if (currentInteractable != null)
             HandleInteraction();
+    }
+
+    private void HandleMoveSpeedBasedOnEnergy(float energyPercent)
+    {
+        if (energyPercent < lowEnergyThreshold)
+        {
+            float t = energyPercent / lowEnergyThreshold;
+            agent.speed = Mathf.Lerp(minMoveSpeedMultiplier * baseMoveSpeed, baseMoveSpeed, t);
+        }
+        else
+        {
+            agent.speed = baseMoveSpeed;
+        }
+    }
+
+    private void HandleInterruptCurrentAction()
+    {
+        currentMineable = null;
+        currentInteractable = null;
+        AttackTarget = null;
+        miningTimer = 0f;
+        animator.ResetTrigger("Mining");
+    }
+
+    private void HandleEnergyDepleted()
+    {
+        agent.isStopped = true;
+
+        HandleInterruptCurrentAction();
+
+        animator.SetBool("IsWalking", false);
+        animator.SetTrigger("Shutdown");
+
+        this.enabled = false;
     }
 
     private void HandleEnergyDrain()
@@ -60,7 +121,18 @@ public class Unit : UnitBase
     {
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            currentInteractable.Interact();
+            if (currentInteractable is OrePickUp pickup)
+            {
+                if (inventory.InventorySO.AddItem(pickup.item, pickup.amount))
+                {
+                    Destroy(pickup.gameObject);
+                }
+            }
+            else
+            {
+                currentInteractable.Interact();
+            }
+
             currentInteractable = null;
             animator.SetBool("IsWalking", false);
         }
@@ -74,18 +146,27 @@ public class Unit : UnitBase
     {
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
+            if (miningTimer == miningInterval)
+            {
+                animator.SetTrigger("Mining");
+            }
+
             miningTimer -= Time.deltaTime;
 
             if (miningTimer <= 0f)
             {
-                miningTimer = miningInterval;
-
                 ItemSO item = currentMineable.Mine();
 
                 if (item != null)
                 {
-                    inventory.InventorySO.AddItem(item,1);
-                    animator.SetTrigger("Mining");
+                    if (currentMineable.IsDepleted())
+                    {
+                        currentMineable = null;
+                    }
+                    else
+                    {
+                        miningTimer = miningInterval;
+                    }
                 }
                 else
                 {
@@ -102,34 +183,64 @@ public class Unit : UnitBase
 
     public void MoveToInteract(IInteractable interactable, Vector3 position)
     {
-        AttackTarget = null;
-        currentMineable = null;
+        HandleInterruptCurrentAction();
         currentInteractable = interactable;
         agent.SetDestination(position);
     }
 
     public void MoveToMine(IMineable mineable, Vector3 position)
     {
-        AttackTarget = null;
-        currentInteractable = null;
+        HandleInterruptCurrentAction();
         currentMineable = mineable;
+
+        float rawMiningTime = currentMineable.GetDurability() - stats.miningPower;
+        miningInterval = Mathf.Max(minMiningTime, rawMiningTime);
+        miningTimer = miningInterval;
+
         agent.SetDestination(position);
     }
 
     public override void MoveToAttack(UnitBase enemy, Vector3 position)
     {
-        currentInteractable = null;
-        currentMineable = null;
-
+        HandleInterruptCurrentAction();
         base.MoveToAttack(enemy, position);
     }
-    
+
     public override void HandleMovement(Vector3 position)
     {
-        currentInteractable = null;
-        currentMineable = null;
-        AttackTarget = null;
+        HandleInterruptCurrentAction();
         base.HandleMovement(position);
     }
 
+    public bool IsMining()
+    {
+        return currentMineable != null && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance;
+    }
+
+    public float GetMiningProgress()
+    {
+        if (currentMineable == null || miningInterval <= 0f)
+            return 0f;
+
+        return 1f - (miningTimer / miningInterval);
+    }
+
+    public UnitActivity GetCurrentState()
+    {
+        if (isAttacking)
+            return UnitActivity.Fighting;
+
+        if (currentMineable != null)
+        {
+            if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+                return UnitActivity.Mining;
+
+            return UnitActivity.Moving;
+        }
+
+        if (agent.velocity.magnitude > 0.1f)
+            return UnitActivity.Moving;
+
+        return UnitActivity.Idle;
+    }
 }
