@@ -12,8 +12,6 @@ public class TunnelSegment : MonoBehaviour
     [Header("Segment Info")]
     [SerializeField] private TunnelType tunnelType;
     [SerializeField] private SocketType exitSocketType = SocketType.Single;
-    [SerializeField] private bool leftPathBlocked;
-    [SerializeField] private bool rightPathBlocked;
 
 
 
@@ -23,9 +21,6 @@ public class TunnelSegment : MonoBehaviour
     public Transform ExitSocketRight => exitSocketRight;
     public TunnelType TunnelType => tunnelType;
     public SocketType ExitSocketType => exitSocketType;
-    public bool LeftPathBlocked => leftPathBlocked;
-    public bool RightPathBlocked => rightPathBlocked;
-    public bool HasAnyBlockedPath => leftPathBlocked || rightPathBlocked;
 
 
     public Transform GetExitSocket(bool useLeftPath)
@@ -61,14 +56,14 @@ public class TunnelSegment : MonoBehaviour
 
         if (exitSocketLeft != null)
         {
-            Gizmos.color = leftPathBlocked ? Color.gray : Color.yellow;
+            Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(exitSocketLeft.position, 0.5f);
             Gizmos.DrawLine(exitSocketLeft.position, exitSocketLeft.position + exitSocketLeft.forward * 2f);
         }
 
         if (exitSocketRight != null)
         {
-            Gizmos.color = rightPathBlocked ? Color.gray : Color.cyan;
+            Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(exitSocketRight.position, 0.5f);
             Gizmos.DrawLine(exitSocketRight.position, exitSocketRight.position + exitSocketRight.forward * 2f);
         }

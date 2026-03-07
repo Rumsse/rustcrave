@@ -5,9 +5,11 @@ public class TunnelGeneratorConfig : ScriptableObject
 {
     [Header("Tunnel Pools")]
     [SerializeField] private TunnelPrefabPool tunnelPool;
-    [SerializeField] private TunnelPrefabPool doubleTunnelPool;
-    [SerializeField] private TunnelPrefabPool connectionStartPool;
-    [SerializeField] private TunnelPrefabPool connectionEndPool;
+    [SerializeField] private TunnelPrefabPool linkStartPool;
+    [SerializeField] private TunnelPrefabPool linkEndPool;
+
+    [Header("Tunnel End")]
+    [SerializeField] private TunnelSegment tunnelEndPrefab;
 
     [Header("Single Tunnel Generation")]
     [SerializeField] private int minSingleTunnelSegments = 3;
@@ -25,20 +27,14 @@ public class TunnelGeneratorConfig : ScriptableObject
     [SerializeField] private bool autoValidateOnLoad = true;
 
     public TunnelPrefabPool TunnelPool => tunnelPool;
-    public TunnelPrefabPool DoubleTunnelPool => doubleTunnelPool;
-    public TunnelPrefabPool ConnectionStartPool => connectionStartPool;
-    public TunnelPrefabPool ConnectionEndPool => connectionEndPool;
+    public TunnelPrefabPool LinkStartPool => linkStartPool;
+    public TunnelPrefabPool LinkEndPool => linkEndPool;
+    public TunnelSegment TunnelEndPrefab => tunnelEndPrefab;
 
-    public int MinSingleTunnelSegments => minSingleTunnelSegments;
-    public int MaxSingleTunnelSegments => maxSingleTunnelSegments;
-    public int SingleTunnelLengthVariance => singleTunnelLengthVariance;
-
-    public int MinDoubleTunnelSegments => minDoubleTunnelSegments;
-    public int MaxDoubleTunnelSegments => maxDoubleTunnelSegments;
-    public int DoubleTunnelLengthVariance => doubleTunnelLengthVariance;
     public float DoubleTunnelSpawnChance => doubleTunnelSpawnChance;
-
     public int TotalSegmentsToGenerate => totalSegmentsToGenerate;
+    public bool CanSpawnDoubleTunnel => doubleTunnelSpawnChance > 0f;
+
 
     public int GetRandomSingleTunnelLength()
     {
@@ -66,6 +62,7 @@ public class TunnelGeneratorConfig : ScriptableObject
     {
         bool isValid = true;
 
+
         if (tunnelPool == null)
         {
             Debug.LogError("Tunnel Pool is not assigned!");
@@ -74,29 +71,39 @@ public class TunnelGeneratorConfig : ScriptableObject
         else
             isValid &= tunnelPool.Validate();
 
-        if (doubleTunnelPool == null)
-        {
-            Debug.LogError("Double Tunnel Pool is not assigned!");
-            isValid = false;
-        }
-        else
-            isValid &= doubleTunnelPool.Validate();
 
-        if (connectionStartPool == null)
-        {
-            Debug.LogError("Connection Start Pool is not assigned!");
-            isValid = false;
-        }
-        else
-            isValid &= connectionStartPool.Validate();
 
-        if (connectionEndPool == null)
+
+        if (CanSpawnDoubleTunnel)
         {
-            Debug.LogError("Connection End Pool is not assigned!");
+            if (linkStartPool == null)
+            {
+                Debug.LogError("Link Start Pool is not assigned!");
+                isValid = false;
+            }
+            else
+                isValid &= linkStartPool.Validate();
+
+            if (linkEndPool == null)
+            {
+                Debug.LogError("Link End Pool is not assigned!");
+                isValid = false;
+            }
+            else
+                isValid &= linkEndPool.Validate();
+        }
+
+
+
+
+        if (tunnelEndPrefab == null)
+        {
+            Debug.LogError("Tunnel End Prefab is not assigned!");
             isValid = false;
         }
-        else
-            isValid &= connectionEndPool.Validate();
+
+
+
 
         if (minSingleTunnelSegments > maxSingleTunnelSegments)
         {
