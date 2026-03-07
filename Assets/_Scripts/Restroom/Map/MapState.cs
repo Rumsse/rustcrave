@@ -9,8 +9,9 @@ public class MapState : ScriptableObject
     [SerializeField] int totalColumns = 3;
 
     [HideInInspector] public int currentRow = -1;
-    [HideInInspector] public int currentColumn = 1;
+    [HideInInspector] public int currentColumn = -1;
     [HideInInspector] public List<PathNodeData> nodes = new();
+    [HideInInspector] public HashSet<string> scannedNodes = new();
 
     public int TotalRows => totalRows;
     public int TotalColumns => totalColumns;
@@ -18,8 +19,9 @@ public class MapState : ScriptableObject
     public void Initialize()
     {
         currentRow = -1;
-        currentColumn = 1;
+        currentColumn = -1;
         nodes = MapGenerator.Generate(totalRows, totalColumns, availableModifiers.Count);
+        scannedNodes.Clear();
     }
 
     public PathModifierData GetModifier(PathNodeData node) =>
@@ -31,6 +33,10 @@ public class MapState : ScriptableObject
     public List<PathNodeData> GetAvailableNodes()
     {
         int nextRow = currentRow + 1;
+
+        if (nextRow >= totalRows)
+            return new List<PathNodeData>();
+
         var nextNodes = GetNodesAtRow(nextRow);
 
         if (currentRow < 0)
@@ -49,4 +55,12 @@ public class MapState : ScriptableObject
         currentRow = node.row;
         currentColumn = node.column;
     }
+
+    public bool IsNodeScanned(PathNodeData node) =>
+        scannedNodes.Contains(NodeKey(node));
+
+    public void ScanNode(PathNodeData node) =>
+        scannedNodes.Add(NodeKey(node));
+
+    static string NodeKey(PathNodeData node) => $"{node.row}-{node.column}";
 }

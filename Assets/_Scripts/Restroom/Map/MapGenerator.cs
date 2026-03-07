@@ -6,16 +6,25 @@ public static class MapGenerator
     public static List<PathNodeData> Generate(int rows, int columns, int modifierCount)
     {
         var nodes = new List<PathNodeData>();
+        int lastRow = rows - 1;
 
         for (int row = 0; row < rows; row++)
         {
+            if (row == lastRow)
+            {
+                int bossCol = columns / 2;
+                nodes.Add(new PathNodeData(row, bossCol, 0, new int[0]));
+                continue;
+            }
+
             for (int col = 0; col < columns; col++)
             {
-                int modifier = row == rows - 1
-                    ? 0
-                    : Random.Range(0, modifierCount);
+                int modifier = Random.Range(0, modifierCount);
 
-                var connections = GenerateConnections(col, columns);
+                int[] connections = row == lastRow - 1
+                    ? new[] { columns / 2 }
+                    : new[] { col };
+
                 nodes.Add(new PathNodeData(row, col, modifier, connections));
             }
         }

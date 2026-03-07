@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     VisualElement leftPanelSlot;
     VisualElement rightPanelSlot;
     VisualElement panelLayer;
+    VisualElement tooltipLayer;
 
     readonly Dictionary<string, VisualElement> panelCache = new();
 
@@ -21,8 +22,16 @@ public class UIManager : MonoBehaviour
         var root = uiDocument.rootVisualElement;
 
         panelLayer = root.Q("panel-layer");
+        tooltipLayer = root.Q("tooltip-layer");
         leftPanelSlot = root.Q("left-panel");
         rightPanelSlot = root.Q("right-panel");
+
+        tooltipLayer = new VisualElement();
+        tooltipLayer.name = "tooltip-layer";
+        tooltipLayer.pickingMode = PickingMode.Ignore;
+        tooltipLayer.style.position = Position.Absolute;
+
+        root.Add(tooltipLayer);
 
         root.Q<Button>("btn-choose-path").clicked += () =>
             TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
@@ -57,7 +66,7 @@ public class UIManager : MonoBehaviour
     void InitializePanel(string key, VisualElement panel)
     {
         if (key == "choose-path")
-            choosePathController.Initialize(panel);
+            choosePathController.Initialize(panel, tooltipLayer);
     }
 
     void BindCloseButton(VisualElement panel, VisualElement slot)
