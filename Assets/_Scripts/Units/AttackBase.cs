@@ -1,4 +1,7 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public abstract class AttackBase : ScriptableObject
 {
@@ -9,11 +12,29 @@ public abstract class AttackBase : ScriptableObject
     public AttackType type;
 
     public abstract void Execute(UnitBase target, UnitBase attacker);
+    
+    protected int GetFinalDamage(int initialDamage) => Mathf.RoundToInt(initialDamage * damageMult);
 }
 
+[Flags]
 public enum AttackType
 {
-    Melee,
-    Ranged,
-    Magic
+    None = 0,
+    Physical = 1 << 0,
+    Magic = 1 << 1,
+    Environmental = 1 << 2,
+    True = 1 << 3// non blockable by anything
+}
+
+[Serializable] 
+public struct DamageInfo
+{
+    public int Value;
+    public AttackType AttackType;
+
+    public DamageInfo(int value, AttackType type)
+    {
+        Value = value;
+        AttackType = type;
+    }
 }

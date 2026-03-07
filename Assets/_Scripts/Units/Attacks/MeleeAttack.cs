@@ -10,7 +10,7 @@ public class MeleeAttack : AttackBase
         
         attacker.Animator?.Play(animationStateName);
 
-        int finalDamage = Mathf.RoundToInt(damageMult * attacker.Stats.damage);
-        target.HealthManager?.Damage(finalDamage);
+        int finalDamage = GetFinalDamage(attacker.Stats.damage);
+        target.HealthManager?.Damage(new DamageInfo(finalDamage, type));
     }
 }
