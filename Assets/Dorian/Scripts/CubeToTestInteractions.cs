@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-[Obsolete]
 public class CubeToTestInteractions : MonoBehaviour, IInteractable
 {
     public event Action onInteract;
