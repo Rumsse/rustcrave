@@ -6,6 +6,10 @@ public class UnitSO : ScriptableObject
 {
     public UnitType unitType;
 
+    [Header("Prefab")]
+    [SerializeField] private GameObject prefab;
+    public GameObject Prefab => prefab;
+
     [Header("Robot Informations")]
     public string robotName;
     public Sprite robotSprite;

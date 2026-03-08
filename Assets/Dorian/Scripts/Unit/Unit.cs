@@ -25,8 +25,23 @@ public class Unit : UnitBase
     private float miningTimer;
     private float miningInterval;
 
+    private SwarmUnitsData swarmUnitsData;
+    private SwarmState swarmState;
+
     private IInteractable currentInteractable;
     private IMineable currentMineable;
+
+    public void Initialize(SwarmUnitsData data, SwarmState state)
+    {
+        swarmUnitsData = data;
+        swarmState = state;
+
+        healthManager.InitializeHealth(swarmUnitsData.currentHP);
+        healthManager.onDeath += () => swarmState.MarkDead(swarmUnitsData.id);
+        healthManager.onHit += HandleDamageTaken;
+
+        energyManager.InitializeEnergy(swarmUnitsData.currentEnergy);
+    }
 
     protected override void Awake()
     {
@@ -39,12 +54,20 @@ public class Unit : UnitBase
     {
         energyManager.onEnergyPercentChange += HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted += HandleEnergyDepleted;
+        healthManager.onHit += HandleDamageTaken;
     }
 
     private void OnDisable()
     {
         energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted -= HandleEnergyDepleted;
+        healthManager.onHit -= HandleDamageTaken;
+
+        if (swarmUnitsData != null && swarmUnitsData.isAlive)
+        {
+            swarmUnitsData.currentHP = healthManager.CurrentHP;
+            swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
+        }
     }
 
     protected override void Update()
@@ -61,6 +84,14 @@ public class Unit : UnitBase
 
         if (currentInteractable != null)
             HandleInteraction();
+    }
+
+    private void HandleDamageTaken(int newCurrentHP)
+    {
+        if (swarmUnitsData != null)
+        {
+            swarmUnitsData.currentHP = newCurrentHP;
+        }
     }
 
     private void HandleMoveSpeedBasedOnEnergy(float energyPercent)

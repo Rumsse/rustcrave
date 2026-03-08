@@ -52,6 +52,16 @@ public class HealthManager : MonoBehaviour, IDamageable
 
     #region Managing Health
 
+    public void InitializeHealth(int savedHP)
+    {
+        _currentHP = savedHP;
+        UpdateHealthVisuals();
+        OnHealthPercentChange((float)_currentHP / MaxHp);
+
+        if (_currentHP <= 0)
+            Death();
+    }
+
     public void Damage(DamageInfo damage)
     {
         if (_baseStats.immunities.HasFlag(damage.AttackType))

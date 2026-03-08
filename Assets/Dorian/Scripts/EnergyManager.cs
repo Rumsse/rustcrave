@@ -29,6 +29,14 @@ public class EnergyManager : MonoBehaviour
         currentDrain = idleDrain;
     }
 
+    public void InitializeEnergy(float savedEnergy)
+    {
+        currentEnergy = savedEnergy;
+
+        if (currentEnergy <= 0)
+            onEnergyDepleted?.Invoke();
+    }
+
     private void Update()
     {
         DrainEnergy();

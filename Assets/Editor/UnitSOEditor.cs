@@ -4,6 +4,7 @@ using UnityEngine;
 [CustomEditor(typeof(UnitSO))]
 public class UnitSOEditor : Editor
 {
+    SerializedProperty prefab;
     SerializedProperty robotSprite;
     SerializedProperty robotName;
     
@@ -27,6 +28,7 @@ public class UnitSOEditor : Editor
 
     void OnEnable()
     {
+        prefab = serializedObject.FindProperty("prefab");
         robotSprite = serializedObject.FindProperty("robotSprite");
         robotName = serializedObject.FindProperty("robotName");
         unitType = serializedObject.FindProperty("unitType");
@@ -55,6 +57,9 @@ public class UnitSOEditor : Editor
         DrawUnitType();
         Space();
 
+        DrawPrefab();
+        Space();
+
         DrawInformations();
         Space();
 
@@ -78,6 +83,11 @@ public class UnitSOEditor : Editor
     void DrawUnitType()
     {
         EditorGUILayout.PropertyField(unitType);
+    }
+
+    void DrawPrefab()
+    {
+        EditorGUILayout.PropertyField(prefab);
     }
 
     void DrawInformations()
