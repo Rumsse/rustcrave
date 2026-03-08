@@ -4,14 +4,20 @@ using UnityEngine.UIElements;
 
 public class MainCraftController : MonoBehaviour
 {
-    [Header("Crafting Sub-Panels Assets")]
+    [Header("State")]
+    [SerializeField] SwarmState swarmState;
+
+    [Header("Panels & Controllers")]
     [SerializeField] VisualTreeAsset robotsCraftPanel;
     //[SerializeField] VisualTreeAsset gadgetsCraftPanel;
-
-    [Header("Sub-Controllers")]
     [SerializeField] RobotsCraftController robotsCraftController;
     // [SerializeField] GadgetsCraftController gadgetsCraftController; 
 
+    [Header("UI Elements")]
+    [SerializeField] VisualTreeAsset unitContainer;
+
+    VisualElement rootElement;
+    VisualElement leftBar;
     VisualElement contentContainer;
     VisualElement craftLayer;
 
@@ -25,8 +31,11 @@ public class MainCraftController : MonoBehaviour
 
     public void Initialize(VisualElement root, VisualElement craftLayer)
     {
+        this.rootElement = root;
         this.craftLayer = craftLayer;
+
         contentContainer = root.Q<VisualElement>("craft-content-container");
+        leftBar = root.Q<VisualElement>("left-bar");
 
         var btnRobots = root.Q<Button>("btn-tab-robots");
         var btnGadgets = root.Q<Button>("btn-tab-gadgets");
@@ -45,6 +54,8 @@ public class MainCraftController : MonoBehaviour
             btnBack.clicked += CloseCurrentTab;
             btnBack.style.display = DisplayStyle.None;
         }
+
+        UpdateSwarmUI(root);
 
     }
 
@@ -87,7 +98,7 @@ public class MainCraftController : MonoBehaviour
     void InitializeSubController(string tabKey, VisualElement panel)
     {
         if (tabKey == "robots" && robotsCraftController != null)
-            robotsCraftController.Initialize(panel, craftLayer);
+            robotsCraftController.Initialize(panel, HandleRobotCraftRequest);
 
         /*else if (tabKey == "gadgets" && gadgetsCraftController != null)
             gadgetsCraftController.Initialize(panel, craftLayer);*/
@@ -110,6 +121,55 @@ public class MainCraftController : MonoBehaviour
     void UpdateButtonStyles(string activeKey)
     {
         
+    }
+
+    #endregion
+
+    #region Swarm UI
+
+    void HandleRobotCraftRequest(UnitSO unitType)
+    {
+        if (swarmState == null) return;
+
+        if (swarmState.SwarmUnits.Count >= swarmState.MaxSwarmSize)
+            return;
+
+        swarmState.AddUnitToSwarm(unitType);
+
+        var newUnitData = swarmState.SwarmUnits[^1];
+        AddSingleUnitToUI(newUnitData);
+    }
+
+    void AddSingleUnitToUI(SwarmUnitsData unitData)
+    {
+        if (leftBar == null || unitContainer == null) return;
+
+        var newUnitIcon = unitContainer.CloneTree();
+        var unitImage = newUnitIcon.Q<VisualElement>("unit-image");
+
+        if (unitData.unitType != null && unitData.unitType.robotSprite != null)
+            unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.robotSprite);
+
+
+        leftBar.Add(newUnitIcon);
+    }
+
+    void UpdateSwarmUI(VisualElement root)
+    {
+        if (swarmState == null || leftBar == null) return;
+
+        var existingContainers = leftBar.Query<VisualElement>("unit-container").ToList();
+
+        foreach (var container in existingContainers)
+        {
+            leftBar.Remove(container);
+        }
+
+        foreach (var unit in swarmState.SwarmUnits)
+        {
+            if (!unit.isAlive) continue;
+            AddSingleUnitToUI(unit);
+        }
     }
 
     #endregion

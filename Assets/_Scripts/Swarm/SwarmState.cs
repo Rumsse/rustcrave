@@ -7,6 +7,9 @@ public class SwarmState : ScriptableObject
 {
     [SerializeField] private List<UnitSO> startingSwarm = new();
     [SerializeField] private List<SwarmUnitsData> swarmUnits = new();
+    [SerializeField] private int maxSwarmSize = 8;
+
+    public int MaxSwarmSize => maxSwarmSize;
 
     public IReadOnlyList<SwarmUnitsData> SwarmUnits => swarmUnits;
     public int AliveCount => swarmUnits.Count(m => m.isAlive);
