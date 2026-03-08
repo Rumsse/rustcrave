@@ -6,7 +6,9 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument uiDocument;
     [SerializeField] VisualTreeAsset choosePathPanel;
+    [SerializeField] VisualTreeAsset mainCraftPanel;
     [SerializeField] ChoosePathController choosePathController;
+    [SerializeField] MainCraftController mainCraftController;
 
     VisualElement leftPanelSlot;
     VisualElement rightPanelSlot;
@@ -22,16 +24,12 @@ public class UIManager : MonoBehaviour
         var root = uiDocument.rootVisualElement;
 
         panelLayer = root.Q("panel-layer");
-        tooltipLayer = root.Q("tooltip-layer");
         leftPanelSlot = root.Q("left-panel");
         rightPanelSlot = root.Q("right-panel");
+        tooltipLayer = root.Q("tooltip-layer");
 
-        tooltipLayer = new VisualElement();
-        tooltipLayer.name = "tooltip-layer";
-        tooltipLayer.pickingMode = PickingMode.Ignore;
-        tooltipLayer.style.position = Position.Absolute;
-
-        root.Add(tooltipLayer);
+        root.Q<Button>("btn-craft").clicked += () =>
+            TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
 
         root.Q<Button>("btn-choose-path").clicked += () =>
             TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
@@ -65,6 +63,10 @@ public class UIManager : MonoBehaviour
 
     void InitializePanel(string key, VisualElement panel)
     {
+
+        if (key == "main-craft-panel")
+            mainCraftController.Initialize(panel, leftPanelSlot);
+
         if (key == "choose-path")
             choosePathController.Initialize(panel, tooltipLayer);
     }

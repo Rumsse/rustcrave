@@ -164,8 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitSpawner
   generator: {fileID: 0}
-  unitPrefab: {fileID: 8434320555201164451, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
-  unitsToSpawn: 5
+  swarmState: {fileID: 0}
   unitsParent: {fileID: 45525952}
   spawnOrigin: {fileID: 45525952}
   sampleRadius: 5
@@ -218,6 +217,65 @@ MonoBehaviour:
   unitLayerMask:
     serializedVersion: 2
     m_Bits: 128
+--- !u!1 &810971826
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 810971827}
+  - component: {fileID: 810971829}
+  - component: {fileID: 810971830}
+  m_Layer: 5
+  m_Name: Craft
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &810971827
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810971826}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 828975490}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &810971829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810971826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e9d24fc37c75f4aa772737b1ef42ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainCraftController
+  robotsCraftPanel: {fileID: 9197481963319205126, guid: c8a5f620aef0a024cbd180dfe15d9156, type: 3}
+  robotsCraftController: {fileID: 810971830}
+--- !u!114 &810971830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810971826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb91dd2dd59b2b4b90f257ade443e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotsCraftController
 --- !u!1 &828975488
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,6 +331,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1227357244}
+  - {fileID: 810971827}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &828975491
@@ -289,7 +348,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   uiDocument: {fileID: 828975489}
   choosePathPanel: {fileID: 9197481963319205126, guid: c4e75abb7b4ed15499a713a9af95f361, type: 3}
+  mainCraftPanel: {fileID: 9197481963319205126, guid: 63f866c96ca601b449d927c1fdc771cc, type: 3}
   choosePathController: {fileID: 1227357243}
+  mainCraftController: {fileID: 810971829}
 --- !u!1 &949252975
 GameObject:
   m_ObjectHideFlags: 0
