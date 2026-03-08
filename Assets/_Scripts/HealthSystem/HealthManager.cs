@@ -18,13 +18,12 @@ public class HealthManager : MonoBehaviour, IDamageable
     #region Properties
 
     public int CurrentHP => _currentHP;
-    public int MaxHp => _baseMaxHP; // later can add scaling like _baseMaxHP * currentLevel etc.
+    public int MaxHp => _baseMaxHP;
 
     #endregion
     
     #region Inspector Fields
 
-    [SerializeField] private UnitSO _baseStats;
     [SerializeField] private ParticleSystem _hitEffect;
     [SerializeField] private MeshRenderer _healthBarRend;
     
@@ -35,14 +34,17 @@ public class HealthManager : MonoBehaviour, IDamageable
     private int _baseMaxHP;
     private int _currentHP;
     private Material _healthMaterial; 
-
+    private StatsManager _baseStats;
+    
     #endregion
 
     #region Unity Lifecycle
 
     private void Awake()
     {
-        _baseMaxHP = _baseStats.maxHP;
+        _baseStats = GetComponent<StatsManager>();
+        
+        _baseMaxHP = _baseStats.MaxHP;
         _currentHP = MaxHp;
         
         _healthMaterial = _healthBarRend.material;
@@ -64,7 +66,7 @@ public class HealthManager : MonoBehaviour, IDamageable
 
     public void Damage(DamageInfo damage)
     {
-        if (_baseStats.immunities.HasFlag(damage.AttackType))
+        if (_baseStats.Immunities.HasFlag(damage.AttackType))
             return;
         
         _hitEffect?.Play();
@@ -81,9 +83,9 @@ public class HealthManager : MonoBehaviour, IDamageable
     
     public void Death()
     {
-        gameObject.SetActive(false);
-        
         OnDeath();
+        
+        gameObject.SetActive(false);
     }
     
     #endregion

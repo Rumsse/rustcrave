@@ -13,12 +13,12 @@ public class RangeAttack : AttackBase
         
         attacker.Animator?.Play(animationStateName);
 
-        int finalDamage = GetFinalDamage(attacker.Stats.damage);
+        int finalDamage = GetFinalDamage(attacker.Stats.Damage);
         
         Projectile proj = PoolManager.Instance.Get(projectilePrefab);
         proj.transform.position = attacker.ProjectileSpawnT.position;
         proj.transform.rotation = Quaternion.LookRotation(target.transform.position - attacker.transform.position);
-        proj.Init(new DamageInfo(finalDamage, type), projectileSpeed, target, projectilePrefab);
+        proj.Init(new DamageInfo(finalDamage, type), projectileSpeed, target, projectilePrefab, effects);
         // Damage is applied on projectile script
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AOEProjectile : MonoBehaviour
@@ -12,13 +13,14 @@ public class AOEProjectile : MonoBehaviour
     private DamageInfo _damage;
 
     private AOEProjectile _prefabOrigin;
+    private List<EffectBase> _effects = new();
     
-    
-    public void Init(DamageInfo damage, AOEProjectile prefabOrigin)
+    public void Init(DamageInfo damage, AOEProjectile prefabOrigin, List<EffectBase> effects)
     {
         _damage = damage;
         _prefabOrigin = prefabOrigin;
-
+        _effects = effects;
+        
         StartCoroutine(HitC());
     }
 
@@ -44,6 +46,10 @@ public class AOEProjectile : MonoBehaviour
         
         if(!other.TryGetComponent(out IDamageable damageable))
             return;
+
+        if(_effects.Count > 0 && other.TryGetComponent(out IAffectable affectable))
+            foreach (var effect in _effects)
+                affectable.ApplyEffect(effect);
         
         damageable.Hit(_damage);
     }

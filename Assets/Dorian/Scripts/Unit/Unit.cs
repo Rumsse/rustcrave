@@ -224,7 +224,7 @@ public class Unit : UnitBase
         HandleInterruptCurrentAction();
         currentMineable = mineable;
 
-        float rawMiningTime = currentMineable.GetDurability() - stats.miningPower;
+        float rawMiningTime = currentMineable.GetDurability() - stats.MiningPower;
         miningInterval = Mathf.Max(minMiningTime, rawMiningTime);
         miningTimer = miningInterval;
 
