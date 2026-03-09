@@ -9,9 +9,9 @@ public class MainCraftController : MonoBehaviour
 
     [Header("Panels & Controllers")]
     [SerializeField] VisualTreeAsset robotsCraftPanel;
-    //[SerializeField] VisualTreeAsset gadgetsCraftPanel;
+    [SerializeField] VisualTreeAsset gadgetsCraftPanel;
     [SerializeField] RobotsCraftController robotsCraftController;
-    // [SerializeField] GadgetsCraftController gadgetsCraftController; 
+    [SerializeField] GadgetsCraftController gadgetsCraftController; 
 
     [Header("UI Elements")]
     [SerializeField] VisualTreeAsset unitContainer;
@@ -46,8 +46,8 @@ public class MainCraftController : MonoBehaviour
         if (btnRobots != null)
             btnRobots.clicked += () => OpenTab("robots", robotsCraftPanel);
 
-        /*if (btnGadgets != null)
-            btnGadgets.clicked += () => OpenTab("gadgets", gadgetsCraftPanel);*/
+        if (btnGadgets != null)
+            btnGadgets.clicked += () => OpenTab("gadgets", gadgetsCraftPanel);
 
         if (btnBack != null)
         {
@@ -100,8 +100,8 @@ public class MainCraftController : MonoBehaviour
         if (tabKey == "robots" && robotsCraftController != null)
             robotsCraftController.Initialize(panel, HandleRobotCraftRequest);
 
-        /*else if (tabKey == "gadgets" && gadgetsCraftController != null)
-            gadgetsCraftController.Initialize(panel, craftLayer);*/
+        else if (tabKey == "gadgets" && gadgetsCraftController != null)
+            gadgetsCraftController.Initialize(panel, HandleGadgetCraftRequest);
     }
 
     void CloseCurrentTab()
@@ -152,6 +152,11 @@ public class MainCraftController : MonoBehaviour
 
 
         leftBar.Add(newUnitIcon);
+    }
+
+    void HandleGadgetCraftRequest(UnitSO unitType)
+    {
+        
     }
 
     void UpdateSwarmUI(VisualElement root)

@@ -7,8 +7,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] UIDocument uiDocument;
     [SerializeField] VisualTreeAsset choosePathPanel;
     [SerializeField] VisualTreeAsset mainCraftPanel;
+    [SerializeField] VisualTreeAsset swarmPanel;
     [SerializeField] ChoosePathController choosePathController;
     [SerializeField] MainCraftController mainCraftController;
+    [SerializeField] SwarmPanelController swarmPanelController;
 
     VisualElement leftPanelSlot;
     VisualElement rightPanelSlot;
@@ -30,6 +32,9 @@ public class UIManager : MonoBehaviour
 
         root.Q<Button>("btn-craft").clicked += () =>
             TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
+
+        root.Q<Button>("btn-swarm").clicked += () =>
+            TogglePanel("swarm-panel", swarmPanel, leftPanelSlot);
 
         root.Q<Button>("btn-choose-path").clicked += () =>
             TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
@@ -66,6 +71,9 @@ public class UIManager : MonoBehaviour
 
         if (key == "main-craft-panel")
             mainCraftController.Initialize(panel, leftPanelSlot);
+
+        if (key == "swarm-panel")
+            swarmPanelController.Initialize(panel, leftPanelSlot);
 
         if (key == "choose-path")
             choosePathController.Initialize(panel, tooltipLayer);

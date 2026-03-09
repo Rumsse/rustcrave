@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 810971827}
   - component: {fileID: 810971829}
   - component: {fileID: 810971830}
+  - component: {fileID: 810971831}
   m_Layer: 5
   m_Name: Craft
   m_TagString: Untagged
@@ -264,7 +265,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainCraftController
   swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
   robotsCraftPanel: {fileID: 9197481963319205126, guid: c8a5f620aef0a024cbd180dfe15d9156, type: 3}
+  gadgetsCraftPanel: {fileID: 9197481963319205126, guid: 85b3adb506299cc45a3444c3810153a8, type: 3}
   robotsCraftController: {fileID: 810971830}
+  gadgetsCraftController: {fileID: 810971831}
   unitContainer: {fileID: 9197481963319205126, guid: 0cbc2e256b9933f4fa75fab81d33d7de, type: 3}
 --- !u!114 &810971830
 MonoBehaviour:
@@ -280,6 +283,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RobotsCraftController
   availableRobots:
   - {fileID: 11400000, guid: 38f0c3753016095408b237199bc49c1e, type: 2}
+--- !u!114 &810971831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810971826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0becc7f9d0d703f4ab9b9d53e4f2fba4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GadgetsCraftController
 --- !u!1 &828975488
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +351,7 @@ Transform:
   m_Children:
   - {fileID: 1227357244}
   - {fileID: 810971827}
+  - {fileID: 2140184853}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &828975491
@@ -353,8 +369,10 @@ MonoBehaviour:
   uiDocument: {fileID: 828975489}
   choosePathPanel: {fileID: 9197481963319205126, guid: c4e75abb7b4ed15499a713a9af95f361, type: 3}
   mainCraftPanel: {fileID: 9197481963319205126, guid: 63f866c96ca601b449d927c1fdc771cc, type: 3}
+  swarmPanel: {fileID: 9197481963319205126, guid: 9801a505cfa015e4993a1ee14ea4c269, type: 3}
   choosePathController: {fileID: 1227357243}
   mainCraftController: {fileID: 810971829}
+  swarmPanelController: {fileID: 2140184852}
 --- !u!1 &949252975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1170,6 +1188,50 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &2140184851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2140184853}
+  - component: {fileID: 2140184852}
+  m_Layer: 5
+  m_Name: Swarm
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2140184852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140184851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bbc3ea2a5e34aa458aa58c7c3b328a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwarmPanelController
+--- !u!4 &2140184853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140184851}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 828975490}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &943519333888713798
 MonoBehaviour:
   m_ObjectHideFlags: 0
