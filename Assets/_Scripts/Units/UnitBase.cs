@@ -137,11 +137,11 @@ public abstract class UnitBase : MonoBehaviour
             return;
         } 
         
+        currentAttack = stats.PossibleAttacks[currentAttackIndex];
+        
         currentAttackIndex++;
         if (currentAttackIndex >= stats.PossibleAttacks.Count)
             currentAttackIndex = 0;
-
-        currentAttack = stats.PossibleAttacks[currentAttackIndex];
     }
 
     protected virtual bool CanAttack()

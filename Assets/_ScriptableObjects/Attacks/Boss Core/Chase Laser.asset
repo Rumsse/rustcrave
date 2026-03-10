@@ -9,41 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b56d3ccd092149943a5452240615d1e2, type: 3}
-  m_Name: Slice Laser
-  m_EditorClassIdentifier: Assembly-CSharp::SliceLaserAttack
-  attackName: Slice Laser
+  m_Script: {fileID: 11500000, guid: d510cb532b9b3694dbca925f75523020, type: 3}
+  m_Name: Chase Laser
+  m_EditorClassIdentifier: Assembly-CSharp::ChaseLaserAttack
+  attackName: Chase Laser
   damageMult: 999
   animationStateName: 
   attackRange: 999
   type: 8
   effects: []
-  sliceAmount: 3
-  recursionDelay: 0.2
-  mask:
-    serializedVersion: 2
-    m_Bits: 128
-  delayAfterStopping: 0.5
-  rotationMin: 480
-  rotationMax: 720
-  rotationSettings:
-    duration: 1
-    ease: 12
-    customEase:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    cycles: 1
-    cycleMode: 0
-    startDelay: 0
-    endDelay: 0
-    useUnscaledTime: 0
-    _useFixedUpdate: 0
-    _updateType: 0
+  laserColor: {r: 0.54901963, g: 0.03529412, b: 0, a: 0.8}
+  rotateAmount: 180
+  timeToFire: 1.5
   indicatorScaleSettings:
-    duration: 0.3
+    duration: 0.2
     ease: 1
     customEase:
       serializedVersion: 2
@@ -59,42 +38,38 @@ MonoBehaviour:
     _useFixedUpdate: 0
     _updateType: 0
   laserScaleSettings:
-    duration: 0.2
-    ease: 19
+    duration: 0.25
+    ease: 1
     customEase:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    cycles: 2
+    cycles: 1
     cycleMode: 1
     startDelay: 0
     endDelay: 0
     useUnscaledTime: 0
     _useFixedUpdate: 0
     _updateType: 0
-  colorSettings:
-    startFromCurrent: 0
-    startValue: {r: 0.5471698, g: 0.03647799, b: 0, a: 0.8}
-    endValue: {r: 0.85882354, g: 0.5058824, b: 0.5294118, a: 1}
-    settings:
-      duration: 0.2
-      ease: 0
-      customEase:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      cycles: 2
-      cycleMode: 1
-      startDelay: 0
-      endDelay: 0
-      useUnscaledTime: 0
-      _useFixedUpdate: 0
-      _updateType: 0
-  controllerPrefab: {fileID: 3131004673102279532, guid: c8d0bcd86050d4c46afa17857eeb4e19, type: 3}
+  rotationSettings:
+    duration: 10
+    ease: 1
+    customEase:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    cycles: 1
+    cycleMode: 0
+    startDelay: 0
+    endDelay: 0
+    useUnscaledTime: 0
+    _useFixedUpdate: 0
+    _updateType: 0
+  controllerPrefab: {fileID: 6815569464592498536, guid: 17db05273ae218540bdd9fa2b5d3f47a, type: 3}
   references:
     version: 2
     RefIds: []

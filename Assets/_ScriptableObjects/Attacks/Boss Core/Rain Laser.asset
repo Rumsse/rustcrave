@@ -9,41 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b56d3ccd092149943a5452240615d1e2, type: 3}
-  m_Name: Slice Laser
-  m_EditorClassIdentifier: Assembly-CSharp::SliceLaserAttack
-  attackName: Slice Laser
+  m_Script: {fileID: 11500000, guid: 4064e0ff669a4f84c9faad587be64a51, type: 3}
+  m_Name: Rain Laser
+  m_EditorClassIdentifier: Assembly-CSharp::RainLaserAttack
+  attackName: Rain Laser
   damageMult: 999
   animationStateName: 
   attackRange: 999
   type: 8
   effects: []
-  sliceAmount: 3
-  recursionDelay: 0.2
+  hitAmount: 5
+  attackDelay: 0.2
+  timeToFire: 1.5
+  possibleHitRange: 15
+  attacksAtUnit: 2
   mask:
     serializedVersion: 2
     m_Bits: 128
-  delayAfterStopping: 0.5
-  rotationMin: 480
-  rotationMax: 720
-  rotationSettings:
-    duration: 1
-    ease: 12
-    customEase:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    cycles: 1
-    cycleMode: 0
-    startDelay: 0
-    endDelay: 0
-    useUnscaledTime: 0
-    _useFixedUpdate: 0
-    _updateType: 0
   indicatorScaleSettings:
-    duration: 0.3
+    duration: 0.2
     ease: 1
     customEase:
       serializedVersion: 2
@@ -59,7 +43,7 @@ MonoBehaviour:
     _useFixedUpdate: 0
     _updateType: 0
   laserScaleSettings:
-    duration: 0.2
+    duration: 0.15
     ease: 19
     customEase:
       serializedVersion: 2
@@ -77,10 +61,10 @@ MonoBehaviour:
   colorSettings:
     startFromCurrent: 0
     startValue: {r: 0.5471698, g: 0.03647799, b: 0, a: 0.8}
-    endValue: {r: 0.85882354, g: 0.5058824, b: 0.5294118, a: 1}
+    endValue: {r: 0.8584906, g: 0.5061855, b: 0.5300538, a: 1}
     settings:
-      duration: 0.2
-      ease: 0
+      duration: 0.15
+      ease: 19
       customEase:
         serializedVersion: 2
         m_Curve: []
@@ -94,7 +78,8 @@ MonoBehaviour:
       useUnscaledTime: 0
       _useFixedUpdate: 0
       _updateType: 0
-  controllerPrefab: {fileID: 3131004673102279532, guid: c8d0bcd86050d4c46afa17857eeb4e19, type: 3}
+  controllerPrefab: {fileID: 1576675480522567014, guid: 6b4be38ed6f2fa34486bd0d6775289f6, type: 3}
+  laserPrefab: {fileID: -206749531684395630, guid: bda34799e2fd15542aa35bfee958d1d4, type: 3}
   references:
     version: 2
     RefIds: []
