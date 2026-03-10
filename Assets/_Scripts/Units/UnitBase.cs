@@ -9,13 +9,14 @@ public abstract class UnitBase : MonoBehaviour
     public UnitSO Stats => stats;
     public Animator Animator => animator;
     public HealthManager HealthManager => healthManager;
-
+    public Transform ProjectileSpawnT => projectileSpawnT;
+    public Transform ModelMidPoint => modelMidPoint;
+    public AttackBase CurrentAttack => currentAttack;
     public UnitBase AttackTarget
     {
         get => attackTarget;
         set
         {
-            Debug.Log($"{gameObject.name} {value}");
             attackTarget = value;
             isAttacking = value;
             
@@ -30,10 +31,14 @@ public abstract class UnitBase : MonoBehaviour
 
     [SerializeField] protected float rotateSpeed;
     [SerializeField] protected float stoppingDistance;
+    
+    [Header("References")]
     [SerializeField] protected UnitSO stats;
     [SerializeField] protected Animator animator;
     [SerializeField] protected HealthManager healthManager;
-
+    [SerializeField] protected Transform projectileSpawnT;
+    [SerializeField] protected Transform modelMidPoint; // used for projectiles to aim at model chest / mid point instead of pivot
+    
     #endregion
     
     #region Private Fields
@@ -45,6 +50,8 @@ public abstract class UnitBase : MonoBehaviour
     protected float lastAttackTime;
 
     protected bool isAttacking;
+
+    private UnitState state;
     
     #endregion
     
@@ -54,57 +61,32 @@ public abstract class UnitBase : MonoBehaviour
         agent.speed = stats.moveSpeed;
         agent.stoppingDistance = stoppingDistance;
     }
-    
+
+    private void Start()
+    {
+        SetState(new IdleState(this));
+    }
+
     protected virtual void Update()
     {
-        UpdateAnimation();
-        
-        if (AttackTarget && currentAttack)
-        {
-            HandleAttacking();
-            isAttacking = true;
-            return;
-        }
-        
-        isAttacking = false;
-    }
-    
-    private void UpdateAnimation()
-    {
-        bool isWalking = agent.hasPath && agent.remainingDistance > agent.stoppingDistance && agent.velocity.sqrMagnitude > 0.01f;
-    
-        animator.SetBool("IsWalking", isWalking);
+        state?.Tick();
     }
     
     public virtual void HandleMovement(Vector3 position)
     {
-        agent.SetDestination(position);
-    }
-
-    private void HandleAttacking()
-    {
-        if (!agent.pathPending && Vector3.Distance(transform.position, AttackTarget.transform.position) <= currentAttack.attackRange)
-        {
-            TryAttack();
-            agent.SetDestination(transform.position);
-        }
-        else
-        {
-            agent.SetDestination(AttackTarget.transform.position);
-            animator.SetBool("IsWalking", true);
-        }
+        AttackTarget = null;
+        SetState(new WalkingState(this, position));
     }
     
     public virtual void MoveToAttack(UnitBase enemy, Vector3 position)
     {
         AttackTarget = enemy;
-        agent.SetDestination(enemy.transform.position);
-
-        attackTarget.HealthManager.onDeath += StopAttacking;
+        SetState(new FightState(this));
+        
+        enemy.HealthManager.onDeath += StopAttacking;
     }
 
-
-    protected virtual void TryAttack()
+    public virtual void TryAttack()
     {
         if (CanAttack())
         {
@@ -137,4 +119,13 @@ public abstract class UnitBase : MonoBehaviour
         AttackTarget = null;
         currentAttack = null;
     }
+    
+    public void SetState(UnitState newState)
+    {
+        state?.ExitState();
+        state = newState;
+        state?.EnterState();
+    }
+    
+    public void StatsChange(UnitSO newStats) => stats = newStats;
 }
