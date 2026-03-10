@@ -52,6 +52,7 @@ public class Unit : UnitBase
 
     private void OnEnable()
     {
+        TunnelEnd.OnTunnelEndReached += SyncDataToState;
         energyManager.onEnergyPercentChange += HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted += HandleEnergyDepleted;
         healthManager.onHit += HandleDamageTaken;
@@ -59,15 +60,10 @@ public class Unit : UnitBase
 
     private void OnDisable()
     {
+        TunnelEnd.OnTunnelEndReached -= SyncDataToState;
         energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted -= HandleEnergyDepleted;
         healthManager.onHit -= HandleDamageTaken;
-
-        if (swarmUnitsData != null && swarmUnitsData.isAlive)
-        {
-            swarmUnitsData.currentHP = healthManager.CurrentHP;
-            swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
-        }
     }
 
     protected override void Update()
@@ -273,5 +269,14 @@ public class Unit : UnitBase
             return UnitActivity.Moving;
 
         return UnitActivity.Idle;
+    }
+
+    public void SyncDataToState()
+    {
+        if (swarmUnitsData != null && swarmUnitsData.isAlive)
+        {
+            swarmUnitsData.currentHP = healthManager.CurrentHP;
+            swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
+        }
     }
 }

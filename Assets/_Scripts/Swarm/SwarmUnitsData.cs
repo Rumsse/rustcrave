@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class SwarmUnitsData
@@ -17,4 +18,13 @@ public class SwarmUnitsData
         currentEnergy = type.maxEnergy;
         isAlive = true;
     }
+
+    public void RestoreEnergy(float amount)
+    {
+        if (!isAlive || unitType == null) return;
+
+        currentEnergy += amount;
+        currentEnergy = Mathf.Clamp(currentEnergy, 0, unitType.maxEnergy);
+    }
+
 }
