@@ -88,11 +88,26 @@ public class SliceLaserController : MonoBehaviour
 
     private void FireLaserInDirection(Laser laser)
     {
-        var overlapResult = Physics.OverlapCapsule(
-            laser.transform.position,
-            laser.transform.position + laser.transform.forward * 50, // 50 so it works like infinite range laser                        
-            laser.Visuals.localScale.x / 2f,
-            _attackData.mask);
+        var startPos = laser.transform.position;
+        
+        float range = 50f; // 50 so it covers entire screen
+        
+        Vector3 halfExtents = new Vector3(
+            laser.InitialLaserScale.x / 2f, 
+            laser.InitialLaserScale.z / 2f, 
+            range
+        );
+
+        Vector3 center = startPos + laser.transform.forward * range;
+
+        Quaternion orientation = laser.transform.rotation;
+
+        var overlapResult = Physics.OverlapBox(
+            center,
+            halfExtents,
+            orientation,
+            _attackData.mask
+        );
         
         if (overlapResult.Length == 0) return;
 

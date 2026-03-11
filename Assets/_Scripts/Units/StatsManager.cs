@@ -10,6 +10,7 @@ public class StatsManager : MonoBehaviour
 
     #region Properties
 
+    public Transform PrefabT => _baseData.Prefab.transform;
     public string RobotName => _baseData.robotName;
     public Sprite RobotSprite => _baseData.robotSprite;
     public UnitType UnitType => _baseData.unitType;

@@ -7,6 +7,8 @@ public class Laser : MonoBehaviour
     public Transform Visuals => _visuals;
     public DecalProjector Indicator => _indicator;
     
+    public Vector3 InitialLaserScale => _initialLaserScale;
+    
     [Header("References")]
     [SerializeField] private Transform _visuals;
     [SerializeField] private DecalProjector _indicator;
