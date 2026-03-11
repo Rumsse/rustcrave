@@ -8,14 +8,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] VisualTreeAsset choosePathPanel;
     [SerializeField] VisualTreeAsset mainCraftPanel;
     [SerializeField] VisualTreeAsset swarmPanel;
+    [SerializeField] VisualTreeAsset eventPanel;
     [SerializeField] ChoosePathController choosePathController;
     [SerializeField] MainCraftController mainCraftController;
     [SerializeField] SwarmPanelController swarmPanelController;
+    [SerializeField] EventPanelController eventPanelController;
 
     VisualElement leftPanelSlot;
     VisualElement rightPanelSlot;
     VisualElement panelLayer;
     VisualElement tooltipLayer;
+    VisualElement eventPanelLayer;
 
     readonly Dictionary<string, VisualElement> panelCache = new();
 
@@ -29,6 +32,7 @@ public class UIManager : MonoBehaviour
         leftPanelSlot = root.Q("left-panel");
         rightPanelSlot = root.Q("right-panel");
         tooltipLayer = root.Q("tooltip-layer");
+        eventPanelLayer = root.Q("event-layer");
 
         root.Q<Button>("btn-craft").clicked += () =>
             TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
@@ -38,6 +42,9 @@ public class UIManager : MonoBehaviour
 
         root.Q<Button>("btn-choose-path").clicked += () =>
             TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
+
+        root.Q<Button>("btn-event-pop-up").clicked += () =>
+            TogglePanel("event-panel", eventPanel, eventPanelLayer);
     }
 
     void TogglePanel(string key, VisualTreeAsset asset, VisualElement slot)
@@ -77,6 +84,9 @@ public class UIManager : MonoBehaviour
 
         if (key == "choose-path")
             choosePathController.Initialize(panel, tooltipLayer);
+
+        if(key == "event-panel")
+            eventPanelController.Initialize(panel, eventPanelLayer);
     }
 
     void BindCloseButton(VisualElement panel, VisualElement slot)
