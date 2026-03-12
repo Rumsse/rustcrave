@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,6 +15,8 @@ public class SwarmState : ScriptableObject
     public IReadOnlyList<SwarmUnitsData> SwarmUnits => swarmUnits;
     public int AliveCount => swarmUnits.Count(m => m.isAlive);
 
+    public event Action<SwarmUnitsData> OnUnitAdded;
+
     public void Initialize()
     {
         swarmUnits.Clear();
@@ -21,7 +24,12 @@ public class SwarmState : ScriptableObject
             swarmUnits.Add(new SwarmUnitsData(type));
     }
 
-    public void AddUnitToSwarm(UnitSO type) => swarmUnits.Add(new SwarmUnitsData(type));
+    public void AddUnitToSwarm(UnitSO type)
+    {
+        var newUnit = new SwarmUnitsData(type);
+        swarmUnits.Add(newUnit);
+        OnUnitAdded?.Invoke(newUnit);
+    }
 
     public void MarkDead(string unitId)
     {
