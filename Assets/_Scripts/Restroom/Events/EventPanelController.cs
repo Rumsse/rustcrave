@@ -24,6 +24,7 @@ public class EventPanelController : MonoBehaviour
     readonly Dictionary<string, SwarmUnitsData> robotDropdownMap = new();
     List<Button> optionButtons = new();
 
+    bool isShowingResult;
     const string PLACEHOLDER = "___";
 
     #region Initialization
@@ -73,6 +74,11 @@ public class EventPanelController : MonoBehaviour
 
     public void TryTriggerRandomEvent()
     {
+        isShowingResult = false;
+
+        if (eventLayer != null)
+            eventLayer.style.display = DisplayStyle.None;
+
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
 
@@ -93,6 +99,9 @@ public class EventPanelController : MonoBehaviour
         SetupDropdown();
         SetupButtons();
         UpdateDynamicTexts();
+
+        if (robotDropdown != null)
+            robotDropdown.style.display = DisplayStyle.Flex;
 
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.Flex;
@@ -129,7 +138,7 @@ public class EventPanelController : MonoBehaviour
 
         foreach (var robot in activeRobots)
         {
-            string baseName = robot.unitType != null ? robot.unitType.name : "Robot";
+            string baseName = robot.unitType != null ? robot.unitType.robotName : "Robot";
             string uniqueName = $"{baseName} #{counter}";
 
             robotDropdownMap.Add(uniqueName, robot);
@@ -193,18 +202,81 @@ public class EventPanelController : MonoBehaviour
 
     void OnExistingButtonClicked(int index)
     {
-        if (currentEvent == null || currentEvent.dialogOptions == null)
+        if (isShowingResult)
+        {
+            ClosePanel();
             return;
+        }
 
-        if (index >= currentEvent.dialogOptions.Count)
+        if (currentEvent == null || currentEvent.dialogOptions == null || index >= currentEvent.dialogOptions.Count)
             return;
 
         var selectedOption = currentEvent.dialogOptions[index];
 
-        if (currentSelectedRobot != null && selectedOption.action != null)
-            selectedOption.action.Execute(currentSelectedRobot);
+        if (selectedOption.isIgnoreOption)
+        {
+            ClosePanel();
+            return;
+        }
 
-        ClosePanel();
+        var outcome = DetermineOutcome(selectedOption, currentSelectedRobot);
+
+        ApplyOutcome(outcome);
+        ShowResultScreen(outcome.resultText);
+    }
+
+    EventOutcome DetermineOutcome(DialogOption option, SwarmUnitsData robot)
+    {
+        if (!option.isMiningCheck)
+            return option.successOutcome;
+
+        int statValue = robot != null && robot.unitType != null ? (int)robot.unitType.miningPower : 0;
+        int finalChance = option.baseSuccessChance + (statValue * option.bonusPerMiningPower);
+        int roll = UnityEngine.Random.Range(1, 101);
+
+        if (roll <= finalChance)
+            return option.successOutcome;
+
+        return option.failureOutcome;
+    }
+
+    void ApplyOutcome(EventOutcome outcome)
+    {
+        if (outcome == null || outcome.actions == null)
+            return;
+
+        foreach (var action in outcome.actions)
+        {
+            if (action != null)
+                action.Execute(currentSelectedRobot, swarmState);
+        }
+    }
+
+    void ShowResultScreen(string resultText)
+    {
+        isShowingResult = true;
+
+        if (robotDropdown != null)
+            robotDropdown.style.display = DisplayStyle.None;
+
+        for (int i = 0; i < optionButtons.Count; i++)
+        {
+            if (i == 0)
+            {
+                optionButtons[i].text = "Continue.";
+                optionButtons[i].style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                optionButtons[i].style.display = DisplayStyle.None;
+            }
+        }
+
+        if (descriptionLabel != null && !string.IsNullOrEmpty(resultText))
+        {
+            string displayName = robotDropdown.value;
+            descriptionLabel.text = resultText.Replace(PLACEHOLDER, displayName);
+        }
     }
 
     void ClosePanel()
