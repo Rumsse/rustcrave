@@ -2,5 +2,7 @@ using UnityEngine;
 
 public interface IMineable
 {
-    public ItemSO Mine();
+    ItemSO Mine();
+    float GetDurability();
+    bool IsDepleted();
 }

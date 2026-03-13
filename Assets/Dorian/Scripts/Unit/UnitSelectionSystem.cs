@@ -25,7 +25,7 @@ public class UnitSelectionSystem : MonoBehaviour
             }
             if ((MouseWorld.TryGetPosition(out Vector3 position)))
             {
-                selectedUnit.HandleMovement(position);
+                selectedUnit?.HandleMovement(position);
             }
         }
     }

@@ -26,6 +26,6 @@ public class BossPhaseController : MonoBehaviour
         if(string.IsNullOrEmpty(phase.animationTrigger))
             _bossUnit.Animator.SetTrigger(phase.animationTrigger);
 
-        _bossUnit.StatsChange(phase.newStats);
+        _bossUnit.ChangeStats(phase.newStats);
     }
 }

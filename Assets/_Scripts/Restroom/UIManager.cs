@@ -6,15 +6,25 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument uiDocument;
     [SerializeField] VisualTreeAsset choosePathPanel;
+    [SerializeField] VisualTreeAsset mainCraftPanel;
+    [SerializeField] VisualTreeAsset swarmPanel;
+    [SerializeField] VisualTreeAsset eventPanel;
     [SerializeField] ChoosePathController choosePathController;
+    [SerializeField] MainCraftController mainCraftController;
+    [SerializeField] SwarmPanelController swarmPanelController;
+    [SerializeField] EventPanelController eventPanelController;
 
     VisualElement leftPanelSlot;
     VisualElement rightPanelSlot;
     VisualElement panelLayer;
+    VisualElement tooltipLayer;
+    VisualElement eventPanelLayer;
 
     readonly Dictionary<string, VisualElement> panelCache = new();
 
     string activePanelKey;
+
+    #region Initialization
 
     void Awake()
     {
@@ -23,10 +33,38 @@ public class UIManager : MonoBehaviour
         panelLayer = root.Q("panel-layer");
         leftPanelSlot = root.Q("left-panel");
         rightPanelSlot = root.Q("right-panel");
+        tooltipLayer = root.Q("tooltip-layer");
+        eventPanelLayer = root.Q("event-layer");
+
+        root.Q<Button>("btn-craft").clicked += () =>
+            TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
+
+        root.Q<Button>("btn-swarm").clicked += () =>
+            TogglePanel("swarm-panel", swarmPanel, leftPanelSlot);
 
         root.Q<Button>("btn-choose-path").clicked += () =>
             TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
+
+        var popUpContainer = root.Q<VisualElement>("event-pop-up");
+        var popUpButton = root.Q<Button>("btn-event-pop-up");
+
+        InitializeEventPanel(popUpContainer, popUpButton);
     }
+
+    void InitializeEventPanel(VisualElement popUpContainer, Button popUpButton)
+    {
+        var panelInstance = eventPanel.CloneTree();
+        panelInstance.style.flexGrow = 1;
+
+        eventPanelLayer.Add(panelInstance);
+        eventPanelLayer.style.display = DisplayStyle.None;
+
+        eventPanelController.Initialize(panelInstance, eventPanelLayer, popUpContainer, popUpButton);
+    }
+
+    #endregion
+
+    #region Tab Management
 
     void TogglePanel(string key, VisualTreeAsset asset, VisualElement slot)
     {
@@ -56,8 +94,14 @@ public class UIManager : MonoBehaviour
 
     void InitializePanel(string key, VisualElement panel)
     {
+        if (key == "main-craft-panel")
+            mainCraftController.Initialize(panel, leftPanelSlot);
+
+        if (key == "swarm-panel")
+            swarmPanelController.Initialize(panel, leftPanelSlot);
+
         if (key == "choose-path")
-            choosePathController.Initialize(panel);
+            choosePathController.Initialize(panel, tooltipLayer);
     }
 
     void BindCloseButton(VisualElement panel, VisualElement slot)
@@ -79,4 +123,6 @@ public class UIManager : MonoBehaviour
         panelLayer.style.display = DisplayStyle.None;
         activePanelKey = null;
     }
+
+    #endregion
 }

@@ -17,5 +17,15 @@ MonoBehaviour:
   animationStateName: Punch Combo
   attackRange: 5
   type: 2
+  effects:
+  - rid: 8303310666421502042
   projectilePrefab: {fileID: 8979190640563872119, guid: 6aae983ab9c824246906ecdaa4cb3208, type: 3}
   spawnOnAttacker: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 8303310666421502042
+      type: {class: SlowEffect, ns: , asm: Assembly-CSharp}
+      data:
+        duration: 15
+        modifier: 0.8
