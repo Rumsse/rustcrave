@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +14,8 @@ public enum UnitActivity
 
 public class Unit : UnitBase
 {
+    public static List<Unit> units = new();
+    
     public NavMeshAgent Agent => agent;
 
     [SerializeField] private UnitInventory inventory;
@@ -56,6 +59,9 @@ public class Unit : UnitBase
         energyManager.onEnergyPercentChange += HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted += HandleEnergyDepleted;
         healthManager.onHit += HandleDamageTaken;
+        
+        if(!units.Contains(this))
+            units.Add(this);
     }
 
     private void OnDisable()
@@ -64,6 +70,9 @@ public class Unit : UnitBase
         energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted -= HandleEnergyDepleted;
         healthManager.onHit -= HandleDamageTaken;
+
+        if (units.Contains(this))
+            units.Remove(this);
     }
 
     protected override void Update()
@@ -270,6 +279,8 @@ public class Unit : UnitBase
 
         return UnitActivity.Idle;
     }
+    
+    public static Unit GetRandomUnit() => units[Random.Range(0, units.Count)];
 
     public void SyncDataToState()
     {

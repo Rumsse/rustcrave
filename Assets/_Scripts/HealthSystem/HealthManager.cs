@@ -50,6 +50,12 @@ public class HealthManager : MonoBehaviour, IDamageable
         _healthMaterial = _healthBarRend.material;
     }
 
+    private void OnEnable()
+    {
+        _currentHP = MaxHp;
+        UpdateHealthVisuals();
+    }
+
     #endregion
 
     #region Managing Health
@@ -85,7 +91,7 @@ public class HealthManager : MonoBehaviour, IDamageable
     {
         OnDeath();
         
-        gameObject.SetActive(false);
+        PoolManager.Instance.Release(transform.parent ?? transform, _baseStats.PrefabT);
     }
     
     #endregion
