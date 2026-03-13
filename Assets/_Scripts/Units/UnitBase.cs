@@ -1,9 +1,20 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public abstract class UnitBase : MonoBehaviour
 {
+    #region Events
+
+    public event Action onAttack;
+    public event Action onSpecialStart;
+    public event Action onSpecialStop;
+    public event Action<UnitState> onStateChange;
+
+    #endregion
+    
     #region Properties
 
     public StatsManager Stats => stats;
@@ -20,17 +31,35 @@ public abstract class UnitBase : MonoBehaviour
             attackTarget = value;
             isAttacking = value;
             
-            if(value)
+            if(value && !currentAttack)
                 RollAttack();
         }
     }
-    
+
+    public bool IsPerformingSpecial
+    {
+        get => _isPerformingSpecial;
+        set
+        {
+            _isPerformingSpecial = value;
+
+            if (!value)
+            {
+                lastAttackTime = Time.time;
+                onSpecialStop?.Invoke();
+            }
+            else
+                onSpecialStart?.Invoke();
+        }
+    }
+
     #endregion
 
     #region Inspector Fields
 
     [SerializeField] protected float rotateSpeed;
     [SerializeField] protected float stoppingDistance;
+    [SerializeField] protected bool loopThroughAttacks;
     
     [Header("References")]
     [SerializeField] protected StatsManager stats;
@@ -52,9 +81,14 @@ public abstract class UnitBase : MonoBehaviour
     protected bool isAttacking;
 
     private UnitState state;
-    
+
+    private int currentAttackIndex;
+    private bool _isPerformingSpecial;
+
     #endregion
-    
+
+    #region Unity Lifecycle
+
     protected virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -71,6 +105,19 @@ public abstract class UnitBase : MonoBehaviour
     {
         state?.Tick();
     }
+
+    #endregion
+
+    #region State Management
+
+    public void SetState(UnitState newState)
+    {
+        state?.ExitState();
+        state = newState;
+        state?.EnterState();
+        
+        onStateChange?.Invoke(state);
+    }
     
     public virtual void HandleMovement(Vector3 position)
     {
@@ -86,21 +133,54 @@ public abstract class UnitBase : MonoBehaviour
         enemy.HealthManager.onDeath += StopAttacking;
     }
 
+    #endregion
+
+    #region Attacking
+
     public virtual void TryAttack()
     {
         if (CanAttack())
         {
+            onAttack?.Invoke();
             currentAttack.Execute(AttackTarget, this);
             RollAttack();
             lastAttackTime = Time.time;
         }
     }
 
+    #region Attack Chosing
+
     protected void RollAttack()
     {
-        currentAttack = stats.PossibleAttacks[Random.Range(0, stats.PossibleAttacks.Count)];
+        if (!loopThroughAttacks) RollAttackRandom();
+        else RollAttackIterative();
     }
 
+    private void RollAttackRandom() => currentAttack = stats.PossibleAttacks[Random.Range(0, stats.PossibleAttacks.Count)];
+
+    private void RollAttackIterative()
+    {
+        if (currentAttackIndex >= stats.PossibleAttacks.Count)
+            currentAttackIndex = 0;
+        
+        currentAttack = stats.PossibleAttacks[currentAttackIndex];
+        
+        currentAttackIndex++;
+    }
+
+    private void RollAttackPhaseChange()
+    {
+        int attackIndex = currentAttackIndex - 1;
+        
+        if (attackIndex >= stats.PossibleAttacks.Count || attackIndex < 0)
+            attackIndex = 0;
+        
+        currentAttack = stats.PossibleAttacks[attackIndex];
+    }
+    
+    #endregion
+    
+    
     protected virtual bool CanAttack()
     {
         if (Time.time - lastAttackTime < 1 / stats.AttacksPerSecond)
@@ -119,13 +199,17 @@ public abstract class UnitBase : MonoBehaviour
         AttackTarget = null;
         currentAttack = null;
     }
-    
-    public void SetState(UnitState newState)
+
+    #endregion
+
+    #region Phase Handling
+
+    public void ChangeStats(UnitSO newStats)
     {
-        state?.ExitState();
-        state = newState;
-        state?.EnterState();
+        stats.ChangeStats(newStats);
+        RollAttackPhaseChange();
     }
+
+    #endregion
     
-    public void ChangeStats(UnitSO newStats) => stats.ChangeStats(newStats);
 }
