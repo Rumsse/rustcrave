@@ -3,20 +3,18 @@ using UnityEngine.UI;
 
 public class UnitStateUI : MonoBehaviour
 {
-    [SerializeField] private Unit unit;
     [SerializeField] private Image stateIcon;
-
     [SerializeField] private Sprite idleSprite;
     [SerializeField] private Sprite movingSprite;
     [SerializeField] private Sprite miningSprite;
     [SerializeField] private Sprite fightingSprite;
+    private Unit unit;
 
     private void Update()
     {
+        if (unit == null) return;
         UnitActivity state = unit.GetCurrentState();
         stateIcon.sprite = GetSpriteForState(state);
-
-        stateIcon.enabled = stateIcon.sprite != null;
     }
 
     private Sprite GetSpriteForState(UnitActivity state)
@@ -29,5 +27,10 @@ public class UnitStateUI : MonoBehaviour
             case UnitActivity.Fighting: return fightingSprite;
             default: return null;
         }
+    }
+
+    public void SetUnit(Unit newUnit)
+    {
+        unit = newUnit;
     }
 }

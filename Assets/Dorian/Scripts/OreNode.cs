@@ -11,7 +11,7 @@ public class OreNode : MonoBehaviour, IMineable
     [SerializeField] private float maxDropRadius = 2.0f;
     [SerializeField] private float dropHeight = 0.5f;
     [SerializeField] private float navMeshSampleDistance = 2.0f;
-    [SerializeField] private int dropAmount = 1;
+    [SerializeField] private int dropAmount;
 
     public ItemSO Mine()
     {
@@ -30,14 +30,14 @@ public class OreNode : MonoBehaviour, IMineable
                 Vector3 finalDropPosition = hit.position + new Vector3(0f, dropHeight, 0f);
                 OrePickUp droppedItem = Instantiate(dropPrefab, finalDropPosition, Quaternion.identity);
                 droppedItem.item = ore;
-                droppedItem.amount = dropAmount;
+                dropAmount = droppedItem.oreValueAmount;
             }
             else
             {
                 Vector3 fallbackPosition = transform.position + new Vector3(0f, dropHeight, 0f);
                 OrePickUp droppedItem = Instantiate(dropPrefab, fallbackPosition, Quaternion.identity);
                 droppedItem.item = ore;
-                droppedItem.amount = dropAmount;
+                dropAmount = droppedItem.oreValueAmount;
             }
         }
 

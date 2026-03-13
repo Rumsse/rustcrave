@@ -4,7 +4,7 @@ using UnityEngine;
 public class OrePickUp : MonoBehaviour, IInteractable
 {
     public ItemSO item;
-    public int amount = 1;
+    public int oreValueAmount;
 
     public event Action onInteract;
 

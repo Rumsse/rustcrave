@@ -34,7 +34,7 @@ public class UnitActions : MonoBehaviour
         
         if (hit.transform.TryGetComponent(out IInteractable interactable))
         {
-            unit.MoveToInteract(interactable, hit.point);
+            unit.MoveToInteract(interactable, hit.transform.position);
             return true;
         }
 
@@ -73,7 +73,7 @@ public class UnitActions : MonoBehaviour
 
         if (hit.transform.TryGetComponent(out IMineable mineable))
         {
-            unit.MoveToMine(mineable, hit.point);
+            unit.MoveToMine(mineable, hit.transform.position);
             return true;
         }
 

@@ -14,11 +14,14 @@ public enum UnitActivity
 public class Unit : UnitBase
 {
     public NavMeshAgent Agent => agent;
+    public string Id => swarmUnitsData.id;
 
     [SerializeField] private UnitInventory inventory;
     [SerializeField] private EnergyManager energyManager;
     [SerializeField] private float minMiningTime;
     [SerializeField] private float minMoveSpeedMultiplier;
+    [SerializeField] private float interactionStoppingDistance;
+    [SerializeField] private float defaultStoppingDistance;
     [SerializeField, Range(0f, 1f)] private float lowEnergyThreshold;
 
     private float baseMoveSpeed;
@@ -27,6 +30,7 @@ public class Unit : UnitBase
 
     private SwarmUnitsData swarmUnitsData;
     private SwarmState swarmState;
+
 
     private IInteractable currentInteractable;
     private IMineable currentMineable;
@@ -41,6 +45,7 @@ public class Unit : UnitBase
         healthManager.onHit += HandleDamageTaken;
 
         energyManager.InitializeEnergy(swarmUnitsData.currentEnergy);
+        UnitRegistry.Register(this);
     }
 
     protected override void Awake()
@@ -55,7 +60,6 @@ public class Unit : UnitBase
         TunnelEnd.OnTunnelEndReached += SyncDataToState;
         energyManager.onEnergyPercentChange += HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted += HandleEnergyDepleted;
-        healthManager.onHit += HandleDamageTaken;
     }
 
     private void OnDisable()
@@ -64,6 +68,11 @@ public class Unit : UnitBase
         energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted -= HandleEnergyDepleted;
         healthManager.onHit -= HandleDamageTaken;
+    }
+
+    private void OnDestroy()
+    {
+        UnitRegistry.Unregister(this);
     }
 
     protected override void Update()
@@ -150,7 +159,7 @@ public class Unit : UnitBase
         {
             if (currentInteractable is OrePickUp pickup)
             {
-                if (inventory.InventorySO.AddItem(pickup.item, pickup.amount))
+                if (inventory.InventorySO.AddItem(pickup.item, pickup.oreValueAmount))
                 {
                     Destroy(pickup.gameObject);
                 }
@@ -212,6 +221,8 @@ public class Unit : UnitBase
     {
         HandleInterruptCurrentAction();
         currentInteractable = interactable;
+
+        agent.stoppingDistance = interactionStoppingDistance;
         agent.SetDestination(position);
     }
 
@@ -224,6 +235,7 @@ public class Unit : UnitBase
         miningInterval = Mathf.Max(minMiningTime, rawMiningTime);
         miningTimer = miningInterval;
 
+        agent.stoppingDistance = interactionStoppingDistance;
         agent.SetDestination(position);
     }
 
@@ -236,6 +248,8 @@ public class Unit : UnitBase
     public override void HandleMovement(Vector3 position)
     {
         HandleInterruptCurrentAction();
+
+        agent.stoppingDistance = defaultStoppingDistance;
         base.HandleMovement(position);
     }
 
