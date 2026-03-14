@@ -38,7 +38,8 @@ public enum UnitType
 {
     Warrior,
     Miner,
-    Toter
+    Toter,
+    MC
 }
 
 

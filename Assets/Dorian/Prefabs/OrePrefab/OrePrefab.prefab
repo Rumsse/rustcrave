@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8768064617428127999}
   - component: {fileID: 7194927049824769705}
-  - component: {fileID: 567936930993025482}
-  m_Layer: 8
+  - component: {fileID: -3141239779102779568}
+  m_Layer: 9
   m_Name: OrePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4539889, y: 0.4135126, z: 0.42224383}
   m_Center: {x: 0.004237592, y: -0.0062336326, z: -0.0026413873}
---- !u!114 &567936930993025482
+--- !u!114 &-3141239779102779568
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,11 +64,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1292930537977458388}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8ee684caefc9504fb79cafd38ac5791, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f0e1bb79601ee5468d291efeb408f0e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OrePickUp
-  item: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::OreNode
+  ore: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
   amount: 1
+  dropPrefab: {fileID: 567936930993025482, guid: 78df304d36458da4dae82211548dcf47, type: 3}
+  minDropRadius: 1
+  maxDropRadius: 2
+  dropHeight: 0.5
+  navMeshSampleDistance: 2
+  dropAmount: 1
 --- !u!1 &2160613275729909147
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,7 +86,7 @@ GameObject:
   - component: {fileID: 2740760461150413428}
   - component: {fileID: 4079511517517328281}
   - component: {fileID: 415140420027776781}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: OrePrefabVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
