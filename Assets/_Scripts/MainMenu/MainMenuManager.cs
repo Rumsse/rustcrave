@@ -5,6 +5,8 @@ public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] private string gameSceneName;
     [SerializeField] private GameObject optionsPanel;
+    [SerializeField] private SwarmState swarmState;
+    [SerializeField] private MapState mapState;
 
     private void Start()
     {
@@ -12,7 +14,12 @@ public class MainMenuManager : MonoBehaviour
             optionsPanel.SetActive(false);
     }
 
-    public void StartGame() => SceneManager.LoadScene(gameSceneName);
+    public void StartGame()
+    {
+        swarmState.Initialize();
+        mapState.Initialize();
+        SceneManager.LoadScene(gameSceneName);
+    }
 
     public void OpenOptions()
     {

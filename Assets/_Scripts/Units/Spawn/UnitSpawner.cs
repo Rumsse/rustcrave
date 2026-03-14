@@ -11,10 +11,10 @@ public class UnitSpawner : MonoBehaviour
     [SerializeField] private float sampleRadius = 5f;
     [SerializeField] private float ringRadius = 2f;
 
-    private void Start()
+/*    private void Start()
     {
         swarmState.Initialize();
-    }
+    }*/
 
     private void OnEnable()
     {

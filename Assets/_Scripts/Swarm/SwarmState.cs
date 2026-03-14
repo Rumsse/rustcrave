@@ -51,6 +51,7 @@ public class SwarmState : ScriptableObject
 
         unit.isAlive = false;
 
+        RemoveDead();
         OnSwarmChanged?.Invoke();
     }
 
