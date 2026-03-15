@@ -21,6 +21,7 @@ public class RobotHUD : MonoBehaviour
 
     private HealthManager healthManager;
     private EnergyManager energyManager;
+    private MCFormController formController;
 
     private List<InventorySlotUI> uiSlots = new List<InventorySlotUI>();
 
@@ -111,6 +112,18 @@ public class RobotHUD : MonoBehaviour
         {
             energyManager.onEnergyPercentChange += HandleEnergyChanged;
         }
+
+        formController = unit.GetComponent<MCFormController>();
+        if (formController != null)
+        {
+            formController.OnFormChanged += HandleFormChanged;
+        }
+    }
+
+    private void HandleFormChanged(UnitSO newStats)
+    {
+        nameText.text = newStats.robotName;
+        icon.sprite = newStats.robotSprite;
     }
 
     private void HandleHealthChanged(float percent)
@@ -176,5 +189,6 @@ public class RobotHUD : MonoBehaviour
 
         if (healthManager != null) healthManager.onHealthPercentChange -= HandleHealthChanged;
         if (energyManager != null) energyManager.onEnergyPercentChange -= HandleEnergyChanged;
+        if (formController != null) formController.OnFormChanged -= HandleFormChanged;
     }
 }

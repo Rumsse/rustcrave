@@ -15,7 +15,9 @@ public class Unit : UnitBase
 {
     public NavMeshAgent Agent => agent;
     public string Id => swarmUnitsData.id;
+    public bool IsMainCharacter => isMainCharacter;
 
+    [SerializeField] private bool isMainCharacter;
     [SerializeField] private UnitInventory inventory;
     [SerializeField] private EnergyManager energyManager;
     [SerializeField] private float minMiningTime;
@@ -30,7 +32,6 @@ public class Unit : UnitBase
 
     private SwarmUnitsData swarmUnitsData;
     private SwarmState swarmState;
-
 
     private IInteractable currentInteractable;
     private IMineable currentMineable;
@@ -121,6 +122,20 @@ public class Unit : UnitBase
         animator.ResetTrigger("Mining");
     }
 
+    public void CancelActionAndPath()
+    {
+        if (currentMineable != null || currentInteractable != null || AttackTarget != null)
+        {
+            HandleInterruptCurrentAction();
+        }
+
+        if (agent.hasPath)
+        {
+            agent.ResetPath();
+            animator.SetBool("IsWalking", false);
+        }
+    }
+
     private void HandleEnergyDepleted()
     {
         agent.isStopped = true;
@@ -184,7 +199,7 @@ public class Unit : UnitBase
         {
             if (miningTimer == miningInterval)
             {
-                animator.SetTrigger("Mining");
+                currentMineable.PlayEffect();
             }
 
             miningTimer -= Time.deltaTime;

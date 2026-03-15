@@ -16,45 +16,72 @@ public class UnitPanel : MonoBehaviour
 
     private HealthManager healthManager;
     private EnergyManager energyManager;
+    private StatsManager statsManager;
+    private MCFormController formController;
 
     private void Awake()
     {
         healthManager = unit.GetComponent<HealthManager>();
         energyManager = unit.GetComponent<EnergyManager>();
-        sprite.sprite = unit.Stats.RobotSprite;
+        statsManager = unit.GetComponent<StatsManager>();
+        formController = unit.GetComponent<MCFormController>();
+
+        sprite.sprite = statsManager.RobotSprite;
     }
 
     private void Start()
     {
-        hpText.text = $"HP: {healthManager.CurrentHP}/{unit.Stats.MaxHP}\n";
-        energyText.text = $"Energy: {energyManager.CurrentEnergy}/{unit.Stats.MaxEnergy}\n";
-        moveSpeedText.text = $"MoveSpeed: {unit.Stats.MoveSpeed}";
-        robotTypeText.text = $"{unit.Stats.UnitType}";
-        robotNameText.text = $"{unit.Stats.RobotName}";
+        UpdateUI();
     }
 
     private void OnEnable()
     {
         healthManager.onHealthPercentChange += UpdateHealthBar;
         energyManager.onEnergyPercentChange += UpdateEnergyBar;
+
+        if (formController != null)
+        {
+            formController.OnFormChanged += HandleFormChanged;
+        }
     }
 
     private void OnDisable()
     {
         healthManager.onHealthPercentChange -= UpdateHealthBar;
         energyManager.onEnergyPercentChange -= UpdateEnergyBar;
+
+        if (formController != null)
+        {
+            formController.OnFormChanged -= HandleFormChanged;
+        }
+    }
+
+    private void HandleFormChanged(UnitSO newStats)
+    {
+        sprite.sprite = statsManager.RobotSprite;
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        hpText.text = $"HP: {healthManager.CurrentHP}/{statsManager.MaxHP}\n";
+        int energyBarInt = Mathf.CeilToInt(energyManager.CurrentEnergy);
+        energyText.text = $"Energy: {energyBarInt}/{statsManager.MaxEnergy}\n";
+        moveSpeedText.text = $"MoveSpeed: {statsManager.MoveSpeed}";
+        robotTypeText.text = $"{statsManager.UnitType}";
+        robotNameText.text = $"{statsManager.RobotName}";
     }
 
     private void UpdateHealthBar(float percent)
     {
         hpBar.fillAmount = percent;
-        hpText.text = $"HP: {healthManager.CurrentHP}/{unit.Stats.MaxHP}\n";
+        hpText.text = $"HP: {healthManager.CurrentHP}/{statsManager.MaxHP}\n";
     }
 
     private void UpdateEnergyBar(float percent)
     {
         energyBar.fillAmount = percent;
         int energyBarInt = Mathf.CeilToInt(energyManager.CurrentEnergy);
-        energyText.text = $"Energy: {energyBarInt}/{unit.Stats.MaxEnergy}\n";
+        energyText.text = $"Energy: {energyBarInt}/{statsManager.MaxEnergy}\n";
     }
 }
