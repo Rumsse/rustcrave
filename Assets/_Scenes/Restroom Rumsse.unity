@@ -419,19 +419,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 246176329}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
-        m_MethodName: Resume
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &246176329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1623,19 +1611,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1127723261}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
-        m_MethodName: Resume
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1127723261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2304,19 +2280,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1396445793}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
-        m_MethodName: Resume
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1396445793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2366,6 +2330,7 @@ GameObject:
   - component: {fileID: 1435208049}
   - component: {fileID: 1435208048}
   - component: {fileID: 1435208050}
+  - component: {fileID: 1435208051}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2428,6 +2393,22 @@ MonoBehaviour:
   - {fileID: 833314400}
   - {fileID: 1625799300}
   - {fileID: 625021111}
+--- !u!114 &1435208051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435208047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d933d09dc364cf047bf169e100cec284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
+  gameSceneName: 
+  optionsPanel: {fileID: 0}
+  swarmState: {fileID: 0}
+  mapState: {fileID: 0}
 --- !u!1 &1622955851
 GameObject:
   m_ObjectHideFlags: 0
@@ -3142,9 +3123,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
-        m_MethodName: ReturnToMainMenu
+      - m_Target: {fileID: 1435208051}
+        m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
+        m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
