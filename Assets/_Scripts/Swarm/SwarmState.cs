@@ -12,6 +12,9 @@ public class SwarmState : ScriptableObject
     [SerializeField] private List<SwarmUnitsData> swarmUnits = new();
     [SerializeField] private int maxSwarmSize = 8;
 
+    [SerializeField] private InventorySO globalInventory;
+    public InventorySO GlobalInventory => globalInventory;
+
 
 
     public int MaxSwarmSize => maxSwarmSize;

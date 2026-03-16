@@ -54,6 +54,22 @@ public class InventorySO : ScriptableObject
 
         return total;
     }
+
+    public void TransferTo(InventorySO targetInventory)
+    {
+        if (inventoryItemList.Count == 0)
+            return;
+
+        for (int i = 0; i < inventoryItemList.Count; i++)
+            targetInventory.AddItem(inventoryItemList[i].item, inventoryItemList[i].amount);
+
+        inventoryItemList.Clear();
+        OnInventoryChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void ForceRefresh() => OnInventoryChanged?.Invoke(this, EventArgs.Empty);
+
+    public void Reset() => inventoryItemList.Clear();
 }
 
 

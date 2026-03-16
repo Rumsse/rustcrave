@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument uiDocument;
+    [SerializeField] InventorySO globalInventory;
     [SerializeField] VisualTreeAsset choosePathPanel;
     [SerializeField] VisualTreeAsset mainCraftPanel;
     [SerializeField] VisualTreeAsset swarmPanel;
@@ -90,6 +91,8 @@ public class UIManager : MonoBehaviour
         slot.style.display = DisplayStyle.Flex;
         panelLayer.style.display = DisplayStyle.Flex;
         activePanelKey = key;
+
+        globalInventory.ForceRefresh();
     }
 
     void InitializePanel(string key, VisualElement panel)

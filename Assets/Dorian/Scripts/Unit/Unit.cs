@@ -303,6 +303,8 @@ public class Unit : UnitBase
         {
             swarmUnitsData.currentHP = healthManager.CurrentHP;
             swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
+
+            inventory.InventorySO.TransferTo(swarmState.GlobalInventory);
         }
     }
 }

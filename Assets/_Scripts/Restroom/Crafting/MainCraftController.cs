@@ -6,6 +6,7 @@ public class MainCraftController : MonoBehaviour
 {
     [Header("State")]
     [SerializeField] SwarmState swarmState;
+    [SerializeField] InventorySO globalInventory;
 
     [Header("Panels & Controllers")]
     [SerializeField] VisualTreeAsset robotsCraftPanel;
@@ -93,6 +94,7 @@ public class MainCraftController : MonoBehaviour
         contentContainer.Add(panel);
         activeTabKey = tabKey;
         UpdateButtonStyles(tabKey);
+        globalInventory.ForceRefresh();
     }
 
     void InitializeSubController(string tabKey, VisualElement panel)

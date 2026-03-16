@@ -7,6 +7,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject optionsPanel;
     [SerializeField] private SwarmState swarmState;
     [SerializeField] private MapState mapState;
+    [SerializeField] private InventorySO globalInventory;
 
     private void Start()
     {
@@ -18,6 +19,7 @@ public class MainMenuManager : MonoBehaviour
     {
         swarmState.Initialize();
         mapState.Initialize();
+        globalInventory.Reset();
         SceneManager.LoadScene(gameSceneName);
     }
 
