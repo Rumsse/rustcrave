@@ -6,6 +6,9 @@ public class OreNode : MonoBehaviour, IMineable
     [SerializeField] private OreSO ore;
     [SerializeField] private int amount;
     [SerializeField] private OrePickUp dropPrefab;
+    [SerializeField] private Transform particlePosition;
+    [SerializeField] private ParticleSystem miningEffect;
+    [SerializeField] private ParticleSystem smokeEffect;
 
     [SerializeField] private float minDropRadius = 1.0f;
     [SerializeField] private float maxDropRadius = 2.0f;
@@ -13,10 +16,19 @@ public class OreNode : MonoBehaviour, IMineable
     [SerializeField] private float navMeshSampleDistance = 2.0f;
     [SerializeField] private int dropAmount;
 
+    public void PlayEffect()
+    {
+        ParticleSystem miningEffectParticle = Instantiate(miningEffect, particlePosition.position, particlePosition.rotation);
+        ParticleSystem smokeEffectParticle = Instantiate(smokeEffect, particlePosition.position, particlePosition.rotation);
+
+        Destroy(miningEffectParticle, 5f);
+        Destroy(smokeEffectParticle, 5f);
+    }
+
     public ItemSO Mine()
     {
         if (amount <= 0)
-            return null;
+        return null;
 
         amount--;
 
