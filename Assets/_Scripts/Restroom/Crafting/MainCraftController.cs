@@ -98,7 +98,7 @@ public class MainCraftController : MonoBehaviour
     void InitializeSubController(string tabKey, VisualElement panel)
     {
         if (tabKey == "robots" && robotsCraftController != null)
-            robotsCraftController.Initialize(panel, HandleRobotCraftRequest);
+            robotsCraftController.Initialize(panel, HandleRobotCraftRequest, globalInventory);
         else if (tabKey == "gadgets" && gadgetsCraftController != null)
             gadgetsCraftController.Initialize(panel, HandleGadgetCraftRequest);
     }
