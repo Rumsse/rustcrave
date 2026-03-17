@@ -11,14 +11,10 @@ public class SwarmState : ScriptableObject
     [SerializeField] private List<UnitSO> startingSwarm = new();
     [SerializeField] private List<SwarmUnitsData> swarmUnits = new();
     [SerializeField] private int maxSwarmSize = 8;
+    [SerializeField] private GlobalInventorySO globalInventory;
 
-    [SerializeField] private InventorySO globalInventory;
-    public InventorySO GlobalInventory => globalInventory;
-
-
-
+    public GlobalInventorySO GlobalInventory => globalInventory;
     public int MaxSwarmSize => maxSwarmSize;
-
     public IReadOnlyList<SwarmUnitsData> SwarmUnits => swarmUnits;
     public int AliveCount => swarmUnits.Count(m => m.isAlive);
 
@@ -38,6 +34,7 @@ public class SwarmState : ScriptableObject
     {
         if (AliveCount >= maxSwarmSize)
             return;
+
         var newUnit = new SwarmUnitsData(type);
         swarmUnits.Add(newUnit);
 
@@ -64,10 +61,7 @@ public class SwarmState : ScriptableObject
         OnSwarmChanged?.Invoke();
     }
 
-    public List<SwarmUnitsData> GetAliveUnits()
-    {
-        return swarmUnits.Where(u => u.isAlive).ToList();
-    }
+    public List<SwarmUnitsData> GetAliveUnits() => swarmUnits.Where(u => u.isAlive).ToList();
 
     public void Reset() => swarmUnits.Clear();
 }

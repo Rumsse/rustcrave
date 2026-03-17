@@ -1096,7 +1096,6 @@ GameObject:
   - component: {fileID: 810971829}
   - component: {fileID: 810971830}
   - component: {fileID: 810971831}
-  - component: {fileID: 810971832}
   m_Layer: 5
   m_Name: Craft
   m_TagString: Untagged
@@ -1132,7 +1131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainCraftController
   swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
-  globalInventory: {fileID: 11400000, guid: a6d277d0a5c8ba04ea6043cae3985888, type: 2}
+  globalInventory: {fileID: 11400000, guid: f715252bf3a047d429a856ce045a8873, type: 2}
   robotsCraftPanel: {fileID: 9197481963319205126, guid: c8a5f620aef0a024cbd180dfe15d9156, type: 3}
   gadgetsCraftPanel: {fileID: 9197481963319205126, guid: 85b3adb506299cc45a3444c3810153a8, type: 3}
   robotsCraftController: {fileID: 810971830}
@@ -1164,20 +1163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0becc7f9d0d703f4ab9b9d53e4f2fba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GadgetsCraftController
---- !u!114 &810971832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 810971826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c4a2e99de1672f43b4fe5df8f0d6695, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GlobalInventoryUI
-  uiDocument: {fileID: 828975489}
-  globalInventory: {fileID: 11400000, guid: a6d277d0a5c8ba04ea6043cae3985888, type: 2}
 --- !u!1 &828975488
 GameObject:
   m_ObjectHideFlags: 0
@@ -1251,7 +1236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   uiDocument: {fileID: 828975489}
-  globalInventory: {fileID: 11400000, guid: a6d277d0a5c8ba04ea6043cae3985888, type: 2}
+  globalInventory: {fileID: 11400000, guid: f715252bf3a047d429a856ce045a8873, type: 2}
   choosePathPanel: {fileID: 9197481963319205126, guid: c4e75abb7b4ed15499a713a9af95f361, type: 3}
   mainCraftPanel: {fileID: 9197481963319205126, guid: 63f866c96ca601b449d927c1fdc771cc, type: 3}
   swarmPanel: {fileID: 9197481963319205126, guid: 9801a505cfa015e4993a1ee14ea4c269, type: 3}

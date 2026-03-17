@@ -180,17 +180,29 @@
                 <ui:VisualElement name="resource-bar" style="flex-grow: 0; flex-direction: row; align-content: stretch; height: 30%; flex-wrap: nowrap; align-self: stretch; justify-content: space-evenly; align-items: stretch; width: 100%; left: auto;">
                     <ui:VisualElement name="resource-sparklite" class="resource-item" style="flex-direction: row; flex-wrap: nowrap; align-content: stretch; align-self: stretch; align-items: stretch; justify-content: space-evenly;">
                         <ui:VisualElement name="icon" class="resource-icon resource-icon-spark" style="justify-content: center; align-self: center; align-content: center; align-items: center; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 9px; margin-right: 9px; margin-bottom: 9px; margin-left: 9px;"/>
-                        <ui:Label text="0" name="amount" class="resource-amount" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;"/>
+                        <ui:Label text="0" name="amount" class="resource-amount" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;">
+                            <Bindings>
+                                <ui:DataBinding property="text" data-source-path="Sparklite" binding-mode="ToTarget"/>
+                            </Bindings>
+                        </ui:Label>
                         <ui:Label text="Sparklite" name="name" class="resource-name" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;"/>
                     </ui:VisualElement>
                     <ui:VisualElement name="resource-scraponite" class="resource-item" style="flex-direction: row; flex-wrap: nowrap; align-content: stretch; align-self: stretch; align-items: stretch; justify-content: space-evenly;">
                         <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite" style="justify-content: center; align-self: center; align-content: center; align-items: center; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 9px; margin-right: 9px; margin-bottom: 9px; margin-left: 9px;"/>
-                        <ui:Label text="0" name="amount" class="resource-amount" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;"/>
+                        <ui:Label text="0" name="amount" class="resource-amount" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;">
+                            <Bindings>
+                                <ui:DataBinding property="text" data-source-path="Scraponite" binding-mode="ToTarget"/>
+                            </Bindings>
+                        </ui:Label>
                         <ui:Label text="Sparklite" name="name" class="resource-name" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;"/>
                     </ui:VisualElement>
                     <ui:VisualElement name="resource-pulsite" class="resource-item" style="flex-direction: row; flex-wrap: nowrap; align-content: stretch; align-self: stretch; align-items: stretch; justify-content: space-evenly;">
                         <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite" style="justify-content: center; align-self: center; align-content: center; align-items: center; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 9px; margin-right: 9px; margin-bottom: 9px; margin-left: 9px; height: 120%;"/>
-                        <ui:Label text="0" name="amount" class="resource-amount" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;"/>
+                        <ui:Label text="0" name="amount" class="resource-amount" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;">
+                            <Bindings>
+                                <ui:DataBinding property="text" data-source-path="Pulsite" binding-mode="ToTarget"/>
+                            </Bindings>
+                        </ui:Label>
                         <ui:Label text="Sparklite" name="name" class="resource-name" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;"/>
                     </ui:VisualElement>
                 </ui:VisualElement>

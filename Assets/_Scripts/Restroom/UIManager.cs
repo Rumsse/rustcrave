@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument uiDocument;
-    [SerializeField] InventorySO globalInventory;
+    [SerializeField] GlobalInventorySO globalInventory;
     [SerializeField] VisualTreeAsset choosePathPanel;
     [SerializeField] VisualTreeAsset mainCraftPanel;
     [SerializeField] VisualTreeAsset swarmPanel;
@@ -22,7 +22,6 @@ public class UIManager : MonoBehaviour
     VisualElement eventPanelLayer;
 
     readonly Dictionary<string, VisualElement> panelCache = new();
-
     string activePanelKey;
 
     #region Initialization
@@ -30,6 +29,7 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         var root = uiDocument.rootVisualElement;
+        root.dataSource = globalInventory;
 
         panelLayer = root.Q("panel-layer");
         leftPanelSlot = root.Q("left-panel");
@@ -37,13 +37,11 @@ public class UIManager : MonoBehaviour
         tooltipLayer = root.Q("tooltip-layer");
         eventPanelLayer = root.Q("event-layer");
 
-        root.Q<Button>("btn-craft").clicked += () =>
+        root.Q<Button>("btn-craft").clicked += () => 
             TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
-
-        root.Q<Button>("btn-swarm").clicked += () =>
+        root.Q<Button>("btn-swarm").clicked += () => 
             TogglePanel("swarm-panel", swarmPanel, leftPanelSlot);
-
-        root.Q<Button>("btn-choose-path").clicked += () =>
+        root.Q<Button>("btn-choose-path").clicked += () => 
             TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
 
         var popUpContainer = root.Q<VisualElement>("event-pop-up");
@@ -91,8 +89,6 @@ public class UIManager : MonoBehaviour
         slot.style.display = DisplayStyle.Flex;
         panelLayer.style.display = DisplayStyle.Flex;
         activePanelKey = key;
-
-        globalInventory.ForceRefresh();
     }
 
     void InitializePanel(string key, VisualElement panel)
@@ -110,6 +106,7 @@ public class UIManager : MonoBehaviour
     void BindCloseButton(VisualElement panel, VisualElement slot)
     {
         var closeBtn = panel.Q<Button>("btn-close");
+
         if (closeBtn != null)
             closeBtn.clicked += () => CloseCurrentPanel(slot);
     }

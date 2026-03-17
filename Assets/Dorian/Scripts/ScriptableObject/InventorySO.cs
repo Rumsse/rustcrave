@@ -55,7 +55,7 @@ public class InventorySO : ScriptableObject
         return total;
     }
 
-    public void TransferTo(InventorySO targetInventory)
+    public void TransferTo(GlobalInventorySO targetInventory)
     {
         if (inventoryItemList.Count == 0)
             return;

@@ -7,7 +7,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject optionsPanel;
     [SerializeField] private SwarmState swarmState;
     [SerializeField] private MapState mapState;
-    [SerializeField] private InventorySO globalInventory;
+    [SerializeField] private GlobalInventorySO globalInventory;
 
     private void Start()
     {

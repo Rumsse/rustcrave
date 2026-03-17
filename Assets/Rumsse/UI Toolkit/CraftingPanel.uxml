@@ -40,17 +40,29 @@
                 <ui:VisualElement name="resource-bar" style="flex-grow: 0; flex-direction: row; align-content: center; height: 25%; flex-wrap: nowrap; align-self: center; justify-content: center; align-items: center; width: 100%; left: auto;">
                     <ui:VisualElement name="resource-sparklite" class="resource-item">
                         <ui:VisualElement name="icon" class="resource-icon resource-icon-spark"/>
-                        <ui:Label text="0" name="amount" class="resource-amount" style="font-size: 16px; -unity-text-align: middle-center;"/>
+                        <ui:Label text="0" name="amount" class="resource-amount" style="font-size: 16px; -unity-text-align: middle-center;">
+                            <Bindings>
+                                <ui:DataBinding property="text" data-source-path="Sparklite" binding-mode="ToTarget"/>
+                            </Bindings>
+                        </ui:Label>
                         <ui:Label text="Sparklite" name="name" class="resource-name" style="font-size: 16px; -unity-text-align: middle-center;"/>
                     </ui:VisualElement>
                     <ui:VisualElement name="resource-scraponite" class="resource-item">
                         <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite"/>
-                        <ui:Label text="0" name="amount" class="resource-amount" style="-unity-text-align: middle-center; font-size: 16px;"/>
+                        <ui:Label text="0" name="amount" class="resource-amount" style="-unity-text-align: middle-center; font-size: 16px;">
+                            <Bindings>
+                                <ui:DataBinding property="text" data-source-path="Scraponite" binding-mode="ToTarget"/>
+                            </Bindings>
+                        </ui:Label>
                         <ui:Label text="Scraponite" name="name" class="resource-name" style="font-size: 16px; -unity-text-align: middle-center;"/>
                     </ui:VisualElement>
                     <ui:VisualElement name="resource-pulsite" class="resource-item">
                         <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite"/>
-                        <ui:Label text="0" name="amount" class="resource-amount" style="font-size: 16px; -unity-text-align: middle-center;"/>
+                        <ui:Label text="0" name="amount" class="resource-amount" style="font-size: 16px; -unity-text-align: middle-center;">
+                            <Bindings>
+                                <ui:DataBinding property="text" data-source-path="Pulsite" binding-mode="ToTarget"/>
+                            </Bindings>
+                        </ui:Label>
                         <ui:Label text="Pulsite" name="name" class="resource-name" style="font-size: 16px; -unity-text-align: middle-center;"/>
                     </ui:VisualElement>
                 </ui:VisualElement>

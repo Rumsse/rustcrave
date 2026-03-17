@@ -1,20 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class MainCraftController : MonoBehaviour
 {
-    [Header("State")]
     [SerializeField] SwarmState swarmState;
-    [SerializeField] InventorySO globalInventory;
+    [SerializeField] GlobalInventorySO globalInventory;
 
-    [Header("Panels & Controllers")]
     [SerializeField] VisualTreeAsset robotsCraftPanel;
     [SerializeField] VisualTreeAsset gadgetsCraftPanel;
     [SerializeField] RobotsCraftController robotsCraftController;
-    [SerializeField] GadgetsCraftController gadgetsCraftController; 
-
-    [Header("UI Elements")]
+    [SerializeField] GadgetsCraftController gadgetsCraftController;
     [SerializeField] VisualTreeAsset unitContainer;
 
     VisualElement rootElement;
@@ -57,7 +54,6 @@ public class MainCraftController : MonoBehaviour
         }
 
         UpdateSwarmUI(root);
-
     }
 
     #endregion
@@ -66,8 +62,11 @@ public class MainCraftController : MonoBehaviour
 
     void OpenTab(string tabKey, VisualTreeAsset asset)
     {
-        if (activeTabKey == tabKey) return; 
-        if (contentContainer == null) return;
+        if (activeTabKey == tabKey)
+            return;
+
+        if (contentContainer == null)
+            return;
 
         contentContainer.Clear();
 
@@ -80,7 +79,6 @@ public class MainCraftController : MonoBehaviour
             InitializeSubController(tabKey, panel);
         }
 
-
         var innerBtnBack = panel.Q<Button>("btn-back");
 
         if (innerBtnBack != null)
@@ -89,19 +87,18 @@ public class MainCraftController : MonoBehaviour
             innerBtnBack.clicked += CloseCurrentTab;
         }
 
-        if (btnClose != null) btnClose.style.display = DisplayStyle.None;
+        if (btnClose != null)
+            btnClose.style.display = DisplayStyle.None;
 
         contentContainer.Add(panel);
         activeTabKey = tabKey;
         UpdateButtonStyles(tabKey);
-        globalInventory.ForceRefresh();
     }
 
     void InitializeSubController(string tabKey, VisualElement panel)
     {
         if (tabKey == "robots" && robotsCraftController != null)
             robotsCraftController.Initialize(panel, HandleRobotCraftRequest);
-
         else if (tabKey == "gadgets" && gadgetsCraftController != null)
             gadgetsCraftController.Initialize(panel, HandleGadgetCraftRequest);
     }
@@ -109,12 +106,13 @@ public class MainCraftController : MonoBehaviour
     void CloseCurrentTab()
     {
         if (contentContainer != null)
-        {
             contentContainer.Clear();
-        }
 
-        if (btnClose != null) btnClose.style.display = DisplayStyle.Flex;
-        if (btnBack != null) btnBack.style.display = DisplayStyle.None;
+        if (btnClose != null)
+            btnClose.style.display = DisplayStyle.Flex;
+
+        if (btnBack != null)
+            btnBack.style.display = DisplayStyle.None;
 
         activeTabKey = null;
         UpdateButtonStyles(string.Empty);
@@ -122,7 +120,6 @@ public class MainCraftController : MonoBehaviour
 
     void UpdateButtonStyles(string activeKey)
     {
-        
     }
 
     #endregion
@@ -131,7 +128,8 @@ public class MainCraftController : MonoBehaviour
 
     void HandleRobotCraftRequest(UnitSO unitType)
     {
-        if (swarmState == null) return;
+        if (swarmState == null)
+            return;
 
         if (swarmState.SwarmUnits.Count >= swarmState.MaxSwarmSize)
             return;
@@ -144,7 +142,8 @@ public class MainCraftController : MonoBehaviour
 
     void AddSingleUnitToUI(SwarmUnitsData unitData)
     {
-        if (leftBar == null || unitContainer == null) return;
+        if (leftBar == null || unitContainer == null)
+            return;
 
         var newUnitIcon = unitContainer.CloneTree();
         var unitImage = newUnitIcon.Q<VisualElement>("unit-image");
@@ -152,29 +151,28 @@ public class MainCraftController : MonoBehaviour
         if (unitData.unitType != null && unitData.unitType.robotSprite != null)
             unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.robotSprite);
 
-
         leftBar.Add(newUnitIcon);
     }
 
     void HandleGadgetCraftRequest(UnitSO unitType)
     {
-        
     }
 
     void UpdateSwarmUI(VisualElement root)
     {
-        if (swarmState == null || leftBar == null) return;
+        if (swarmState == null || leftBar == null)
+            return;
 
         var existingContainers = leftBar.Query<VisualElement>("unit-container").ToList();
 
         foreach (var container in existingContainers)
-        {
             leftBar.Remove(container);
-        }
 
         foreach (var unit in swarmState.SwarmUnits)
         {
-            if (!unit.isAlive) continue;
+            if (!unit.isAlive)
+                continue;
+
             AddSingleUnitToUI(unit);
         }
     }
