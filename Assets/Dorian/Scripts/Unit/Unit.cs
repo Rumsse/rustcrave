@@ -17,11 +17,16 @@ public class Unit : UnitBase
     public static List<Unit> units = new();
     
     public NavMeshAgent Agent => agent;
+    public string Id => swarmUnitsData.id;
+    public bool IsMainCharacter => isMainCharacter;
 
+    [SerializeField] private bool isMainCharacter;
     [SerializeField] private UnitInventory inventory;
     [SerializeField] private EnergyManager energyManager;
     [SerializeField] private float minMiningTime;
     [SerializeField] private float minMoveSpeedMultiplier;
+    [SerializeField] private float interactionStoppingDistance;
+    [SerializeField] private float defaultStoppingDistance;
     [SerializeField, Range(0f, 1f)] private float lowEnergyThreshold;
 
     private float baseMoveSpeed;
@@ -44,6 +49,7 @@ public class Unit : UnitBase
         healthManager.onHit += HandleDamageTaken;
 
         energyManager.InitializeEnergy(swarmUnitsData.currentEnergy);
+        UnitRegistry.Register(this);
     }
 
     protected override void Awake()
@@ -73,6 +79,11 @@ public class Unit : UnitBase
 
         if (units.Contains(this))
             units.Remove(this);
+    }
+
+    private void OnDestroy()
+    {
+        UnitRegistry.Unregister(this);
     }
 
     protected override void Update()
@@ -121,6 +132,20 @@ public class Unit : UnitBase
         animator.ResetTrigger("Mining");
     }
 
+    public void CancelActionAndPath()
+    {
+        if (currentMineable != null || currentInteractable != null || AttackTarget != null)
+        {
+            HandleInterruptCurrentAction();
+        }
+
+        if (agent.hasPath)
+        {
+            agent.ResetPath();
+            animator.SetBool("IsWalking", false);
+        }
+    }
+
     private void HandleEnergyDepleted()
     {
         agent.isStopped = true;
@@ -159,7 +184,7 @@ public class Unit : UnitBase
         {
             if (currentInteractable is OrePickUp pickup)
             {
-                if (inventory.InventorySO.AddItem(pickup.item, pickup.amount))
+                if (inventory.InventorySO.AddItem(pickup.item, pickup.oreValueAmount))
                 {
                     Destroy(pickup.gameObject);
                 }
@@ -184,7 +209,7 @@ public class Unit : UnitBase
         {
             if (miningTimer == miningInterval)
             {
-                animator.SetTrigger("Mining");
+                currentMineable.PlayEffect();
             }
 
             miningTimer -= Time.deltaTime;
@@ -221,6 +246,8 @@ public class Unit : UnitBase
     {
         HandleInterruptCurrentAction();
         currentInteractable = interactable;
+
+        agent.stoppingDistance = interactionStoppingDistance;
         agent.SetDestination(position);
     }
 
@@ -233,6 +260,7 @@ public class Unit : UnitBase
         miningInterval = Mathf.Max(minMiningTime, rawMiningTime);
         miningTimer = miningInterval;
 
+        agent.stoppingDistance = interactionStoppingDistance;
         agent.SetDestination(position);
     }
 
@@ -245,6 +273,8 @@ public class Unit : UnitBase
     public override void HandleMovement(Vector3 position)
     {
         HandleInterruptCurrentAction();
+
+        agent.stoppingDistance = defaultStoppingDistance;
         base.HandleMovement(position);
     }
 
@@ -288,6 +318,8 @@ public class Unit : UnitBase
         {
             swarmUnitsData.currentHP = healthManager.CurrentHP;
             swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
+
+            inventory.InventorySO.TransferTo(swarmState.GlobalInventory);
         }
     }
 }

@@ -2,31 +2,52 @@ using UnityEngine;
 
 public class UnitInventoryUI : MonoBehaviour
 {
-    [SerializeField] private Unit unit;
-    [SerializeField] private GameObject unitInventory;
+    [SerializeField] private GameObject unitPanel;
+    private static UnitInventoryUI currentOpenPanel;
+    private Unit unit;
 
 
-    private void Start()
+    public void SetUnit(Unit newUnit)
     {
-        UnitSelectionSystem.Instance.OnSelectedUnitChanged += UnitSelectionSystem_OnSelectedUnitChanged;
-        UpdateVisual();
+        unit = newUnit;
     }
 
-    private void UnitSelectionSystem_OnSelectedUnitChanged(object sender, System.EventArgs e)
+    public void ShowPanel()
     {
-        UpdateVisual();
-    }
+        if (unitPanel == null) return;
 
-    private void UpdateVisual()
-    {
-        if (UnitSelectionSystem.Instance.GetSelectedUnit() == unit)
+        if (currentOpenPanel != null && currentOpenPanel != this)
         {
-            unitInventory.SetActive(true);
+            currentOpenPanel.HidePanel();
+        }
+
+        unitPanel.SetActive(true);
+        currentOpenPanel = this;
+    }
+
+    public void HidePanel()
+    {
+        if (unitPanel == null) return;
+
+        unitPanel.SetActive(false);
+
+        if (currentOpenPanel == this)
+        {
+            currentOpenPanel = null;
+        }
+    }
+
+    public void TogglePanel()
+    {
+        if (unitPanel == null) return;
+
+        if (unitPanel.activeSelf)
+        {
+            HidePanel();
         }
         else
         {
-            unitInventory.SetActive(false);
+            ShowPanel();
         }
     }
-
 }

@@ -10,6 +10,7 @@ public class SwarmUnitsData
     public float currentEnergy;
     public bool isAlive;
 
+
     public SwarmUnitsData(UnitSO type)
     {
         id = Guid.NewGuid().ToString();

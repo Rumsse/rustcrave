@@ -6,17 +6,29 @@ public class OreNode : MonoBehaviour, IMineable
     [SerializeField] private OreSO ore;
     [SerializeField] private int amount;
     [SerializeField] private OrePickUp dropPrefab;
+    [SerializeField] private Transform particlePosition;
+    [SerializeField] private ParticleSystem miningEffect;
+    [SerializeField] private ParticleSystem smokeEffect;
 
     [SerializeField] private float minDropRadius = 1.0f;
     [SerializeField] private float maxDropRadius = 2.0f;
     [SerializeField] private float dropHeight = 0.5f;
     [SerializeField] private float navMeshSampleDistance = 2.0f;
-    [SerializeField] private int dropAmount = 1;
+    [SerializeField] private int dropAmount;
+
+    public void PlayEffect()
+    {
+        ParticleSystem miningEffectParticle = Instantiate(miningEffect, particlePosition.position, particlePosition.rotation);
+        ParticleSystem smokeEffectParticle = Instantiate(smokeEffect, particlePosition.position, particlePosition.rotation);
+
+        Destroy(miningEffectParticle, 5f);
+        Destroy(smokeEffectParticle, 5f);
+    }
 
     public ItemSO Mine()
     {
         if (amount <= 0)
-            return null;
+        return null;
 
         amount--;
 
@@ -30,14 +42,14 @@ public class OreNode : MonoBehaviour, IMineable
                 Vector3 finalDropPosition = hit.position + new Vector3(0f, dropHeight, 0f);
                 OrePickUp droppedItem = Instantiate(dropPrefab, finalDropPosition, Quaternion.identity);
                 droppedItem.item = ore;
-                droppedItem.amount = dropAmount;
+                dropAmount = droppedItem.oreValueAmount;
             }
             else
             {
                 Vector3 fallbackPosition = transform.position + new Vector3(0f, dropHeight, 0f);
                 OrePickUp droppedItem = Instantiate(dropPrefab, fallbackPosition, Quaternion.identity);
                 droppedItem.item = ore;
-                droppedItem.amount = dropAmount;
+                dropAmount = droppedItem.oreValueAmount;
             }
         }
 

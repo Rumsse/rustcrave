@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class UnitActions : MonoBehaviour
@@ -11,7 +10,7 @@ public class UnitActions : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            if(HandleMining())
+            if (HandleMining())
                 return;
             if (HandleInteraction())
                 return;
@@ -23,15 +22,15 @@ public class UnitActions : MonoBehaviour
     private bool HandleInteraction()
     {
         Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
-        if (unit == null) return false;
+        if (unit == null || !unit.enabled) return false;
 
         var hitCheck = GetRaycastHit(interactableLayerMask);
 
         if (!hitCheck.HasValue)
             return false;
-        
+
         RaycastHit hit = hitCheck.Value;
-        
+
         if (hit.transform.TryGetComponent(out IInteractable interactable))
         {
             unit.MoveToInteract(interactable, hit.point);
@@ -40,19 +39,19 @@ public class UnitActions : MonoBehaviour
 
         return false;
     }
-    
+
     private void HandleAttack()
     {
         Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
-        if (unit == null) return;
+        if (unit == null || !unit.enabled) return;
 
         var hitCheck = GetRaycastHit(unitLayerMask);
 
         if (!hitCheck.HasValue)
             return;
-        
+
         RaycastHit hit = hitCheck.Value;
-        
+
         if (hit.transform.TryGetComponent(out EnemyUnit enemy))
         {
             unit.MoveToAttack(enemy, hit.point);
@@ -62,7 +61,7 @@ public class UnitActions : MonoBehaviour
     private bool HandleMining()
     {
         Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
-        if (unit == null) return false;
+        if (unit == null || !unit.enabled) return false;
 
         var hitCheck = GetRaycastHit(oreLayerMask);
 
@@ -92,4 +91,3 @@ public class UnitActions : MonoBehaviour
         return null;
     }
 }
-
