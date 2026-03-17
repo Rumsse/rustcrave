@@ -27,7 +27,7 @@ public class EnemyUnit : UnitBase
     {
         base.Update();
         
-        if(!isAttacking)
+        if(!isAttacking && Stats.PossibleAttacks.Count != 0 && agent.enabled)
             agent.SetDestination(guardPoint.position);
     }
 

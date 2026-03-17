@@ -14,7 +14,8 @@ public class StatsManager : MonoBehaviour
     public string RobotName => _baseData.robotName;
     public Sprite RobotSprite => _baseData.robotSprite;
     public UnitType UnitType => _baseData.unitType;
-    public AttackType Immunities => _baseData.immunities;
+    public AttackType TypeImmunities => _baseData.typeImmunities;
+    public DeliveryMethod DeliveryMethodImmunities => _baseData.deliveryMethodImmunities;
     public int MaxHP => Mathf.RoundToInt(_baseData.maxHP * GetStatModifier(StatsType.MaxHP));
     public float MoveSpeed => _baseData.moveSpeed * GetStatModifier(StatsType.Speed);
     public int Damage => Mathf.RoundToInt(_baseData.damage * GetStatModifier(StatsType.Damage));

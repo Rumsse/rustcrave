@@ -72,7 +72,10 @@ public class HealthManager : MonoBehaviour, IDamageable
 
     public void Damage(DamageInfo damage)
     {
-        if (_baseStats.Immunities.HasFlag(damage.AttackType))
+        if (_baseStats.TypeImmunities.HasFlag(damage.AttackType))
+            return;
+        
+        if(_baseStats.DeliveryMethodImmunities.HasFlag(damage.DeliveryMethod))
             return;
         
         _hitEffect?.Play();
