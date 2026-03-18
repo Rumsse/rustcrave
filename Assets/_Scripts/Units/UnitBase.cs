@@ -19,30 +19,30 @@ public abstract class UnitBase : MonoBehaviour
         {
             attackTarget = value;
             isAttacking = value;
-            
-            if(value)
+
+            if (value)
                 RollAttack();
         }
     }
-    
+
     #endregion
 
     #region Inspector Fields
 
     [SerializeField] protected float rotateSpeed;
     [SerializeField] protected float stoppingDistance;
-    
+
     [Header("References")]
     [SerializeField] protected StatsManager stats;
     [SerializeField] protected Animator animator;
     [SerializeField] protected HealthManager healthManager;
     [SerializeField] protected Transform projectileSpawnT;
-    [SerializeField] protected Transform modelMidPoint; // used for projectiles to aim at model chest / mid point instead of pivot
-    
+    [SerializeField] protected Transform modelMidPoint;
+
     #endregion
-    
+
     #region Private Fields
-    
+
     protected NavMeshAgent agent;
     private UnitBase attackTarget;
 
@@ -52,9 +52,9 @@ public abstract class UnitBase : MonoBehaviour
     protected bool isAttacking;
 
     private UnitState state;
-    
+
     #endregion
-    
+
     protected virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -71,18 +71,18 @@ public abstract class UnitBase : MonoBehaviour
     {
         state?.Tick();
     }
-    
+
     public virtual void HandleMovement(Vector3 position)
     {
         AttackTarget = null;
         SetState(new WalkingState(this, position));
     }
-    
+
     public virtual void MoveToAttack(UnitBase enemy, Vector3 position)
     {
         AttackTarget = enemy;
         SetState(new FightState(this));
-        
+
         enemy.HealthManager.onDeath += StopAttacking;
     }
 
@@ -90,7 +90,15 @@ public abstract class UnitBase : MonoBehaviour
     {
         if (CanAttack())
         {
-            currentAttack.Execute(AttackTarget, this);
+            if (TryGetComponent<MantisPassiveAbility>(out var mantisPassive))
+            {
+                mantisPassive.ExecuteComboAttack(AttackTarget, currentAttack);
+            }
+            else
+            {
+                currentAttack.Execute(AttackTarget, this);
+            }
+
             RollAttack();
             lastAttackTime = Time.time;
         }
@@ -105,27 +113,25 @@ public abstract class UnitBase : MonoBehaviour
     {
         if (Time.time - lastAttackTime < 1 / stats.AttacksPerSecond)
             return false;
-        
-        // can add stuff like HasStun() etc.
-        
+
         return true;
     }
 
     protected void StopAttacking()
     {
-        if(AttackTarget)
+        if (AttackTarget)
             AttackTarget.HealthManager.onDeath -= StopAttacking;
-        
+
         AttackTarget = null;
         currentAttack = null;
     }
-    
+
     public void SetState(UnitState newState)
     {
         state?.ExitState();
         state = newState;
         state?.EnterState();
     }
-    
+
     public void ChangeStats(UnitSO newStats) => stats.ChangeStats(newStats);
 }

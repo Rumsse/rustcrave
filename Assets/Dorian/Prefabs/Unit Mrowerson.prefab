@@ -2026,10 +2026,35 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3031104613421895505, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       insertIndex: 1
       addedObject: {fileID: 4351928232363300138}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7403444660189884253}
   m_SourcePrefab: {fileID: 100100000, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
 --- !u!4 &969012177437021651 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3031104613421895505, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
   m_PrefabInstance: {fileID: 2837895478390430338}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5536585068807582925 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+  m_PrefabInstance: {fileID: 2837895478390430338}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7403444660189884253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536585068807582925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41ee4a841da232748b4151ae52c03c7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AntPassiveAbility
+  checkRadius: 3
+  checkInterval: 0.75
+  antRobotName: Mrowerson
+  baseBuffAmount: 1
+  antBonusBuffAmount: 1

@@ -71,16 +71,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      insertIndex: 13
+      addedObject: {fileID: 4499729557593952421}
   m_SourcePrefab: {fileID: 100100000, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
 --- !u!114 &4855583244103756579 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7205836209904595361, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
   m_PrefabInstance: {fileID: 2837895478390430338}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 5536585068807582925}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb0d17d87ec4e1a408ab81f2d21a5653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsManager
+--- !u!1 &5536585068807582925 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+  m_PrefabInstance: {fileID: 2837895478390430338}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4499729557593952421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536585068807582925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ee124a8aa4e84e4da26d86117c173e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MantisPassiveAbility
+  strikesCount: 3
+  timeBetweenStrikes: 0.3

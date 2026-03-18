@@ -18,6 +18,7 @@ public class Unit : UnitBase
     public NavMeshAgent Agent => agent;
     public string Id => swarmUnitsData.id;
     public bool IsMainCharacter => isMainCharacter;
+    public bool IsEnergyDrainDoubled { get; set; }
 
     [SerializeField] private bool isMainCharacter;
     [SerializeField] private string commandTriggerName;
@@ -50,6 +51,8 @@ public class Unit : UnitBase
 
         energyManager.InitializeEnergy(swarmUnitsData.currentEnergy);
         UnitRegistry.Register(this);
+
+        RefreshStats();
     }
 
     protected override void Awake()
@@ -98,6 +101,16 @@ public class Unit : UnitBase
 
         if (currentInteractable != null)
             HandleInteraction();
+    }
+
+    public void RefreshStats()
+    {
+        if (stats != null)
+        {
+            baseMoveSpeed = stats.MoveSpeed;
+            float currentPercent = stats.MaxEnergy > 0 ? (float)energyManager.CurrentEnergy / stats.MaxEnergy : 1f;
+            HandleMoveSpeedBasedOnEnergy(currentPercent);
+        }
     }
 
     private void HandleDamageTaken(int newCurrentHP)
@@ -157,8 +170,7 @@ public class Unit : UnitBase
 
     private void HandleEnergyDrain()
     {
-        if (isMainCharacter)
-            return;
+        if (isMainCharacter) return;
 
         if (isAttacking)
         {
@@ -170,7 +182,14 @@ public class Unit : UnitBase
         }
         else if (agent.velocity.magnitude > 0.1f)
         {
-            energyManager.SetMoveDrain();
+            if (IsEnergyDrainDoubled)
+            {
+                energyManager.SetActionDrain();
+            }
+            else
+            {
+                energyManager.SetMoveDrain();
+            }
         }
         else
         {

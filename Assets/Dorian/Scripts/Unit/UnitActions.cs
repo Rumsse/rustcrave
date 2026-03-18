@@ -9,13 +9,30 @@ public class UnitActions : MonoBehaviour
 
     [SerializeField] private GameObject moveIndicatorPrefab;
     [SerializeField] private CommandVisualizer commandVisualizer;
-    [SerializeField] private float indicatorYOffset = 0.05f;
+    [SerializeField] private float indicatorYOffset;
 
     private bool isDraggingCommand;
 
     private void Update()
     {
+        HandleAbilityInput();
         HandleCommandInput();
+    }
+
+    private void HandleAbilityInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
+
+            if (unit != null && unit.enabled)
+            {
+                if (unit.TryGetComponent<ActiveAbility>(out var ability))
+                {
+                    ability.TryExecute();
+                }
+            }
+        }
     }
 
     private void HandleCommandInput()
