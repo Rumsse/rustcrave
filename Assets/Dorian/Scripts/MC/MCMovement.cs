@@ -9,11 +9,13 @@ public class MCMovement : MonoBehaviour
     private float currentSpeed;
     private Animator animator;
     private Camera mainCamera;
-
+    private Unit unit;
+    private bool wasMovingWithWASD;
 
     private void Start()
     {
         mainCamera = Camera.main;
+        unit = GetComponent<Unit>();
     }
 
     private void Update()
@@ -30,6 +32,12 @@ public class MCMovement : MonoBehaviour
 
         if (inputDirection.magnitude >= minimumMoveThreshold)
         {
+            if (unit != null)
+            {
+                unit.CancelActionAndPath();
+                unit.Agent.velocity = Vector3.zero;
+            }
+
             Vector3 cameraForward = mainCamera.transform.forward;
             Vector3 cameraRight = mainCamera.transform.right;
 
@@ -53,12 +61,18 @@ public class MCMovement : MonoBehaviour
             {
                 animator.SetBool("IsWalking", true);
             }
+
+            wasMovingWithWASD = true;
         }
         else
         {
-            if (animator != null)
+            if (wasMovingWithWASD)
             {
-                animator.SetBool("IsWalking", false);
+                wasMovingWithWASD = false;
+                if (animator != null)
+                {
+                    animator.SetBool("IsWalking", false);
+                }
             }
         }
     }

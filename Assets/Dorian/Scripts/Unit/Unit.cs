@@ -13,11 +13,14 @@ public enum UnitActivity
 
 public class Unit : UnitBase
 {
+    public static Unit MainCharacter { get; private set; }
+
     public NavMeshAgent Agent => agent;
     public string Id => swarmUnitsData.id;
     public bool IsMainCharacter => isMainCharacter;
 
     [SerializeField] private bool isMainCharacter;
+    [SerializeField] private string commandTriggerName;
     [SerializeField] private UnitInventory inventory;
     [SerializeField] private EnergyManager energyManager;
     [SerializeField] private float minMiningTime;
@@ -54,6 +57,11 @@ public class Unit : UnitBase
         base.Awake();
         baseMoveSpeed = agent.speed;
         miningTimer = 0f;
+
+        if (isMainCharacter)
+        {
+            MainCharacter = this;
+        }
     }
 
     private void OnEnable()
@@ -119,7 +127,6 @@ public class Unit : UnitBase
         currentInteractable = null;
         AttackTarget = null;
         miningTimer = 0f;
-        animator.ResetTrigger("Mining");
     }
 
     public void CancelActionAndPath()
@@ -150,6 +157,9 @@ public class Unit : UnitBase
 
     private void HandleEnergyDrain()
     {
+        if (isMainCharacter)
+            return;
+
         if (isAttacking)
         {
             energyManager.SetActionDrain();
@@ -220,9 +230,7 @@ public class Unit : UnitBase
                     }
                 }
                 else
-                {
                     currentMineable = null;
-                }
             }
             animator.SetBool("IsWalking", false);
         }
@@ -306,6 +314,19 @@ public class Unit : UnitBase
         {
             swarmUnitsData.currentHP = healthManager.CurrentHP;
             swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
+        }
+    }
+
+    public void SetAnimator(Animator newAnimator)
+    {
+        animator = newAnimator;
+    }
+
+    public void PlayCommandAnimation()
+    {
+        if (animator != null && !string.IsNullOrEmpty(commandTriggerName))
+        {
+            animator.SetTrigger(commandTriggerName);
         }
     }
 }

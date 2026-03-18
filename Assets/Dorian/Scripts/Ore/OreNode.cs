@@ -4,6 +4,7 @@ using UnityEngine.AI;
 public class OreNode : MonoBehaviour, IMineable
 {
     [SerializeField] private OreSO ore;
+    [SerializeField] private OreTooltip oreTooltip;
     [SerializeField] private int amount;
     [SerializeField] private OrePickUp dropPrefab;
     [SerializeField] private Transform particlePosition;
@@ -12,7 +13,6 @@ public class OreNode : MonoBehaviour, IMineable
 
     [SerializeField] private float minDropRadius = 1.0f;
     [SerializeField] private float maxDropRadius = 2.0f;
-    [SerializeField] private float dropHeight = 0.5f;
     [SerializeField] private float navMeshSampleDistance = 2.0f;
     [SerializeField] private int dropAmount;
 
@@ -28,7 +28,7 @@ public class OreNode : MonoBehaviour, IMineable
     public ItemSO Mine()
     {
         if (amount <= 0)
-        return null;
+            return null;
 
         amount--;
 
@@ -39,15 +39,13 @@ public class OreNode : MonoBehaviour, IMineable
 
             if (NavMesh.SamplePosition(rawDropPosition, out NavMeshHit hit, navMeshSampleDistance, NavMesh.AllAreas))
             {
-                Vector3 finalDropPosition = hit.position + new Vector3(0f, dropHeight, 0f);
-                OrePickUp droppedItem = Instantiate(dropPrefab, finalDropPosition, Quaternion.identity);
+                OrePickUp droppedItem = Instantiate(dropPrefab, transform.position, Quaternion.identity);
                 droppedItem.item = ore;
                 dropAmount = droppedItem.oreValueAmount;
             }
             else
             {
-                Vector3 fallbackPosition = transform.position + new Vector3(0f, dropHeight, 0f);
-                OrePickUp droppedItem = Instantiate(dropPrefab, fallbackPosition, Quaternion.identity);
+                OrePickUp droppedItem = Instantiate(dropPrefab, transform.position, Quaternion.identity);
                 droppedItem.item = ore;
                 dropAmount = droppedItem.oreValueAmount;
             }
@@ -67,5 +65,15 @@ public class OreNode : MonoBehaviour, IMineable
     public bool IsDepleted()
     {
         return amount <= 0;
+    }
+
+    private void OnMouseEnter()
+    {
+        oreTooltip.ShowTooltip();
+    }
+
+    private void OnMouseExit()
+    {
+        oreTooltip.HideTooltip();
     }
 }
