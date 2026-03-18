@@ -7,6 +7,9 @@ public class ChoosePathController : MonoBehaviour
 {
     [SerializeField] MapState mapState;
     [SerializeField] ActiveModifier activeModifier;
+    [SerializeField] GlobalInventorySO globalInventory;
+    [SerializeField] OreSO pulsite;
+
     [SerializeField] VisualTreeAsset tooltipAsset;
     [SerializeField] string mainGameScene = "new Tunel Generation Rumsse";
     [SerializeField] string mainBossScene = "boss map";
@@ -16,6 +19,7 @@ public class ChoosePathController : MonoBehaviour
 
     PathNodeTooltipController tooltipController;
     Label debugLabel;
+
 
     #region Initialization
 
@@ -128,6 +132,10 @@ public class ChoosePathController : MonoBehaviour
         if (mapState.IsNodeScanned(node))
             return;
 
+        if (globalInventory.Pulsite < 1)
+            return;
+
+        globalInventory.RemoveItem(pulsite, 1);
         mapState.ScanNode(node);
         tooltipController.RefreshContent();
     }
