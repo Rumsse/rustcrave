@@ -145,6 +145,19 @@ public abstract class UnitBase : MonoBehaviour
             currentAttack.Execute(AttackTarget, this);
             RollAttack();
             lastAttackTime = Time.time;
+
+            if (TryGetComponent<MantisPassiveAbility>(out var mantisPassive))
+            {
+                mantisPassive.ExecuteComboAttack(AttackTarget, currentAttack);
+            }
+            else
+            {
+                currentAttack.Execute(AttackTarget, this);
+            }
+
+            RollAttack();
+            lastAttackTime = Time.time;
+
         }
     }
 
@@ -154,6 +167,10 @@ public abstract class UnitBase : MonoBehaviour
     {
         if (!loopThroughAttacks) RollAttackRandom();
         else RollAttackIterative();
+
+
+        currentAttack = stats.PossibleAttacks[Random.Range(0, stats.PossibleAttacks.Count)];
+
     }
 
     private void RollAttackRandom() => currentAttack = stats.PossibleAttacks[Random.Range(0, stats.PossibleAttacks.Count)];
