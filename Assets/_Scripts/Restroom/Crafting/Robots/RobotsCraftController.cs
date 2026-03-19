@@ -5,14 +5,25 @@ using UnityEngine.UIElements;
 
 public class RobotsCraftController : MonoBehaviour
 {
-    [SerializeField] private List<UnitSO> availableRobots;
+    [Serializable]
+    public struct RobotCraftData
+    {
+        public string ButtonId;
+        public string ContainerId;
+        public CraftingRecipe Recipe;
+    }
+
+    [SerializeField] private List<RobotCraftData> robotsCraftDataList;
 
     private Action<UnitSO> requestCraftRobot;
-    private Button craftButton;
+    private GlobalInventorySO globalInventory;
 
-    public void Initialize(VisualElement root, Action<UnitSO> onCraftRequested)
+
+
+    public void Initialize(VisualElement root, Action<UnitSO> onCraftRequested, GlobalInventorySO inventory)
     {
         requestCraftRobot = onCraftRequested;
+        globalInventory = inventory;
 
         var infoBtn = root.Q<Button>("btn-info-robots");
         var infoPanel = root.Q<VisualElement>("robots-info-panel");
@@ -23,12 +34,19 @@ public class RobotsCraftController : MonoBehaviour
             infoBtn.clicked -= () => ShowInfo(infoPanel);
         }
 
-        craftButton = root.Q<Button>("btn-craft-miner");
-
-        if (craftButton != null)
+        foreach (var data in robotsCraftDataList)
         {
-            craftButton.clicked -= OnCraftClicked;
-            craftButton.clicked += OnCraftClicked;
+            var button = root.Q<Button>(data.ButtonId);
+            var container = root.Q<VisualElement>(data.ContainerId);
+
+            if (container != null && data.Recipe != null)
+                container.dataSource = data.Recipe;
+
+            if (button == null)
+                continue;
+
+            button.clicked -= () => OnCraftClicked(data.Recipe);
+            button.clicked += () => OnCraftClicked(data.Recipe);
         }
 
     }
@@ -47,14 +65,47 @@ public class RobotsCraftController : MonoBehaviour
 
     #region Crafting Logic
 
-    private void OnCraftClicked()
+    private void OnCraftClicked(CraftingRecipe recipe)
     {
-        if (availableRobots == null || availableRobots.Count == 0)
+        if (recipe == null)
             return;
 
-        UnitSO robotToCraft = availableRobots[0];
+        if (!CanAfford(recipe))
+            return;
 
-        requestCraftRobot?.Invoke(robotToCraft);
+        ConsumeResources(recipe);
+        requestCraftRobot?.Invoke(recipe.CraftedUnit);
+    }
+
+    private bool CanAfford(CraftingRecipe recipe)
+    {
+        foreach (var cost in recipe.Costs)
+            if (GetResourceAmount(cost.Ore) < cost.Amount)
+                return false;
+
+        return true;
+    }
+
+    private void ConsumeResources(CraftingRecipe recipe)
+    {
+        foreach (var cost in recipe.Costs)
+            globalInventory.RemoveItem(cost.Ore, cost.Amount);
+    }
+
+    private int GetResourceAmount(OreSO ore)
+    {
+        string id = ore.oreName.ToLower();
+
+        if (id == "sparklite")
+            return globalInventory.Sparklite;
+
+        if (id == "scraponite")
+            return globalInventory.Scraponite;
+
+        if (id == "pulsite")
+            return globalInventory.Pulsite;
+
+        return 0;
     }
 
     #endregion

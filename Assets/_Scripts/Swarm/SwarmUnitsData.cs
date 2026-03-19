@@ -28,4 +28,12 @@ public class SwarmUnitsData
         currentEnergy = Mathf.Clamp(currentEnergy, 0, unitType.maxEnergy);
     }
 
+    public void RestoreHealth(int amount)
+    {
+        if (!isAlive || unitType == null) return;
+
+        currentHP += amount;
+        currentHP = Mathf.Clamp(currentHP, 0, unitType.maxHP);
+    }
+
 }

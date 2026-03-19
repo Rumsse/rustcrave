@@ -7,6 +7,7 @@ public class UnitSOEditor : Editor
     SerializedProperty prefab;
     SerializedProperty robotSprite;
     SerializedProperty robotName;
+    SerializedProperty robotDescription;
     
     SerializedProperty unitType;
 
@@ -31,6 +32,7 @@ public class UnitSOEditor : Editor
         prefab = serializedObject.FindProperty("prefab");
         robotSprite = serializedObject.FindProperty("robotSprite");
         robotName = serializedObject.FindProperty("robotName");
+        robotDescription = serializedObject.FindProperty("robotDescription");
         unitType = serializedObject.FindProperty("unitType");
 
         moveSpeed = serializedObject.FindProperty("moveSpeed");
@@ -93,6 +95,7 @@ public class UnitSOEditor : Editor
     void DrawInformations()
     {
         EditorGUILayout.PropertyField(robotName);
+        EditorGUILayout.PropertyField(robotDescription);
         EditorGUILayout.PropertyField(robotSprite);
     }
 

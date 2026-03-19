@@ -6,6 +6,13 @@ public class FightState : UnitState
 
     public override void Tick()
     {
+        if (_unit.IsPerformingSpecial)
+        {
+            if (_agent.hasPath) _agent.ResetPath();
+            _unit.Animator.SetBool("IsWalking", false);
+            return;
+        }
+        
         if (!_unit.AttackTarget)
         {
             _unit.SetState(new IdleState(_unit));

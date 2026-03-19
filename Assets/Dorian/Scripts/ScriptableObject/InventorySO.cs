@@ -43,6 +43,29 @@ public class InventorySO : ScriptableObject
         return true;
     }
 
+    public bool RemoveItem(ItemSO item, int amount)
+    {
+        for (int i = 0; i < inventoryItemList.Count; i++)
+        {
+            if (inventoryItemList[i].item != item)
+                continue;
+
+            if (inventoryItemList[i].amount < amount)
+                return false;
+
+            inventoryItemList[i].AddAmount(-amount);
+
+            if (inventoryItemList[i].amount <= 0)
+                inventoryItemList.RemoveAt(i);
+
+            OnInventoryChanged?.Invoke(this, EventArgs.Empty);
+
+            return true;
+        }
+
+        return false;
+    }
+
     public int GetTotalAmount()
     {
         int total = 0;
@@ -54,6 +77,22 @@ public class InventorySO : ScriptableObject
 
         return total;
     }
+
+    public void TransferTo(GlobalInventorySO targetInventory)
+    {
+        if (inventoryItemList.Count == 0)
+            return;
+
+        for (int i = 0; i < inventoryItemList.Count; i++)
+            targetInventory.AddItem(inventoryItemList[i].item, inventoryItemList[i].amount);
+
+        inventoryItemList.Clear();
+        OnInventoryChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void ForceRefresh() => OnInventoryChanged?.Invoke(this, EventArgs.Empty);
+
+    public void Reset() => inventoryItemList.Clear();
 }
 
 

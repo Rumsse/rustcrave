@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -72,6 +73,10 @@ public class Unit : UnitBase
         TunnelEnd.OnTunnelEndReached += SyncDataToState;
         energyManager.onEnergyPercentChange += HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted += HandleEnergyDepleted;
+        healthManager.onHit += HandleDamageTaken;
+        
+        if(!units.Contains(this))
+            units.Add(this);
     }
 
     private void OnDisable()
@@ -80,6 +85,9 @@ public class Unit : UnitBase
         energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted -= HandleEnergyDepleted;
         healthManager.onHit -= HandleDamageTaken;
+
+        if (units.Contains(this))
+            units.Remove(this);
     }
 
     private void OnDestroy()
@@ -326,6 +334,8 @@ public class Unit : UnitBase
 
         return UnitActivity.Idle;
     }
+    
+    public static Unit GetRandomUnit() => units[Random.Range(0, units.Count)];
 
     public void SyncDataToState()
     {
@@ -333,6 +343,8 @@ public class Unit : UnitBase
         {
             swarmUnitsData.currentHP = healthManager.CurrentHP;
             swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
+
+            inventory.InventorySO.TransferTo(swarmState.GlobalInventory);
         }
     }
 
