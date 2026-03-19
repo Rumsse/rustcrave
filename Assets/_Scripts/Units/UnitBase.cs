@@ -14,7 +14,7 @@ public abstract class UnitBase : MonoBehaviour
     public event Action<UnitState> onStateChange;
 
     #endregion
-    
+
     #region Properties
 
     public StatsManager Stats => stats;
@@ -31,8 +31,25 @@ public abstract class UnitBase : MonoBehaviour
             attackTarget = value;
             isAttacking = value;
 
-            if (value)
+            if (value && !currentAttack)
                 RollAttack();
+        }
+    }
+
+    public bool IsPerformingSpecial
+    {
+        get => _isPerformingSpecial;
+        set
+        {
+            _isPerformingSpecial = value;
+
+            if (!value)
+            {
+                lastAttackTime = Time.time;
+                onSpecialStop?.Invoke();
+            }
+            else
+                onSpecialStart?.Invoke();
         }
     }
 
@@ -42,13 +59,14 @@ public abstract class UnitBase : MonoBehaviour
 
     [SerializeField] protected float rotateSpeed;
     [SerializeField] protected float stoppingDistance;
+    [SerializeField] protected bool loopThroughAttacks;
 
     [Header("References")]
     [SerializeField] protected StatsManager stats;
     [SerializeField] protected Animator animator;
     [SerializeField] protected HealthManager healthManager;
     [SerializeField] protected Transform projectileSpawnT;
-    [SerializeField] protected Transform modelMidPoint;
+    [SerializeField] protected Transform modelMidPoint; // used for projectiles to aim at model chest / mid point instead of pivot
 
     #endregion
 
@@ -64,7 +82,12 @@ public abstract class UnitBase : MonoBehaviour
 
     private UnitState state;
 
+    private int currentAttackIndex;
+    private bool _isPerformingSpecial;
+
     #endregion
+
+    #region Unity Lifecycle
 
     protected virtual void Awake()
     {
@@ -81,6 +104,19 @@ public abstract class UnitBase : MonoBehaviour
     protected virtual void Update()
     {
         state?.Tick();
+    }
+
+    #endregion
+
+    #region State Management
+
+    public void SetState(UnitState newState)
+    {
+        state?.ExitState();
+        state = newState;
+        state?.EnterState();
+
+        onStateChange?.Invoke(state);
     }
 
     public virtual void HandleMovement(Vector3 position)
@@ -105,15 +141,8 @@ public abstract class UnitBase : MonoBehaviour
     {
         if (CanAttack())
         {
-            if (TryGetComponent<MantisPassiveAbility>(out var mantisPassive))
-            {
-                mantisPassive.ExecuteComboAttack(AttackTarget, currentAttack);
-            }
-            else
-            {
-                currentAttack.Execute(AttackTarget, this);
-            }
-
+            onAttack?.Invoke();
+            currentAttack.Execute(AttackTarget, this);
             RollAttack();
             lastAttackTime = Time.time;
         }
@@ -133,29 +162,31 @@ public abstract class UnitBase : MonoBehaviour
     {
         if (currentAttackIndex >= stats.PossibleAttacks.Count)
             currentAttackIndex = 0;
-        
+
         currentAttack = stats.PossibleAttacks[currentAttackIndex];
-        
+
         currentAttackIndex++;
     }
 
     private void RollAttackPhaseChange()
     {
         int attackIndex = currentAttackIndex - 1;
-        
+
         if (attackIndex >= stats.PossibleAttacks.Count || attackIndex < 0)
             attackIndex = 0;
-        
+
         currentAttack = stats.PossibleAttacks[attackIndex];
     }
-    
+
     #endregion
-    
-    
+
+
     protected virtual bool CanAttack()
     {
         if (Time.time - lastAttackTime < 1 / stats.AttacksPerSecond)
             return false;
+
+        // can add stuff like HasStun() etc.
 
         return true;
     }
@@ -169,11 +200,16 @@ public abstract class UnitBase : MonoBehaviour
         currentAttack = null;
     }
 
-    public void SetState(UnitState newState)
+    #endregion
+
+    #region Phase Handling
+
+    public void ChangeStats(UnitSO newStats)
     {
         stats.ChangeStats(newStats);
         RollAttackPhaseChange();
     }
 
-    public void ChangeStats(UnitSO newStats) => stats.ChangeStats(newStats);
+    #endregion
+
 }
