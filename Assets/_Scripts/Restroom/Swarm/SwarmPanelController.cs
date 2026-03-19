@@ -8,16 +8,24 @@ public class SwarmPanelController : MonoBehaviour
     [SerializeField] VisualTreeAsset unitSlotTemplate;
     [SerializeField] VisualTreeAsset unitInfoPanelAsset;
     [SerializeField] UnitInfoPanelController unitInfoPanelController;
+    [SerializeField] UnitMaintanceController maintenanceController;
+    [SerializeField] StyleSheet quickManagementStyleSheet;
 
     VisualElement rootElement;
     VisualElement slotsContainer;
     VisualElement unitInfoContainer;
     Button btnCloseMain;
+    Button btnQuickManagement;
+    Label subtitleLabel;
 
     readonly List<VisualElement> activeSlots = new();
     readonly Dictionary<string, VisualElement> subPanelCache = new();
 
     string activeTabKey;
+    bool isQuickManagementActive;
+
+    const string DefaultSubtitle = "Click on the unit image to get more information about it";
+    const string QuickSubtitle = "LMB to repair | RMB to charge";
 
     #region Initialization
 
@@ -27,9 +35,31 @@ public class SwarmPanelController : MonoBehaviour
         slotsContainer = root.Q<VisualElement>("swarm-slots-container");
         unitInfoContainer = root.Q<VisualElement>("unit-info-container");
         btnCloseMain = root.Q<Button>("btn-close");
+        btnQuickManagement = root.Q<Button>("btn-quick-management");
+        subtitleLabel = root.Q<Label>("subtitle-label");
 
         if (swarmState == null || slotsContainer == null || unitSlotTemplate == null)
             return;
+
+        isQuickManagementActive = false;
+
+        if (quickManagementStyleSheet != null)
+            rootElement.styleSheets.Remove(quickManagementStyleSheet);
+
+        if (subtitleLabel != null)
+            subtitleLabel.text = DefaultSubtitle;
+
+        if (btnQuickManagement != null)
+        {
+            btnQuickManagement.clicked -= ToggleQuickManagement;
+            btnQuickManagement.clicked += ToggleQuickManagement;
+        }
+
+        if (btnCloseMain != null)
+        {
+            btnCloseMain.clicked -= HandleMainClose;
+            btnCloseMain.clicked += HandleMainClose;
+        }
 
         swarmState.OnSwarmChanged -= RebuildSwarmUI;
         swarmState.OnSwarmChanged += RebuildSwarmUI;
@@ -114,6 +144,70 @@ public class SwarmPanelController : MonoBehaviour
 
     #endregion
 
+    #region Quick Management
+
+    void ToggleQuickManagement()
+    {
+        isQuickManagementActive = !isQuickManagementActive;
+
+        if (subtitleLabel != null)
+            subtitleLabel.text = isQuickManagementActive ? QuickSubtitle : DefaultSubtitle;
+
+        UpdateStyleSheet();
+    }
+
+    void HandleMainClose()
+    {
+        if (!isQuickManagementActive)
+            return;
+
+        isQuickManagementActive = false;
+
+        if (subtitleLabel != null)
+            subtitleLabel.text = DefaultSubtitle;
+
+        UpdateStyleSheet();
+    }
+
+    void UpdateStyleSheet()
+    {
+        if (rootElement == null || quickManagementStyleSheet == null)
+            return;
+
+        if (isQuickManagementActive)
+        {
+            rootElement.styleSheets.Add(quickManagementStyleSheet);
+
+            foreach (var slot in activeSlots)
+                slot.styleSheets.Add(quickManagementStyleSheet);
+        }
+        else
+        {
+            rootElement.styleSheets.Remove(quickManagementStyleSheet);
+
+            foreach (var slot in activeSlots)
+                slot.styleSheets.Remove(quickManagementStyleSheet);
+        }
+    }
+
+    void HandleSlotInteraction(PointerUpEvent evt, SwarmUnitsData unitData)
+    {
+        if (isQuickManagementActive)
+        {
+            if (evt.button == 0)
+                maintenanceController?.TryRepair(unitData);
+            else if (evt.button == 1)
+                maintenanceController?.TryCharge(unitData);
+
+            return;
+        }
+
+        if (evt.button == 0)
+            OpenTab("unit-info-panel", unitInfoPanelAsset, unitData);
+    }
+
+    #endregion
+
     #region UI Management
 
     void RebuildSwarmUI()
@@ -138,12 +232,16 @@ public class SwarmPanelController : MonoBehaviour
         var slot = unitSlotTemplate.CloneTree();
         slot.userData = unitData;
 
+        if (isQuickManagementActive && quickManagementStyleSheet != null)
+            slot.styleSheets.Add(quickManagementStyleSheet);
+
         var unitImage = slot.Q<VisualElement>("unit-image");
 
         if (unitData.unitType != null && unitData.unitType.robotSprite != null)
             unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.robotSprite);
 
-        slot.RegisterCallback<ClickEvent>(evt => OpenTab("unit-info-panel", unitInfoPanelAsset, unitData));
+        if (unitImage != null)
+            unitImage.RegisterCallback<PointerUpEvent>(evt => HandleSlotInteraction(evt, unitData));
 
         slotsContainer.Add(slot);
         activeSlots.Add(slot);
@@ -167,7 +265,7 @@ public class SwarmPanelController : MonoBehaviour
     void UpdateSingleSlotStats(VisualElement slot, SwarmUnitsData unitData)
     {
         var hpLabel = slot.Q<Label>("hp-label");
-        var enLabel = slot.Q<Label>("en-label");
+        var enLabel = slot.Q<Label>("energy-label");
 
         if (hpLabel != null && unitData.unitType != null)
             hpLabel.text = $"HP {unitData.currentHP}/{unitData.unitType.maxHP}";
