@@ -12,6 +12,8 @@ public class UnitSO : ScriptableObject
 
     [Header("Robot Informations")]
     public string robotName;
+    [TextArea]
+    public string robotDescription;
     public Sprite robotSprite;
 
     [Header("Common Stats")]

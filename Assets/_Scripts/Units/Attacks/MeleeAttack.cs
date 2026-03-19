@@ -8,6 +8,8 @@ public class MeleeAttack : AttackBase
         if (!attacker || !target)
             return;
         
+        base.Execute(target, attacker);
+        
         attacker.Animator?.Play(animationStateName);
 
         int finalDamage = GetFinalDamage(attacker.Stats.Damage);

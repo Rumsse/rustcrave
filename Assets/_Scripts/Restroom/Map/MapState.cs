@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "MapState", menuName = "Restroom/Map State")]
+[CreateAssetMenu(fileName = "MapState", menuName = "Restroom/Map/Map State")]
 public class MapState : ScriptableObject
 {
     [SerializeField] List<PathModifierData> availableModifiers = new();

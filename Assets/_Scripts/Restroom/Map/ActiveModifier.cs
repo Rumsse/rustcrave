@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ActiveModifier", menuName = "Restroom/Active Modifier")]
+[CreateAssetMenu(fileName = "ActiveModifier", menuName = "Restroom/Map/Active Modifier")]
 public class ActiveModifier : ScriptableObject
 {
     public PathModifierData current;

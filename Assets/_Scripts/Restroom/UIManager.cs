@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument uiDocument;
+    [SerializeField] GlobalInventorySO globalInventory;
     [SerializeField] VisualTreeAsset choosePathPanel;
     [SerializeField] VisualTreeAsset mainCraftPanel;
     [SerializeField] VisualTreeAsset swarmPanel;
@@ -21,12 +22,14 @@ public class UIManager : MonoBehaviour
     VisualElement eventPanelLayer;
 
     readonly Dictionary<string, VisualElement> panelCache = new();
-
     string activePanelKey;
+
+    #region Initialization
 
     void Awake()
     {
         var root = uiDocument.rootVisualElement;
+        root.dataSource = globalInventory;
 
         panelLayer = root.Q("panel-layer");
         leftPanelSlot = root.Q("left-panel");
@@ -34,18 +37,33 @@ public class UIManager : MonoBehaviour
         tooltipLayer = root.Q("tooltip-layer");
         eventPanelLayer = root.Q("event-layer");
 
-        root.Q<Button>("btn-craft").clicked += () =>
+        root.Q<Button>("btn-craft").clicked += () => 
             TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
-
-        root.Q<Button>("btn-swarm").clicked += () =>
+        root.Q<Button>("btn-swarm").clicked += () => 
             TogglePanel("swarm-panel", swarmPanel, leftPanelSlot);
-
-        root.Q<Button>("btn-choose-path").clicked += () =>
+        root.Q<Button>("btn-choose-path").clicked += () => 
             TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
 
-        root.Q<Button>("btn-event-pop-up").clicked += () =>
-            TogglePanel("event-panel", eventPanel, eventPanelLayer);
+        var popUpContainer = root.Q<VisualElement>("event-pop-up");
+        var popUpButton = root.Q<Button>("btn-event-pop-up");
+
+        InitializeEventPanel(popUpContainer, popUpButton);
     }
+
+    void InitializeEventPanel(VisualElement popUpContainer, Button popUpButton)
+    {
+        var panelInstance = eventPanel.CloneTree();
+        panelInstance.style.flexGrow = 1;
+
+        eventPanelLayer.Add(panelInstance);
+        eventPanelLayer.style.display = DisplayStyle.None;
+
+        eventPanelController.Initialize(panelInstance, eventPanelLayer, popUpContainer, popUpButton);
+    }
+
+    #endregion
+
+    #region Tab Management
 
     void TogglePanel(string key, VisualTreeAsset asset, VisualElement slot)
     {
@@ -75,7 +93,6 @@ public class UIManager : MonoBehaviour
 
     void InitializePanel(string key, VisualElement panel)
     {
-
         if (key == "main-craft-panel")
             mainCraftController.Initialize(panel, leftPanelSlot);
 
@@ -84,14 +101,12 @@ public class UIManager : MonoBehaviour
 
         if (key == "choose-path")
             choosePathController.Initialize(panel, tooltipLayer);
-
-        if(key == "event-panel")
-            eventPanelController.Initialize(panel, eventPanelLayer);
     }
 
     void BindCloseButton(VisualElement panel, VisualElement slot)
     {
         var closeBtn = panel.Q<Button>("btn-close");
+
         if (closeBtn != null)
             closeBtn.clicked += () => CloseCurrentPanel(slot);
     }
@@ -108,4 +123,6 @@ public class UIManager : MonoBehaviour
         panelLayer.style.display = DisplayStyle.None;
         activePanelKey = null;
     }
+
+    #endregion
 }

@@ -1,9 +1,20 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public abstract class UnitBase : MonoBehaviour
 {
+    #region Events
+
+    public event Action onAttack;
+    public event Action onSpecialStart;
+    public event Action onSpecialStop;
+    public event Action<UnitState> onStateChange;
+
+    #endregion
+    
     #region Properties
 
     public StatsManager Stats => stats;
@@ -86,6 +97,10 @@ public abstract class UnitBase : MonoBehaviour
         enemy.HealthManager.onDeath += StopAttacking;
     }
 
+    #endregion
+
+    #region Attacking
+
     public virtual void TryAttack()
     {
         if (CanAttack())
@@ -104,11 +119,39 @@ public abstract class UnitBase : MonoBehaviour
         }
     }
 
+    #region Attack Chosing
+
     protected void RollAttack()
     {
-        currentAttack = stats.PossibleAttacks[Random.Range(0, stats.PossibleAttacks.Count)];
+        if (!loopThroughAttacks) RollAttackRandom();
+        else RollAttackIterative();
     }
 
+    private void RollAttackRandom() => currentAttack = stats.PossibleAttacks[Random.Range(0, stats.PossibleAttacks.Count)];
+
+    private void RollAttackIterative()
+    {
+        if (currentAttackIndex >= stats.PossibleAttacks.Count)
+            currentAttackIndex = 0;
+        
+        currentAttack = stats.PossibleAttacks[currentAttackIndex];
+        
+        currentAttackIndex++;
+    }
+
+    private void RollAttackPhaseChange()
+    {
+        int attackIndex = currentAttackIndex - 1;
+        
+        if (attackIndex >= stats.PossibleAttacks.Count || attackIndex < 0)
+            attackIndex = 0;
+        
+        currentAttack = stats.PossibleAttacks[attackIndex];
+    }
+    
+    #endregion
+    
+    
     protected virtual bool CanAttack()
     {
         if (Time.time - lastAttackTime < 1 / stats.AttacksPerSecond)
@@ -128,9 +171,8 @@ public abstract class UnitBase : MonoBehaviour
 
     public void SetState(UnitState newState)
     {
-        state?.ExitState();
-        state = newState;
-        state?.EnterState();
+        stats.ChangeStats(newStats);
+        RollAttackPhaseChange();
     }
 
     public void ChangeStats(UnitSO newStats) => stats.ChangeStats(newStats);
