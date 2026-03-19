@@ -3474,6 +3474,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2140184853}
   - component: {fileID: 2140184852}
+  - component: {fileID: 2140184854}
+  - component: {fileID: 2140184855}
   m_Layer: 5
   m_Name: Swarm
   m_TagString: Untagged
@@ -3495,6 +3497,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SwarmPanelController
   swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
   unitSlotTemplate: {fileID: 9197481963319205126, guid: d465988c9caf9b14aa4b5a46ebca9e45, type: 3}
+  unitInfoPanelAsset: {fileID: 9197481963319205126, guid: ae9ea586e07c7c2478f7e5960920e1c5, type: 3}
+  unitInfoPanelController: {fileID: 2140184854}
 --- !u!4 &2140184853
 Transform:
   m_ObjectHideFlags: 0
@@ -3510,6 +3514,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 828975490}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2140184854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140184851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9db6fb73f0efb9c468c5b23a6572ae8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitInfoPanelController
+  maintenanceController: {fileID: 2140184855}
+--- !u!114 &2140184855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140184851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b51c06fc14cacf44bc32ead2b745300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitMaintanceController
+  globalInventory: {fileID: 11400000, guid: f715252bf3a047d429a856ce045a8873, type: 2}
+  repairCost: {fileID: 11400000, guid: 0061f7be7fca301459f90f248d72f178, type: 2}
+  chargeCost: {fileID: 11400000, guid: 624c60f47626ada42a432de2a91f4456, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
