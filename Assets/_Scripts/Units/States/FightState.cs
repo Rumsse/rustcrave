@@ -6,9 +6,12 @@ public class FightState : UnitState
 
     public override void Tick()
     {
+        if (!_unit.CurrentAttack)
+            return;
+        
         if (_unit.IsPerformingSpecial)
         {
-            if (_agent.hasPath) _agent.ResetPath();
+            if (_agent.enabled && _agent.hasPath) _agent.ResetPath();
             _unit.Animator.SetBool("IsWalking", false);
             return;
         }
@@ -25,13 +28,15 @@ public class FightState : UnitState
 
         if (dist < range)
         {
-            _agent.ResetPath();
+            if(_agent.enabled)
+                _agent.ResetPath();
             _unit.Animator.SetBool("IsWalking", false);
             _unit.TryAttack();
         } 
         else
         {
-            _agent.SetDestination(_unit.AttackTarget.transform.position);
+            if(_agent.enabled)
+                _agent.SetDestination(_unit.AttackTarget.transform.position);
             _unit.Animator.SetBool("IsWalking", true);
         }
     }

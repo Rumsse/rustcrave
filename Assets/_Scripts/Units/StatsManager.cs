@@ -11,13 +11,14 @@ public class StatsManager : MonoBehaviour
     public string RobotName => _baseData.robotName;
     public Sprite RobotSprite => _baseData.robotSprite;
     public UnitType UnitType => _baseData.unitType;
-    public AttackType Immunities => _baseData.immunities;
-    public int MaxHP => Mathf.RoundToInt((_baseData.maxHP + GetFlatStatModifier(StatsType.MaxHP)) * GetStatModifier(StatsType.MaxHP));
-    public float MoveSpeed => (_baseData.moveSpeed + GetFlatStatModifier(StatsType.Speed)) * GetStatModifier(StatsType.Speed);
-    public int Damage => Mathf.RoundToInt((_baseData.damage + GetFlatStatModifier(StatsType.Damage)) * GetStatModifier(StatsType.Damage));
-    public float AttacksPerSecond => (_baseData.attacksPerSecond + GetFlatStatModifier(StatsType.AttacksPerSecond)) * GetStatModifier(StatsType.AttacksPerSecond);
-    public float MiningPower => (_baseData.miningPower + GetFlatStatModifier(StatsType.MiningPower)) * GetStatModifier(StatsType.MiningPower);
-    public int CarryCapacity => Mathf.RoundToInt((_baseData.carryCapacity + GetFlatStatModifier(StatsType.CarryCapacity)) * GetStatModifier(StatsType.CarryCapacity));
+    public AttackType TypeImmunities => _baseData.typeImmunities;
+    public DeliveryMethod DeliveryMethodImmunities => _baseData.deliveryMethodImmunities;
+    public int MaxHP => Mathf.RoundToInt(_baseData.maxHP * GetStatModifier(StatsType.MaxHP));
+    public float MoveSpeed => _baseData.moveSpeed * GetStatModifier(StatsType.Speed);
+    public int Damage => Mathf.RoundToInt(_baseData.damage * GetStatModifier(StatsType.Damage));
+    public float AttacksPerSecond => _baseData.attacksPerSecond * GetStatModifier(StatsType.AttacksPerSecond);
+    public float MiningPower => _baseData.miningPower *  GetStatModifier(StatsType.MiningPower);
+    public int CarryCapacity => Mathf.RoundToInt(_baseData.carryCapacity * GetStatModifier(StatsType.CarryCapacity));
     public List<AttackBase> PossibleAttacks => _baseData.possibleAttacks;
     public int MaxEnergy => Mathf.RoundToInt((_baseData.maxEnergy + GetFlatStatModifier(StatsType.MaxEnergy)) * GetStatModifier(StatsType.MaxEnergy));
 

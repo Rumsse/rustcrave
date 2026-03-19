@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -34,15 +35,27 @@ public enum AttackType
     True = 1 << 3// non blockable by anything
 }
 
+[Flags]
+public enum DeliveryMethod
+{
+    None = 0,
+    Melee = 1 << 0,
+    Ranged = 1 << 1,
+    AOE = 1 << 2,
+    Special = 1 << 3
+}
+
 [Serializable] 
 public struct DamageInfo
 {
     public int Value;
     public AttackType AttackType;
+    public DeliveryMethod DeliveryMethod;
 
-    public DamageInfo(int value, AttackType type)
+    public DamageInfo(int value, AttackType type, DeliveryMethod method = DeliveryMethod.Special)
     {
         Value = value;
         AttackType = type;
+        DeliveryMethod = method;
     }
 }

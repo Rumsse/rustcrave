@@ -14,7 +14,8 @@ public class UnitSOEditor : Editor
     SerializedProperty moveSpeed;
     SerializedProperty maxHP;
     SerializedProperty possibleAttacks;
-    SerializedProperty immunities;
+    SerializedProperty typeImmunities;
+    SerializedProperty deliveryImmunities;
     SerializedProperty maxEnergy;
 
     SerializedProperty damage;
@@ -39,7 +40,8 @@ public class UnitSOEditor : Editor
         maxHP = serializedObject.FindProperty("maxHP");
         possibleAttacks = serializedObject.FindProperty("possibleAttacks");
         maxEnergy = serializedObject.FindProperty("maxEnergy");
-        immunities = serializedObject.FindProperty("immunities");
+        typeImmunities = serializedObject.FindProperty("typeImmunities");
+        deliveryImmunities = serializedObject.FindProperty("deliveryMethodImmunities");
 
         damage = serializedObject.FindProperty("damage");
         attacksPerSecond = serializedObject.FindProperty("attacksPerSecond");
@@ -104,7 +106,8 @@ public class UnitSOEditor : Editor
         EditorGUILayout.LabelField("Common Stats", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(moveSpeed);
         EditorGUILayout.PropertyField(maxHP);
-        EditorGUILayout.PropertyField(immunities);
+        EditorGUILayout.PropertyField(typeImmunities);
+        EditorGUILayout.PropertyField(deliveryImmunities);
         EditorGUILayout.PropertyField(maxEnergy);
     }
 
