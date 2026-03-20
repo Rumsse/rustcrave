@@ -7,7 +7,17 @@ public class StatsManager : MonoBehaviour
 {
     [SerializeField] private UnitSO _baseData;
 
-    public Transform PrefabT => _baseData.Prefab.transform;
+    public Transform PrefabT
+    {
+        get
+        {
+            if(_baseData.Prefab)
+                return _baseData.Prefab.transform;
+
+            return null;
+        }
+    }
+
     public string RobotName => _baseData.robotName;
     public Sprite RobotSprite => _baseData.robotSprite;
     public UnitType UnitType => _baseData.unitType;

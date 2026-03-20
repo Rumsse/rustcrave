@@ -19,6 +19,7 @@ public abstract class UnitBase : MonoBehaviour
 
     public StatsManager Stats => stats;
     public Animator Animator => animator;
+    public NavMeshAgent Agent => agent;
     public HealthManager HealthManager => healthManager;
     public Transform ProjectileSpawnT => projectileSpawnT;
     public Transform ModelMidPoint => modelMidPoint;
@@ -142,9 +143,6 @@ public abstract class UnitBase : MonoBehaviour
         if (CanAttack())
         {
             onAttack?.Invoke();
-            currentAttack.Execute(AttackTarget, this);
-            RollAttack();
-            lastAttackTime = Time.time;
 
             if (TryGetComponent<MantisPassiveAbility>(out var mantisPassive))
             {
@@ -167,10 +165,6 @@ public abstract class UnitBase : MonoBehaviour
     {
         if (!loopThroughAttacks) RollAttackRandom();
         else RollAttackIterative();
-
-
-        currentAttack = stats.PossibleAttacks[Random.Range(0, stats.PossibleAttacks.Count)];
-
     }
 
     private void RollAttackRandom() => currentAttack = stats.PossibleAttacks[Random.Range(0, stats.PossibleAttacks.Count)];

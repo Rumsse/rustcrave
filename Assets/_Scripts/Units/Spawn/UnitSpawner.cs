@@ -4,6 +4,8 @@ using UnityEngine.AI;
 
 public class UnitSpawner : MonoBehaviour
 {
+    [SerializeField] private bool startSpawn = false;
+    [ShowIf("startSpawn", false)]
     [SerializeField] private TunnelGenerator generator;
     [SerializeField] private SwarmState swarmState;
     [SerializeField] private Transform unitsParent;
@@ -11,19 +13,20 @@ public class UnitSpawner : MonoBehaviour
     [SerializeField] private float sampleRadius = 5f;
     [SerializeField] private float ringRadius = 2f;
 
-/*    private void Start()
+    private void Start()
     {
-        swarmState.Initialize();
-    }*/
+        if(startSpawn)
+            SpawnUnits();
+    }
 
     private void OnEnable()
     {
-        if (generator != null) generator.OnNavMeshReady += SpawnUnits;
+        if (generator != null && !startSpawn) generator.OnNavMeshReady += SpawnUnits;
     }
 
     private void OnDisable()
     {
-        if (generator != null) generator.OnNavMeshReady -= SpawnUnits;
+        if (generator != null && !startSpawn) generator.OnNavMeshReady -= SpawnUnits;
     }
 
     private void SpawnUnits()
