@@ -11,6 +11,7 @@ public class UnitInfoPanelController : MonoBehaviour
     Label descriptionLabel;
     Label hpLabel;
     Label energyLabel;
+    Label abilityDescriptionLabel;
     Button btnRepair;
     Button btnCharge;
 
@@ -28,6 +29,7 @@ public class UnitInfoPanelController : MonoBehaviour
         descriptionLabel = root.Q<Label>("unit-description");
         hpLabel = root.Q<Label>("hp-label");
         energyLabel = root.Q<Label>("energy-label");
+        abilityDescriptionLabel = root.Q<Label>("ability-description");
 
         btnRepair = root.Q<Button>("btn-repair");
         btnCharge = root.Q<Button>("btn-charge");
@@ -64,6 +66,9 @@ public class UnitInfoPanelController : MonoBehaviour
 
         if (descriptionLabel != null)
             descriptionLabel.text = currentUnit.unitType.robotDescription;
+
+        if (abilityDescriptionLabel != null)
+            abilityDescriptionLabel.text = currentUnit.unitType.abilityDescription;
 
         UpdateStats();
 
