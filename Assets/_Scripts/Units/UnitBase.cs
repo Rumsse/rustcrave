@@ -14,11 +14,12 @@ public abstract class UnitBase : MonoBehaviour
     public event Action<UnitState> onStateChange;
 
     #endregion
-    
+
     #region Properties
 
     public StatsManager Stats => stats;
     public Animator Animator => animator;
+    public NavMeshAgent Agent => agent;
     public HealthManager HealthManager => healthManager;
     public Transform ProjectileSpawnT => projectileSpawnT;
     public Transform ModelMidPoint => modelMidPoint;
@@ -30,8 +31,8 @@ public abstract class UnitBase : MonoBehaviour
         {
             attackTarget = value;
             isAttacking = value;
-            
-            if(value && !currentAttack)
+
+            if (value && !currentAttack)
                 RollAttack();
         }
     }
@@ -60,18 +61,18 @@ public abstract class UnitBase : MonoBehaviour
     [SerializeField] protected float rotateSpeed;
     [SerializeField] protected float stoppingDistance;
     [SerializeField] protected bool loopThroughAttacks;
-    
+
     [Header("References")]
     [SerializeField] protected StatsManager stats;
     [SerializeField] protected Animator animator;
     [SerializeField] protected HealthManager healthManager;
     [SerializeField] protected Transform projectileSpawnT;
     [SerializeField] protected Transform modelMidPoint; // used for projectiles to aim at model chest / mid point instead of pivot
-    
+
     #endregion
-    
+
     #region Private Fields
-    
+
     protected NavMeshAgent agent;
     private UnitBase attackTarget;
 
@@ -115,21 +116,21 @@ public abstract class UnitBase : MonoBehaviour
         state?.ExitState();
         state = newState;
         state?.EnterState();
-        
+
         onStateChange?.Invoke(state);
     }
-    
+
     public virtual void HandleMovement(Vector3 position)
     {
         AttackTarget = null;
         SetState(new WalkingState(this, position));
     }
-    
+
     public virtual void MoveToAttack(UnitBase enemy, Vector3 position)
     {
         AttackTarget = enemy;
         SetState(new FightState(this));
-        
+
         enemy.HealthManager.onDeath += StopAttacking;
     }
 
@@ -142,9 +143,19 @@ public abstract class UnitBase : MonoBehaviour
         if (CanAttack())
         {
             onAttack?.Invoke();
-            currentAttack.Execute(AttackTarget, this);
+
+            if (TryGetComponent<MantisPassiveAbility>(out var mantisPassive))
+            {
+                mantisPassive.ExecuteComboAttack(AttackTarget, currentAttack);
+            }
+            else
+            {
+                currentAttack.Execute(AttackTarget, this);
+            }
+
             RollAttack();
             lastAttackTime = Time.time;
+
         }
     }
 
@@ -162,40 +173,40 @@ public abstract class UnitBase : MonoBehaviour
     {
         if (currentAttackIndex >= stats.PossibleAttacks.Count)
             currentAttackIndex = 0;
-        
+
         currentAttack = stats.PossibleAttacks[currentAttackIndex];
-        
+
         currentAttackIndex++;
     }
 
     private void RollAttackPhaseChange()
     {
         int attackIndex = currentAttackIndex - 1;
-        
+
         if (attackIndex >= stats.PossibleAttacks.Count || attackIndex < 0)
             attackIndex = 0;
-        
+
         currentAttack = stats.PossibleAttacks[attackIndex];
     }
-    
+
     #endregion
-    
-    
+
+
     protected virtual bool CanAttack()
     {
         if (Time.time - lastAttackTime < 1 / stats.AttacksPerSecond)
             return false;
-        
+
         // can add stuff like HasStun() etc.
-        
+
         return true;
     }
 
     protected void StopAttacking()
     {
-        if(AttackTarget)
+        if (AttackTarget)
             AttackTarget.HealthManager.onDeath -= StopAttacking;
-        
+
         AttackTarget = null;
         currentAttack = null;
     }
@@ -211,5 +222,5 @@ public abstract class UnitBase : MonoBehaviour
     }
 
     #endregion
-    
+
 }

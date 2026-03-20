@@ -14,13 +14,16 @@ public enum UnitActivity
 
 public class Unit : UnitBase
 {
+    public static Unit MainCharacter { get; private set; }
+
     public static List<Unit> units = new();
-    
-    public NavMeshAgent Agent => agent;
+
     public string Id => swarmUnitsData.id;
     public bool IsMainCharacter => isMainCharacter;
+    public bool IsEnergyDrainDoubled { get; set; }
 
     [SerializeField] private bool isMainCharacter;
+    [SerializeField] private string commandTriggerName;
     [SerializeField] private UnitInventory inventory;
     [SerializeField] private EnergyManager energyManager;
     [SerializeField] private float minMiningTime;
@@ -50,6 +53,8 @@ public class Unit : UnitBase
 
         energyManager.InitializeEnergy(swarmUnitsData.currentEnergy);
         UnitRegistry.Register(this);
+
+        RefreshStats();
     }
 
     protected override void Awake()
@@ -57,6 +62,12 @@ public class Unit : UnitBase
         base.Awake();
         baseMoveSpeed = agent.speed;
         miningTimer = 0f;
+
+        if (isMainCharacter)
+        {
+            MainCharacter = this;
+        }
+
     }
 
     private void OnEnable()
@@ -65,8 +76,8 @@ public class Unit : UnitBase
         energyManager.onEnergyPercentChange += HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted += HandleEnergyDepleted;
         healthManager.onHit += HandleDamageTaken;
-        
-        if(!units.Contains(this))
+
+        if (!units.Contains(this))
             units.Add(this);
     }
 
@@ -100,6 +111,16 @@ public class Unit : UnitBase
 
         if (currentInteractable != null)
             HandleInteraction();
+    }
+
+    public void RefreshStats()
+    {
+        if (stats != null)
+        {
+            baseMoveSpeed = stats.MoveSpeed;
+            float currentPercent = stats.MaxEnergy > 0 ? (float)energyManager.CurrentEnergy / stats.MaxEnergy : 1f;
+            HandleMoveSpeedBasedOnEnergy(currentPercent);
+        }
     }
 
     private void HandleDamageTaken(int newCurrentHP)
@@ -171,12 +192,24 @@ public class Unit : UnitBase
         else if (agent.velocity.magnitude > 0.1f)
         {
             energyManager.SetMoveDrain();
+
+            if (IsEnergyDrainDoubled)
+            {
+                energyManager.SetActionDrain();
+            }
+            else
+            {
+                energyManager.SetMoveDrain();
+            }
+
         }
         else
         {
             energyManager.SetIdleDrain();
         }
     }
+
+
 
     private void HandleInteraction()
     {
@@ -309,7 +342,7 @@ public class Unit : UnitBase
 
         return UnitActivity.Idle;
     }
-    
+
     public static Unit GetRandomUnit() => units[Random.Range(0, units.Count)];
 
     public void SyncDataToState()
@@ -322,4 +355,18 @@ public class Unit : UnitBase
             inventory.InventorySO.TransferTo(swarmState.GlobalInventory);
         }
     }
+
+    public void SetAnimator(Animator newAnimator)
+    {
+        animator = newAnimator;
+    }
+
+    public void PlayCommandAnimation()
+    {
+        if (animator != null && !string.IsNullOrEmpty(commandTriggerName))
+        {
+            animator.SetTrigger(commandTriggerName);
+        }
+    }
+
 }

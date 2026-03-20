@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "RestoreSwarmEnergyAction", menuName = "Restroom/Events/Actions/Restore Swarm Energy")]
 public class RestoreSwarmEnergyAction : EventAction
 {
-    public float percentage = 0.1f;
+    [SerializeField] float percentage = 0.1f;
 
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)
     {

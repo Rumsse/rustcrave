@@ -14,12 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitSO
   unitType: 3
   prefab: {fileID: 6555729451623028360, guid: 31acf5885066ab146801275d4f0af43d, type: 3}
-  robotName: MC
-  robotSprite: {fileID: 21300000, guid: 709cbec79718509458cacc4f211c72f6, type: 3}
+  robotName: Player
+  robotDescription: 'Empty Conductor Form:
+
+    In this form, the player can issue
+    commands to other robots.
+
+
+    Spider Form:
+
+    In this form, the player can
+    perform basic actions such as fighting and digging, but loses control of the
+    swarm. If you lose the swarm, you are forced to use this form.'
+  robotSprite: {fileID: 21300000, guid: 78b9b093292b6534d90e1df1574dc48b, type: 3}
+  abilityDescription: "Empty Conductor Form:\n- Disconnect (active)\nThe spider jumps
+    off the Conductor\u2019s head, losing control of the puppet\u2019s body and focusing
+    all control on the spider.\n\nSpider Form:\n- Connect (active)\nJumps onto the
+    conductor\u2019s head, regaining control over him and the entire swarm."
   moveSpeed: 3
   maxEnergy: 100
   maxHP: 40
-  immunities: 0
+  typeImmunities: 0
+  deliveryMethodImmunities: 0
   damage: 2
   attacksPerSecond: 1
   miningPower: 1.2

@@ -217,6 +217,10 @@ MonoBehaviour:
   unitLayerMask:
     serializedVersion: 2
     m_Bits: 128
+  mouseWorldLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  moveIndicatorPrefab: {fileID: 0}
 --- !u!1 &139000359
 GameObject:
   m_ObjectHideFlags: 0
@@ -2110,7 +2114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraZoom
   wideCamera: {fileID: 1572376364}
-  speed: 2
+  speed: 0.8
 --- !u!1 &804888285
 GameObject:
   m_ObjectHideFlags: 0
@@ -4927,6 +4931,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
   gameSceneName: 
   optionsPanel: {fileID: 0}
+  creditsPanel: {fileID: 0}
+  settingsPanel: {fileID: 0}
+  guidePanel: {fileID: 0}
   swarmState: {fileID: 0}
   mapState: {fileID: 0}
   globalInventory: {fileID: 0}

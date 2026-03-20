@@ -7,13 +7,16 @@ public class UnitSOEditor : Editor
     SerializedProperty prefab;
     SerializedProperty robotSprite;
     SerializedProperty robotName;
+    SerializedProperty robotDescription;
+    SerializedProperty abilityDescription;
     
     SerializedProperty unitType;
 
     SerializedProperty moveSpeed;
     SerializedProperty maxHP;
     SerializedProperty possibleAttacks;
-    SerializedProperty immunities;
+    SerializedProperty typeImmunities;
+    SerializedProperty deliveryImmunities;
     SerializedProperty maxEnergy;
 
     SerializedProperty damage;
@@ -31,13 +34,16 @@ public class UnitSOEditor : Editor
         prefab = serializedObject.FindProperty("prefab");
         robotSprite = serializedObject.FindProperty("robotSprite");
         robotName = serializedObject.FindProperty("robotName");
+        robotDescription = serializedObject.FindProperty("robotDescription");
+        abilityDescription = serializedObject.FindProperty("abilityDescription");
         unitType = serializedObject.FindProperty("unitType");
 
         moveSpeed = serializedObject.FindProperty("moveSpeed");
         maxHP = serializedObject.FindProperty("maxHP");
         possibleAttacks = serializedObject.FindProperty("possibleAttacks");
         maxEnergy = serializedObject.FindProperty("maxEnergy");
-        immunities = serializedObject.FindProperty("immunities");
+        typeImmunities = serializedObject.FindProperty("typeImmunities");
+        deliveryImmunities = serializedObject.FindProperty("deliveryMethodImmunities");
 
         damage = serializedObject.FindProperty("damage");
         attacksPerSecond = serializedObject.FindProperty("attacksPerSecond");
@@ -93,6 +99,8 @@ public class UnitSOEditor : Editor
     void DrawInformations()
     {
         EditorGUILayout.PropertyField(robotName);
+        EditorGUILayout.PropertyField(robotDescription);
+        EditorGUILayout.PropertyField(abilityDescription);
         EditorGUILayout.PropertyField(robotSprite);
     }
 
@@ -101,7 +109,8 @@ public class UnitSOEditor : Editor
         EditorGUILayout.LabelField("Common Stats", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(moveSpeed);
         EditorGUILayout.PropertyField(maxHP);
-        EditorGUILayout.PropertyField(immunities);
+        EditorGUILayout.PropertyField(typeImmunities);
+        EditorGUILayout.PropertyField(deliveryImmunities);
         EditorGUILayout.PropertyField(maxEnergy);
     }
 

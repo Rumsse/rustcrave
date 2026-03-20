@@ -9,6 +9,8 @@ public class UnitSelectionSystem : MonoBehaviour
 
     [SerializeField] private Unit selectedUnit;
     [SerializeField] private LayerMask unitLayerMask;
+    [SerializeField] private LayerMask mouseWorldLayerMask;
+    [SerializeField] private GameObject moveIndicatorPrefab;
 
     private void Awake()
     {
@@ -23,9 +25,23 @@ public class UnitSelectionSystem : MonoBehaviour
             {
                 return;
             }
-            if ((MouseWorld.TryGetPosition(out Vector3 position)))
+            if (MouseWorld.TryGetPosition(out Vector3 position))
             {
-                selectedUnit?.HandleMovement(position);
+                if (selectedUnit != null)
+                {
+                    if (!selectedUnit.IsMainCharacter && MCFormController.Instance != null && MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider)
+                    {
+                        return;
+                    }
+
+                    selectedUnit.HandleMovement(position);
+                    ShowMoveIndicator(position);
+
+                    if (!selectedUnit.IsMainCharacter)
+                    {
+                        Unit.MainCharacter?.PlayCommandAnimation();
+                    }
+                }
             }
         }
     }
@@ -44,10 +60,23 @@ public class UnitSelectionSystem : MonoBehaviour
         return false;
     }
 
+    private void ShowMoveIndicator(Vector3 position)
+    {
+        if (moveIndicatorPrefab != null)
+        {
+            Instantiate(moveIndicatorPrefab, position + new Vector3(0, 0.05f, 0), Quaternion.identity);
+        }
+    }
+
     public void SetSelectedUnit(Unit unit)
     {
         selectedUnit = unit;
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
+
+        if (unit != null && !unit.IsMainCharacter)
+        {
+            Unit.MainCharacter?.PlayCommandAnimation();
+        }
     }
 
     public Unit GetSelectedUnit()

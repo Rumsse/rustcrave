@@ -1,0 +1,11 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="background" style="flex-grow: 1; background-color: rgb(74, 63, 1); flex-wrap: wrap; border-bottom-left-radius: 27px; border-bottom-right-radius: 27px;">
+        <ui:VisualElement name="text-container" style="flex-grow: 1; flex-direction: row; align-self: center; align-content: stretch; align-items: stretch; justify-content: space-evenly;">
+            <ui:Label text="Cave 1" name="cave-modificator" style="color: rgb(255, 245, 235); font-size: 30px;"/>
+            <ui:Label text="Calm" name="cave-stage" style="color: rgb(255, 245, 235); font-size: 30px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="progress-bar" style="flex-grow: 1;">
+            <ui:ProgressBar value="22" title="my-progress" style="width: 80%; height: 42%; align-self: center; justify-content: center; align-content: center; align-items: stretch;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

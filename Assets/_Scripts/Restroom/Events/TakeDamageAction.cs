@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DamageAction", menuName = "Restroom/Events/Actions/Take Damage")]
 public class DamageEventAction : EventAction
 {
-    public int damageAmount = 10;
+    [SerializeField] public int damageAmount = 10;
 
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)
     {

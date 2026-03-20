@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
@@ -67,17 +68,19 @@ public class RainLaserController : MonoBehaviour
         ScaleIndividualLasers(1, laser);
         ScaleIndividualIndicator(0, laser);
 
-        TryHit(laser);
+        StartCoroutine(TryHit(laser));
     }
 
-    private void TryHit(Laser laser)
+    private IEnumerator TryHit(Laser laser)
     {
+        yield return new WaitForSeconds(_attackData.laserScaleSettings.duration);
+        
         var overlapResult = Physics.OverlapSphere(
             laser.transform.position,
             laser.Visuals.localScale.x / 2f,
             _attackData.mask);
-
-        if (overlapResult.Length == 0) return;
+        
+        if (overlapResult.Length == 0) yield break;
 
         foreach (var result in overlapResult)
         {

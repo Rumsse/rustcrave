@@ -97,17 +97,29 @@
                         <ui:VisualElement name="craft-cost" style="flex-grow: 1; align-self: center; align-items: auto; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; align-content: center; height: 100px; width: 300px;">
                             <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); justify-content: flex-start; align-content: center; flex-direction: row; flex-wrap: nowrap;">
                                 <ui:VisualElement name="icon" class="resource-icon resource-icon-spark" style="height: 150%; width: 15%;"/>
-                                <ui:Label text="0" name="amount" class="resource-amount"/>
+                                <ui:Label text="0" name="amount" class="resource-amount">
+                                    <Bindings>
+                                        <ui:DataBinding property="text" data-source-path="SparkliteCost" binding-mode="ToTarget"/>
+                                    </Bindings>
+                                </ui:Label>
                                 <ui:Label text="Sparklite" name="name" class="resource-name"/>
                             </ui:VisualElement>
                             <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0);">
                                 <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite" style="align-self: auto; width: 15%; height: 150%;"/>
-                                <ui:Label text="0" name="amount" class="resource-amount"/>
+                                <ui:Label text="0" name="amount" class="resource-amount">
+                                    <Bindings>
+                                        <ui:DataBinding property="text" data-source-path="ScraponiteCost" binding-mode="ToTarget"/>
+                                    </Bindings>
+                                </ui:Label>
                                 <ui:Label text="Scraponite" name="name" class="resource-name" style="align-self: auto; align-content: flex-start; justify-content: flex-start;"/>
                             </ui:VisualElement>
                             <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); justify-content: flex-start; align-self: center; align-content: center;">
                                 <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite" style="height: 150%; width: 15%;"/>
-                                <ui:Label text="0" name="amount" class="resource-amount"/>
+                                <ui:Label text="0" name="amount" class="resource-amount">
+                                    <Bindings>
+                                        <ui:DataBinding property="text" data-source-path="PulsiteCost" binding-mode="ToTarget"/>
+                                    </Bindings>
+                                </ui:Label>
                                 <ui:Label text="Pulsite" name="name" class="resource-name"/>
                             </ui:VisualElement>
                         </ui:VisualElement>
