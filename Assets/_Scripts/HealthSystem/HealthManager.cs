@@ -94,7 +94,8 @@ public class HealthManager : MonoBehaviour, IDamageable
     {
         OnDeath();
         
-        PoolManager.Instance.Release(transform, _baseStats.PrefabT);
+        if(_baseStats.PrefabT) PoolManager.Instance.Release(transform, _baseStats.PrefabT);
+        else gameObject.SetActive(false);
     }
     
     #endregion

@@ -63,9 +63,7 @@ public class Laser : MonoBehaviour
         float targetWidth = literal ? width : _initialIndicatorScale.x * width;
     
         Tween.Custom(
-            _indicator.size.x,
-            targetWidth,
-            settings ?? _scaleSettings,
+            new (_indicator.size.x, targetWidth,  settings ?? _scaleSettings),
             onValueChange: val => {
                 var size = _indicator.size;
                 size.x = val;
@@ -90,9 +88,7 @@ public class Laser : MonoBehaviour
         float targetHeight = literal ? height : _initialIndicatorScale.y * height;
 
         Tween.Custom(
-            _indicator.size.y,
-            targetHeight,
-            settings ?? _scaleSettings,
+            new(_indicator.size.y, targetHeight,  settings ?? _scaleSettings),
             onValueChange: val => {
                 var size = _indicator.size;
                 size.y = val;
