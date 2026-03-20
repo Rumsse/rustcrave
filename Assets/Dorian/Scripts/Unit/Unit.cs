@@ -150,7 +150,6 @@ public class Unit : UnitBase
         currentInteractable = null;
         AttackTarget = null;
         miningTimer = 0f;
-        animator.ResetTrigger("Mining");
     }
 
     public void CancelActionAndPath()
