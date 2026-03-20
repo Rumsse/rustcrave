@@ -43,6 +43,8 @@ public class UnitPanel : MonoBehaviour
         {
             formController.OnFormChanged += HandleFormChanged;
         }
+
+        UpdateUI();
     }
 
     private void OnDisable()
