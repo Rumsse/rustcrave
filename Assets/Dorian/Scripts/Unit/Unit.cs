@@ -18,7 +18,6 @@ public class Unit : UnitBase
 
     public static List<Unit> units = new();
 
-    public NavMeshAgent Agent => agent;
     public string Id => swarmUnitsData.id;
     public bool IsMainCharacter => isMainCharacter;
     public bool IsEnergyDrainDoubled { get; set; }

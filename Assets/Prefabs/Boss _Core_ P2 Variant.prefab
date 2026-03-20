@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitRunToPoints
   _unit: {fileID: 0}
-  _runPoints: []
+  _doorTransforms: []
 --- !u!1 &3906454744757786829
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +312,7 @@ GameObject:
   - component: {fileID: 5525333599017666543}
   - component: {fileID: 5743136620504399862}
   - component: {fileID: 1520173604602115342}
+  - component: {fileID: 7943958805487632643}
   m_Layer: 7
   m_Name: Unit Object
   m_TagString: Unit
@@ -466,7 +467,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -516,6 +517,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
   sceneToLoad: Restroom Rumsse
+--- !u!114 &7943958805487632643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6620241524090684623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e23df6f8a42f9414c8505a52239615b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnterDoors
+  _useCooldown: 10
+  _tweenSettings:
+    duration: 1.5
+    ease: 1
+    customEase:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    cycles: 1
+    cycleMode: 0
+    startDelay: 0
+    endDelay: 0
+    useUnscaledTime: 0
+    _useFixedUpdate: 0
+    _updateType: 0
 --- !u!1001 &2145553936104300867
 PrefabInstance:
   m_ObjectHideFlags: 0
