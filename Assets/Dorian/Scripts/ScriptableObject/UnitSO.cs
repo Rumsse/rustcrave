@@ -16,6 +16,8 @@ public class UnitSO : ScriptableObject
     [TextArea]
     public string robotDescription;
     public Sprite robotSprite;
+    [TextArea]
+    public string abilityDescription;
 
     [Header("Common Stats")]
     public float moveSpeed;

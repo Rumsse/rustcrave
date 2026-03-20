@@ -8,6 +8,7 @@ public class UnitSOEditor : Editor
     SerializedProperty robotSprite;
     SerializedProperty robotName;
     SerializedProperty robotDescription;
+    SerializedProperty abilityDescription;
     
     SerializedProperty unitType;
 
@@ -34,6 +35,7 @@ public class UnitSOEditor : Editor
         robotSprite = serializedObject.FindProperty("robotSprite");
         robotName = serializedObject.FindProperty("robotName");
         robotDescription = serializedObject.FindProperty("robotDescription");
+        abilityDescription = serializedObject.FindProperty("abilityDescription");
         unitType = serializedObject.FindProperty("unitType");
 
         moveSpeed = serializedObject.FindProperty("moveSpeed");
@@ -98,6 +100,7 @@ public class UnitSOEditor : Editor
     {
         EditorGUILayout.PropertyField(robotName);
         EditorGUILayout.PropertyField(robotDescription);
+        EditorGUILayout.PropertyField(abilityDescription);
         EditorGUILayout.PropertyField(robotSprite);
     }
 
