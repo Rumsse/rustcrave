@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 4380223622731129259}
   - component: {fileID: 2784189041895778029}
   - component: {fileID: 6661612963204746029}
+  - component: {fileID: 3155833242318412233}
+  - component: {fileID: 5698830170423056329}
+  - component: {fileID: 4317949511200845301}
   m_Layer: 7
   m_Name: Unit Object
   m_TagString: Unit
@@ -97,7 +100,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyUnit
   rotateSpeed: 10
   stoppingDistance: 0.2
-  stats: {fileID: 11400000, guid: d5023d3421e795d4995984c6c0bbffab, type: 2}
+  loopThroughAttacks: 0
+  stats: {fileID: 3155833242318412233}
   animator: {fileID: 3490708751490827617}
   healthManager: {fileID: 6661612963204746029}
   projectileSpawnT: {fileID: 1887024913893125654}
@@ -115,9 +119,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c05d69698b3d8b47b97e3da99c45c69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthManager
-  _baseStats: {fileID: 11400000, guid: d5023d3421e795d4995984c6c0bbffab, type: 2}
   _hitEffect: {fileID: 5320617027888536597}
   _healthBarRend: {fileID: 4111269178738068048}
+--- !u!114 &3155833242318412233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3215094073417232085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0d17d87ec4e1a408ab81f2d21a5653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsManager
+  _baseData: {fileID: 11400000, guid: d5023d3421e795d4995984c6c0bbffab, type: 2}
+--- !u!114 &5698830170423056329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3215094073417232085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 435830662db4457488c0d5ddd1bbdf77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitAffectable
+--- !u!54 &4317949511200845301
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3215094073417232085}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3967151473964373244
 GameObject:
   m_ObjectHideFlags: 0

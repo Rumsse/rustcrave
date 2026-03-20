@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemSO", menuName = "Scriptable Objects/ItemSO")]
 public abstract class ItemSO : ScriptableObject
 {
+    public Sprite oreSprite;
     public GameObject prefab;
     public ItemType itemType;
 

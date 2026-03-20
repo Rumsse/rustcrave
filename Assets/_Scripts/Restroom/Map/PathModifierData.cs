@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PathModifier", menuName = "Restroom/Path Modifier")]
+[CreateAssetMenu(fileName = "PathModifier", menuName = "Restroom/Map/Path Modifier")]
 public class PathModifierData : ScriptableObject
 {
     [SerializeField] PathModifier type;

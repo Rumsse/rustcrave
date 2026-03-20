@@ -6,13 +6,14 @@ public class IdleState : UnitState
 
     public override void EnterState()
     {
-        _agent.ResetPath();
+        if(_agent.enabled)
+            _agent.ResetPath();
         _unit.Animator.SetBool("IsWalking", false);
     }
 
     public override void Tick()
     {
-        if (_unit.AttackTarget != null)
+        if (_unit.AttackTarget != null && _unit.Stats.PossibleAttacks.Count != 0)
             _unit.SetState(new FightState(_unit));
     }
 }

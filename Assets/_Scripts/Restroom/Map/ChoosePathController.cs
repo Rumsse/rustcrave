@@ -7,19 +7,29 @@ public class ChoosePathController : MonoBehaviour
 {
     [SerializeField] MapState mapState;
     [SerializeField] ActiveModifier activeModifier;
+    [SerializeField] GlobalInventorySO globalInventory;
+    [SerializeField] OreSO pulsite;
+
+    [SerializeField] VisualTreeAsset tooltipAsset;
     [SerializeField] string mainGameScene = "new Tunel Generation Rumsse";
+    [SerializeField] string mainBossScene = "boss map";
     [SerializeField] bool debugMode = true;
 
     readonly Dictionary<Button, PathNodeData> buttonNodeMap = new();
 
+    PathNodeTooltipController tooltipController;
     Label debugLabel;
+
 
     #region Initialization
 
-    public void Initialize(VisualElement panelRoot)
+    public void Initialize(VisualElement panelRoot, VisualElement tooltipLayer)
     {
         if (mapState.nodes.Count == 0)
             mapState.Initialize();
+
+        if (tooltipController == null)
+            tooltipController = new PathNodeTooltipController(tooltipLayer, tooltipAsset);
 
         buttonNodeMap.Clear();
         BindButtons(panelRoot);
@@ -31,28 +41,45 @@ public class ChoosePathController : MonoBehaviour
 
     void BindButtons(VisualElement root)
     {
-        for (int row = 0; row < mapState.TotalRows; row++)
+        foreach (var node in mapState.nodes)
         {
-            var nodesInRow = mapState.GetNodesAtRow(row);
+            var btn = root.Q<Button>($"node-{node.row}-{node.column}");
 
-            for (int col = 0; col < nodesInRow.Count; col++)
+            if (btn == null)
             {
-                var node = nodesInRow[col];
-                var btn = root.Q<Button>($"node-{row}-{col}");
-
-                if (btn == null)
-                {
-                    Debug.LogWarning($"Button node-{row}-{col} not found!");
-                    continue;
-                }
-
-                buttonNodeMap[btn] = node;
-                btn.clicked += () => OnNodeClicked(node);
-
-                if (debugMode)
-                    SetupDebugButton(btn, node);
+                Debug.LogWarning($"Button node-{node.row}-{node.column} not found!");
+                continue;
             }
+
+            buttonNodeMap[btn] = node;
+            RegisterNodeEvents(btn, node);
+
+            if (debugMode)
+                SetupDebugButton(btn, node);
         }
+    }
+
+    void RegisterNodeEvents(Button btn, PathNodeData node)
+    {
+        btn.clicked += () => OnNodeClicked(node);
+
+        if (node.row == mapState.TotalRows - 1)
+            return;
+
+        btn.RegisterCallback<PointerEnterEvent>(evt =>
+            tooltipController.Show(node, mapState, evt.position));
+
+        btn.RegisterCallback<PointerLeaveEvent>(evt =>
+            tooltipController.Hide());
+
+        btn.RegisterCallback<PointerMoveEvent>(evt =>
+            tooltipController.UpdatePosition(evt.position));
+
+        btn.RegisterCallback<PointerDownEvent>(evt =>
+        {
+            if (evt.button == 1)
+                OnNodeRightClicked(node);
+        });
     }
 
     #endregion
@@ -94,8 +121,23 @@ public class ChoosePathController : MonoBehaviour
         var modifier = mapState.GetModifier(node);
         activeModifier.Set(modifier);
 
-        Debug.Log($"Moving to row:{node.row} col:{node.column} modifier:{modifier.DisplayName}");
-        SceneManager.LoadScene(mainGameScene);
+        bool isBoss = node.row == mapState.TotalRows - 1;
+
+        string scene = isBoss ? mainBossScene : mainGameScene;
+        SceneManager.LoadScene(scene);
+    }
+
+    void OnNodeRightClicked(PathNodeData node)
+    {
+        if (mapState.IsNodeScanned(node))
+            return;
+
+        if (globalInventory.Pulsite < 1)
+            return;
+
+        globalInventory.RemoveItem(pulsite, 1);
+        mapState.ScanNode(node);
+        tooltipController.RefreshContent();
     }
 
     #endregion

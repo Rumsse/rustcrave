@@ -8,9 +8,11 @@ public class MeleeAttack : AttackBase
         if (!attacker || !target)
             return;
         
+        base.Execute(target, attacker);
+        
         attacker.Animator?.Play(animationStateName);
 
-        int finalDamage = GetFinalDamage(attacker.Stats.damage);
-        target.HealthManager?.Damage(new DamageInfo(finalDamage, type));
+        int finalDamage = GetFinalDamage(attacker.Stats.Damage);
+        target.HealthManager?.Damage(new DamageInfo(finalDamage, type, DeliveryMethod.Melee));
     }
 }

@@ -18,13 +18,12 @@ public class HealthManager : MonoBehaviour, IDamageable
     #region Properties
 
     public int CurrentHP => _currentHP;
-    public int MaxHp => _baseMaxHP; // later can add scaling like _baseMaxHP * currentLevel etc.
+    public int MaxHp => _baseMaxHP;
 
     #endregion
     
     #region Inspector Fields
 
-    [SerializeField] private UnitSO _baseStats;
     [SerializeField] private ParticleSystem _hitEffect;
     [SerializeField] private MeshRenderer _healthBarRend;
     
@@ -35,26 +34,48 @@ public class HealthManager : MonoBehaviour, IDamageable
     private int _baseMaxHP;
     private int _currentHP;
     private Material _healthMaterial; 
-
+    private StatsManager _baseStats;
+    
     #endregion
 
     #region Unity Lifecycle
 
     private void Awake()
     {
-        _baseMaxHP = _baseStats.maxHP;
+        _baseStats = GetComponent<StatsManager>();
+        
+        _baseMaxHP = _baseStats.MaxHP;
         _currentHP = MaxHp;
         
         _healthMaterial = _healthBarRend.material;
+    }
+
+    private void OnEnable()
+    {
+        _currentHP = MaxHp;
+        UpdateHealthVisuals();
     }
 
     #endregion
 
     #region Managing Health
 
+    public void InitializeHealth(int savedHP)
+    {
+        _currentHP = savedHP;
+        UpdateHealthVisuals();
+        OnHealthPercentChange((float)_currentHP / MaxHp);
+
+        if (_currentHP <= 0)
+            Death();
+    }
+
     public void Damage(DamageInfo damage)
     {
-        if (_baseStats.immunities.HasFlag(damage.AttackType))
+        if (_baseStats.TypeImmunities.HasFlag(damage.AttackType))
+            return;
+        
+        if(_baseStats.DeliveryMethodImmunities.HasFlag(damage.DeliveryMethod))
             return;
         
         _hitEffect?.Play();
@@ -71,9 +92,10 @@ public class HealthManager : MonoBehaviour, IDamageable
     
     public void Death()
     {
-        gameObject.SetActive(false);
-        
         OnDeath();
+        
+        if(_baseStats.PrefabT) PoolManager.Instance.Release(transform, _baseStats.PrefabT);
+        else gameObject.SetActive(false);
     }
     
     #endregion

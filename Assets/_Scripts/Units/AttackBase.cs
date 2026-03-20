@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public abstract class AttackBase : ScriptableObject
 {
@@ -10,8 +11,16 @@ public abstract class AttackBase : ScriptableObject
     public string animationStateName;
     public float attackRange;
     public AttackType type;
+    [SerializeReference] public List<EffectBase> effects = new();
+    
+    public virtual void Execute(UnitBase target, UnitBase attacker)
+    {
+        if(effects == null || effects.Count == 0)
+            return;
 
-    public abstract void Execute(UnitBase target, UnitBase attacker);
+        foreach (var effectBase in effects)
+            effectBase.ApplyEffect(target);
+    }
     
     protected int GetFinalDamage(int initialDamage) => Mathf.RoundToInt(initialDamage * damageMult);
 }
@@ -26,15 +35,27 @@ public enum AttackType
     True = 1 << 3// non blockable by anything
 }
 
+[Flags]
+public enum DeliveryMethod
+{
+    None = 0,
+    Melee = 1 << 0,
+    Ranged = 1 << 1,
+    AOE = 1 << 2,
+    Special = 1 << 3
+}
+
 [Serializable] 
 public struct DamageInfo
 {
     public int Value;
     public AttackType AttackType;
+    public DeliveryMethod DeliveryMethod;
 
-    public DamageInfo(int value, AttackType type)
+    public DamageInfo(int value, AttackType type, DeliveryMethod method = DeliveryMethod.Special)
     {
         Value = value;
         AttackType = type;
+        DeliveryMethod = method;
     }
 }

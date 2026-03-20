@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 829275997c2ba9448aed1ee9f0a6735a, type: 3}
+  m_Name: Mrowerson
+  m_EditorClassIdentifier: Assembly-CSharp::UnitSO
+  unitType: 1
+  prefab: {fileID: 5536585068807582925, guid: 7f09f2f2edf8f9c42a679aa420cfd655, type: 3}
+  robotName: Ant
+  robotDescription: 'Fast, agile, but fragile with low health.
+
+    Gains stat bonuses
+    when other robots are nearby.
+
+    Compared to other robots, it can carry more.'
+  robotSprite: {fileID: 21300000, guid: 228e10aeb8689ec4cab08d0a31b9bd44, type: 3}
+  abilityDescription: 'Better Together (passive)
+
+    Gains +1 to DIG, ATTACK, and
+    SPEED if next to another robot. If it is another ant, gains an additional +1
+    to that stats.'
+  moveSpeed: 3
+  maxEnergy: 100
+  maxHP: 40
+  typeImmunities: 0
+  deliveryMethodImmunities: 0
+  damage: 2
+  attacksPerSecond: 1
+  miningPower: 0.1
+  carryCapacity: 5
+  possibleAttacks:
+  - {fileID: 11400000, guid: b438eb888779e1d40b3f32f85632956a, type: 2}
