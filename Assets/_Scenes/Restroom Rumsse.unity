@@ -1132,6 +1132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainCraftController
   swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
   globalInventory: {fileID: 11400000, guid: f715252bf3a047d429a856ce045a8873, type: 2}
+  gadgetsGlobalInventory: {fileID: 11400000, guid: 5820305f0014e82429e867a180d2aa24, type: 2}
   robotsCraftPanel: {fileID: 9197481963319205126, guid: c8a5f620aef0a024cbd180dfe15d9156, type: 3}
   gadgetsCraftPanel: {fileID: 9197481963319205126, guid: 85b3adb506299cc45a3444c3810153a8, type: 3}
   robotsCraftController: {fileID: 810971830}
@@ -1171,6 +1172,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0becc7f9d0d703f4ab9b9d53e4f2fba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GadgetsCraftController
+  gadgetCraftDataList:
+  - ButtonId: btn-craft-kinetic
+    ContainerId: container-kinetic
+    Recipe: {fileID: 11400000, guid: 14d7a270f48eea64bb1355ac67b60d12, type: 2}
+  - ButtonId: btn-craft-hammer
+    ContainerId: container-hammer
+    Recipe: {fileID: 11400000, guid: 1341e491239be294fbfde61691e59e04, type: 2}
+  - ButtonId: btn-craft-electro
+    ContainerId: container-electro
+    Recipe: {fileID: 11400000, guid: bc05a0e2f6d733e42833471b789587c8, type: 2}
+  - ButtonId: btn-craft-spark
+    ContainerId: container-spark
+    Recipe: {fileID: 11400000, guid: 9b57460b145758049b19821abae81b0b, type: 2}
+  - ButtonId: btn-craft-oiled
+    ContainerId: container-oiled
+    Recipe: {fileID: 11400000, guid: 7ea3df7c2ece0c74c8948b0fdbfd8a74, type: 2}
+  - ButtonId: btn-craft-copper
+    ContainerId: container-copper
+    Recipe: {fileID: 11400000, guid: d6ec775fa79f271428af906f237d2e77, type: 2}
 --- !u!1 &828975488
 GameObject:
   m_ObjectHideFlags: 0
@@ -2441,6 +2461,7 @@ MonoBehaviour:
   swarmState: {fileID: 0}
   mapState: {fileID: 0}
   globalInventory: {fileID: 0}
+  gadgetsInventory: {fileID: 0}
 --- !u!1 &1622955851
 GameObject:
   m_ObjectHideFlags: 0
@@ -3551,6 +3572,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitInfoPanelController
   maintenanceController: {fileID: 2140184855}
+  gadgetsGlobalInventory: {fileID: 11400000, guid: 5820305f0014e82429e867a180d2aa24, type: 2}
+  gadgetIconTemplate: {fileID: 9197481963319205126, guid: 221f4026421fd7c438e5a6325cc175de, type: 3}
+  swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
 --- !u!114 &2140184855
 MonoBehaviour:
   m_ObjectHideFlags: 0
