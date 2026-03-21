@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e8844d53273ac048af370e31b970e9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DisplayInventory
-  inventorySO: {fileID: 11400000, guid: 68cf324b8f620034595f0860e5969703, type: 2}
+  inventory: {fileID: 0}
   xStart: -226
   yStart: 210
   xSpaceBetweenItems: 150
@@ -204,6 +204,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1496676927546083773, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: slotsContainer
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3031104613421895505, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.43
@@ -287,16 +291,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f8c3451454ddd54c8662b0e5e6a699d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitInventoryUI
-  unit: {fileID: 6880762459235787944}
-  unitInventory: {fileID: 5415968068689961918}
---- !u!114 &6880762459235787944 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8434320555201164451, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
-  m_PrefabInstance: {fileID: 3058464059488587787}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4739481105956748868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 809fc6455a6961840acfcc908ab76576, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Unit
+  unitPanel: {fileID: 0}
+  equipmentUI: {fileID: 0}
