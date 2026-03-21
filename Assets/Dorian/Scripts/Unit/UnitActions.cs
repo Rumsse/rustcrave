@@ -38,7 +38,7 @@ public class UnitActions : MonoBehaviour
     private void HandleCommandInput()
     {
         Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
-
+        
         if (unit != null && !unit.IsMainCharacter && MCFormController.Instance != null)
         {
             if (MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider)
@@ -78,6 +78,7 @@ public class UnitActions : MonoBehaviour
                     commandVisualizer.StopVisuals();
                 }
 
+                unit.PlayCommandSound();
                 ExecuteCommand();
             }
         }

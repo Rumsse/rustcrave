@@ -32,7 +32,8 @@ public class StatsManager : MonoBehaviour
     public int CarryCapacity => Mathf.RoundToInt((_baseData.carryCapacity + GetFlatStatModifier(StatsType.CarryCapacity)) * GetStatModifier(StatsType.CarryCapacity));
     public List<AttackBase> PossibleAttacks => _baseData.possibleAttacks;
     public int MaxEnergy => Mathf.RoundToInt((_baseData.maxEnergy + GetFlatStatModifier(StatsType.MaxEnergy)) * GetStatModifier(StatsType.MaxEnergy));
-
+    public UnitSounds Sounds => _baseData.sounds;
+    
     private Dictionary<StatsType, float> _statsModifiers = new();
     private Dictionary<StatsType, float> _flatStatsModifiers = new();
 

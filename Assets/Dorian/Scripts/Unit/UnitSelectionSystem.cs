@@ -69,6 +69,7 @@ public class UnitSelectionSystem : MonoBehaviour
     public void SetSelectedUnit(Unit unit)
     {
         selectedUnit = unit;
+        unit.PlaySelectSound();
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
 
         if (unit != null && !unit.IsMainCharacter)

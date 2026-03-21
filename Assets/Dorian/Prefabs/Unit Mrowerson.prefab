@@ -909,6 +909,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4351928232363300138}
   - component: {fileID: 1605750811148014627}
+  - component: {fileID: 5016830575244948437}
   m_Layer: 0
   m_Name: Ant_rig
   m_TagString: Untagged
@@ -962,6 +963,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5016830575244948437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3976387134221340560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40565f7da7e834d4ab40c6011a78804a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitSoundsPlayer
+  _stats: {fileID: 4855583244103756579}
 --- !u!1 &4291141577668424214
 GameObject:
   m_ObjectHideFlags: 0
@@ -2147,6 +2161,46 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.207
       objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _deathSound.Path
+      value: "event:/Mr\xF3wka/sx_\u015Amier\u0107"
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _takeDamageSound.Path
+      value: "event:/Mr\xF3wka/sx_Dostawanie_DMG"
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _deathSound.Guid.Data1
+      value: -1884473264
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _deathSound.Guid.Data2
+      value: 1320863612
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _deathSound.Guid.Data3
+      value: 1930218639
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _deathSound.Guid.Data4
+      value: 869606477
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _takeDamageSound.Guid.Data1
+      value: 1895508101
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _takeDamageSound.Guid.Data2
+      value: 1259155327
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _takeDamageSound.Guid.Data3
+      value: 177183113
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _takeDamageSound.Guid.Data4
+      value: 1071439846
+      objectReference: {fileID: 0}
     - target: {fileID: 7205836209904595361, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: _baseData
       value: 
@@ -2211,6 +2265,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e87ecc3199bf2324bb60c9037fc2131b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitEquipment
+--- !u!114 &4855583244103756579 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7205836209904595361, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+  m_PrefabInstance: {fileID: 2837895478390430338}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536585068807582925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0d17d87ec4e1a408ab81f2d21a5653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsManager
 --- !u!1 &5536585068807582925 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}

@@ -176,6 +176,46 @@ PrefabInstance:
       propertyPath: _baseStats
       value: 
       objectReference: {fileID: 11400000, guid: c7cd6e4acf5850146998f5c63bda7c0d, type: 2}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _deathSound.Path
+      value: "event:/Modliszka/sx_\u015Amier\u0107"
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _takeDamageSound.Path
+      value: event:/Modliszka/sx_Dostawanie_DMG
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _deathSound.Guid.Data1
+      value: -999124695
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _deathSound.Guid.Data2
+      value: 1273702247
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _deathSound.Guid.Data3
+      value: -1224625019
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _deathSound.Guid.Data4
+      value: 1351227582
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _takeDamageSound.Guid.Data1
+      value: 827057985
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _takeDamageSound.Guid.Data2
+      value: 1231459809
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _takeDamageSound.Guid.Data3
+      value: -313558888
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: _takeDamageSound.Guid.Data4
+      value: 411369377
+      objectReference: {fileID: 0}
     - target: {fileID: 7710145713479773504, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: stats
       value: 
@@ -360,6 +400,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 06a859ab71377e6428399f0293ce2bc1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4124594072820417793}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 06a859ab71377e6428399f0293ce2bc1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4935910145288981350}
   m_SourcePrefab: {fileID: 100100000, guid: 06a859ab71377e6428399f0293ce2bc1, type: 3}
 --- !u!1 &8267468295452909241 stripped
 GameObject:
@@ -388,6 +431,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4935910145288981350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8267468295452909241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40565f7da7e834d4ab40c6011a78804a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitSoundsPlayer
+  _stats: {fileID: 4855583244103756579}
 --- !u!4 &8786560462636844035 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 06a859ab71377e6428399f0293ce2bc1, type: 3}

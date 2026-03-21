@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FMOD.Studio;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -42,7 +43,7 @@ public class Unit : UnitBase
 
     private IInteractable currentInteractable;
     private IMineable currentMineable;
-
+    
     public void Initialize(SwarmUnitsData data, SwarmState state)
     {
         swarmUnitsData = data;
@@ -247,6 +248,7 @@ public class Unit : UnitBase
             if (miningTimer == miningInterval)
             {
                 currentMineable.PlayEffect();
+                AudioManager.PlayOneShot(stats.Sounds.mineSound);
             }
 
             miningTimer -= Time.deltaTime;
@@ -373,4 +375,18 @@ public class Unit : UnitBase
         }
     }
 
+    #region Audio
+
+    public void PlaySelectSound()
+    {
+        AudioManager.PlayOneShot(stats.Sounds.selectSound);
+    }
+
+    public void PlayCommandSound()
+    {
+        AudioManager.PlayOneShot(stats.Sounds.commandSound);
+    }
+
+    #endregion
+    
 }

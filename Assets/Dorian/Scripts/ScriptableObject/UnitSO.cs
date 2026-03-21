@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -38,6 +40,8 @@ public class UnitSO : ScriptableObject
 
     public List<AttackBase> possibleAttacks;
 
+    public UnitSounds sounds;
+
 }
 
 public enum UnitType
@@ -48,4 +52,15 @@ public enum UnitType
     MC
 }
 
-
+[Serializable]
+public struct UnitSounds
+{
+    // todo: later probably should move attackSound to attackSO
+    public EventReference attackSound;
+    public EventReference walkSound;
+    public EventReference mineSound;
+    public EventReference selectSound;
+    public EventReference takeDamageSound;
+    public EventReference deathSound;
+    public EventReference commandSound;
+}

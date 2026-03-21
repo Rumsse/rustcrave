@@ -1,4 +1,5 @@
 using System;
+using FMODUnity;
 using UnityEngine;
 
 public class HealthManager : MonoBehaviour, IDamageable
@@ -86,6 +87,8 @@ public class HealthManager : MonoBehaviour, IDamageable
         OnHealthPercentChange((float)_currentHP / MaxHp);
         OnHit(_currentHP);
         
+        AudioManager.PlayOneShot(_baseStats.Sounds.takeDamageSound);
+        
         if(_currentHP <= 0)
             Death();
     }
@@ -93,6 +96,8 @@ public class HealthManager : MonoBehaviour, IDamageable
     public void Death()
     {
         OnDeath();
+        
+        AudioManager.PlayOneShot(_baseStats.Sounds.deathSound);
         
         if(_baseStats.PrefabT) PoolManager.Instance.Release(transform, _baseStats.PrefabT);
         else gameObject.SetActive(false);
