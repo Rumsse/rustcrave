@@ -25,6 +25,7 @@ public class Unit : UnitBase
     [SerializeField] private bool isMainCharacter;
     [SerializeField] private string commandTriggerName;
     [SerializeField] private UnitInventory inventory;
+    [SerializeField] private UnitEquipment unitEquipment;
     [SerializeField] private EnergyManager energyManager;
     [SerializeField] private float minMiningTime;
     [SerializeField] private float minMoveSpeedMultiplier;
@@ -52,6 +53,10 @@ public class Unit : UnitBase
         healthManager.onHit += HandleDamageTaken;
 
         energyManager.InitializeEnergy(swarmUnitsData.currentEnergy);
+
+        if (unitEquipment != null)
+            unitEquipment.Initialize(swarmUnitsData.assignedGadgets);
+
         UnitRegistry.Register(this);
 
         RefreshStats();

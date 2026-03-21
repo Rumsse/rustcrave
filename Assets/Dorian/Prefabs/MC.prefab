@@ -195,7 +195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 459395757731840737, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: equippedGadgets.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 459395757731840737, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: 'equippedGadgets.Array.data[0]'
@@ -269,6 +269,18 @@ PrefabInstance:
       propertyPath: stats
       value: 
       objectReference: {fileID: 11400000, guid: 3bd52a4bb59cb7e4ea6226b709332bb3, type: 2}
+    - target: {fileID: 7710145713479773504, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: idleDrain
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7710145713479773504, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: moveDrain
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7710145713479773504, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: actionDrain
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: m_Name
       value: MC
@@ -277,6 +289,10 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 1108003288806892292}
+    - target: {fileID: 8434320555201164451, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: unitEquipment
+      value: 
+      objectReference: {fileID: 3975947423733578278}
     - target: {fileID: 8434320555201164451, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: isMainCharacter
       value: 1
@@ -326,6 +342,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3031104613421895505, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
   m_PrefabInstance: {fileID: 3552633241278707911}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3975947423733578278 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 459395757731840737, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+  m_PrefabInstance: {fileID: 3552633241278707911}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6555729451623028360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e87ecc3199bf2324bb60c9037fc2131b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitEquipment
 --- !u!114 &4918428629679148132 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8434320555201164451, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}

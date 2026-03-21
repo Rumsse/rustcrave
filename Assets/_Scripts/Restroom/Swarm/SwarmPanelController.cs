@@ -268,13 +268,10 @@ public class SwarmPanelController : MonoBehaviour
         var enLabel = slot.Q<Label>("energy-label");
 
         if (hpLabel != null && unitData.unitType != null)
-            hpLabel.text = $"HP {unitData.currentHP}/{unitData.unitType.maxHP}";
+            hpLabel.text = $"HP {unitData.currentHP}/{unitData.GetTotalMaxHP()}";
 
         if (enLabel != null && unitData.unitType != null)
-        {
-            float energyPercent = (unitData.currentEnergy / unitData.unitType.maxEnergy) * 100f;
-            enLabel.text = $"EN {Mathf.RoundToInt(energyPercent)}%";
-        }
+            enLabel.text = $"EN {Mathf.RoundToInt(unitData.currentEnergy)}%";
     }
 
     #endregion

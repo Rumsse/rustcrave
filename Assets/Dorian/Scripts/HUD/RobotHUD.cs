@@ -16,7 +16,13 @@ public class RobotHUD : MonoBehaviour
     [SerializeField] private Transform inventoryPanel;
     [SerializeField] private GameObject inventorySlotPrefab;
 
+    [Header("Selection Visuals")]
+    [SerializeField] private Outline outline;
+    [SerializeField] private Color32 defaultOutlineColor = new Color32(25, 19, 17, 255);
+    [SerializeField] private Color32 selectedOutlineColor = new Color32(40, 150, 44, 255);
+
     private SwarmUnitsData unitData;
+    private Unit selectedUnit;
     private UnitInventoryUI inventoryUI;
     private UnitInventory currentInventory;
 
@@ -53,6 +59,9 @@ public class RobotHUD : MonoBehaviour
 
         TryAssignUnit();
         UnitRegistry.OnUnitRegistered += OnUnitRegistered;
+
+        if (UnitSelectionSystem.Instance != null)
+            UnitSelectionSystem.Instance.OnSelectedUnitChanged += HandleSelectionChanged;
     }
 
     private void TryAssignUnit()
@@ -75,6 +84,7 @@ public class RobotHUD : MonoBehaviour
 
     private void AssignUnitComponents(Unit unit)
     {
+        selectedUnit = unit;
         statsManager = unit.GetComponent<StatsManager>();
 
         if (stateUI != null) stateUI.SetUnit(unit);
@@ -114,6 +124,8 @@ public class RobotHUD : MonoBehaviour
         {
             formController.OnFormChanged += HandleFormChanged;
         }
+
+        UpdateOutlineState();
 
         if (gameObject.activeInHierarchy)
         {
@@ -165,6 +177,17 @@ public class RobotHUD : MonoBehaviour
         RefreshInventoryVisuals();
     }
 
+    private void HandleSelectionChanged(object sender, EventArgs e) => UpdateOutlineState();
+
+    private void UpdateOutlineState()
+    {
+        if (outline == null || selectedUnit == null || UnitSelectionSystem.Instance == null)
+            return;
+
+        bool isSelected = UnitSelectionSystem.Instance.GetSelectedUnit() == selectedUnit;
+        outline.effectColor = isSelected ? selectedOutlineColor : defaultOutlineColor;
+    }
+
     private void RefreshInventoryVisuals()
     {
         if (currentInventory == null || currentInventory.InventorySO == null) return;
@@ -209,6 +232,9 @@ public class RobotHUD : MonoBehaviour
     private void OnDestroy()
     {
         UnitRegistry.OnUnitRegistered -= OnUnitRegistered;
+
+        if (UnitSelectionSystem.Instance != null)
+            UnitSelectionSystem.Instance.OnSelectedUnitChanged -= HandleSelectionChanged;
 
         if (currentInventory != null && currentInventory.InventorySO != null)
         {

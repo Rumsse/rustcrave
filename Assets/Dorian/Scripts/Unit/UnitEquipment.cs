@@ -17,26 +17,42 @@ public class UnitEquipment : MonoBehaviour
         unitInventory = GetComponent<UnitInventory>();
     }
 
-    private void Start()
+    public void Initialize(List<GadgetSO> savedGadgets)
     {
         foreach (var gadget in equippedGadgets)
-        {
-            if (gadget != null)
-            {
-                statsManager.AddFlatStatModifier(gadget.modifiedStat, gadget.statIncreaseAmount);
-            }
-        }
+            RemoveGadgetStats(gadget);
 
-        if (unit != null)
-        {
-            unit.RefreshStats();
-        }
+        equippedGadgets.Clear();
 
-        if (unitInventory != null)
+        foreach (var gadget in savedGadgets)
         {
-            unitInventory.UpdateCapacity();
+            if (gadget == null) continue;
+
+            equippedGadgets.Add(gadget);
+            ApplyGadgetStats(gadget);
         }
     }
+
+    /*    private void Start()
+        {
+            foreach (var gadget in equippedGadgets)
+            {
+                if (gadget != null)
+                {
+                    statsManager.AddFlatStatModifier(gadget.modifiedStat, gadget.statIncreaseAmount);
+                }
+            }
+
+            if (unit != null)
+            {
+                unit.RefreshStats();
+            }
+
+            if (unitInventory != null)
+            {
+                unitInventory.UpdateCapacity();
+            }
+        }*/
 
     public bool TryEquipGadget(GadgetSO gadget)
     {

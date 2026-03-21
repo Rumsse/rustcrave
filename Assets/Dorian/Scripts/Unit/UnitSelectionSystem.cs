@@ -19,31 +19,29 @@ public class UnitSelectionSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (TryHandleUnitSelection())
-            {
-                return;
-            }
-            if (MouseWorld.TryGetPosition(out Vector3 position))
-            {
-                if (selectedUnit != null)
-                {
-                    if (!selectedUnit.IsMainCharacter && MCFormController.Instance != null && MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider)
-                    {
-                        return;
-                    }
+        if (Time.timeScale == 0)
+            return;
 
-                    selectedUnit.HandleMovement(position);
-                    ShowMoveIndicator(position);
+        if (!Input.GetMouseButtonDown(0))
+            return;
 
-                    if (!selectedUnit.IsMainCharacter)
-                    {
-                        Unit.MainCharacter?.PlayCommandAnimation();
-                    }
-                }
-            }
-        }
+        if (TryHandleUnitSelection())
+            return;
+
+        if (!MouseWorld.TryGetPosition(out Vector3 position))
+            return;
+
+        if (selectedUnit == null)
+            return;
+
+        if (!selectedUnit.IsMainCharacter && MCFormController.Instance != null && MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider)
+            return;
+
+        selectedUnit.HandleMovement(position);
+        ShowMoveIndicator(position);
+
+        if (!selectedUnit.IsMainCharacter)
+            Unit.MainCharacter?.PlayCommandAnimation();
     }
 
     private bool TryHandleUnitSelection()

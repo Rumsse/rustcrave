@@ -1,3 +1,4 @@
+using FMOD;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,6 +16,13 @@ public class UnitInfoPanelController : MonoBehaviour
     Button btnRepair;
     Button btnCharge;
 
+    Label hpStat;
+    Label enStat;
+    Label atkStat;
+    Label digStat;
+    Label spdStat;
+    Label capStat;
+
     SwarmUnitsData currentUnit;
     IVisualElementScheduledItem updateTask;
 
@@ -30,6 +38,13 @@ public class UnitInfoPanelController : MonoBehaviour
         hpLabel = root.Q<Label>("hp-label");
         energyLabel = root.Q<Label>("energy-label");
         abilityDescriptionLabel = root.Q<Label>("ability-description");
+
+        hpStat = root.Q<Label>("hp-stat");
+        enStat = root.Q<Label>("en-stat");
+        atkStat = root.Q<Label>("atk-stat");
+        digStat = root.Q<Label>("dig-stat");
+        spdStat = root.Q<Label>("spd-stat");
+        capStat = root.Q<Label>("cap-stat");
 
         btnRepair = root.Q<Button>("btn-repair");
         btnCharge = root.Q<Button>("btn-charge");
@@ -117,13 +132,28 @@ public class UnitInfoPanelController : MonoBehaviour
         }
 
         if (hpLabel != null)
-            hpLabel.text = $"Health: {currentUnit.currentHP}/{currentUnit.unitType.maxHP}";
+            hpLabel.text = $"Health: {currentUnit.currentHP}/{currentUnit.GetTotalMaxHP()}";
 
         if (energyLabel != null)
-        {
-            float energyPercent = (currentUnit.currentEnergy / currentUnit.unitType.maxEnergy) * 100f;
-            energyLabel.text = $"Energy: {Mathf.RoundToInt(energyPercent)}%";
-        }
+            energyLabel.text = $"Energy: {Mathf.RoundToInt(currentUnit.currentEnergy)}%";
+
+        if (hpStat != null)
+            hpStat.text = $"Health: {currentUnit.GetTotalMaxHP()}";
+
+        if (enStat != null)
+            enStat.text = $"Energy: {currentUnit.GetTotalMaxEnergy()}";
+
+        if (atkStat != null)
+            atkStat.text = $"Attack: {currentUnit.GetTotalDamage()}";
+
+        if (digStat != null)
+            digStat.text = $"Dig: {currentUnit.GetTotalMiningPower()}";
+
+        if (spdStat != null)
+            spdStat.text = $"Speed: {currentUnit.GetTotalSpeed()}";
+
+        if (capStat != null)
+            capStat.text = $"Capacity: {currentUnit.GetTotalCapacity()}";
     }
 
     #endregion
