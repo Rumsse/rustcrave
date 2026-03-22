@@ -1507,6 +1507,9 @@ MonoBehaviour:
   hpText: {fileID: 6741008564041367283}
   energyText: {fileID: 8890366946315678006}
   moveSpeedText: {fileID: 1714836954959728964}
+  attackText: {fileID: 0}
+  digText: {fileID: 0}
+  capacityText: {fileID: 0}
   robotTypeText: {fileID: 3283170537159207200}
   robotNameText: {fileID: 1583231496622511434}
 --- !u!114 &7206334655323283939
@@ -1766,6 +1769,7 @@ MonoBehaviour:
   isMainCharacter: 0
   commandTriggerName: 
   inventory: {fileID: 8749845555779088744}
+  unitEquipment: {fileID: 0}
   energyManager: {fileID: 7710145713479773504}
   minMiningTime: 1
   minMoveSpeedMultiplier: 0.15
@@ -2065,19 +2069,7 @@ MonoBehaviour:
       m_Calls: []
   onHit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8434320555201164451}
-        m_TargetAssemblyTypeName: Unit, Assembly-CSharp
-        m_MethodName: CancelActionAndPath
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onDeath:
     m_PersistentCalls:
       m_Calls: []

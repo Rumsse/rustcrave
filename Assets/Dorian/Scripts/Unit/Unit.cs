@@ -218,27 +218,29 @@ public class Unit : UnitBase
 
     private void HandleInteraction()
     {
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (currentInteractable as Object == null)
         {
-            if (currentInteractable is OrePickUp pickup)
-            {
-                if (inventory.InventorySO.AddItem(pickup.item, pickup.oreValueAmount))
-                {
-                    Destroy(pickup.gameObject);
-                }
-            }
-            else
-            {
-                currentInteractable.Interact();
-            }
-
             currentInteractable = null;
             animator.SetBool("IsWalking", false);
+            return;
         }
-        else
+
+        if (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
         {
             animator.SetBool("IsWalking", true);
+            return;
         }
+
+        if (currentInteractable is OrePickUp pickup)
+        {
+            if (inventory.InventorySO.AddItem(pickup.item, pickup.oreValueAmount))
+                Destroy(pickup.gameObject);
+        }
+        else
+            currentInteractable.Interact();
+
+        currentInteractable = null;
+        animator.SetBool("IsWalking", false);
     }
 
     private void HandleMining()

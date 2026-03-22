@@ -25,23 +25,7 @@ public class UnitSelectionSystem : MonoBehaviour
         if (!Input.GetMouseButtonDown(0))
             return;
 
-        if (TryHandleUnitSelection())
-            return;
-
-        if (!MouseWorld.TryGetPosition(out Vector3 position))
-            return;
-
-        if (selectedUnit == null)
-            return;
-
-        if (!selectedUnit.IsMainCharacter && MCFormController.Instance != null && MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider)
-            return;
-
-        selectedUnit.HandleMovement(position);
-        ShowMoveIndicator(position);
-
-        if (!selectedUnit.IsMainCharacter)
-            Unit.MainCharacter?.PlayCommandAnimation();
+        TryHandleUnitSelection();
     }
 
     private bool TryHandleUnitSelection()
@@ -58,13 +42,13 @@ public class UnitSelectionSystem : MonoBehaviour
         return false;
     }
 
-    private void ShowMoveIndicator(Vector3 position)
+    /*private void ShowMoveIndicator(Vector3 position)
     {
         if (moveIndicatorPrefab != null)
         {
             Instantiate(moveIndicatorPrefab, position + new Vector3(0, 0.05f, 0), Quaternion.identity);
         }
-    }
+    }*/
 
     public void SetSelectedUnit(Unit unit)
     {
