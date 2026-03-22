@@ -17,20 +17,17 @@ public class UnitSelectedVisual : MonoBehaviour
         UpdateVisual();
     }
 
+    private void OnDestroy()
+    {
+        if (UnitSelectionSystem.Instance != null)
+            UnitSelectionSystem.Instance.OnSelectedUnitChanged -= UnitSelectionSystem_OnSelectedUnitChanged;
+    }
+
     private void UnitSelectionSystem_OnSelectedUnitChanged(object sender, System.EventArgs e)
     {
         UpdateVisual();
     }
 
-    private void UpdateVisual()
-    {
-        if (UnitSelectionSystem.Instance.GetSelectedUnit() == unit)
-        {
-            meshRenderer.enabled = true;
-        }
-        else
-        {
-            meshRenderer.enabled = false;
-        }
-    }
+    private void UpdateVisual() => meshRenderer.enabled = UnitSelectionSystem.Instance.GetSelectedUnit() == unit;
+
 }

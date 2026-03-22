@@ -2492,10 +2492,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3304940097761876451, guid: 82cc1cddb6342764b8dd447ed2feb90b, type: 3}
-      propertyPath: _isSingleUse
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6094854392575888183, guid: 82cc1cddb6342764b8dd447ed2feb90b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.01
@@ -6092,14 +6088,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2552645629554569333, guid: 82cc1cddb6342764b8dd447ed2feb90b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3304940097761876451, guid: 82cc1cddb6342764b8dd447ed2feb90b, type: 3}
-      propertyPath: _damage
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3304940097761876451, guid: 82cc1cddb6342764b8dd447ed2feb90b, type: 3}
-      propertyPath: _isSingleUse
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6094854392575888183, guid: 82cc1cddb6342764b8dd447ed2feb90b, type: 3}
@@ -10629,9 +10617,25 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2599953305640489252, guid: ba88d47f18f979946aa8954b81b0fa2b, type: 3}
+      propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1878303188}
+    - target: {fileID: 2599953305640489252, guid: ba88d47f18f979946aa8954b81b0fa2b, type: 3}
+      propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleBossDeath
+      objectReference: {fileID: 0}
+    - target: {fileID: 2599953305640489252, guid: ba88d47f18f979946aa8954b81b0fa2b, type: 3}
+      propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: EndScreen, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 2976941183502266486, guid: ba88d47f18f979946aa8954b81b0fa2b, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3164026390318551092, guid: ba88d47f18f979946aa8954b81b0fa2b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3966127523689585974, guid: ba88d47f18f979946aa8954b81b0fa2b, type: 3}
       propertyPath: m_Constraints
@@ -10695,7 +10699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8608675874507031299, guid: ba88d47f18f979946aa8954b81b0fa2b, type: 3}
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8608675874507031299, guid: ba88d47f18f979946aa8954b81b0fa2b, type: 3}
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -10735,7 +10739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9133271752246664156, guid: ba88d47f18f979946aa8954b81b0fa2b, type: 3}
       propertyPath: sceneToLoad
-      value: Main Menu
+      value: Restroom Rumsse
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
