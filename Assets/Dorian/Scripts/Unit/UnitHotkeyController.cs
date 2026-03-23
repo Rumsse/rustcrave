@@ -24,6 +24,9 @@ public class UnitHotkeyController : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale == 0)
+            return;
+
         foreach (var pair in hotkeys)
         {
             if (Input.GetKeyDown(pair.Key))

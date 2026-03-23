@@ -1,4 +1,6 @@
 using System;
+using FMOD.Studio;
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
@@ -68,7 +70,7 @@ public abstract class UnitBase : MonoBehaviour
     [SerializeField] protected HealthManager healthManager;
     [SerializeField] protected Transform projectileSpawnT;
     [SerializeField] protected Transform modelMidPoint; // used for projectiles to aim at model chest / mid point instead of pivot
-
+    
     #endregion
 
     #region Private Fields
@@ -85,7 +87,7 @@ public abstract class UnitBase : MonoBehaviour
 
     private int currentAttackIndex;
     private bool _isPerformingSpecial;
-
+    
     #endregion
 
     #region Unity Lifecycle
@@ -150,6 +152,7 @@ public abstract class UnitBase : MonoBehaviour
             }
             else
             {
+                AudioManager.PlayOneShot(stats.Sounds.attackSound);
                 currentAttack.Execute(AttackTarget, this);
             }
 

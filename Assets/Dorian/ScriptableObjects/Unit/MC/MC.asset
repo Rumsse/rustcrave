@@ -27,18 +27,68 @@ MonoBehaviour:
     perform basic actions such as fighting and digging, but loses control of the
     swarm. If you lose the swarm, you are forced to use this form.'
   robotSprite: {fileID: 21300000, guid: 78b9b093292b6534d90e1df1574dc48b, type: 3}
-  abilityDescription: "Empty Conductor Form:\n- Disconnect (active)\nThe spider jumps
-    off the Conductor\u2019s head, losing control of the puppet\u2019s body and focusing
-    all control on the spider.\n\nSpider Form:\n- Connect (active)\nJumps onto the
-    conductor\u2019s head, regaining control over him and the entire swarm."
+  abilityDescription: "Empty Conductor Form:\n- Disconnect (active) [E]\nThe spider
+    jumps off the Conductor\u2019s head, losing control of the puppet\u2019s body
+    and focusing all control on the spider.\n\nSpider Form:\n- Connect (active) [E]\nJumps
+    onto the conductor\u2019s head, regaining control over him and the entire swarm."
   moveSpeed: 3
   maxEnergy: 100
-  maxHP: 40
+  maxHP: 12
   typeImmunities: 0
   deliveryMethodImmunities: 0
   damage: 2
   attacksPerSecond: 1
-  miningPower: 1.2
+  miningPower: 1
   carryCapacity: 4
   possibleAttacks:
   - {fileID: 11400000, guid: b438eb888779e1d40b3f32f85632956a, type: 2}
+  sounds:
+    attackSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    walkSound:
+      Guid:
+        Data1: 641660590
+        Data2: 1230751318
+        Data3: -1492564046
+        Data4: -1885417579
+      Path: event:/Mc_Pacyna/sx_Chodzenie
+    mineSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    selectSound:
+      Guid:
+        Data1: -1202010673
+        Data2: 1191494500
+        Data3: -2103765576
+        Data4: -1565249290
+      Path: "event:/Mc_Pacyna/sx_Wyb\xF3r_jednostki"
+    takeDamageSound:
+      Guid:
+        Data1: 1671979887
+        Data2: 1327688029
+        Data3: 934013596
+        Data4: -496926011
+      Path: event:/Mc_Pacyna/sx_Dostawanie_DMG
+    deathSound:
+      Guid:
+        Data1: -523196936
+        Data2: 1134597032
+        Data3: -204623965
+        Data4: 1363850900
+      Path: "event:/Mc_Pacyna/sx_\u015Amier\u0107"
+    commandSound:
+      Guid:
+        Data1: 712172827
+        Data2: 1090697845
+        Data3: -1343245675
+        Data4: -425071615
+      Path: event:/Mc_Pacyna/sx_Nadanie_rozkazu

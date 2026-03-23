@@ -3,9 +3,10 @@ using UnityEngine;
 public class UnitInventoryUI : MonoBehaviour
 {
     [SerializeField] private GameObject unitPanel;
+    [SerializeField] private UnitEquipmentUI equipmentUI;
+
     private static UnitInventoryUI currentOpenPanel;
     private Unit unit;
-
 
     public void SetUnit(Unit newUnit)
     {
@@ -23,6 +24,11 @@ public class UnitInventoryUI : MonoBehaviour
 
         unitPanel.SetActive(true);
         currentOpenPanel = this;
+
+        if (unit != null && equipmentUI != null)
+        {
+            equipmentUI.RefreshSlots(unit);
+        }
     }
 
     public void HidePanel()

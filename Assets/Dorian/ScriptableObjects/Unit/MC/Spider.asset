@@ -15,14 +15,80 @@ MonoBehaviour:
   unitType: 3
   prefab: {fileID: 919132149155446097, guid: 897bc4e57829cec4b92efb6eeefe2b6c, type: 3}
   robotName: Spider
-  robotSprite: {fileID: 21300000, guid: c31dc3c9e2c404349bb7271f8c08bb97, type: 3}
+  robotDescription: 'Empty Conductor Form:
+
+    In this form, the player can issue
+    commands to other robots.
+
+
+    Spider Form:
+
+    In this form, the player can
+    perform basic actions such as fighting and digging, but loses control of the
+    swarm. If you lose the swarm, you are forced to use this form.'
+  robotSprite: {fileID: 21300000, guid: 8d296e8ac5104e44aa5b45c611814917, type: 3}
+  abilityDescription: "Empty Conductor Form:\n- Disconnect (active) [E]\nThe spider
+    jumps off the Conductor\u2019s head, losing control of the puppet\u2019s body
+    and focusing all control on the spider.\n\nSpider Form:\n- Connect (active) [E]\nJumps
+    onto the conductor\u2019s head, regaining control over him and the entire swarm."
   moveSpeed: 3
   maxEnergy: 100
-  maxHP: 100
-  immunities: 0
-  damage: 3
-  attacksPerSecond: 2
+  maxHP: 12
+  typeImmunities: 0
+  deliveryMethodImmunities: 0
+  damage: 2
+  attacksPerSecond: 1
   miningPower: 3
-  carryCapacity: 2
+  carryCapacity: 4
   possibleAttacks:
   - {fileID: 11400000, guid: b438eb888779e1d40b3f32f85632956a, type: 2}
+  sounds:
+    attackSound:
+      Guid:
+        Data1: 1950793374
+        Data2: 1324937826
+        Data3: 1977447052
+        Data4: 603611867
+      Path: "event:/Mc_Paj\u0105k/sx_Atak"
+    walkSound:
+      Guid:
+        Data1: 1593311795
+        Data2: 1086979754
+        Data3: 1162688409
+        Data4: -2069507751
+      Path: "event:/Mc_Paj\u0105k/sx_Chodzenie"
+    mineSound:
+      Guid:
+        Data1: 956767445
+        Data2: 1166844266
+        Data3: -355343441
+        Data4: -487827771
+      Path: "event:/Mc_Paj\u0105k/sx_Kopanie"
+    selectSound:
+      Guid:
+        Data1: 1185930439
+        Data2: 1136372907
+        Data3: 1474573729
+        Data4: 1565915921
+      Path: "event:/Mc_Paj\u0105k/sx_Wyb\xF3r_jednostki"
+    takeDamageSound:
+      Guid:
+        Data1: 1529270941
+        Data2: 1098196250
+        Data3: 1551747764
+        Data4: -1138800832
+      Path: "event:/Mc_Paj\u0105k/sx_Dostawanie_DMG"
+    deathSound:
+      Guid:
+        Data1: -737027145
+        Data2: 1180360846
+        Data3: -261885506
+        Data4: 1320856558
+      Path: "event:/Mc_Paj\u0105k/sx_\u015Amier\u0107"
+    commandSound:
+      Guid:
+        Data1: -1748529590
+        Data2: 1192994933
+        Data3: -812110940
+        Data4: 782019454
+      Path: "event:/Mc_Paj\u0105k/sx_Nadanie_rozkazu"

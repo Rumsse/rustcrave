@@ -39,6 +39,9 @@ public class CommandVisualizer : MonoBehaviour
 
     public void StartVisuals(Unit unit)
     {
+        if (Time.timeScale == 0)
+            return;
+
         if (dragStartIndicator != null)
         {
             dragStartIndicator.transform.position = unit.transform.position + new Vector3(unit.transform.position.x, indicatorYOffset, unit.transform.position.z);

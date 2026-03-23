@@ -19,64 +19,45 @@ public class UnitSelectionSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (TryHandleUnitSelection())
-            {
-                return;
-            }
-            if (MouseWorld.TryGetPosition(out Vector3 position))
-            {
-                if (selectedUnit != null)
-                {
-                    if (!selectedUnit.IsMainCharacter && MCFormController.Instance != null && MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider)
-                    {
-                        return;
-                    }
+        if (Time.timeScale == 0)
+            return;
 
-                    selectedUnit.HandleMovement(position);
-                    ShowMoveIndicator(position);
+        if (!Input.GetMouseButtonDown(0))
+            return;
 
-                    if (!selectedUnit.IsMainCharacter)
-                    {
-                        Unit.MainCharacter?.PlayCommandAnimation();
-                    }
-                }
-            }
-        }
+        TryHandleUnitSelection();
     }
 
     private bool TryHandleUnitSelection()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, unitLayerMask))
-        {
-            if (raycastHit.transform.TryGetComponent(out Unit unit))
-            {
-                SetSelectedUnit(unit);
-                return true;
-            }
-        }
-        return false;
-    }
 
-    private void ShowMoveIndicator(Vector3 position)
-    {
-        if (moveIndicatorPrefab != null)
-        {
-            Instantiate(moveIndicatorPrefab, position + new Vector3(0, 0.05f, 0), Quaternion.identity);
-        }
+        if (!Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, unitLayerMask))
+            return false;
+
+        if (!raycastHit.transform.TryGetComponent(out Unit unit))
+            return false;
+
+        SetSelectedUnit(unit);
+        return true;
     }
 
     public void SetSelectedUnit(Unit unit)
     {
         selectedUnit = unit;
+
+        if (unit != null)
+            unit.PlaySelectSound();
+
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
 
-        if (unit != null && !unit.IsMainCharacter)
-        {
-            Unit.MainCharacter?.PlayCommandAnimation();
-        }
+        if (unit == null)
+            return;
+
+        if (unit.IsMainCharacter)
+            return;
+
+        Unit.MainCharacter?.PlayCommandAnimation();
     }
 
     public Unit GetSelectedUnit()

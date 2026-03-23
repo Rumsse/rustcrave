@@ -10,7 +10,8 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
     [SerializeField] MapState mapState;
     [SerializeField] ActiveModifier activeModifier;
     [SerializeField] TunnelGenerator tunnelGenerator;
-    [SerializeField] Transform playerTransform;
+    [SerializeField] Transform cameraTargetTransform;
+    [SerializeField] Transform startPos;
 
     #endregion
 
@@ -52,8 +53,9 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
         if (segments.Count == 0)
             return;
 
-        startPositionZ = segments[0].transform.position.z;
-        endPositionZ = segments[^1].transform.position.z;
+        //startPositionZ = segments[0].transform.position.z;
+        startPositionZ = startPos.transform.position.z;
+        endPositionZ = segments[^1].transform.position.z - 10f;
 
         UpdateUIInfo();
         tooltipPanel.SetActive(false);
@@ -66,7 +68,7 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     void Update()
     {
-        if (!isReady || playerTransform == null)
+        if (!isReady || cameraTargetTransform == null)
             return;
 
         float totalDistance = endPositionZ - startPositionZ;
@@ -74,7 +76,7 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
         if (Mathf.Approximately(totalDistance, 0f))
             return;
 
-        float currentDistance = playerTransform.position.z - startPositionZ;
+        float currentDistance = cameraTargetTransform.position.z - startPositionZ;
         progressSlider.value = Mathf.Clamp01(currentDistance / totalDistance);
     }
 
