@@ -51,8 +51,15 @@ public sealed class OffscreenKillZone : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (!_isKillEnabled) return;
-        if (!other.TryGetComponent<HealthManager>(out var health)) return;
-        health.Death();
+        if (other.TryGetComponent<HealthManager>(out var health))
+        {
+            health.Death();
+            return;
+        }
+
+        if (other.tag == "DroppedBody")
+            Destroy(other.gameObject);
+
     }
 
     #endregion
