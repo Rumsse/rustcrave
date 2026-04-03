@@ -13,7 +13,7 @@ public class UnitMaintanceController : MonoBehaviour
         if (unit == null || !unit.isAlive)
             return false;
 
-        if (unit.currentHP >= unit.unitType.maxHP)
+        if (unit.currentHP >= unit.GetTotalMaxHP())
             return false;
 
         if (!CanAfford(repairCost))
@@ -30,7 +30,7 @@ public class UnitMaintanceController : MonoBehaviour
         if (unit == null || !unit.isAlive)
             return false;
 
-        if (unit.currentEnergy >= unit.unitType.maxEnergy)
+        if (unit.currentEnergy >= unit.GetTotalMaxEnergy())
             return false;
 
         if (!CanAfford(chargeCost))

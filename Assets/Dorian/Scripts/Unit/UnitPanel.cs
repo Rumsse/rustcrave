@@ -11,6 +11,9 @@ public class UnitPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI hpText;
     [SerializeField] private TextMeshProUGUI energyText;
     [SerializeField] private TextMeshProUGUI moveSpeedText;
+    [SerializeField] private TextMeshProUGUI attackText;
+    [SerializeField] private TextMeshProUGUI digText;
+    [SerializeField] private TextMeshProUGUI capacityText;
     [SerializeField] private TextMeshProUGUI robotTypeText;
     [SerializeField] private TextMeshProUGUI robotNameText;
 
@@ -43,6 +46,8 @@ public class UnitPanel : MonoBehaviour
         {
             formController.OnFormChanged += HandleFormChanged;
         }
+
+        UpdateUI();
     }
 
     private void OnDisable()
@@ -68,6 +73,9 @@ public class UnitPanel : MonoBehaviour
         int energyBarInt = Mathf.CeilToInt(energyManager.CurrentEnergy);
         energyText.text = $"Energy: {energyBarInt}/{statsManager.MaxEnergy}\n";
         moveSpeedText.text = $"MoveSpeed: {statsManager.MoveSpeed}";
+        attackText.text = $"Attack: {statsManager.Damage}";
+        digText.text = $"Dig: {statsManager.MiningPower}";
+        capacityText.text = $"Capacity: {statsManager.CarryCapacity}";
         robotTypeText.text = $"{statsManager.UnitType}";
         robotNameText.text = $"{statsManager.RobotName}";
     }

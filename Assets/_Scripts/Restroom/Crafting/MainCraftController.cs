@@ -7,6 +7,7 @@ public class MainCraftController : MonoBehaviour
 {
     [SerializeField] SwarmState swarmState;
     [SerializeField] GlobalInventorySO globalInventory;
+    [SerializeField] GadgetsGlobalInventory gadgetsGlobalInventory;
 
     [SerializeField] VisualTreeAsset robotsCraftPanel;
     [SerializeField] VisualTreeAsset gadgetsCraftPanel;
@@ -100,7 +101,7 @@ public class MainCraftController : MonoBehaviour
         if (tabKey == "robots" && robotsCraftController != null)
             robotsCraftController.Initialize(panel, HandleRobotCraftRequest, globalInventory);
         else if (tabKey == "gadgets" && gadgetsCraftController != null)
-            gadgetsCraftController.Initialize(panel, HandleGadgetCraftRequest);
+            gadgetsCraftController.Initialize(panel, HandleGadgetCraftRequest, globalInventory);
     }
 
     void CloseCurrentTab()
@@ -140,6 +141,14 @@ public class MainCraftController : MonoBehaviour
         AddSingleUnitToUI(newUnitData);
     }
 
+    void HandleGadgetCraftRequest(GadgetSO gadget)
+    {
+        if (gadgetsGlobalInventory == null)
+            return;
+
+        gadgetsGlobalInventory.AddGadget(gadget);
+    }
+
     void AddSingleUnitToUI(SwarmUnitsData unitData)
     {
         if (leftBar == null || unitContainer == null)
@@ -152,10 +161,6 @@ public class MainCraftController : MonoBehaviour
             unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.robotSprite);
 
         leftBar.Add(newUnitIcon);
-    }
-
-    void HandleGadgetCraftRequest(UnitSO unitType)
-    {
     }
 
     void UpdateSwarmUI(VisualElement root)

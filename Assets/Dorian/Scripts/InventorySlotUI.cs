@@ -8,9 +8,9 @@ public class InventorySlotUI : MonoBehaviour
 
     public void SetItem(ItemSO item)
     {
-        if (item.oreSprite != null)
+        if (item.itemSprite != null)
         {
-            iconImage.sprite = item.oreSprite;
+            iconImage.sprite = item.itemSprite;
             iconImage.enabled = true;
         }
     }

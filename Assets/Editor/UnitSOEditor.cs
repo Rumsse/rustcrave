@@ -26,6 +26,16 @@ public class UnitSOEditor : Editor
 
     SerializedProperty carryCapacity;
 
+    private SerializedProperty sounds;
+    
+    // SerializedProperty attackSound;
+    // SerializedProperty walkSound;
+    // SerializedProperty mineSound;
+    // SerializedProperty selectSound;
+    // SerializedProperty takeDamageSound;
+    // SerializedProperty deathSound;
+    // SerializedProperty commandSound;
+    
     Color defaultColor;
     Color activeColor = new Color(0.6f, 1f, 0.6f);
 
@@ -52,6 +62,8 @@ public class UnitSOEditor : Editor
 
         carryCapacity = serializedObject.FindProperty("carryCapacity");
 
+        sounds = serializedObject.FindProperty("sounds");
+        
         defaultColor = GUI.color;
     }
 
@@ -83,6 +95,8 @@ public class UnitSOEditor : Editor
 
         DrawAttacks();
 
+        DrawSounds();
+        
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -147,6 +161,11 @@ public class UnitSOEditor : Editor
         ResetColor();
     }
 
+    void DrawSounds()
+    {
+        EditorGUILayout.PropertyField(sounds);
+    }
+    
     void SetColor(UnitType type)
     {
         GUI.color = (UnitType)unitType.enumValueIndex == type ? activeColor: defaultColor;

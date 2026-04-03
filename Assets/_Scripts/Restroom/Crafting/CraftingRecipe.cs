@@ -13,6 +13,9 @@ public class CraftingRecipe : ScriptableObject
     public int healthRestoreAmount;
     public int energyRestorePercentage;
 
+    [Header("Gadgets")]
+    public GadgetSO CraftedGadget;
+
     [Header("Costs")]
     public List<ResourceCost> Costs;
 

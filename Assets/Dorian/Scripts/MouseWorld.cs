@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MouseWorld : MonoBehaviour
 {
@@ -16,16 +17,18 @@ public class MouseWorld : MonoBehaviour
 
     public static bool TryGetPosition(out Vector3 position)
     {
+        position = default;
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return false;
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Instance.mouseWorldLayerMask))
-        {
-            position = hit.point;
-            return true;
-        }
+        if (!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Instance.mouseWorldLayerMask))
+            return false;
 
-        position = default;
-        return false;
+        position = hit.point;
+        return true;
     }
 
 }

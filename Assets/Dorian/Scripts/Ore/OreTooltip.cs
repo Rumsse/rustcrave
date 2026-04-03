@@ -13,7 +13,7 @@ public class OreTooltip : MonoBehaviour
     {
         descriptionText.text = oreSO.description;
         nameText.text = oreSO.oreName;
-        oreIcon.sprite = oreSO.oreSprite;
+        oreIcon.sprite = oreSO.itemSprite;
 
 
         HideTooltip();

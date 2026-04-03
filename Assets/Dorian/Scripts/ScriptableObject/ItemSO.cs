@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemSO", menuName = "Scriptable Objects/ItemSO")]
 public abstract class ItemSO : ScriptableObject
 {
-    public Sprite oreSprite;
+    public Sprite itemSprite;
     public GameObject prefab;
     public ItemType itemType;
 
@@ -14,5 +14,6 @@ public abstract class ItemSO : ScriptableObject
 public enum ItemType
 {
     None,
-    Ore
+    Ore,
+    Gadget
 }

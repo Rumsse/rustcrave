@@ -11,6 +11,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private SwarmState swarmState;
     [SerializeField] private MapState mapState;
     [SerializeField] private GlobalInventorySO globalInventory;
+    [SerializeField] private GadgetsGlobalInventory gadgetsInventory;
 
     private void Start()
     {
@@ -26,6 +27,7 @@ public class MainMenuManager : MonoBehaviour
         swarmState.Initialize();
         mapState.Initialize();
         globalInventory.Reset();
+        gadgetsInventory.Reset();
         SceneManager.LoadScene(gameSceneName);
     }
 

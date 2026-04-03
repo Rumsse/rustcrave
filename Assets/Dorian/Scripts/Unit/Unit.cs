@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FMOD.Studio;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,6 +26,7 @@ public class Unit : UnitBase
     [SerializeField] private bool isMainCharacter;
     [SerializeField] private string commandTriggerName;
     [SerializeField] private UnitInventory inventory;
+    [SerializeField] private UnitEquipment unitEquipment;
     [SerializeField] private EnergyManager energyManager;
     [SerializeField] private float minMiningTime;
     [SerializeField] private float minMoveSpeedMultiplier;
@@ -41,7 +43,7 @@ public class Unit : UnitBase
 
     private IInteractable currentInteractable;
     private IMineable currentMineable;
-
+    
     public void Initialize(SwarmUnitsData data, SwarmState state)
     {
         swarmUnitsData = data;
@@ -52,6 +54,10 @@ public class Unit : UnitBase
         healthManager.onHit += HandleDamageTaken;
 
         energyManager.InitializeEnergy(swarmUnitsData.currentEnergy);
+
+        if (unitEquipment != null)
+            unitEquipment.Initialize(swarmUnitsData.assignedGadgets);
+
         UnitRegistry.Register(this);
 
         RefreshStats();
@@ -150,7 +156,6 @@ public class Unit : UnitBase
         currentInteractable = null;
         AttackTarget = null;
         miningTimer = 0f;
-        animator.ResetTrigger("Mining");
     }
 
     public void CancelActionAndPath()
@@ -213,27 +218,29 @@ public class Unit : UnitBase
 
     private void HandleInteraction()
     {
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (currentInteractable as Object == null)
         {
-            if (currentInteractable is OrePickUp pickup)
-            {
-                if (inventory.InventorySO.AddItem(pickup.item, pickup.oreValueAmount))
-                {
-                    Destroy(pickup.gameObject);
-                }
-            }
-            else
-            {
-                currentInteractable.Interact();
-            }
-
             currentInteractable = null;
             animator.SetBool("IsWalking", false);
+            return;
         }
-        else
+
+        if (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
         {
             animator.SetBool("IsWalking", true);
+            return;
         }
+
+        if (currentInteractable is OrePickUp pickup)
+        {
+            if (inventory.InventorySO.AddItem(pickup.item, pickup.oreValueAmount))
+                Destroy(pickup.gameObject);
+        }
+        else
+            currentInteractable.Interact();
+
+        currentInteractable = null;
+        animator.SetBool("IsWalking", false);
     }
 
     private void HandleMining()
@@ -243,6 +250,7 @@ public class Unit : UnitBase
             if (miningTimer == miningInterval)
             {
                 currentMineable.PlayEffect();
+                AudioManager.PlayOneShot(stats.Sounds.mineSound);
             }
 
             miningTimer -= Time.deltaTime;
@@ -369,4 +377,18 @@ public class Unit : UnitBase
         }
     }
 
+    #region Audio
+
+    public void PlaySelectSound()
+    {
+        AudioManager.PlayOneShot(stats.Sounds.selectSound);
+    }
+
+    public void PlayCommandSound()
+    {
+        AudioManager.PlayOneShot(stats.Sounds.commandSound);
+    }
+
+    #endregion
+    
 }

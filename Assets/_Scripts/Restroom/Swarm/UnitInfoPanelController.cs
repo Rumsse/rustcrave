@@ -1,9 +1,14 @@
+using FMOD;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class UnitInfoPanelController : MonoBehaviour
 {
     [SerializeField] UnitMaintanceController maintenanceController;
+    [SerializeField] GadgetsGlobalInventory gadgetsGlobalInventory;
+    [SerializeField] VisualTreeAsset gadgetIconTemplate;
+    [SerializeField] SwarmState swarmState;
 
     VisualElement rootElement;
     VisualElement unitImage;
@@ -15,8 +20,22 @@ public class UnitInfoPanelController : MonoBehaviour
     Button btnRepair;
     Button btnCharge;
 
+    Label hpStat;
+    Label enStat;
+    Label atkStat;
+    Label digStat;
+    Label spdStat;
+    Label capStat;
+
+    VisualElement gadgetPopup;
+    VisualElement gadgetListContainer;
+    Button btnClosePopup;
+    List<Button> gadgetSlots = new();
+
     SwarmUnitsData currentUnit;
     IVisualElementScheduledItem updateTask;
+    int currentEditingSlotIndex = -1;
+
 
     #region Initialization
 
@@ -30,6 +49,13 @@ public class UnitInfoPanelController : MonoBehaviour
         hpLabel = root.Q<Label>("hp-label");
         energyLabel = root.Q<Label>("energy-label");
         abilityDescriptionLabel = root.Q<Label>("ability-description");
+
+        hpStat = root.Q<Label>("hp-stat");
+        enStat = root.Q<Label>("en-stat");
+        atkStat = root.Q<Label>("atk-stat");
+        digStat = root.Q<Label>("dig-stat");
+        spdStat = root.Q<Label>("spd-stat");
+        capStat = root.Q<Label>("cap-stat");
 
         btnRepair = root.Q<Button>("btn-repair");
         btnCharge = root.Q<Button>("btn-charge");
@@ -45,6 +71,148 @@ public class UnitInfoPanelController : MonoBehaviour
             btnCharge.clicked -= HandleChargeClick;
             btnCharge.clicked += HandleChargeClick;
         }
+
+        InitializeGadgetUI(root);
+    }
+
+    void InitializeGadgetUI(VisualElement root)
+    {
+        gadgetPopup = root.Q<VisualElement>("gadgets-popup");
+        gadgetListContainer = root.Q<VisualElement>("gadgets-list-container");
+        btnClosePopup = root.Q<Button>("btn-close-popup");
+
+        if (btnClosePopup != null)
+        {
+            btnClosePopup.clicked -= CloseGadgetPopup;
+            btnClosePopup.clicked += CloseGadgetPopup;
+        }
+
+        gadgetSlots.Clear();
+
+        for (int i = 0; i < 2; i++)
+        {
+            var slot = root.Q<Button>($"gadget-slot-{i}");
+
+            if (slot == null)
+                continue;
+
+            int index = i;
+            slot.clicked -= () => OpenGadgetPopup(index);
+            slot.clicked += () => OpenGadgetPopup(index);
+
+            gadgetSlots.Add(slot);
+        }
+
+        CloseGadgetPopup();
+    }
+
+    #endregion
+
+    #region Gadgets UI Logic
+
+    void OpenGadgetPopup(int slotIndex)
+    {
+        if (gadgetPopup == null || gadgetsGlobalInventory == null || currentUnit == null)
+            return;
+
+        currentEditingSlotIndex = slotIndex;
+        gadgetListContainer?.Clear();
+
+        var unequipBtn = gadgetIconTemplate.Instantiate().Q<Button>();
+        unequipBtn.text = "X";
+        unequipBtn.style.backgroundImage = new StyleBackground();
+        unequipBtn.clicked += () => EquipGadget(null);
+        gadgetListContainer?.Add(unequipBtn);
+
+        foreach (var gadget in gadgetsGlobalInventory.unlockedGadgets)
+        {
+            if (IsGadgetEquippedByOther(gadget))
+                continue;
+
+            var iconBtn = gadgetIconTemplate.Instantiate().Q<Button>();
+
+            if (gadget.gadgetIcon != null)
+                iconBtn.style.backgroundImage = new StyleBackground(gadget.gadgetIcon);
+
+            iconBtn.clicked += () => EquipGadget(gadget);
+            gadgetListContainer?.Add(iconBtn);
+        }
+
+        gadgetPopup.style.display = DisplayStyle.Flex;
+    }
+
+    bool IsGadgetEquippedByOther(GadgetSO gadget)
+    {
+        if (swarmState == null || gadget == null)
+            return false;
+
+        foreach (var unit in swarmState.SwarmUnits)
+        {
+            if (unit == currentUnit)
+                continue;
+
+            if (unit.assignedGadgets.Contains(gadget))
+                return true;
+        }
+
+        return false;
+    }
+
+    void CloseGadgetPopup()
+    {
+        if (gadgetPopup == null)
+            return;
+
+        gadgetPopup.style.display = DisplayStyle.None;
+        currentEditingSlotIndex = -1;
+    }
+
+    void EquipGadget(GadgetSO gadget)
+    {
+        if (currentUnit == null || currentEditingSlotIndex < 0)
+            return;
+
+        while (currentUnit.assignedGadgets.Count <= currentEditingSlotIndex)
+            currentUnit.assignedGadgets.Add(null);
+
+        if (gadget != null)
+        {
+            int existingIndex = currentUnit.assignedGadgets.IndexOf(gadget);
+
+            if (existingIndex >= 0 && existingIndex != currentEditingSlotIndex)
+                currentUnit.assignedGadgets[existingIndex] = null;
+        }
+
+        currentUnit.assignedGadgets[currentEditingSlotIndex] = gadget;
+
+        RefreshGadgetSlotsUI();
+        CloseGadgetPopup();
+        UpdateStats();
+    }
+
+    void RefreshGadgetSlotsUI()
+    {
+        if (currentUnit == null)
+            return;
+
+        for (int i = 0; i < gadgetSlots.Count; i++)
+        {
+            GadgetSO gadget = null;
+
+            if (i < currentUnit.assignedGadgets.Count)
+                gadget = currentUnit.assignedGadgets[i];
+
+            if (gadget != null && gadget.gadgetIcon != null)
+            {
+                gadgetSlots[i].style.backgroundImage = new StyleBackground(gadget.gadgetIcon);
+                gadgetSlots[i].text = string.Empty;
+            }
+            else
+            {
+                gadgetSlots[i].style.backgroundImage = new StyleBackground();
+                gadgetSlots[i].text = string.Empty;
+            }
+        }
     }
 
     #endregion
@@ -57,6 +225,9 @@ public class UnitInfoPanelController : MonoBehaviour
             return;
 
         currentUnit = unitData;
+
+        if (currentUnit.assignedGadgets == null)
+            currentUnit.assignedGadgets = new List<GadgetSO>();
 
         if (unitImage != null && currentUnit.unitType.robotSprite != null)
             unitImage.style.backgroundImage = new StyleBackground(currentUnit.unitType.robotSprite);
@@ -71,6 +242,7 @@ public class UnitInfoPanelController : MonoBehaviour
             abilityDescriptionLabel.text = currentUnit.unitType.abilityDescription;
 
         UpdateStats();
+        RefreshGadgetSlotsUI();
 
         updateTask?.Pause();
         updateTask = rootElement.schedule.Execute(UpdateStats).Every(100);
@@ -117,13 +289,28 @@ public class UnitInfoPanelController : MonoBehaviour
         }
 
         if (hpLabel != null)
-            hpLabel.text = $"Health: {currentUnit.currentHP}/{currentUnit.unitType.maxHP}";
+            hpLabel.text = $"Health: {currentUnit.currentHP}/{currentUnit.GetTotalMaxHP()}";
 
         if (energyLabel != null)
-        {
-            float energyPercent = (currentUnit.currentEnergy / currentUnit.unitType.maxEnergy) * 100f;
-            energyLabel.text = $"Energy: {Mathf.RoundToInt(energyPercent)}%";
-        }
+            energyLabel.text = $"Energy: {Mathf.RoundToInt(currentUnit.currentEnergy)}%";
+
+        if (hpStat != null)
+            hpStat.text = $"Health: {currentUnit.GetTotalMaxHP()}";
+
+        if (enStat != null)
+            enStat.text = $"Energy: {currentUnit.GetTotalMaxEnergy()}";
+
+        if (atkStat != null)
+            atkStat.text = $"Attack: {currentUnit.GetTotalDamage()}";
+
+        if (digStat != null)
+            digStat.text = $"Dig: {currentUnit.GetTotalMiningPower()}";
+
+        if (spdStat != null)
+            spdStat.text = $"Speed: {currentUnit.GetTotalSpeed()}";
+
+        if (capStat != null)
+            capStat.text = $"Capacity: {currentUnit.GetTotalCapacity()}";
     }
 
     #endregion
