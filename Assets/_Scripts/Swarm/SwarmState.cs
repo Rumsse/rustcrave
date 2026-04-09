@@ -12,8 +12,11 @@ public class SwarmState : ScriptableObject
     [SerializeField] private List<SwarmUnitsData> swarmUnits = new();
     [SerializeField] private int maxSwarmSize = 8;
     [SerializeField] private GlobalInventorySO globalInventory;
+    [SerializeField] private GadgetsGlobalInventory globalGadgetsInventory;
 
     public GlobalInventorySO GlobalInventory => globalInventory;
+    public GadgetsGlobalInventory GlobalGadgetsInventory => globalGadgetsInventory;
+
     public int MaxSwarmSize => maxSwarmSize;
     public IReadOnlyList<SwarmUnitsData> SwarmUnits => swarmUnits;
     public int AliveCount => swarmUnits.Count(m => m.isAlive);

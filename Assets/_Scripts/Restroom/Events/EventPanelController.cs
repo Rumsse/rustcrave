@@ -7,6 +7,7 @@ public class EventPanelController : MonoBehaviour
 {
     [SerializeField] SwarmState swarmState;
     [SerializeField] EventDatabase eventDatabase;
+    [SerializeField] float eventTriggerChance = 0.5f;
 
     VisualElement eventLayer;
     VisualElement popUpContainer;
@@ -82,7 +83,7 @@ public class EventPanelController : MonoBehaviour
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
 
-        if (UnityEngine.Random.value > 0.5f)
+        if (Random.value > eventTriggerChance)
             return;
 
         if (eventDatabase == null || eventDatabase.availableEvents == null || eventDatabase.availableEvents.Count == 0)
@@ -93,7 +94,7 @@ public class EventPanelController : MonoBehaviour
         if (activeRobots.Count == 0)
             return;
 
-        int randomIndex = UnityEngine.Random.Range(0, eventDatabase.availableEvents.Count);
+        int randomIndex = Random.Range(0, eventDatabase.availableEvents.Count);
         currentEvent = eventDatabase.availableEvents[randomIndex];
 
         SetupDropdown();
@@ -225,33 +226,6 @@ public class EventPanelController : MonoBehaviour
         ShowResultScreen(outcome.resultText);
     }
 
-    EventOutcome DetermineOutcome(DialogOption option, SwarmUnitsData robot)
-    {
-        if (!option.isMiningCheck)
-            return option.successOutcome;
-
-        int statValue = robot != null && robot.unitType != null ? (int)robot.unitType.miningPower : 0;
-        int finalChance = option.baseSuccessChance + (statValue * option.bonusPerMiningPower);
-        int roll = UnityEngine.Random.Range(1, 101);
-
-        if (roll <= finalChance)
-            return option.successOutcome;
-
-        return option.failureOutcome;
-    }
-
-    void ApplyOutcome(EventOutcome outcome)
-    {
-        if (outcome == null || outcome.actions == null)
-            return;
-
-        foreach (var action in outcome.actions)
-        {
-            if (action != null)
-                action.Execute(currentSelectedRobot, swarmState);
-        }
-    }
-
     void ShowResultScreen(string resultText)
     {
         isShowingResult = true;
@@ -286,6 +260,49 @@ public class EventPanelController : MonoBehaviour
 
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
+    }
+
+    #endregion
+
+    #region Outcome Determination and Application
+
+    EventOutcome DetermineOutcome(DialogOption option, SwarmUnitsData robot)
+    {
+        if (!option.isMiningCheck && !option.isAttackCheck)
+            return option.successOutcome;
+
+        int statValue = 0;
+        int finalChance = option.baseSuccessChance;
+
+        if (option.isMiningCheck)
+        {
+            statValue = robot != null && robot.unitType != null ? (int)robot.unitType.miningPower : 0;
+            finalChance += statValue * option.bonusPerMiningPower;
+        }
+        else if (option.isAttackCheck)
+        {
+            statValue = robot != null && robot.unitType != null ? robot.unitType.damage : 0;
+            finalChance += statValue * option.bonusPerDamage;
+        }
+
+        int roll = Random.Range(1, 101);
+
+        if (roll <= finalChance)
+            return option.successOutcome;
+
+        return option.failureOutcome;
+    }
+
+    void ApplyOutcome(EventOutcome outcome)
+    {
+        if (outcome == null || outcome.actions == null)
+            return;
+
+        foreach (var action in outcome.actions)
+        {
+            if (action != null)
+                action.Execute(currentSelectedRobot, swarmState);
+        }
     }
 
     #endregion

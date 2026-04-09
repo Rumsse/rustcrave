@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: The old and rusted thing
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: A PILE OF SCRAP
+  eventDescription: 'There is a pile of scrap and pipes, but something sticks out
+    of the pile. I think it is moving.
+
+
+    What do you do?'
+  dialogOptions:
+  - optionText: I order ___ to approach and get it.
+    isIgnoreOption: 0
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: '___ dig up the pile of scrap and a rusted roomba appeared from
+        underneath.
+
+
+        A roomba started driving around us, happily. It looks
+        familar. I must know it from somewhere...'
+      actions:
+      - {fileID: 11400000, guid: 3969a1b94fca13745a08e87d68045603, type: 2}
+    failureOutcome:
+      resultText: 
+      actions: []
+  - optionText: I order ___ to acquire scrap.
+    isIgnoreOption: 0
+    baseSuccessChance: 50
+    isMiningCheck: 1
+    bonusPerMiningPower: 5
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: '___ was able to acquire a bit of useful scrap while scavenging
+        the pile.
+
+
+        You receive 4 scraponite.'
+      actions:
+      - {fileID: 11400000, guid: b46d935199a114b4bb6fdabd926dff52, type: 2}
+    failureOutcome:
+      resultText: '___ got a big scratch from a sharp piece of metal while trying
+        to pick up some scrap.
+
+        ___ He takes 1 DMG.
+
+
+        You receive
+        only 1 scraponite.'
+      actions:
+      - {fileID: 11400000, guid: 1454c54381b0f924285e9d7433f73c3b, type: 2}
+      - {fileID: 11400000, guid: 9aadc124edd3cce418aa655ef2690dde, type: 2}
+  - optionText: Ignore
+    isIgnoreOption: 1
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: 
+      actions: []
+    failureOutcome:
+      resultText: 
+      actions: []

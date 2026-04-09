@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: Rusty Carcass
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: RUSTY CARCASS
+  eventDescription: "You find the remains of a massive, ancient mining machine. Its
+    heavy maintenance hatch is slightly open, but the rusted hinges look like they
+    could snap at any second, crushing whatever is inside. \nWhat do you do?"
+  dialogOptions:
+  - optionText: I order a ___ to carefully dismantle it.
+    isIgnoreOption: 0
+    baseSuccessChance: 50
+    isMiningCheck: 1
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: "___ uses its precise tools to safely unhinge the heavy plates.
+        The engine block is intact! \n\nYou receive 4 Scraponite and 2 Sparklite."
+      actions:
+      - {fileID: 11400000, guid: b46d935199a114b4bb6fdabd926dff52, type: 2}
+      - {fileID: 11400000, guid: 5ba1a516aa2e9a243ba84b7ec2126fe7, type: 2}
+    failureOutcome:
+      resultText: "The rusted metal suddenly gives way, crushing ___'s tools and
+        damaging its chassis! \n\n___ takes 3 DMG and the loot is destroyed."
+      actions:
+      - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
+  - optionText: I order ___ to force it open with brute strength.
+    isIgnoreOption: 0
+    baseSuccessChance: 40
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 1
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: "___ violently rips the hatch off before it can collapse! You pull
+        out a pristine component from the wreckage. \n\nYou receive 1 Random Gadget."
+      actions:
+      - {fileID: 11400000, guid: 80d9c91a11eb1be46ae38d02f21baaee, type: 2}
+    failureOutcome:
+      resultText: "___ rips the hatch, but the entire structure collapses instantly,
+        burying it under tons of scrap! \n\n___ is destroyed!"
+      actions:
+      - {fileID: 11400000, guid: f44904e83ff0d404d9e34dbd253985a5, type: 2}
+  - optionText: Ignore
+    isIgnoreOption: 1
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: 
+      actions: []
+    failureOutcome:
+      resultText: 
+      actions: []
