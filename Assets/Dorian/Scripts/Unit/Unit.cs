@@ -152,6 +152,9 @@ public class Unit : UnitBase
 
     private void HandleInterruptCurrentAction()
     {
+        if (currentMineable != null)
+            currentMineable.StopEffect();
+
         currentMineable = null;
         currentInteractable = null;
         AttackTarget = null;
@@ -245,42 +248,42 @@ public class Unit : UnitBase
 
     private void HandleMining()
     {
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (currentMineable as Object == null)
         {
-            if (miningTimer == miningInterval)
-            {
-                currentMineable.PlayEffect();
-                AudioManager.PlayOneShot(stats.Sounds.mineSound);
-            }
-
-            miningTimer -= Time.deltaTime;
-
-            if (miningTimer <= 0f)
-            {
-                ItemSO item = currentMineable.Mine();
-
-                if (item != null)
-                {
-                    if (currentMineable.IsDepleted())
-                    {
-                        currentMineable = null;
-                    }
-                    else
-                    {
-                        miningTimer = miningInterval;
-                    }
-                }
-                else
-                {
-                    currentMineable = null;
-                }
-            }
+            currentMineable = null;
             animator.SetBool("IsWalking", false);
+            return;
         }
-        else
+
+        if (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
         {
             animator.SetBool("IsWalking", true);
+            return;
         }
+
+        animator.SetBool("IsWalking", false);
+
+        if (miningTimer == miningInterval)
+        {
+            currentMineable.PlayEffect();
+            AudioManager.PlayOneShot(stats.Sounds.mineSound);
+        }
+
+        miningTimer -= Time.deltaTime;
+
+        if (miningTimer > 0f)
+            return;
+
+        ItemSO item = currentMineable.Mine();
+
+        if (item != null && !currentMineable.IsDepleted())
+        {
+            miningTimer = miningInterval;
+            return;
+        }
+
+        currentMineable.StopEffect();
+        currentMineable = null;
     }
 
     public void MoveToInteract(IInteractable interactable, Vector3 position)

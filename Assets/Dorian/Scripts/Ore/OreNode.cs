@@ -7,9 +7,7 @@ public class OreNode : MonoBehaviour, IMineable
     [SerializeField] private OreTooltip oreTooltip;
     [SerializeField] private int amount;
     [SerializeField] private OrePickUp dropPrefab;
-    [SerializeField] private Transform particlePosition;
     [SerializeField] private ParticleSystem miningEffect;
-    [SerializeField] private ParticleSystem smokeEffect;
 
     [SerializeField] private float minDropRadius = 1.0f;
     [SerializeField] private float maxDropRadius = 2.0f;
@@ -18,11 +16,14 @@ public class OreNode : MonoBehaviour, IMineable
 
     public void PlayEffect()
     {
-        ParticleSystem miningEffectParticle = Instantiate(miningEffect, particlePosition.position, particlePosition.rotation);
-        ParticleSystem smokeEffectParticle = Instantiate(smokeEffect, particlePosition.position, particlePosition.rotation);
+        if (miningEffect != null)
+            miningEffect.Play(true);
+    }
 
-        Destroy(miningEffectParticle, 5f);
-        Destroy(smokeEffectParticle, 5f);
+    public void StopEffect()
+    {
+        if (miningEffect != null)
+            miningEffect.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 
     public ItemSO Mine()
@@ -36,19 +37,14 @@ public class OreNode : MonoBehaviour, IMineable
         {
             Vector2 randomCircle = Random.insideUnitCircle.normalized * Random.Range(minDropRadius, maxDropRadius);
             Vector3 rawDropPosition = transform.position + new Vector3(randomCircle.x, 0f, randomCircle.y);
+            Vector3 spawnPosition = transform.position;
 
             if (NavMesh.SamplePosition(rawDropPosition, out NavMeshHit hit, navMeshSampleDistance, NavMesh.AllAreas))
-            {
-                OrePickUp droppedItem = Instantiate(dropPrefab, transform.position, Quaternion.identity);
-                droppedItem.item = ore;
-                dropAmount = droppedItem.oreValueAmount;
-            }
-            else
-            {
-                OrePickUp droppedItem = Instantiate(dropPrefab, transform.position, Quaternion.identity);
-                droppedItem.item = ore;
-                dropAmount = droppedItem.oreValueAmount;
-            }
+                spawnPosition = hit.position;
+
+            OrePickUp droppedItem = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
+            droppedItem.item = ore;
+            dropAmount = droppedItem.oreValueAmount;
         }
 
         if (amount <= 0)
