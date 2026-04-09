@@ -15,9 +15,13 @@ public class DialogOption
     public string optionText;
     public bool isIgnoreOption;
 
-    public bool isMiningCheck;
     [Range(0, 100)] public int baseSuccessChance = 50;
+
+    public bool isMiningCheck;
     public int bonusPerMiningPower = 10;
+
+    public bool isAttackCheck;
+    public int bonusPerDamage = 10;
 
     public EventOutcome successOutcome;
     public EventOutcome failureOutcome;

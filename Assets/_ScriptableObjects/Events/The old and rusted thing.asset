@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
   m_Name: The old and rusted thing
   m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
-  eventTitle: The Old and Rusted Thing
+  eventTitle: A PILE OF SCRAP
   eventDescription: 'There is a pile of scrap and pipes, but something sticks out
     of the pile. I think it is moving.
 
@@ -21,9 +21,11 @@ MonoBehaviour:
   dialogOptions:
   - optionText: I order ___ to approach and get it.
     isIgnoreOption: 0
-    isMiningCheck: 0
     baseSuccessChance: 50
+    isMiningCheck: 0
     bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
     successOutcome:
       resultText: '___ dig up the pile of scrap and a rusted roomba appeared from
         underneath.
@@ -38,9 +40,11 @@ MonoBehaviour:
       actions: []
   - optionText: I order ___ to acquire scrap.
     isIgnoreOption: 0
-    isMiningCheck: 1
     baseSuccessChance: 50
+    isMiningCheck: 1
     bonusPerMiningPower: 5
+    isAttackCheck: 0
+    bonusPerDamage: 10
     successOutcome:
       resultText: '___ was able to acquire a bit of useful scrap while scavenging
         the pile.
@@ -63,9 +67,11 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 9aadc124edd3cce418aa655ef2690dde, type: 2}
   - optionText: Ignore
     isIgnoreOption: 1
-    isMiningCheck: 0
     baseSuccessChance: 50
+    isMiningCheck: 0
     bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
     successOutcome:
       resultText: 
       actions: []
