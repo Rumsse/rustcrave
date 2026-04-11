@@ -7,7 +7,20 @@ public abstract class BaseSpawnConfig : ScriptableObject, ISpawnConfig
     [SerializeField] protected ActiveModifier activeModifier;
 
     public IReadOnlyList<SpawnEntry> Entries => entries;
+
+    public abstract int BaseMaxSpawnsPerSegment { get; }
     public abstract int MaxSpawnsPerSegment { get; }
+
+    public float BaseTotalChance
+    {
+        get
+        {
+            float total = 0f;
+            foreach (var entry in entries)
+                total += entry.SpawnChance;
+            return total;
+        }
+    }
 
     public float TotalChance
     {
@@ -16,7 +29,6 @@ public abstract class BaseSpawnConfig : ScriptableObject, ISpawnConfig
             float total = 0f;
             foreach (var entry in entries)
                 total += GetModifiedChance(entry);
-
             return total;
         }
     }

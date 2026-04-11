@@ -7,16 +7,18 @@ public class ActiveModifier : ScriptableObject
 
     public float EnemySpawnMultiplier => current != null ? current.EnemySpawnMultiplier : 1f;
     public float ResourceSpawnMultiplier => current != null ? current.ResourceSpawnMultiplier : 1f;
+    public float PulsiteSpawnMultiplier => current != null ? current.PulsiteSpawnMultiplier : 1f;
+    public bool IsCameraUnstable => current != null && current.IsCameraUnstable;
 
     public void Set(PathModifierData modifier)
     {
         current = modifier;
-        Debug.Log($"<color=green>[ActiveModifier]</color> new modifier set: {(current != null ? current.DisplayName : "NULL")}");
+        //Debug.Log($"<color=green>[ActiveModifier]</color> new modifier set: {(current != null ? current.DisplayName : "NULL")}");
     }
 
     public void Clear()
     {
         current = null;
-        Debug.Log("<color=red>[ActiveModifier]</color> modifier cleared.");
+        //Debug.Log("<color=red>[ActiveModifier]</color> modifier cleared.");
     }
 }

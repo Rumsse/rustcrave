@@ -5,13 +5,27 @@ public class ResourceConfig : BaseSpawnConfig
 {
     [SerializeField] private int maxSpawnsPerSegment = 3;
 
-    public override int MaxSpawnsPerSegment => maxSpawnsPerSegment;
+    public override int BaseMaxSpawnsPerSegment => maxSpawnsPerSegment;
+
+    public override int MaxSpawnsPerSegment
+    {
+        get
+        {
+            float ratio = BaseTotalChance > 0f ? TotalChance / BaseTotalChance : 1f;
+            return Mathf.RoundToInt(maxSpawnsPerSegment * ratio);
+        }
+    }
 
     public override float GetModifiedChance(SpawnEntry entry)
     {
-        if (entry.SpawnTag == SpawnTag.Pulsite && activeModifier != null)
-            return entry.SpawnChance * activeModifier.ResourceSpawnMultiplier;
+        if (activeModifier == null)
+            return entry.SpawnChance;
 
-        return entry.SpawnChance;
+        float modifiedChance = entry.SpawnChance * activeModifier.ResourceSpawnMultiplier;
+
+        if (entry.SpawnTag == SpawnTag.Pulsite)
+            modifiedChance *= activeModifier.PulsiteSpawnMultiplier;
+
+        return modifiedChance;
     }
 }
