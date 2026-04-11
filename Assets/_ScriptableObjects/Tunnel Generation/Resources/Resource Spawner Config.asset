@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 704d463d00d12b241939bf41d36acbf7, type: 3}
   m_Name: Resource Spawner Config
   m_EditorClassIdentifier: Assembly-CSharp::ResourceConfig
-  resources:
+  entries:
   - prefab: {fileID: 8550049958132090496, guid: 048ae83cf1dadb841ad2789cd9b89954, type: 3}
-    spawnChance: 0.693
+    spawnChance: 0.67
+    spawnTag: 0
   - prefab: {fileID: 4573973831071435853, guid: 7f61fc3ea7355cd43b29cf0cab06ca6c, type: 3}
     spawnChance: 0.5
+    spawnTag: 0
   - prefab: {fileID: 4467200941623851641, guid: 620ad802cbac8fc46ba217650376c0cd, type: 3}
-    spawnChance: 0.226
+    spawnChance: 0.25
+    spawnTag: 1
+  activeModifier: {fileID: 11400000, guid: d373c29c877b50b43b30a9a517ecce77, type: 2}
   maxSpawnsPerSegment: 5

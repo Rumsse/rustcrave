@@ -3,24 +3,6 @@ using UnityEngine;
 
 public static class SpawnHelper
 {
-    public static GameObject GetRandomPrefab(ISpawnConfig config)
-    {
-        if (config.Entries.Count == 0 || config.TotalChance <= 0f)
-            return null;
-
-        float roll = Random.Range(0f, config.TotalChance);
-        float cumulative = 0f;
-
-        foreach (var entry in config.Entries)
-        {
-            cumulative += entry.SpawnChance;
-            if (roll <= cumulative)
-                return entry.Prefab;
-        }
-
-        return config.Entries[config.Entries.Count - 1].Prefab;
-    }
-
     public static List<T> SelectRandomPoints<T>(T[] points, int count)
     {
         var available = new List<T>(points);
@@ -38,16 +20,16 @@ public static class SpawnHelper
         return selected;
     }
 
-    public static bool ValidateConfig(ISpawnConfig config, string configName)
+    public static bool ValidateEntries(IReadOnlyList<SpawnEntry> entries, string configName)
     {
-        if (config.Entries.Count == 0)
+        if (entries.Count == 0)
         {
             Debug.LogWarning($"{configName} has no entries!");
             return false;
         }
 
         bool isValid = true;
-        foreach (var entry in config.Entries)
+        foreach (var entry in entries)
         {
             if (entry.Prefab == null)
             {

@@ -8,6 +8,15 @@ public class ActiveModifier : ScriptableObject
     public float EnemySpawnMultiplier => current != null ? current.EnemySpawnMultiplier : 1f;
     public float ResourceSpawnMultiplier => current != null ? current.ResourceSpawnMultiplier : 1f;
 
-    public void Set(PathModifierData modifier) => current = modifier;
-    public void Clear() => current = null;
+    public void Set(PathModifierData modifier)
+    {
+        current = modifier;
+        Debug.Log($"<color=green>[ActiveModifier]</color> new modifier set: {(current != null ? current.DisplayName : "NULL")}");
+    }
+
+    public void Clear()
+    {
+        current = null;
+        Debug.Log("<color=red>[ActiveModifier]</color> modifier cleared.");
+    }
 }

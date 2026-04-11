@@ -23,7 +23,7 @@ public class TunnelResourceSpawner : MonoBehaviour
 
             foreach (var point in selected)
             {
-                GameObject prefab = SpawnHelper.GetRandomPrefab(resourceConfig);
+                GameObject prefab = resourceConfig.GetRandomPrefab();
                 if (prefab == null)
                     continue;
 
