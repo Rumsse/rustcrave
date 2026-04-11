@@ -2331,7 +2331,7 @@ GameObject:
   - component: {fileID: 465489101}
   - component: {fileID: 465489100}
   m_Layer: 5
-  m_Name: background
+  m_Name: top bar background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2350,7 +2350,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2046269768}
-  - {fileID: 1770720358}
   - {fileID: 477648182}
   m_Father: {fileID: 1554600055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4254,6 +4253,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856802057}
   m_CullTransparentMesh: 1
+--- !u!1 &862281269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 862281272}
+  - component: {fileID: 862281271}
+  - component: {fileID: 862281270}
+  m_Layer: 5
+  m_Name: black background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &862281270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862281269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.5882353}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &862281271
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862281269}
+  m_CullTransparentMesh: 1
+--- !u!224 &862281272
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862281269}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.0088, y: 1.0088, z: 1.0088}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1554600055}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &920702292
 GameObject:
   m_ObjectHideFlags: 0
@@ -4334,7 +4408,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 4
   m_TargetDisplay: 0
 --- !u!224 &920702296
 RectTransform:
@@ -6535,7 +6609,6 @@ GameObject:
   - component: {fileID: 1554600054}
   - component: {fileID: 1554600053}
   - component: {fileID: 1554600052}
-  - component: {fileID: 1554600056}
   m_Layer: 5
   m_Name: Canvas Top bar info
   m_TagString: Untagged
@@ -6604,7 +6677,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!224 &1554600055
 RectTransform:
@@ -6619,6 +6692,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 465489099}
+  - {fileID: 862281272}
+  - {fileID: 1770720358}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6626,27 +6701,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1554600056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1554600051}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41def8a8bed294f4097bd5ee42f00466, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TunnelProgressUI
-  mapState: {fileID: 11400000, guid: 18f918ded4fcc85458c274981b815dda, type: 2}
-  activeModifier: {fileID: 11400000, guid: d373c29c877b50b43b30a9a517ecce77, type: 2}
-  tunnelGenerator: {fileID: 1830855794}
-  cameraTargetTransform: {fileID: 783335243}
-  startPos: {fileID: 783335243}
-  progressSlider: {fileID: 2046269769}
-  stageInfoText: {fileID: 1770720359}
-  tooltipPanel: {fileID: 477648181}
-  tooltipText: {fileID: 1596145302}
 --- !u!1 &1555484011
 GameObject:
   m_ObjectHideFlags: 0
@@ -7708,6 +7762,7 @@ GameObject:
   - component: {fileID: 1762193606}
   - component: {fileID: 1762193607}
   - component: {fileID: 1762193608}
+  - component: {fileID: 1762193609}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -7802,6 +7857,28 @@ MonoBehaviour:
   controlsPanel: {fileID: 214639561}
   restroomPanel: {fileID: 2020237880}
   bossPanel: {fileID: 36538174}
+--- !u!114 &1762193609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762193603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41def8a8bed294f4097bd5ee42f00466, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TunnelProgressUI
+  mapState: {fileID: 11400000, guid: 18f918ded4fcc85458c274981b815dda, type: 2}
+  activeModifier: {fileID: 11400000, guid: d373c29c877b50b43b30a9a517ecce77, type: 2}
+  tunnelGenerator: {fileID: 1830855794}
+  cameraTargetTransform: {fileID: 783335243}
+  startPos: {fileID: 783335243}
+  progressSlider: {fileID: 2046269769}
+  stageInfoText: {fileID: 1770720359}
+  tooltipPanel: {fileID: 477648181}
+  tooltipText: {fileID: 1596145302}
+  darkScreen: {fileID: 862281270}
 --- !u!1 &1767491973
 GameObject:
   m_ObjectHideFlags: 0
@@ -8022,7 +8099,7 @@ GameObject:
   - component: {fileID: 1770720360}
   - component: {fileID: 1770720359}
   m_Layer: 5
-  m_Name: cave
+  m_Name: cave stage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8035,16 +8112,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1770720357}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 465489099}
+  m_Father: {fileID: 1554600055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.1, y: 13}
+  m_AnchoredPosition: {x: -1.7101167, y: 511}
   m_SizeDelta: {x: 349.51, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1770720359
@@ -8094,8 +8171,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -10147,12 +10224,12 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2090435490}
+  - {fileID: 1762193604}
   - {fileID: 1017172256}
   - {fileID: 1830855793}
   - {fileID: 422177249}
   - {fileID: 45525952}
   - {fileID: 672248864}
-  - {fileID: 1762193604}
   - {fileID: 1391810040}
   - {fileID: 920702296}
   - {fileID: 1554600055}
