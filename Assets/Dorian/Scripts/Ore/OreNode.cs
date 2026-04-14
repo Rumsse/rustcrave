@@ -65,6 +65,7 @@ public class OreNode : MonoBehaviour, IMineable
 
     private void OnMouseEnter()
     {
+        if (Time.timeScale == 0f) return;
         oreTooltip.ShowTooltip();
     }
 
