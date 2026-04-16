@@ -14,9 +14,11 @@ public class MapStateEditor : Editor
 
         if (GUILayout.Button("Reset Map"))
         {
-            mapState.currentRow = -1;
-            mapState.currentColumn = 1;
             mapState.nodes.Clear();
+            mapState.scannedNodes.Clear();
+            mapState.visitedNodes.Clear();
+            mapState.currentNodeId = string.Empty;
+
             EditorUtility.SetDirty(mapState);
             Debug.Log("Map reset!");
         }
@@ -33,7 +35,7 @@ public class MapStateEditor : Editor
 
         EditorGUILayout.Space(5);
         EditorGUILayout.HelpBox(
-            $"Current: row {mapState.currentRow}, col {mapState.currentColumn}\nNodes: {mapState.nodes.Count}",
+            $"Current Row: {mapState.currentRow}\nNodes: {mapState.nodes.Count}",
             MessageType.Info
         );
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -7,19 +8,14 @@ public class ChoosePathController : MonoBehaviour
 {
     [SerializeField] MapState mapState;
     [SerializeField] ActiveModifier activeModifier;
-    [SerializeField] GlobalInventorySO globalInventory;
-    [SerializeField] OreSO pulsite;
-
+    [SerializeField] VisualTreeAsset nodeButtonAsset;
     [SerializeField] VisualTreeAsset tooltipAsset;
-    [SerializeField] string mainGameScene = "new Tunel Generation Rumsse";
-    [SerializeField] string mainBossScene = "boss map";
-    [SerializeField] bool debugMode = true;
 
-    readonly Dictionary<Button, PathNodeData> buttonNodeMap = new();
 
+    readonly Dictionary<string, Button> idToButtonMap = new();
+    VisualElement nodesLayer;
+    VisualElement linesLayer;
     PathNodeTooltipController tooltipController;
-    Label debugLabel;
-
 
     #region Initialization
 
@@ -28,153 +24,118 @@ public class ChoosePathController : MonoBehaviour
         if (mapState.nodes.Count == 0)
             mapState.Initialize();
 
+        nodesLayer = panelRoot.Q<VisualElement>("nodes-layer");
+        linesLayer = panelRoot.Q<VisualElement>("path-lines-layer");
+
         if (tooltipController == null)
             tooltipController = new PathNodeTooltipController(tooltipLayer, tooltipAsset);
 
-        buttonNodeMap.Clear();
-        BindButtons(panelRoot);
-        UpdateButtonStates();
-
-        if (debugMode)
-            SetupDebugLabel(panelRoot);
+        GenerateUI();
+        linesLayer.generateVisualContent += OnGenerateLines;
     }
 
-    void BindButtons(VisualElement root)
+    void GenerateUI()
     {
+        nodesLayer.Clear();
+        idToButtonMap.Clear();
+
         foreach (var node in mapState.nodes)
         {
-            var btn = root.Q<Button>($"node-{node.row}-{node.column}");
+            var btn = nodeButtonAsset.Instantiate().Q<Button>();
+            idToButtonMap[node.id] = btn;
 
-            if (btn == null)
-            {
-                Debug.LogWarning($"Button node-{node.row}-{node.column} not found!");
-                continue;
-            }
-
-            buttonNodeMap[btn] = node;
+            SetupButtonPosition(btn, node);
             RegisterNodeEvents(btn, node);
-
-            if (debugMode)
-                SetupDebugButton(btn, node);
+            nodesLayer.Add(btn);
         }
+
+        nodesLayer.RegisterCallback<GeometryChangedEvent>(evt => linesLayer.MarkDirtyRepaint());
+
+        UpdateButtonStates();
     }
 
-    void RegisterNodeEvents(Button btn, PathNodeData node)
+    void SetupButtonPosition(Button btn, PathNodeData node)
     {
-        btn.clicked += () => OnNodeClicked(node);
+        btn.style.position = Position.Absolute;
 
-        if (node.row == mapState.TotalRows - 1)
-            return;
-
-        btn.RegisterCallback<PointerEnterEvent>(evt =>
-            tooltipController.Show(node, mapState, evt.position));
-
-        btn.RegisterCallback<PointerLeaveEvent>(evt =>
-            tooltipController.Hide());
-
-        btn.RegisterCallback<PointerMoveEvent>(evt =>
-            tooltipController.UpdatePosition(evt.position));
-
-        btn.RegisterCallback<PointerDownEvent>(evt =>
-        {
-            if (evt.button == 1)
-                OnNodeRightClicked(node);
-        });
+        btn.style.left = new StyleLength(Length.Percent(node.columnPosition * 20 + 10));
+        btn.style.bottom = new StyleLength(Length.Percent(node.row * 15 + 10));
     }
 
     #endregion
 
-    #region Button States
+    #region Lines Rendering
+
+    void OnGenerateLines(MeshGenerationContext mgc)
+    {
+        var painter = mgc.painter2D;
+        painter.strokeColor = new Color(1, 1, 1, 0.4f);
+        painter.lineWidth = 3f;
+
+        foreach (var node in mapState.nodes)
+        {
+            if (node.connectedToNodes == null) continue;
+
+            var startBtn = idToButtonMap[node.id];
+
+            if (startBtn.worldBound.width == 0) continue;
+
+            Vector2 startPos = GetBtnCenter(startBtn);
+
+            foreach (var targetId in node.connectedToNodes)
+            {
+                if (!idToButtonMap.TryGetValue(targetId, out var endBtn)) continue;
+
+                painter.BeginPath();
+                painter.MoveTo(startPos);
+                painter.LineTo(GetBtnCenter(endBtn));
+                painter.Stroke();
+            }
+        }
+    }
+
+    Vector2 GetBtnCenter(Button btn)
+    {
+        Vector2 worldCenter = btn.worldBound.center;
+        return linesLayer.WorldToLocal(worldCenter);
+    }
+
+    #endregion
+
+    #region Logic
 
     void UpdateButtonStates()
     {
         var available = mapState.GetAvailableNodes();
 
-        foreach (var (btn, node) in buttonNodeMap)
+        foreach (var node in mapState.nodes)
         {
-            bool isAvailable = available.Contains(node);
-            bool isVisited = node.row <= mapState.currentRow;
+            var btn = idToButtonMap[node.id];
+            bool isAvailable = available.Any(n => n.id == node.id);
+            bool isVisited = node.id == mapState.currentNodeId || mapState.IsVisited(node);
 
             btn.SetEnabled(isAvailable);
 
             btn.RemoveFromClassList("node-available");
             btn.RemoveFromClassList("node-visited");
-            btn.RemoveFromClassList("node-locked");
 
-            if (isVisited)
-                btn.AddToClassList("node-visited");
-            else if (isAvailable)
-                btn.AddToClassList("node-available");
-            else
-                btn.AddToClassList("node-locked");
+            if (isVisited) btn.AddToClassList("node-visited");
+            else if (isAvailable) btn.AddToClassList("node-available");
         }
     }
-
-    #endregion
-
-    #region Node Selection
 
     void OnNodeClicked(PathNodeData node)
     {
         mapState.MoveToNode(node);
-
-        var modifier = mapState.GetModifier(node);
-        activeModifier.Set(modifier);
-
-        bool isBoss = node.row == mapState.TotalRows - 1;
-
-        string scene = isBoss ? mainBossScene : mainGameScene;
-        SceneManager.LoadScene(scene);
+        activeModifier.Set(mapState.GetModifier(node));
+        SceneManager.LoadScene(node.row == mapState.TotalRows - 1 ? "BossScene" : "GameScene");
     }
 
-    void OnNodeRightClicked(PathNodeData node)
+    void RegisterNodeEvents(Button btn, PathNodeData node)
     {
-        if (mapState.IsNodeScanned(node))
-            return;
-
-        if (globalInventory.Pulsite < 1)
-            return;
-
-        globalInventory.RemoveItem(pulsite, 1);
-        mapState.ScanNode(node);
-        tooltipController.RefreshContent();
-    }
-
-    #endregion
-
-    #region Debug
-
-    void SetupDebugButton(Button btn, PathNodeData node)
-    {
-        var modifier = mapState.GetModifier(node);
-        btn.text = $"{modifier.DisplayName}\n[{node.row},{node.column}]";
-        btn.tooltip = $"Row: {node.row}\nCol: {node.column}\n{modifier.DisplayName}\n{modifier.Description}";
-    }
-
-    void SetupDebugLabel(VisualElement root)
-    {
-        debugLabel = new Label();
-        debugLabel.style.position = Position.Absolute;
-        debugLabel.style.left = 10;
-        debugLabel.style.bottom = 10;
-        debugLabel.style.color = Color.yellow;
-        debugLabel.style.fontSize = 14;
-        debugLabel.text = BuildDebugText();
-        root.Add(debugLabel);
-    }
-
-    string BuildDebugText()
-    {
-        var text = $"Current: row {mapState.currentRow}, col {mapState.currentColumn}\n";
-        text += "Available nodes:\n";
-
-        foreach (var node in mapState.GetAvailableNodes())
-        {
-            var mod = mapState.GetModifier(node);
-            text += $"  [{node.row},{node.column}] {mod.DisplayName} (enemy x{mod.EnemySpawnMultiplier}, resource x{mod.ResourceSpawnMultiplier})\n";
-        }
-
-        return text;
+        btn.clicked += () => OnNodeClicked(node);
+        btn.RegisterCallback<PointerEnterEvent>(evt => tooltipController.Show(node, mapState, evt.position));
+        btn.RegisterCallback<PointerLeaveEvent>(evt => tooltipController.Hide());
     }
 
     #endregion

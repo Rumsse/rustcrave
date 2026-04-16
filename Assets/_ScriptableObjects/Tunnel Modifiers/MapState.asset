@@ -18,48 +18,73 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 069328bb56aa91c4ebe23918f08f63e8, type: 2}
   - {fileID: 11400000, guid: a0286f2fba7535647be05bd4ae42d67b, type: 2}
   - {fileID: 11400000, guid: 6cc35b5e736044f4c857e059d238d3a8, type: 2}
-  totalRows: 4
-  totalColumns: 3
-  currentRow: -1
-  currentColumn: -1
+  minRows: 4
+  maxRows: 5
+  minCols: 4
+  maxCols: 5
   nodes:
-  - row: 0
-    column: 0
-    modifierIndex: 0
-    connectedToColumns: 00000000
-  - row: 0
-    column: 1
-    modifierIndex: 3
-    connectedToColumns: 01000000
-  - row: 0
-    column: 2
-    modifierIndex: 1
-    connectedToColumns: 02000000
-  - row: 1
-    column: 0
-    modifierIndex: 3
-    connectedToColumns: 00000000
-  - row: 1
-    column: 1
-    modifierIndex: 3
-    connectedToColumns: 01000000
-  - row: 1
-    column: 2
-    modifierIndex: 1
-    connectedToColumns: 02000000
-  - row: 2
-    column: 0
+  - id: 09b7a738-795d-43cc-b69f-cb2b2614efc5
+    row: 0
+    columnPosition: 0
     modifierIndex: 2
-    connectedToColumns: 01000000
-  - row: 2
-    column: 1
+    connectedToNodes:
+    - bd863f8b-5824-4430-9492-31697b85f3c2
+    - d2ac688e-d90e-4eab-8088-e58165a7ce0a
+  - id: b6ae6179-a09f-4374-992b-50c2e552b796
+    row: 0
+    columnPosition: 4
+    modifierIndex: 1
+    connectedToNodes:
+    - d2ac688e-d90e-4eab-8088-e58165a7ce0a
+    - bd863f8b-5824-4430-9492-31697b85f3c2
+  - id: bd863f8b-5824-4430-9492-31697b85f3c2
+    row: 1
+    columnPosition: 0
+    modifierIndex: 3
+    connectedToNodes:
+    - db7e835d-d3f3-4531-8040-c91ba6942cea
+    - b369f6d3-ff2d-42f7-bca7-f618bc8066f5
+  - id: d2ac688e-d90e-4eab-8088-e58165a7ce0a
+    row: 1
+    columnPosition: 4
     modifierIndex: 4
-    connectedToColumns: 01000000
-  - row: 2
-    column: 2
+    connectedToNodes:
+    - 179c1a45-2683-4533-8ee6-0863c685bcf5
+  - id: db7e835d-d3f3-4531-8040-c91ba6942cea
+    row: 2
+    columnPosition: 0
+    modifierIndex: 2
+    connectedToNodes:
+    - cf1ebd08-710f-4048-bfcb-fc0e74cd70ea
+    - b0c2b724-a561-4832-91e6-9482e8860c2c
+  - id: b369f6d3-ff2d-42f7-bca7-f618bc8066f5
+    row: 2
+    columnPosition: 1.3333334
+    modifierIndex: 1
+    connectedToNodes:
+    - cf1ebd08-710f-4048-bfcb-fc0e74cd70ea
+    - b0c2b724-a561-4832-91e6-9482e8860c2c
+  - id: 179c1a45-2683-4533-8ee6-0863c685bcf5
+    row: 2
+    columnPosition: 4
+    modifierIndex: 3
+    connectedToNodes:
+    - b0c2b724-a561-4832-91e6-9482e8860c2c
+  - id: cf1ebd08-710f-4048-bfcb-fc0e74cd70ea
+    row: 3
+    columnPosition: 0
+    modifierIndex: 1
+    connectedToNodes:
+    - eed423f0-9799-4844-952e-e3ba20a17e08
+  - id: b0c2b724-a561-4832-91e6-9482e8860c2c
+    row: 3
+    columnPosition: 4
+    modifierIndex: 2
+    connectedToNodes:
+    - eed423f0-9799-4844-952e-e3ba20a17e08
+  - id: eed423f0-9799-4844-952e-e3ba20a17e08
+    row: 4
+    columnPosition: 2
     modifierIndex: 0
-    connectedToColumns: 01000000
-  - row: 3
-    column: 1
-    modifierIndex: 0
-    connectedToColumns: 
+    connectedToNodes: []
+  currentNodeId: 

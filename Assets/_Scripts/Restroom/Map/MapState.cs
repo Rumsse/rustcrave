@@ -1,66 +1,82 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MapState", menuName = "Restroom/Map/Map State")]
 public class MapState : ScriptableObject
 {
     [SerializeField] List<PathModifierData> availableModifiers = new();
-    [SerializeField] int totalRows = 4;
-    [SerializeField] int totalColumns = 3;
 
-    [HideInInspector] public int currentRow = -1;
-    [HideInInspector] public int currentColumn = -1;
+    [SerializeField] int minRows = 4;
+    [SerializeField] int maxRows = 6;
+    [SerializeField] int minCols = 3;
+    [SerializeField] int maxCols = 5;
+
     [HideInInspector] public List<PathNodeData> nodes = new();
     [HideInInspector] public HashSet<string> scannedNodes = new();
+    [HideInInspector] public HashSet<string> visitedNodes = new();
+    [HideInInspector] public string currentNodeId = string.Empty;
 
-    public int TotalRows => totalRows;
-    public int TotalColumns => totalColumns;
+    public int TotalRows => nodes.Count > 0 ? nodes.Max(n => n.row) + 1 : 0;
 
-    public void Initialize()
+    public int currentRow
     {
-        currentRow = -1;
-        currentColumn = -1;
-        nodes = MapGenerator.Generate(totalRows, totalColumns, availableModifiers.Count);
-        scannedNodes.Clear();
+        get
+        {
+            if (string.IsNullOrEmpty(currentNodeId))
+                return -1;
+
+            var node = nodes.FirstOrDefault(n => n.id == currentNodeId);
+            return node?.row ?? -1;
+        }
     }
 
-    public PathModifierData GetModifier(PathNodeData node) =>
-        availableModifiers[node.modifierIndex];
+    #region Initialization
 
-    public List<PathNodeData> GetNodesAtRow(int row) =>
-        nodes.FindAll(n => n.row == row);
+    public void Initialize() => InitializeProcedural(minRows, maxRows, minCols, maxCols);
+
+    public void InitializeProcedural(int minRows, int maxRows, int minCols, int maxCols)
+    {
+        nodes = MapGenerator.Generate(minRows, maxRows, minCols, maxCols, availableModifiers.Count);
+        scannedNodes.Clear();
+        visitedNodes.Clear();
+        currentNodeId = string.Empty;
+    }
+
+    #endregion
+
+    #region Node Operations
+
+    public PathModifierData GetModifier(PathNodeData node) => availableModifiers[node.modifierIndex];
 
     public List<PathNodeData> GetAvailableNodes()
     {
-        int nextRow = currentRow + 1;
+        if (string.IsNullOrEmpty(currentNodeId))
+            return nodes.Where(n => n.row == 0).ToList();
 
-        if (nextRow >= totalRows)
+        var currentNode = nodes.FirstOrDefault(n => n.id == currentNodeId);
+
+        if (currentNode == null || currentNode.connectedToNodes == null)
             return new List<PathNodeData>();
 
-        var nextNodes = GetNodesAtRow(nextRow);
-
-        if (currentRow < 0)
-            return nextNodes;
-
-        var currentNode = nodes.Find(n => n.row == currentRow && n.column == currentColumn);
-        if (currentNode == null)
-            return new List<PathNodeData>();
-
-        return nextNodes.FindAll(n =>
-            System.Array.Exists(currentNode.connectedToColumns, c => c == n.column));
+        return nodes.Where(n => currentNode.connectedToNodes.Contains(n.id)).ToList();
     }
 
     public void MoveToNode(PathNodeData node)
     {
-        currentRow = node.row;
-        currentColumn = node.column;
+        currentNodeId = node.id;
+        visitedNodes.Add(node.id);
     }
 
-    public bool IsNodeScanned(PathNodeData node) =>
-        scannedNodes.Contains(NodeKey(node));
+    #endregion
 
-    public void ScanNode(PathNodeData node) =>
-        scannedNodes.Add(NodeKey(node));
+    #region State Checks
 
-    static string NodeKey(PathNodeData node) => $"{node.row}-{node.column}";
+    public bool IsVisited(PathNodeData node) => visitedNodes.Contains(node.id);
+
+    public bool IsNodeScanned(PathNodeData node) => scannedNodes.Contains(node.id);
+
+    public void ScanNode(PathNodeData node) => scannedNodes.Add(node.id);
+
+    #endregion
 }

@@ -1,32 +1,15 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Rumsse/UI%20Toolkit/ChoosePathPanel%20Style.uss?fileID=7433441132597879392&amp;guid=8016aebf0a42e64488c6b9673359d231&amp;type=3#ChoosePathPanel Style"/>
-    <ui:VisualElement name="Root" picking-mode="Ignore" style="flex-grow: 1; background-color: rgb(74, 63, 1); border-top-left-radius: 7%; border-bottom-left-radius: 7%; align-content: center; align-items: center; background-image: url(&quot;project://database/Assets/Rumsse/2d/mapp.png?fileID=2800000&amp;guid=874c91c7c60e172459035747189c19a3&amp;type=3#mapp&quot;); width: 100%; height: 100%;">
+    <Style src="project://database/Assets/Rumsse/UI%20Toolkit/Styles/ChoosePathPanel%20Style.uss?fileID=7433441132597879392&amp;guid=8016aebf0a42e64488c6b9673359d231&amp;type=3#ChoosePathPanel Style"/>
+    <ui:VisualElement name="Root" picking-mode="Ignore" style="flex-grow: 1; background-color: rgb(74, 63, 1); border-top-left-radius: 7%; border-bottom-left-radius: 7%; align-content: center; align-items: center; background-image: none; width: 100%; height: 100%;">
         <ui:Button text="X" name="btn-close" style="border-top-left-radius: 127px; border-top-right-radius: 127px; border-bottom-right-radius: 127px; border-bottom-left-radius: 127px; border-left-color: rgb(72, 72, 72); border-right-color: rgb(72, 72, 72); border-top-color: rgb(72, 72, 72); border-bottom-color: rgb(72, 72, 72); background-color: rgb(27, 27, 27); color: rgb(255, 244, 232); width: 40px; height: 40px; margin-top: 23px; margin-right: 23px; margin-bottom: 23px; margin-left: 23px; align-self: flex-end; position: absolute; top: 10px; left: 10px;"/>
         <ui:VisualElement name="path-header" picking-mode="Ignore" style="flex-grow: 1; width: 830px; align-content: center; align-items: center; margin-top: 48px; margin-right: 48px; margin-bottom: 0; margin-left: 48px;">
             <ui:Label text="WHERE TO NOW?" name="" style="-unity-font-style: bold; font-size: 55px;"/>
             <ui:Label text="LMB to GO | RMB to SCAN" style="font-size: 20px; -unity-font-style: bold;"/>
         </ui:VisualElement>
-        <ui:VisualElement name="path-map" picking-mode="Ignore" style="flex-grow: 1; width: 960px; height: 900px; padding-top: 5%; padding-right: 5%; padding-bottom: 10%; padding-left: 5%;">
-            <ui:VisualElement name="boss-row" picking-mode="Ignore" class="row" style="flex-grow: 1;">
-                <ui:Button text="Boss" name="node-3-1" class="pathButton"/>
-            </ui:VisualElement>
-            <ui:VisualElement name="upper-row" picking-mode="Ignore" class="row" style="flex-grow: 1;">
-                <ui:Button text="?" name="node-2-0" class="pathButton"/>
-                <ui:Button text="?" name="node-2-1" class="pathButton"/>
-                <ui:Button text="?" name="node-2-2" class="pathButton"/>
-            </ui:VisualElement>
-            <ui:VisualElement name="middle-row" picking-mode="Ignore" class="row" style="flex-grow: 1;">
-                <ui:Button text="?" name="node-1-0" class="pathButton"/>
-                <ui:Button text="?" name="node-1-1" class="pathButton"/>
-                <ui:Button text="?" name="node-1-2" class="pathButton"/>
-            </ui:VisualElement>
-            <ui:VisualElement name="bottom-row" picking-mode="Ignore" class="row" style="flex-grow: 1;">
-                <ui:Button text="?" name="node-0-0" class="pathButton"/>
-                <ui:Button text="?" name="node-0-1" class="pathButton"/>
-                <ui:Button text="?" name="node-0-2" class="pathButton"/>
-            </ui:VisualElement>
-            <ui:VisualElement name="start-row" picking-mode="Ignore" class="row" style="flex-grow: 1;">
-                <ui:Button text="Start" class="pathButton"/>
+        <ui:VisualElement name="path-map-container" picking-mode="Ignore" usage-hints="DynamicColor" style="flex-grow: 1; width: 960px; height: 900px; padding-top: 5%; padding-right: 5%; padding-bottom: 10%; padding-left: 5%;">
+            <ui:VisualElement name="path-lines-layer" picking-mode="Ignore" style="flex-grow: 1; position: absolute; width: 90%; height: 84%;"/>
+            <ui:VisualElement name="nodes-layer" picking-mode="Ignore" style="flex-grow: 1; position: absolute; width: 90%; height: 84%; top: 50px; left: 50px;">
+                <ui:Button text="Start" class="pathButton" style="display: none;"/>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="player-map" picking-mode="Ignore" style="flex-grow: 1; position: absolute; flex-direction: column-reverse; width: 960px; height: 1080px; align-content: flex-end; align-items: stretch; justify-content: flex-start; align-self: auto; padding-top: 25px; padding-right: 25px; padding-bottom: 25px; padding-left: 25px; display: none;">

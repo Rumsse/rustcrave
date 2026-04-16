@@ -91,5 +91,4 @@ public class PathNodeTooltipController
             costLabel.text = "COSTS 1 PULSITE";
         }
     }
-
 }
