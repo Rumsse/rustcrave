@@ -17,6 +17,7 @@ public class RobotsCraftController : MonoBehaviour
 
     private Action<UnitSO> requestCraftRobot;
     private GlobalInventorySO globalInventory;
+    private InfoTooltipController infoTooltip;
 
 
 
@@ -28,10 +29,14 @@ public class RobotsCraftController : MonoBehaviour
         var infoBtn = root.Q<Button>("btn-info-robots");
         var infoPanel = root.Q<VisualElement>("robots-info-panel");
 
-        if (infoBtn != null && infoPanel != null)
+        if (infoPanel != null)
+            infoTooltip = new InfoTooltipController(infoPanel);
+
+        if (infoBtn != null && infoTooltip != null)
         {
-            infoBtn.clicked += () => ShowInfo(infoPanel);
-            infoBtn.clicked -= () => ShowInfo(infoPanel);
+            infoBtn.RegisterCallback<PointerEnterEvent>(evt => infoTooltip.Show(evt.position));
+            infoBtn.RegisterCallback<PointerLeaveEvent>(evt => infoTooltip.Hide());
+            infoBtn.RegisterCallback<PointerMoveEvent>(evt => infoTooltip.UpdatePosition(evt.position));
         }
 
         foreach (var data in robotsCraftDataList)
