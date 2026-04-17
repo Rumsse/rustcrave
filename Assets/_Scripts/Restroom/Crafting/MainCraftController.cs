@@ -54,6 +54,8 @@ public class MainCraftController : MonoBehaviour
             btnBack.style.display = DisplayStyle.None;
         }
 
+        rootElement.RegisterCallback<DetachFromPanelEvent>(evt => CloseCurrentTab());
+
         UpdateSwarmUI(root);
     }
 

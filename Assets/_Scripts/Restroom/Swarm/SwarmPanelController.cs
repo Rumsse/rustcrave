@@ -67,6 +67,8 @@ public class SwarmPanelController : MonoBehaviour
         swarmState.OnUnitAdded -= AddUnitSlot;
         swarmState.OnUnitAdded += AddUnitSlot;
 
+        rootElement.RegisterCallback<DetachFromPanelEvent>(ResetPanel);
+
         RebuildSwarmUI();
 
         root.schedule.Execute(UpdateStats).Every(100);
@@ -140,6 +142,21 @@ public class SwarmPanelController : MonoBehaviour
             unitInfoPanelController.ClosePanel();
 
         activeTabKey = null;
+    }
+
+    void ResetPanel(DetachFromPanelEvent evt)
+    {
+        CloseCurrentTab();
+
+        if (!isQuickManagementActive)
+            return;
+
+        isQuickManagementActive = false;
+
+        if (subtitleLabel != null)
+            subtitleLabel.text = DefaultSubtitle;
+
+        UpdateStyleSheet();
     }
 
     #endregion

@@ -11,8 +11,8 @@ public class GadgetsGlobalInventory : ScriptableObject
         if (gadget == null)
             return;
 
-        if (unlockedGadgets.Contains(gadget))
-            return;
+        /*if (unlockedGadgets.Contains(gadget))
+            return;*/
 
         unlockedGadgets.Add(gadget);
     }
