@@ -1,33 +1,41 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DisplayUnitSpawner : MonoBehaviour
 {
-    [SerializeField] private SwarmState swarmState;
-    [SerializeField] private Transform unitsParent;
-    [SerializeField] private List<Transform> spawnPoints = new List<Transform>();
+    public event Action<Transform> OnNewUnitSpawned;
 
-    private int currentSpawnIndex = 0;
+    [SerializeField] SwarmState swarmState;
+    [SerializeField] Transform unitsParent;
+    [SerializeField] List<Transform> spawnPoints = new();
 
+    int currentSpawnIndex = 0;
 
-    private void OnEnable()
+    #region Unity Lifecycle
+
+    void OnEnable()
     {
         if (swarmState != null)
             swarmState.OnUnitAdded += HandleNewUnitCrafted;
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         if (swarmState != null)
             swarmState.OnUnitAdded -= HandleNewUnitCrafted;
     }
 
-    private void Start() => SpawnDisplayModels();
+    void Start() => SpawnDisplayModels();
 
+    #endregion
 
-    private void SpawnDisplayModels()
+    #region Spawning Logic
+
+    void SpawnDisplayModels()
     {
-        if (swarmState == null) return;
+        if (swarmState == null)
+            return;
 
         currentSpawnIndex = 0;
 
@@ -38,12 +46,18 @@ public class DisplayUnitSpawner : MonoBehaviour
         }
     }
 
-    private void HandleNewUnitCrafted(SwarmUnitsData newUnit) => SpawnSingleUnit(newUnit);
+    void HandleNewUnitCrafted(SwarmUnitsData newUnit)
+    {
+        Transform spawnedUnit = SpawnSingleUnit(newUnit);
 
-    private void SpawnSingleUnit(SwarmUnitsData swarmUnit)
+        if (spawnedUnit != null)
+            OnNewUnitSpawned?.Invoke(spawnedUnit);
+    }
+
+    Transform SpawnSingleUnit(SwarmUnitsData swarmUnit)
     {
         if (currentSpawnIndex >= spawnPoints.Count)
-            return;
+            return null;
 
         Transform spawnPoint = spawnPoints[currentSpawnIndex];
 
@@ -53,25 +67,29 @@ public class DisplayUnitSpawner : MonoBehaviour
         var go = Instantiate(swarmUnit.unitType.Prefab, spawnPoint.position, spawnPoint.rotation, inactiveHolder.transform);
 
         var allScripts = go.GetComponentsInChildren<MonoBehaviour>(true);
+
         foreach (var script in allScripts)
-        {
-            DestroyImmediate(script); 
-        }
+            DestroyImmediate(script);
 
         var agent = go.GetComponent<UnityEngine.AI.NavMeshAgent>();
-        if (agent != null) DestroyImmediate(agent);
+
+        if (agent != null)
+            DestroyImmediate(agent);
 
         var colliders = go.GetComponentsInChildren<Collider>(true);
+
         foreach (var col in colliders)
-        {
             DestroyImmediate(col);
-        }
 
         go.transform.SetParent(unitsParent != null ? unitsParent : spawnPoint);
         go.SetActive(true);
 
-        Destroy(inactiveHolder); 
+        Destroy(inactiveHolder);
 
         currentSpawnIndex++;
+
+        return go.transform;
     }
+
+    #endregion
 }

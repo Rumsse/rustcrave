@@ -45,7 +45,11 @@ public class UIManager : MonoBehaviour
         rightPanelSlot.pickingMode = PickingMode.Ignore;
         eventPanelLayer.pickingMode = PickingMode.Ignore;
 
-        root.Q<Button>("btn-craft").clicked += () => TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
+        root.Q<Button>("btn-craft").clicked += () =>
+        {
+            TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
+            mainCraftController.NotifyPanelOpened();
+        };
         root.Q<Button>("btn-swarm").clicked += () => TogglePanel("swarm-panel", swarmPanel, leftPanelSlot);
         root.Q<Button>("btn-choose-path").clicked += () => TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
 
