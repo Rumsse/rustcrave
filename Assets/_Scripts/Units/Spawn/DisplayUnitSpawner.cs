@@ -10,6 +10,8 @@ public class DisplayUnitSpawner : MonoBehaviour
     [SerializeField] Transform unitsParent;
     [SerializeField] List<Transform> spawnPoints = new();
 
+    readonly Dictionary<SwarmUnitsData, Transform> spawnedModels = new();
+
     int currentSpawnIndex = 0;
 
     #region Unity Lifecycle
@@ -54,6 +56,14 @@ public class DisplayUnitSpawner : MonoBehaviour
             OnNewUnitSpawned?.Invoke(spawnedUnit);
     }
 
+    public Transform GetUnitTransform(SwarmUnitsData unitData)
+    {
+        if (unitData != null && spawnedModels.TryGetValue(unitData, out Transform t))
+            return t;
+
+        return null;
+    }
+
     Transform SpawnSingleUnit(SwarmUnitsData swarmUnit)
     {
         if (currentSpawnIndex >= spawnPoints.Count)
@@ -87,6 +97,8 @@ public class DisplayUnitSpawner : MonoBehaviour
         Destroy(inactiveHolder);
 
         currentSpawnIndex++;
+
+        spawnedModels[swarmUnit] = go.transform;
 
         return go.transform;
     }

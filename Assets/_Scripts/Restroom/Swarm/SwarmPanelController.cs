@@ -1,9 +1,15 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class SwarmPanelController : MonoBehaviour
 {
+    public event Action OnSwarmPanelOpened;
+    public event Action OnSwarmPanelClosed;
+    public event Action<SwarmUnitsData> OnUnitInfoOpened;
+    public event Action OnUnitInfoClosed;
+
     [SerializeField] SwarmState swarmState;
     [SerializeField] VisualTreeAsset unitSlotTemplate;
     [SerializeField] VisualTreeAsset unitInfoPanelAsset;
@@ -74,6 +80,9 @@ public class SwarmPanelController : MonoBehaviour
         root.schedule.Execute(UpdateStats).Every(100);
     }
 
+    public void NotifyPanelOpened() => OnSwarmPanelOpened?.Invoke();
+    public void NotifyPanelClosed() => OnSwarmPanelClosed?.Invoke();
+
     void OnDisable()
     {
         if (swarmState == null)
@@ -128,6 +137,8 @@ public class SwarmPanelController : MonoBehaviour
 
         if (unitInfoPanelController != null)
             unitInfoPanelController.OpenPanel(unitData);
+
+        OnUnitInfoOpened?.Invoke(unitData);
     }
 
     void CloseCurrentTab()
@@ -142,6 +153,8 @@ public class SwarmPanelController : MonoBehaviour
             unitInfoPanelController.ClosePanel();
 
         activeTabKey = null;
+
+        OnUnitInfoClosed?.Invoke();
     }
 
     void ResetPanel(DetachFromPanelEvent evt)

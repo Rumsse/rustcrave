@@ -48,9 +48,23 @@ public class UIManager : MonoBehaviour
         root.Q<Button>("btn-craft").clicked += () =>
         {
             TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
-            mainCraftController.NotifyPanelOpened();
+
+            if (activePanelKey == "main-craft-panel")
+                mainCraftController.NotifyPanelOpened();
+            else
+                mainCraftController.NotifyPanelClosed();
         };
-        root.Q<Button>("btn-swarm").clicked += () => TogglePanel("swarm-panel", swarmPanel, leftPanelSlot);
+
+        root.Q<Button>("btn-swarm").clicked += () =>
+        {
+            TogglePanel("swarm-panel", swarmPanel, leftPanelSlot);
+
+            if (activePanelKey == "swarm-panel")
+                swarmPanelController.NotifyPanelOpened();
+            else
+                swarmPanelController.NotifyPanelClosed();
+        };
+
         root.Q<Button>("btn-choose-path").clicked += () => TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
 
         root.RegisterCallback<PointerDownEvent>(OnScreenClicked, TrickleDown.TrickleDown);
@@ -128,6 +142,12 @@ public class UIManager : MonoBehaviour
     {
         if (activePanelKey == null)
             return;
+
+        if (activePanelKey == "main-craft-panel")
+            mainCraftController.NotifyPanelClosed();
+
+        if (activePanelKey == "swarm-panel")
+            swarmPanelController.NotifyPanelClosed();
 
         if (panelCache.TryGetValue(activePanelKey, out var panel))
             panel.RemoveFromHierarchy();

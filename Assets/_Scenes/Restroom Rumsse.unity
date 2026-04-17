@@ -2532,6 +2532,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 901794516}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1198212857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1198212858}
+  m_Layer: 0
+  m_Name: Swarm Centre
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1198212858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198212857}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.12, y: 5.18, z: 40.93}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1227357242
 GameObject:
   m_ObjectHideFlags: 0
@@ -4046,10 +4077,16 @@ MonoBehaviour:
   mainCamera: {fileID: 1830822325}
   unitSpawner: {fileID: 1435208050}
   craftController: {fileID: 810971829}
+  swarmController: {fileID: 2140184852}
   robotZoomOffset: {x: 0, y: 1.5, z: 3}
   robotFramingOffset: {x: -1, y: 1.5, z: 0}
   playerZoomOffset: {x: 0, y: 1.5, z: 2.5}
   playerFramingOffset: {x: 1, y: 1, z: 0}
+  swarmCenter: {fileID: 1198212858}
+  swarmZoomOffset: {x: 0, y: 2.5, z: 0.3}
+  swarmFramingOffset: {x: -1, y: 2.3, z: -0.15}
+  unitZoomOffset: {x: 0, y: 1.15, z: 2}
+  unitFramingOffset: {x: 0.75, y: 0.8, z: 0}
   transitionSpeed: 5
 --- !u!1 &1851331453
 GameObject:
@@ -5076,3 +5113,4 @@ SceneRoots:
   - {fileID: 2089529408}
   - {fileID: 828975490}
   - {fileID: 2180056445798802474}
+  - {fileID: 1198212858}

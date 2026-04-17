@@ -65,6 +65,7 @@ public class MainCraftController : MonoBehaviour
     }
 
     public void NotifyPanelOpened() => OnCraftPanelOpened?.Invoke();
+    public void NotifyPanelClosed() => OnCraftPanelClosed?.Invoke();
 
     #endregion
 

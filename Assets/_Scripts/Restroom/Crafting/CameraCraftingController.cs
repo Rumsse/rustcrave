@@ -6,14 +6,24 @@ public class CameraCraftingController : MonoBehaviour
     [SerializeField] Camera mainCamera;
     [SerializeField] DisplayUnitSpawner unitSpawner;
     [SerializeField] MainCraftController craftController;
+    [SerializeField] SwarmPanelController swarmController;
 
-    [Header("Robot Camera Positioning")]
+    [Header("Robot Crafting Zoom")]
     [SerializeField] Vector3 robotZoomOffset = new(0, 1.5f, 3f);
     [SerializeField] Vector3 robotFramingOffset = new(-1f, 1.5f, 0f);
 
-    [Header("Player Camera Positioning")]
+    [Header("Player Crafting Zoom")]
     [SerializeField] Vector3 playerZoomOffset = new(0, 1.5f, 4f);
     [SerializeField] Vector3 playerFramingOffset = new(-1.5f, 1.5f, 0f);
+
+    [Header("Swarm Overview Zoom")]
+    [SerializeField] Transform swarmCenter;
+    [SerializeField] Vector3 swarmZoomOffset = new(0, 6f, 12f);
+    [SerializeField] Vector3 swarmFramingOffset = new(-2f, 0, 0f);
+
+    [Header("Swarm Unit Info Zoom")]
+    [SerializeField] Vector3 unitZoomOffset = new(0, 1.5f, 3f);
+    [SerializeField] Vector3 unitFramingOffset = new(-1f, 1.5f, 0f);
 
     [Space(10)]
     [SerializeField] float transitionSpeed = 5f;
@@ -21,7 +31,9 @@ public class CameraCraftingController : MonoBehaviour
     Vector3 originalPosition;
     Quaternion originalRotation;
     Coroutine transitionCoroutine;
-    bool isZoomedIn = false;
+
+    bool isCraftPanelOpen = false;
+    bool isSwarmPanelOpen = false;
 
     #region Initialization
 
@@ -34,45 +46,117 @@ public class CameraCraftingController : MonoBehaviour
     void OnEnable()
     {
         if (unitSpawner != null)
-            unitSpawner.OnNewUnitSpawned += ZoomToRobot;
+            unitSpawner.OnNewUnitSpawned += ZoomToCraftedRobot;
 
         if (craftController != null)
         {
-            craftController.OnCraftPanelClosed += ResetCamera;
-            craftController.OnCraftPanelOpened += ZoomToPlayer;
+            craftController.OnCraftPanelClosed += HandleCraftClosed;
+            craftController.OnCraftPanelOpened += HandleCraftOpened;
+        }
+
+        if (swarmController != null)
+        {
+            swarmController.OnSwarmPanelOpened += HandleSwarmOpened;
+            swarmController.OnSwarmPanelClosed += HandleSwarmClosed;
+            swarmController.OnUnitInfoOpened += HandleUnitInfoOpened;
+            swarmController.OnUnitInfoClosed += HandleUnitInfoClosed;
         }
     }
 
     void OnDisable()
     {
         if (unitSpawner != null)
-            unitSpawner.OnNewUnitSpawned -= ZoomToRobot;
+            unitSpawner.OnNewUnitSpawned -= ZoomToCraftedRobot;
 
         if (craftController != null)
         {
-            craftController.OnCraftPanelClosed -= ResetCamera;
-            craftController.OnCraftPanelOpened -= ZoomToPlayer;
+            craftController.OnCraftPanelClosed -= HandleCraftClosed;
+            craftController.OnCraftPanelOpened -= HandleCraftOpened;
         }
+
+        if (swarmController != null)
+        {
+            swarmController.OnSwarmPanelOpened -= HandleSwarmOpened;
+            swarmController.OnSwarmPanelClosed -= HandleSwarmClosed;
+            swarmController.OnUnitInfoOpened -= HandleUnitInfoOpened;
+            swarmController.OnUnitInfoClosed -= HandleUnitInfoClosed;
+        }
+    }
+
+    #endregion
+
+    #region Event Handlers
+
+    void HandleCraftOpened()
+    {
+        SaveOriginalPosition();
+        isCraftPanelOpen = true;
+        ZoomToPlayer();
+    }
+
+    void HandleCraftClosed()
+    {
+        isCraftPanelOpen = false;
+        TryResetCamera();
+    }
+
+    void HandleSwarmOpened()
+    {
+        SaveOriginalPosition();
+        isSwarmPanelOpen = true;
+        ZoomToSwarmOverview();
+    }
+
+    void HandleSwarmClosed()
+    {
+        isSwarmPanelOpen = false;
+        TryResetCamera();
+    }
+
+    void HandleUnitInfoOpened(SwarmUnitsData unit)
+    {
+        if (!isSwarmPanelOpen) return;
+
+        ZoomToSpecificUnit(unit);
+    }
+
+    void HandleUnitInfoClosed()
+    {
+        if (!isSwarmPanelOpen) return;
+
+        ZoomToSwarmOverview();
     }
 
     #endregion
 
     #region Camera Logic
 
-    void ZoomToRobot(Transform target) => ExecuteZoom(target, robotZoomOffset, robotFramingOffset);
+    void ZoomToCraftedRobot(Transform target) => ExecuteZoom(target, robotZoomOffset, robotFramingOffset);
 
     void ZoomToPlayer()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
 
         if (playerObj == null)
-        {
-            Debug.LogWarning("Player object with tag 'Player' not found.");
             return;
-        }
 
-        Transform playerTarget = playerObj.transform;
-        ExecuteZoom(playerTarget, playerZoomOffset, playerFramingOffset);
+        ExecuteZoom(playerObj.transform, playerZoomOffset, playerFramingOffset);
+    }
+
+    void ZoomToSwarmOverview()
+    {
+        if (swarmCenter == null)
+            return;
+
+        ExecuteZoom(swarmCenter, swarmZoomOffset, swarmFramingOffset);
+    }
+
+    void ZoomToSpecificUnit(SwarmUnitsData unitData)
+    {
+        Transform unitTransform = unitSpawner.GetUnitTransform(unitData);
+
+        if (unitTransform != null)
+            ExecuteZoom(unitTransform, unitZoomOffset, unitFramingOffset);
     }
 
     void ExecuteZoom(Transform target, Vector3 currentZoomOffset, Vector3 currentFramingOffset)
@@ -80,33 +164,31 @@ public class CameraCraftingController : MonoBehaviour
         if (target == null)
             return;
 
-        SaveOriginalCameraTransform();
-
         Vector3 targetPos = target.position + target.TransformDirection(currentZoomOffset);
         Vector3 lookTarget = target.position + target.TransformDirection(currentFramingOffset);
+        Vector3 lookDirection = lookTarget - targetPos;
 
-        Quaternion targetRot = Quaternion.LookRotation(lookTarget - targetPos);
+        if (lookDirection == Vector3.zero)
+            lookDirection = target.forward;
+
+        Quaternion targetRot = Quaternion.LookRotation(lookDirection);
 
         StartTransition(targetPos, targetRot);
     }
 
-    void SaveOriginalCameraTransform()
+    void SaveOriginalPosition()
     {
-        if (isZoomedIn)
-            return;
-
-        originalPosition = mainCamera.transform.position;
-        originalRotation = mainCamera.transform.rotation;
-        isZoomedIn = true;
+        if (!isCraftPanelOpen && !isSwarmPanelOpen)
+        {
+            originalPosition = mainCamera.transform.position;
+            originalRotation = mainCamera.transform.rotation;
+        }
     }
 
-    void ResetCamera()
+    void TryResetCamera()
     {
-        if (!isZoomedIn)
-            return;
-
-        StartTransition(originalPosition, originalRotation);
-        isZoomedIn = false;
+        if (!isCraftPanelOpen && !isSwarmPanelOpen)
+            StartTransition(originalPosition, originalRotation);
     }
 
     void StartTransition(Vector3 targetPos, Quaternion targetRot)
