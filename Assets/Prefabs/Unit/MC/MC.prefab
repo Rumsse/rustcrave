@@ -451,7 +451,10 @@ MonoBehaviour:
   switchKey: 101
   conductorBodyPrefab: {fileID: 3785565532985694201}
   spiderDropForwardOffset: 2
+  jumpArcHeight: 0
   hatSlot: {fileID: 2374922274528656194}
+  returnSpeedMultiplier: 6
+  arrivalThreshold: 2
   conductorVisual: {fileID: 3785565532985694201}
   spiderVisual: {fileID: 8398009392491789184}
   conductorStats: {fileID: 11400000, guid: 3bd52a4bb59cb7e4ea6226b709332bb3, type: 2}
@@ -460,6 +463,7 @@ MonoBehaviour:
   connectTriggerName: Connect
   bodyDropTriggerName: Down
   bodyRiseTriggerName: Up
+  walkingBoolName: IsWalking
   connectAnimationDuration: 0.5
   disconnectAnimationDuration: 0.5
 --- !u!114 &6033899236461606731
