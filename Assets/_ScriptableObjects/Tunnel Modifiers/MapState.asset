@@ -18,48 +18,95 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 069328bb56aa91c4ebe23918f08f63e8, type: 2}
   - {fileID: 11400000, guid: a0286f2fba7535647be05bd4ae42d67b, type: 2}
   - {fileID: 11400000, guid: 6cc35b5e736044f4c857e059d238d3a8, type: 2}
-  totalRows: 4
-  totalColumns: 3
-  currentRow: -1
-  currentColumn: -1
+  minRows: 4
+  maxRows: 5
+  minCols: 4
+  maxCols: 5
+  minTotalNodes: 13
+  maxTotalNodes: 14
   nodes:
-  - row: 0
-    column: 0
-    modifierIndex: 0
-    connectedToColumns: 00000000
-  - row: 0
-    column: 1
-    modifierIndex: 3
-    connectedToColumns: 01000000
-  - row: 0
-    column: 2
-    modifierIndex: 1
-    connectedToColumns: 02000000
-  - row: 1
-    column: 0
-    modifierIndex: 3
-    connectedToColumns: 00000000
-  - row: 1
-    column: 1
-    modifierIndex: 3
-    connectedToColumns: 01000000
-  - row: 1
-    column: 2
-    modifierIndex: 1
-    connectedToColumns: 02000000
-  - row: 2
-    column: 0
-    modifierIndex: 2
-    connectedToColumns: 01000000
-  - row: 2
-    column: 1
+  - id: 19b1b00e-11f6-4937-ad5f-2a9527c46102
+    row: 0
+    columnPosition: 0
     modifierIndex: 4
-    connectedToColumns: 01000000
-  - row: 2
-    column: 2
+    connectedToNodes:
+    - 6633f54e-da3b-40e7-ba99-1e7d70f097ed
+  - id: dc44b1a7-cad6-4e81-b8af-8a44aae66c5f
+    row: 0
+    columnPosition: 1
+    modifierIndex: 4
+    connectedToNodes:
+    - 6633f54e-da3b-40e7-ba99-1e7d70f097ed
+  - id: 6cdc5468-12d1-4cf6-b3ea-48adbea1b597
+    row: 0
+    columnPosition: 2
+    modifierIndex: 1
+    connectedToNodes:
+    - a170a1de-8ac5-4087-8269-fe8c271d8f4f
+  - id: d2334ca4-7d93-4b0f-a987-a487ab38aa4b
+    row: 0
+    columnPosition: 3
     modifierIndex: 0
-    connectedToColumns: 01000000
-  - row: 3
-    column: 1
+    connectedToNodes:
+    - 05ccaaca-381f-4304-b9f1-d9b2108bd23e
+    - a170a1de-8ac5-4087-8269-fe8c271d8f4f
+  - id: 6633f54e-da3b-40e7-ba99-1e7d70f097ed
+    row: 1
+    columnPosition: 0.5
+    modifierIndex: 1
+    connectedToNodes:
+    - 4d3b4f28-1447-4d7f-ac61-405e00bf9032
+    - c310851c-0089-4971-809c-ee6059222e30
+  - id: a170a1de-8ac5-4087-8269-fe8c271d8f4f
+    row: 1
+    columnPosition: 1.5
     modifierIndex: 0
-    connectedToColumns: 
+    connectedToNodes:
+    - c310851c-0089-4971-809c-ee6059222e30
+    - f8c7adbc-4bd8-43aa-a8ab-f0fed216d008
+  - id: 05ccaaca-381f-4304-b9f1-d9b2108bd23e
+    row: 1
+    columnPosition: 2.5
+    modifierIndex: 3
+    connectedToNodes:
+    - f8c7adbc-4bd8-43aa-a8ab-f0fed216d008
+  - id: 4d3b4f28-1447-4d7f-ac61-405e00bf9032
+    row: 2
+    columnPosition: 0
+    modifierIndex: 2
+    connectedToNodes:
+    - 65b9f5ed-bb0d-41f8-bf2f-1a12eed5974f
+    - 5cfe1ebe-6c4a-4942-ae30-b2fe933a2198
+  - id: c310851c-0089-4971-809c-ee6059222e30
+    row: 2
+    columnPosition: 1
+    modifierIndex: 4
+    connectedToNodes:
+    - 65b9f5ed-bb0d-41f8-bf2f-1a12eed5974f
+  - id: f8c7adbc-4bd8-43aa-a8ab-f0fed216d008
+    row: 2
+    columnPosition: 2
+    modifierIndex: 1
+    connectedToNodes:
+    - 5cfe1ebe-6c4a-4942-ae30-b2fe933a2198
+    - 65b9f5ed-bb0d-41f8-bf2f-1a12eed5974f
+  - id: 65b9f5ed-bb0d-41f8-bf2f-1a12eed5974f
+    row: 3
+    columnPosition: 1
+    modifierIndex: 3
+    connectedToNodes:
+    - 8e02613e-0233-4b5c-89d8-121139770b4c
+  - id: 5cfe1ebe-6c4a-4942-ae30-b2fe933a2198
+    row: 3
+    columnPosition: 2
+    modifierIndex: 2
+    connectedToNodes:
+    - 8e02613e-0233-4b5c-89d8-121139770b4c
+  - id: 8e02613e-0233-4b5c-89d8-121139770b4c
+    row: 4
+    columnPosition: 1.5
+    modifierIndex: 3
+    connectedToNodes: []
+  scannedNodes: []
+  visitedNodes: []
+  currentNodeId: 

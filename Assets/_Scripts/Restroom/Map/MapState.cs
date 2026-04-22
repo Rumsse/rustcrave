@@ -1,66 +1,82 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MapState", menuName = "Restroom/Map/Map State")]
 public class MapState : ScriptableObject
 {
     [SerializeField] List<PathModifierData> availableModifiers = new();
-    [SerializeField] int totalRows = 4;
-    [SerializeField] int totalColumns = 3;
 
-    [HideInInspector] public int currentRow = -1;
-    [HideInInspector] public int currentColumn = -1;
+    [SerializeField] int minRows = 4;
+    [SerializeField] int maxRows = 6;
+    [SerializeField] int minCols = 3;
+    [SerializeField] int maxCols = 5;
+
+    [SerializeField] int minTotalNodes = 11;
+    [SerializeField] int maxTotalNodes = 14;
+
     [HideInInspector] public List<PathNodeData> nodes = new();
-    [HideInInspector] public HashSet<string> scannedNodes = new();
+    [HideInInspector] public List<string> scannedNodes = new();
+    [HideInInspector] public List<string> visitedNodes = new();
+    [HideInInspector] public string currentNodeId = string.Empty;
 
-    public int TotalRows => totalRows;
-    public int TotalColumns => totalColumns;
+    public int TotalRows => nodes.Count > 0 ? nodes.Max(n => n.row) + 1 : 0;
+    public int TotalColumns => maxCols;
+
+    public int currentRow => GetCurrentRow();
+
+    int GetCurrentRow()
+    {
+        if (string.IsNullOrEmpty(currentNodeId))
+            return -1;
+
+        var node = nodes.FirstOrDefault(n => n.id == currentNodeId);
+        return node?.row ?? -1;
+    }
 
     public void Initialize()
     {
-        currentRow = -1;
-        currentColumn = -1;
-        nodes = MapGenerator.Generate(totalRows, totalColumns, availableModifiers.Count);
+        nodes = MapGenerator.Generate(minRows, maxRows, minCols, maxCols, minTotalNodes, maxTotalNodes, availableModifiers.Count);
         scannedNodes.Clear();
+        visitedNodes.Clear();
+        currentNodeId = string.Empty;
     }
 
-    public PathModifierData GetModifier(PathNodeData node) =>
-        availableModifiers[node.modifierIndex];
-
-    public List<PathNodeData> GetNodesAtRow(int row) =>
-        nodes.FindAll(n => n.row == row);
+    public PathModifierData GetModifier(PathNodeData node) => availableModifiers[node.modifierIndex];
 
     public List<PathNodeData> GetAvailableNodes()
     {
-        int nextRow = currentRow + 1;
-
-        if (nextRow >= totalRows)
+        if (nodes.Count == 0)
             return new List<PathNodeData>();
 
-        var nextNodes = GetNodesAtRow(nextRow);
+        if (string.IsNullOrEmpty(currentNodeId))
+            return nodes.Where(n => n.row == 0).ToList();
 
-        if (currentRow < 0)
-            return nextNodes;
+        var currentNode = nodes.FirstOrDefault(n => n.id == currentNodeId);
 
-        var currentNode = nodes.Find(n => n.row == currentRow && n.column == currentColumn);
-        if (currentNode == null)
+        if (currentNode == null || currentNode.connectedToNodes == null)
             return new List<PathNodeData>();
 
-        return nextNodes.FindAll(n =>
-            System.Array.Exists(currentNode.connectedToColumns, c => c == n.column));
+        return nodes.Where(n => currentNode.connectedToNodes.Contains(n.id)).ToList();
     }
 
     public void MoveToNode(PathNodeData node)
     {
-        currentRow = node.row;
-        currentColumn = node.column;
+        currentNodeId = node.id;
+
+        if (!visitedNodes.Contains(node.id))
+            visitedNodes.Add(node.id);
+
+        Debug.Log($"[MapState] Moved to: {node.id.Substring(0, 8)}...");
     }
 
-    public bool IsNodeScanned(PathNodeData node) =>
-        scannedNodes.Contains(NodeKey(node));
+    public bool IsVisited(PathNodeData node) => visitedNodes.Contains(node.id);
 
-    public void ScanNode(PathNodeData node) =>
-        scannedNodes.Add(NodeKey(node));
+    public bool IsNodeScanned(PathNodeData node) => scannedNodes.Contains(node.id);
 
-    static string NodeKey(PathNodeData node) => $"{node.row}-{node.column}";
+    public void ScanNode(PathNodeData node)
+    {
+        if (!scannedNodes.Contains(node.id))
+            scannedNodes.Add(node.id);
+    }
 }

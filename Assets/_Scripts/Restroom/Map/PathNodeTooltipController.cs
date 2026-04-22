@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -76,8 +77,18 @@ public class PathNodeTooltipController
     void UpdateContent()
     {
         bool isScanned = currentMapState.IsNodeScanned(currentNode);
+        bool isVisited = currentMapState.IsVisited(currentNode);
+        bool isCurrent = currentNode.id == currentMapState.currentNodeId;
+        bool isBoss = currentNode.row == currentMapState.TotalRows - 1;
+        bool isIdentityKnown = isScanned || isVisited || isCurrent;
 
-        if (isScanned)
+        if (isBoss)
+        {
+            titleLabel.text = "BOSS";
+            actionLabel.text = "FINAL ENCOUNTER";
+            costLabel.text = "";
+        }
+        else if (isIdentityKnown)
         {
             var modifier = currentMapState.GetModifier(currentNode);
             titleLabel.text = modifier.DisplayName.ToUpper();
@@ -91,5 +102,4 @@ public class PathNodeTooltipController
             costLabel.text = "COSTS 1 PULSITE";
         }
     }
-
 }

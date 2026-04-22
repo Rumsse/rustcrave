@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,6 +6,9 @@ using UnityEngine.UIElements;
 
 public class MainCraftController : MonoBehaviour
 {
+    public event Action OnCraftPanelClosed;
+    public event Action OnCraftPanelOpened;
+
     [SerializeField] SwarmState swarmState;
     [SerializeField] GlobalInventorySO globalInventory;
     [SerializeField] GadgetsGlobalInventory gadgetsGlobalInventory;
@@ -14,6 +18,7 @@ public class MainCraftController : MonoBehaviour
     [SerializeField] RobotsCraftController robotsCraftController;
     [SerializeField] GadgetsCraftController gadgetsCraftController;
     [SerializeField] VisualTreeAsset unitContainer;
+    [SerializeField] ParticleSystem gadgetCraftParticle;
 
     VisualElement rootElement;
     VisualElement leftBar;
@@ -54,8 +59,13 @@ public class MainCraftController : MonoBehaviour
             btnBack.style.display = DisplayStyle.None;
         }
 
+        rootElement.RegisterCallback<DetachFromPanelEvent>(evt => CloseCurrentTab());
+
         UpdateSwarmUI(root);
     }
+
+    public void NotifyPanelOpened() => OnCraftPanelOpened?.Invoke();
+    public void NotifyPanelClosed() => OnCraftPanelClosed?.Invoke();
 
     #endregion
 
@@ -117,6 +127,8 @@ public class MainCraftController : MonoBehaviour
 
         activeTabKey = null;
         UpdateButtonStyles(string.Empty);
+
+        OnCraftPanelClosed?.Invoke();
     }
 
     void UpdateButtonStyles(string activeKey)
@@ -147,6 +159,9 @@ public class MainCraftController : MonoBehaviour
             return;
 
         gadgetsGlobalInventory.AddGadget(gadget);
+
+        if (gadgetCraftParticle != null)
+            gadgetCraftParticle.Play();
     }
 
     void AddSingleUnitToUI(SwarmUnitsData unitData)

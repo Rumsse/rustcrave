@@ -1,16 +1,18 @@
 [System.Serializable]
 public class PathNodeData
 {
+    public string id;
     public int row;
-    public int column;
+    public float columnPosition;
     public int modifierIndex;
-    public int[] connectedToColumns;
+    public string[] connectedToNodes;
 
-    public PathNodeData(int row, int column, int modifierIndex, int[] connectedToColumns)
+    public PathNodeData(int row, float columnPosition, int modifierIndex)
     {
+        this.id = System.Guid.NewGuid().ToString();
         this.row = row;
-        this.column = column;
+        this.columnPosition = columnPosition;
         this.modifierIndex = modifierIndex;
-        this.connectedToColumns = connectedToColumns;
+        this.connectedToNodes = new string[0];
     }
 }
