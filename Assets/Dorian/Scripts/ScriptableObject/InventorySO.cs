@@ -66,6 +66,19 @@ public class InventorySO : ScriptableObject
         return false;
     }
 
+    // Logic to steal random item from inventory, used in steal attack
+    public ItemSO StealRandomItem()
+    {
+        if (inventoryItemList.Count == 0)
+            return null;
+
+        int randomIndex = UnityEngine.Random.Range(0, inventoryItemList.Count);
+        ItemSO stolenItem = inventoryItemList[randomIndex].item;
+
+        RemoveItem(stolenItem, 1);
+        return stolenItem;
+    }
+
     public int GetTotalAmount()
     {
         int total = 0;
