@@ -23,6 +23,8 @@ public class Unit : UnitBase
     public bool IsMainCharacter => isMainCharacter;
     public bool IsEnergyDrainDoubled { get; set; }
 
+    public UnitInventory Inventory => inventory; // Expose inventory to steal from it
+
     [SerializeField] private bool isMainCharacter;
     [SerializeField] private string commandTriggerName;
     [SerializeField] private UnitInventory inventory;
