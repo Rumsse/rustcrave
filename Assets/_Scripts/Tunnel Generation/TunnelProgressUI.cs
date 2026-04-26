@@ -132,7 +132,7 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     void UpdateUIInfo()
     {
-        int currentStage = mapState.currentRow + 1;
+        int currentStage = mapState.CurrentRow + 1;
         string modifierName = activeModifier.current != null ? activeModifier.current.name : "Standard";
 
         stageInfoText.text = $"CAVE {currentStage} - {modifierName}";

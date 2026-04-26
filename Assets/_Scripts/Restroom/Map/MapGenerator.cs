@@ -4,14 +4,14 @@ using UnityEngine;
 
 public static class MapGenerator
 {
-    public static List<PathNodeData> Generate(int minRows, int maxRows, int minCols, int maxCols, int minTotalNodes, int maxTotalNodes, int modifierCount)
+    public static List<PathNodeData> Generate(int minRows, int maxRows, int minColumns, int maxColumns, int minTotalNodes, int maxTotalNodes, int modifierCount)
     {
         List<PathNodeData> bestGraph = null;
-        int closestDiff = int.MaxValue;
+        int closestDifference = int.MaxValue;
 
         for (int attempt = 0; attempt < 50; attempt++)
         {
-            var nodes = GenerateRawGraph(minRows, maxRows, minCols, maxCols, modifierCount);
+            var nodes = GenerateRawGraph(minRows, maxRows, minColumns, maxColumns, modifierCount);
             PruneDeadEnds(nodes);
 
             int count = nodes.Count;
@@ -19,10 +19,10 @@ public static class MapGenerator
             if (count >= minTotalNodes && count <= maxTotalNodes)
                 return nodes;
 
-            int diff = Mathf.Min(Mathf.Abs(count - minTotalNodes), Mathf.Abs(count - maxTotalNodes));
-            if (diff < closestDiff)
+            int difference = Mathf.Min(Mathf.Abs(count - minTotalNodes), Mathf.Abs(count - maxTotalNodes));
+            if (difference < closestDifference)
             {
-                closestDiff = diff;
+                closestDifference = difference;
                 bestGraph = nodes;
             }
         }
@@ -33,73 +33,65 @@ public static class MapGenerator
         return bestGraph;
     }
 
-    static List<PathNodeData> GenerateRawGraph(int minRows, int maxRows, int minCols, int maxCols, int modifierCount)
+    static List<PathNodeData> GenerateRawGraph(int minRows, int maxRows, int minColumns, int maxColumns, int modifierCount)
     {
         int rows = Random.Range(minRows, maxRows + 1);
-        int cols = Random.Range(minCols, maxCols + 1);
+        int columns = Random.Range(minColumns, maxColumns + 1);
         var nodes = new List<PathNodeData>();
         var nodesByRow = new Dictionary<int, List<PathNodeData>>();
 
-        for (int r = 0; r < rows; r++)
+        for (int rowIndex = 0; rowIndex < rows; rowIndex++)
         {
-            nodesByRow[r] = new List<PathNodeData>();
-            int nodesInRow = (r == rows - 1) ? 1 : Random.Range(2, cols + 1);
-            float centerColumnIndex = (cols - 1) / 2f;
+            nodesByRow[rowIndex] = new List<PathNodeData>();
+            int nodeCountInRow = (rowIndex == rows - 1) ? 1 : Random.Range(2, columns + 1);
+            float centerColumnIndex = (columns - 1) / 2f;
 
-            for (int i = 0; i < nodesInRow; i++)
+            for (int i = 0; i < nodeCountInRow; i++)
             {
-                float colPos;
-                if (r == rows - 1)
-                    colPos = centerColumnIndex;
+                float columnPosition;
+                if (rowIndex == rows - 1)
+                {
+                    columnPosition = centerColumnIndex;
+                }
                 else
                 {
-                    float offsetFromCenter = (i - (nodesInRow - 1) / 2f);
-                    colPos = centerColumnIndex + offsetFromCenter;
+                    float offsetFromCenter = (i - (nodeCountInRow - 1) / 2f);
+                    columnPosition = centerColumnIndex + offsetFromCenter;
                 }
 
-                var node = new PathNodeData(r, colPos, Random.Range(0, modifierCount));
+                var node = new PathNodeData(rowIndex, columnPosition, Random.Range(0, modifierCount));
                 nodes.Add(node);
-                nodesByRow[r].Add(node);
+                nodesByRow[rowIndex].Add(node);
             }
         }
 
-        for (int r = 0; r < rows - 1; r++)
+        for (int rowIndex = 0; rowIndex < rows - 1; rowIndex++)
         {
-            foreach (var node in nodesByRow[r])
+            foreach (var node in nodesByRow[rowIndex])
             {
-                var nextRow = nodesByRow[r + 1];
+                var nextRow = nodesByRow[rowIndex + 1];
                 int connections = Random.Range(1, Mathf.Min(3, nextRow.Count + 1));
 
-                var verticalConns = nextRow
-                    .OrderBy(n => Mathf.Abs(n.columnPosition - node.columnPosition))
+                var verticalConnections = nextRow
+                    .OrderBy(n => Mathf.Abs(n.ColumnPosition - node.ColumnPosition))
                     .Take(connections)
-                    .Select(n => n.id);
+                    .Select(n => n.Id)
+                    .ToList();
 
-                node.connectedToNodes = verticalConns.ToArray();
+                node.OverwriteConnections(verticalConnections);
             }
         }
 
-        for (int r = 1; r < rows - 1; r++)
+        for (int rowIndex = 1; rowIndex < rows - 1; rowIndex++)
         {
-            var rowNodes = nodesByRow[r].OrderBy(n => n.columnPosition).ToList();
+            var rowNodes = nodesByRow[rowIndex].OrderBy(n => n.ColumnPosition).ToList();
 
             for (int i = 0; i < rowNodes.Count - 1; i++)
             {
                 if (Random.value < 0.25f)
                 {
-                    var currentConns = rowNodes[i].connectedToNodes.ToList();
-                    if (!currentConns.Contains(rowNodes[i + 1].id))
-                    {
-                        currentConns.Add(rowNodes[i + 1].id);
-                        rowNodes[i].connectedToNodes = currentConns.ToArray();
-                    }
-
-                    var nextConns = rowNodes[i + 1].connectedToNodes.ToList();
-                    if (!nextConns.Contains(rowNodes[i].id))
-                    {
-                        nextConns.Add(rowNodes[i].id);
-                        rowNodes[i + 1].connectedToNodes = nextConns.ToArray();
-                    }
+                    rowNodes[i].AddConnection(rowNodes[i + 1].Id);
+                    rowNodes[i + 1].AddConnection(rowNodes[i].Id);
                 }
             }
         }
@@ -109,32 +101,37 @@ public static class MapGenerator
 
     static void PruneDeadEnds(List<PathNodeData> nodes)
     {
-        if (nodes.Count == 0) return;
-        int totalRows = nodes.Max(n => n.row) + 1;
-        bool changed;
+        if (nodes.Count == 0)
+            return;
+
+        int totalRows = nodes.Max(n => n.Row) + 1;
+        bool hasChanged;
 
         do
         {
-            changed = false;
-            var validIds = new HashSet<string>(nodes.Select(n => n.id));
+            hasChanged = false;
+            var validIds = new HashSet<string>(nodes.Select(n => n.Id));
 
             foreach (var node in nodes)
             {
-                var validConns = node.connectedToNodes.Where(id => validIds.Contains(id)).ToArray();
-                if (validConns.Length != node.connectedToNodes.Length)
+                var validConnections = node.ConnectedNodeIds.Where(id => validIds.Contains(id)).ToList();
+                if (validConnections.Count != node.ConnectedNodeIds.Count)
                 {
-                    node.connectedToNodes = validConns;
-                    changed = true;
+                    node.OverwriteConnections(validConnections);
+                    hasChanged = true;
                 }
             }
 
-            var hasIncoming = new HashSet<string>(nodes.SelectMany(n => n.connectedToNodes));
-            int removedIn = nodes.RemoveAll(n => n.row > 0 && n.row < totalRows - 1 && !hasIncoming.Contains(n.id));
-            if (removedIn > 0) changed = true;
+            var hasIncoming = new HashSet<string>(nodes.SelectMany(n => n.ConnectedNodeIds));
 
-            int removedOut = nodes.RemoveAll(n => n.row < totalRows - 1 && n.connectedToNodes.Length == 0);
-            if (removedOut > 0) changed = true;
+            int removedIncoming = nodes.RemoveAll(n => n.Row > 0 && n.Row < totalRows - 1 && !hasIncoming.Contains(n.Id));
+            if (removedIncoming > 0)
+                hasChanged = true;
 
-        } while (changed);
+            int removedOutgoing = nodes.RemoveAll(n => n.Row < totalRows - 1 && n.ConnectedNodeIds.Count == 0);
+            if (removedOutgoing > 0)
+                hasChanged = true;
+
+        } while (hasChanged);
     }
 }

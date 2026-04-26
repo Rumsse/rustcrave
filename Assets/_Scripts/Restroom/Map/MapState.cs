@@ -8,75 +8,82 @@ public class MapState : ScriptableObject
     [SerializeField] List<PathModifierData> availableModifiers = new();
 
     [SerializeField] int minRows = 4;
-    [SerializeField] int maxRows = 6;
-    [SerializeField] int minCols = 3;
-    [SerializeField] int maxCols = 5;
+    [SerializeField] int maxRows = 5;
+    [SerializeField] int minColumns = 4;
+    [SerializeField] int maxColumns = 5;
 
     [SerializeField] int minTotalNodes = 11;
     [SerializeField] int maxTotalNodes = 14;
 
-    [HideInInspector] public List<PathNodeData> nodes = new();
-    [HideInInspector] public List<string> scannedNodes = new();
-    [HideInInspector] public List<string> visitedNodes = new();
-    [HideInInspector] public string currentNodeId = string.Empty;
+    [HideInInspector][SerializeField] List<PathNodeData> internalNodes = new();
+    [HideInInspector][SerializeField] List<string> internalScannedNodeIds = new();
+    [HideInInspector][SerializeField] List<string> internalVisitedNodeIds = new();
 
-    public int TotalRows => nodes.Count > 0 ? nodes.Max(n => n.row) + 1 : 0;
-    public int TotalColumns => maxCols;
+    public IReadOnlyList<PathNodeData> Nodes => internalNodes;
+    [field: SerializeField, HideInInspector] public string CurrentNodeId { get; private set; } = string.Empty;
 
-    public int currentRow => GetCurrentRow();
-
-    int GetCurrentRow()
-    {
-        if (string.IsNullOrEmpty(currentNodeId))
-            return -1;
-
-        var node = nodes.FirstOrDefault(n => n.id == currentNodeId);
-        return node?.row ?? -1;
-    }
+    public int TotalRows => internalNodes.Count > 0 ? internalNodes.Max(n => n.Row) + 1 : 0;
+    public int TotalColumns => maxColumns;
+    public int CurrentRow => GetCurrentRow();
+    public int VisitedNodesCount => internalVisitedNodeIds.Count;
 
     public void Initialize()
     {
-        nodes = MapGenerator.Generate(minRows, maxRows, minCols, maxCols, minTotalNodes, maxTotalNodes, availableModifiers.Count);
-        scannedNodes.Clear();
-        visitedNodes.Clear();
-        currentNodeId = string.Empty;
+        internalNodes = MapGenerator.Generate(minRows, maxRows, minColumns, maxColumns, minTotalNodes, maxTotalNodes, availableModifiers.Count);
+        ResetProgress();
     }
 
-    public PathModifierData GetModifier(PathNodeData node) => availableModifiers[node.modifierIndex];
+    public PathModifierData GetModifier(PathNodeData node) => availableModifiers[node.ModifierIndex];
 
-    public List<PathNodeData> GetAvailableNodes()
+    public IReadOnlyList<PathNodeData> GetAvailableNodes()
     {
-        if (nodes.Count == 0)
+        if (internalNodes.Count == 0)
             return new List<PathNodeData>();
 
-        if (string.IsNullOrEmpty(currentNodeId))
-            return nodes.Where(n => n.row == 0).ToList();
+        if (string.IsNullOrEmpty(CurrentNodeId))
+            return internalNodes.Where(n => n.Row == 0).ToList();
 
-        var currentNode = nodes.FirstOrDefault(n => n.id == currentNodeId);
+        var currentNode = internalNodes.FirstOrDefault(n => n.Id == CurrentNodeId);
 
-        if (currentNode == null || currentNode.connectedToNodes == null)
+        if (currentNode == null || currentNode.ConnectedNodeIds == null)
             return new List<PathNodeData>();
 
-        return nodes.Where(n => currentNode.connectedToNodes.Contains(n.id)).ToList();
+        return internalNodes.Where(n => currentNode.ConnectedNodeIds.Contains(n.Id)).ToList();
     }
 
     public void MoveToNode(PathNodeData node)
     {
-        currentNodeId = node.id;
+        CurrentNodeId = node.Id;
 
-        if (!visitedNodes.Contains(node.id))
-            visitedNodes.Add(node.id);
+        if (!internalVisitedNodeIds.Contains(node.Id))
+            internalVisitedNodeIds.Add(node.Id);
 
-        Debug.Log($"[MapState] Moved to: {node.id.Substring(0, 8)}...");
+        Debug.Log($"[MapState] Moved to: {node.Id.Substring(0, 8)}...");
     }
 
-    public bool IsVisited(PathNodeData node) => visitedNodes.Contains(node.id);
+    public bool IsVisited(PathNodeData node) => internalVisitedNodeIds.Contains(node.Id);
 
-    public bool IsNodeScanned(PathNodeData node) => scannedNodes.Contains(node.id);
+    public bool IsNodeScanned(PathNodeData node) => internalScannedNodeIds.Contains(node.Id);
 
     public void ScanNode(PathNodeData node)
     {
-        if (!scannedNodes.Contains(node.id))
-            scannedNodes.Add(node.id);
+        if (!internalScannedNodeIds.Contains(node.Id))
+            internalScannedNodeIds.Add(node.Id);
+    }
+
+    public void ResetProgress()
+    {
+        internalScannedNodeIds.Clear();
+        internalVisitedNodeIds.Clear();
+        CurrentNodeId = string.Empty;
+    }
+
+    int GetCurrentRow()
+    {
+        if (string.IsNullOrEmpty(CurrentNodeId))
+            return -1;
+
+        var node = internalNodes.FirstOrDefault(n => n.Id == CurrentNodeId);
+        return node?.Row ?? -1;
     }
 }

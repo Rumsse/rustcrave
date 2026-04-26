@@ -14,10 +14,7 @@ public class MapStateEditor : Editor
 
         if (GUILayout.Button("Reset to Start"))
         {
-            mapState.scannedNodes.Clear();
-            mapState.visitedNodes.Clear();
-            mapState.currentNodeId = string.Empty;
-
+            mapState.ResetProgress();
             EditorUtility.SetDirty(mapState);
         }
 
@@ -32,7 +29,7 @@ public class MapStateEditor : Editor
 
         EditorGUILayout.Space(5);
         EditorGUILayout.HelpBox(
-            $"Current Node Row: {mapState.currentRow}\nVisited Nodes: {mapState.visitedNodes.Count}\nTotal Generated Nodes: {mapState.nodes.Count}",
+            $"Current Node Row: {mapState.CurrentRow}\nVisited Nodes: {mapState.VisitedNodesCount}\nTotal Generated Nodes: {mapState.Nodes.Count}",
             MessageType.Info
         );
     }

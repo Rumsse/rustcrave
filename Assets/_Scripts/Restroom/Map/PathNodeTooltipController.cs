@@ -78,8 +78,8 @@ public class PathNodeTooltipController
     {
         bool isScanned = currentMapState.IsNodeScanned(currentNode);
         bool isVisited = currentMapState.IsVisited(currentNode);
-        bool isCurrent = currentNode.id == currentMapState.currentNodeId;
-        bool isBoss = currentNode.row == currentMapState.TotalRows - 1;
+        bool isCurrent = currentNode.Id == currentMapState.CurrentNodeId;
+        bool isBoss = currentNode.Row == currentMapState.TotalRows - 1;
         bool isIdentityKnown = isScanned || isVisited || isCurrent;
 
         if (isBoss)
