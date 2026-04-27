@@ -21,11 +21,11 @@ public class SoundtrackPlayer : MonoBehaviour
 
     public void PlayTrack(EventReference eventReference)
     {
-        if (CurrentTrack.isValid())
-        {
-            CurrentTrack.stop(STOP_MODE.ALLOWFADEOUT);
-            CurrentTrack.release();
-        }
+        //if (CurrentTrack.isValid())
+        //{
+        //    CurrentTrack.stop(STOP_MODE.ALLOWFADEOUT);
+        //    CurrentTrack.release();
+        //}
         
         CurrentTrack = RuntimeManager.CreateInstance(eventReference);
         CurrentTrack.start();
