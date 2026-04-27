@@ -4,48 +4,82 @@ using FMODUnity;
 
 public class SnapshotManager : MonoBehaviour
 {
-    [SerializeField]
-    private bool snapshotActivated = false;
+    [Header("Settings")]
+    [SerializeField] private EventReference bossSnapshot;
+    [SerializeField] private EventReference biomSnapshot;
 
+    private FMOD.Studio.EventInstance currentSnapshotInstance;
+    private FMOD.GUID activeSnapshotGuid;
 
-    private FMOD.Studio.EventInstance outsideSnapshotInstance;
-    public EventReference bossSnapshot;
-    public EventReference biomSnapshot;
-
-    void FixedUpdate()
+    void OnEnable()
     {
-        ToggleSnapshotLogic();
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void ToggleSnapshotLogic()
+    void OnDisable()
     {
-        Scene scene = SceneManager.GetActiveScene();
-        string sceneString = scene.ToString();
-        if(sceneString == "BossTest" && !snapshotActivated)
-        {
-            ToggleSnapshot(true);
-        }
-        else if(sceneString != "BossTest" && snapshotActivated)
-        {
-            ToggleSnapshot(false);
-        }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        StopSnapshot(true);
     }
 
-    private void ToggleSnapshot(bool activate)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (activate)
+        string name = scene.name;
+
+        if (name == "BossTest")
         {
-            outsideSnapshotInstance = FMODUnity.RuntimeManager.CreateInstance(bossSnapshot);
-            outsideSnapshotInstance.start();
+            PlaySnapshot(bossSnapshot);
+        }
+        else if (name == "new Tunel Generation Rumsse")
+        {
+            PlaySnapshot(biomSnapshot);
         }
         else
         {
-            if (outsideSnapshotInstance.isValid())
-            {
-                outsideSnapshotInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                outsideSnapshotInstance.release();
-            }
+            StopSnapshot(false);
+            activeSnapshotGuid = new FMOD.GUID();
+            Debug.Log(IsPlaying(currentSnapshotInstance));
         }
-        snapshotActivated = activate;
+    }
+
+    bool IsPlaying(FMOD.Studio.EventInstance instance)
+    {
+        FMOD.Studio.PLAYBACK_STATE state;
+        instance.getPlaybackState(out state);
+        return state != FMOD.Studio.PLAYBACK_STATE.STOPPED;
+    }
+
+    private void PlaySnapshot(EventReference snapshotRef)
+    {
+        if (activeSnapshotGuid.Equals(snapshotRef.Guid))
+        {
+            return;
+        }
+
+        StopSnapshot(false);
+
+        if (!snapshotRef.IsNull)
+        {
+            currentSnapshotInstance = RuntimeManager.CreateInstance(snapshotRef);
+            currentSnapshotInstance.start();
+            activeSnapshotGuid = snapshotRef.Guid;
+        }
+    }
+
+    private void StopSnapshot(bool immediate)
+    {
+        if (currentSnapshotInstance.isValid())
+        {
+            FMOD.Studio.STOP_MODE stopMode = immediate
+                ? FMOD.Studio.STOP_MODE.IMMEDIATE
+                : FMOD.Studio.STOP_MODE.ALLOWFADEOUT;
+
+            currentSnapshotInstance.stop(stopMode);
+
+            currentSnapshotInstance.release();
+
+            currentSnapshotInstance = default;
+            activeSnapshotGuid = new FMOD.GUID();
+        }
     }
 }
