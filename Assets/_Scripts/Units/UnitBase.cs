@@ -69,8 +69,8 @@ public abstract class UnitBase : MonoBehaviour
     [SerializeField] protected Animator animator;
     [SerializeField] protected HealthManager healthManager;
     [SerializeField] protected Transform projectileSpawnT;
-    [SerializeField] protected Transform modelMidPoint; // used for projectiles to aim at model chest / mid point instead of pivot
-    
+    [SerializeField] protected Transform modelMidPoint;
+
     #endregion
 
     #region Private Fields
@@ -87,7 +87,9 @@ public abstract class UnitBase : MonoBehaviour
 
     private int currentAttackIndex;
     private bool _isPerformingSpecial;
-    
+
+    private EventInstance attackSoundInstance;
+
     #endregion
 
     #region Unity Lifecycle
@@ -109,6 +111,15 @@ public abstract class UnitBase : MonoBehaviour
         state?.Tick();
     }
 
+    protected virtual void OnDestroy()
+    {
+        if (attackSoundInstance.isValid())
+        {
+            attackSoundInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            attackSoundInstance.release();
+        }
+    }
+
     #endregion
 
     #region State Management
@@ -124,7 +135,7 @@ public abstract class UnitBase : MonoBehaviour
 
     public virtual void HandleMovement(Vector3 position)
     {
-        AttackTarget = null;
+        StopAttacking();
         SetState(new WalkingState(this, position));
     }
 
@@ -149,18 +160,19 @@ public abstract class UnitBase : MonoBehaviour
             if (TryGetComponent<MantisPassiveAbility>(out var mantisPassive))
             {
                 mantisPassive.ExecuteComboAttack(AttackTarget, currentAttack);
+                PlayAttackSound();
             }
             else
             {
-                AudioManager.PlayOneShot(stats.Sounds.attackSound);
+                PlayAttackSound();
                 currentAttack.Execute(AttackTarget, this);
             }
 
             RollAttack();
             lastAttackTime = Time.time;
-
         }
     }
+    #endregion
 
     #region Attack Chosing
 
@@ -192,15 +204,11 @@ public abstract class UnitBase : MonoBehaviour
         currentAttack = stats.PossibleAttacks[attackIndex];
     }
 
-    #endregion
-
 
     protected virtual bool CanAttack()
     {
         if (Time.time - lastAttackTime < 1 / stats.AttacksPerSecond)
             return false;
-
-        // can add stuff like HasStun() etc.
 
         return true;
     }
@@ -212,8 +220,36 @@ public abstract class UnitBase : MonoBehaviour
 
         AttackTarget = null;
         currentAttack = null;
+
+        StopAttackSound();
     }
 
+    #endregion
+
+    #region Audio Management
+
+    protected void PlayAttackSound()
+    {
+        if (!attackSoundInstance.isValid())
+        {
+            attackSoundInstance = RuntimeManager.CreateInstance(stats.Sounds.attackSound);
+            RuntimeManager.AttachInstanceToGameObject(attackSoundInstance, gameObject);
+        }
+
+        attackSoundInstance.getPlaybackState(out PLAYBACK_STATE playbackState);
+        if (playbackState == PLAYBACK_STATE.STOPPED)
+        {
+            attackSoundInstance.start();
+        }
+    }
+
+    protected void StopAttackSound()
+    {
+        if (attackSoundInstance.isValid())
+        {
+            attackSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+    }
     #endregion
 
     #region Phase Handling
@@ -225,5 +261,4 @@ public abstract class UnitBase : MonoBehaviour
     }
 
     #endregion
-
 }
