@@ -78,6 +78,7 @@ public class MCFormController : MonoBehaviour
         if (currentForm == CharacterForm.Conductor)
         {
             StartCoroutine(SwitchToSpiderRoutine());
+            CheckTutorialSpiderDetachAsync(); 
         }
         else if (currentForm == CharacterForm.Spider)
         {
@@ -277,6 +278,20 @@ public class MCFormController : MonoBehaviour
     public CharacterForm GetCurrentForm()
     {
         return currentForm;
+    }
+
+    private async void CheckTutorialSpiderDetachAsync()
+    {
+        if (TutorialTaskVerifier.Instance == null) return;
+
+        if (TutorialTaskVerifier.Instance.CurrentTask != TutorialTaskType.DetachSpider) return;
+
+        await Awaitable.WaitForSecondsAsync(1f);
+
+        if (TutorialTaskVerifier.Instance != null && TutorialTaskVerifier.Instance.CurrentTask == TutorialTaskType.DetachSpider)
+        {
+            TutorialTaskVerifier.Instance.CompleteTask();
+        }
     }
 }
 

@@ -45,7 +45,7 @@ public class Unit : UnitBase
 
     private IInteractable currentInteractable;
     private IMineable currentMineable;
-    
+
     public void Initialize(SwarmUnitsData data, SwarmState state)
     {
         swarmUnitsData = data;
@@ -239,7 +239,10 @@ public class Unit : UnitBase
         if (currentInteractable is OrePickUp pickup)
         {
             if (inventory.InventorySO.AddItem(pickup.item, pickup.oreValueAmount))
+            {
+                pickup.Interact();
                 Destroy(pickup.gameObject);
+            }
         }
         else
             currentInteractable.Interact();
@@ -395,5 +398,5 @@ public class Unit : UnitBase
     }
 
     #endregion
-    
+
 }
