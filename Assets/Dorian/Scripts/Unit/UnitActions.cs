@@ -7,6 +7,7 @@ public class UnitActions : MonoBehaviour
     [SerializeField] private LayerMask oreLayerMask;
     [SerializeField] private LayerMask unitLayerMask;
     [SerializeField] private LayerMask mouseWorldLayerMask;
+    [SerializeField] private StatsManager statsManager;
 
     [Header("Visual Feedback Prefabs")]
     [SerializeField] private GameObject moveIndicatorPrefab;
