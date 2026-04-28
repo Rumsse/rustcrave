@@ -1,10 +1,13 @@
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class RoombaMovement : MonoBehaviour
 {
     public Transform[] waypoints;
     public float waitAtPoint = 0f;
+    [SerializeField] private EventReference moveSound;
 
     private NavMeshAgent agent;
     private int currentIndex = 0;
@@ -14,12 +17,22 @@ public class RoombaMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         currentIndex = 0;
         StartCoroutine(PatrolLoop());
+        AudioManager.PlayOneShot(moveSound);
     }
 
     void OnDisable()
     {
         StopAllCoroutines();
+        StopSound();
     }
+
+    private void StopSound()
+    {
+        var instance = RuntimeManager.CreateInstance(moveSound);
+        instance.start();
+        instance.release();
+    }
+
 
     System.Collections.IEnumerator PatrolLoop()
     {

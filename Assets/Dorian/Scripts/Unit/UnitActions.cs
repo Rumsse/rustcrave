@@ -21,6 +21,7 @@ public class UnitActions : MonoBehaviour
 
     private bool isDraggingCommand;
 
+
     private void Update()
     {
         if (Time.timeScale == 0f) return;
@@ -89,8 +90,8 @@ public class UnitActions : MonoBehaviour
                 {
                     commandVisualizer.StopVisuals();
                 }
+                AudioManager.PlayOneShot(statsManager.Sounds.commandSound);
 
-                unit.PlayCommandSound();
                 ExecuteCommand();
             }
         }
@@ -157,6 +158,7 @@ public class UnitActions : MonoBehaviour
         if (TryGetTargetUnderMouse<EnemyUnit>(unitLayerMask, out var enemy, out Vector3 hitPoint, out Transform targetTransform))
         {
             unit.MoveToAttack(enemy, hitPoint);
+            AudioManager.PlayOneShot(statsManager.Sounds.attackSound);
             ShowActionFeedback(attackFeedbackPrefab, targetTransform);
             return true;
         }
@@ -177,6 +179,7 @@ public class UnitActions : MonoBehaviour
         if (TryGetTargetUnderMouse<IMineable>(oreLayerMask, out var mineable, out Vector3 hitPoint, out Transform targetTransform))
         {
             unit.MoveToMine(mineable, hitPoint);
+            AudioManager.PlayOneShot(statsManager.Sounds.mineSound);
             ShowActionFeedback(mineFeedbackPrefab, targetTransform);
             return true;
         }

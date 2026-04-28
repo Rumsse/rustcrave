@@ -296,7 +296,7 @@ public class Unit : UnitBase
         agent.stoppingDistance = interactionStoppingDistance;
         agent.SetDestination(position);
     }
-
+    
     public void MoveToMine(IMineable mineable, Vector3 position)
     {
         HandleInterruptCurrentAction();
