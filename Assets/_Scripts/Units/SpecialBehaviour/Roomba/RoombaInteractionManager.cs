@@ -1,8 +1,10 @@
 using UnityEngine;
+using FMODUnity;
 
 public class RoombaInteractionManager : MonoBehaviour
 {
     [SerializeField] private ParticleSystem clickParticles;
+    [SerializeField] private EventReference pettingRoombaSound;
     private Camera mainCamera;
 
     private void Awake() => mainCamera = Camera.main;
@@ -24,6 +26,7 @@ public class RoombaInteractionManager : MonoBehaviour
 
         if (hit.collider.TryGetComponent(out IRoombaInteractable interactable))
             interactable.Interact();
+        AudioManager.PlayOneShot(pettingRoombaSound);
     }
 
     private void PlayParticles(Vector3 position)

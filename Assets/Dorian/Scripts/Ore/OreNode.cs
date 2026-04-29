@@ -28,6 +28,7 @@ public class OreNode : MonoBehaviour, IMineable
 
     public ItemSO Mine()
     {
+        Debug.Log(amount);
         if (amount <= 0)
             return null;
 

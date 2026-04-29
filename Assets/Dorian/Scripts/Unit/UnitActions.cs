@@ -89,8 +89,8 @@ public class UnitActions : MonoBehaviour
                 {
                     commandVisualizer.StopVisuals();
                 }
+                AudioManager.PlayOneShot(statsManager.Sounds.commandSound);
 
-                unit.PlayCommandSound();
                 ExecuteCommand();
             }
         }

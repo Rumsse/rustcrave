@@ -2598,8 +2598,8 @@ MonoBehaviour:
   pulsiteOre: {fileID: 0}
   nodeButtonAsset: {fileID: 9197481963319205126, guid: df6ea6f039476844a8b90d08bd55835b, type: 3}
   tooltipAsset: {fileID: 9197481963319205126, guid: 02252f9e4166ef94ab467c186386ea09, type: 3}
-  mainGameScene: Tunnels Gameplay
-  mainBossScene: Boss Scene
+  mainGameScene: new Tunel Generation Rumsse
+  mainBossScene: BossTest
   unknownIcon: {fileID: 21300000, guid: af265b2fbc97a2045ac7f630d1214705, type: 3}
   bossIcon: {fileID: 21300000, guid: e600b90ad40b15f4386bf18e9dcee3bc, type: 3}
   lineNodePadding: 50
@@ -2878,6 +2878,37 @@ MonoBehaviour:
   - Who will I fight next?
   - dududu... My sweet Balbinka...
   - Hello Stranger. Do you know Balbinka?
+  barksSoundsArray:
+  - Guid:
+      Data1: -2081973908
+      Data2: 1074816213
+      Data3: 194924448
+      Data4: 1386386665
+    Path: event:/Rumba/vx_Where_is_Balbinka
+  - Guid:
+      Data1: -1744683395
+      Data2: 1222243871
+      Data3: 1641951935
+      Data4: 1474057497
+    Path: event:/Rumba/vx_BAALBIIINKAAA
+  - Guid:
+      Data1: -2143113397
+      Data2: 1314806222
+      Data3: -1995461713
+      Data4: 369916577
+    Path: event:/Rumba/vx_Who_will_I_fight_next
+  - Guid:
+      Data1: 38330713
+      Data2: 1290738758
+      Data3: 1980304820
+      Data4: 703084669
+    Path: event:/Rumba/vx_dududu...My_sweet_Balbinka...
+  - Guid:
+      Data1: 868309559
+      Data2: 1176005288
+      Data3: -1028344184
+      Data4: 621855346
+    Path: event:/Rumba/vx_Hello_Stranger._Do_you_know_Balbinka
 --- !u!1 &1392818359
 GameObject:
   m_ObjectHideFlags: 0
@@ -3288,7 +3319,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
   gameSceneName: 
-  tutorialSceneName: 
   optionsPanel: {fileID: 0}
   creditsPanel: {fileID: 0}
   settingsPanel: {fileID: 0}
@@ -3324,6 +3354,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoombaInteractionManager
   clickParticles: {fileID: 0}
+  pettingRoombaSound:
+    Guid:
+      Data1: 368105345
+      Data2: 1152940923
+      Data3: 2139245727
+      Data4: 1967203796
+    Path: "event:/Rumba/sx_G\u0142askanie"
 --- !u!1 &1515081970
 GameObject:
   m_ObjectHideFlags: 0
@@ -4931,6 +4968,26 @@ PrefabInstance:
     - target: {fileID: 3644993959418237819, guid: 4d0ddd89d442a8a46a34b7b036f21766, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7955655358815273944, guid: 4d0ddd89d442a8a46a34b7b036f21766, type: 3}
+      propertyPath: moveSound.Path
+      value: event:/Rumba/sx_Chodzenie
+      objectReference: {fileID: 0}
+    - target: {fileID: 7955655358815273944, guid: 4d0ddd89d442a8a46a34b7b036f21766, type: 3}
+      propertyPath: moveSound.Guid.Data1
+      value: -705493284
+      objectReference: {fileID: 0}
+    - target: {fileID: 7955655358815273944, guid: 4d0ddd89d442a8a46a34b7b036f21766, type: 3}
+      propertyPath: moveSound.Guid.Data2
+      value: 1173082937
+      objectReference: {fileID: 0}
+    - target: {fileID: 7955655358815273944, guid: 4d0ddd89d442a8a46a34b7b036f21766, type: 3}
+      propertyPath: moveSound.Guid.Data3
+      value: 1253182360
+      objectReference: {fileID: 0}
+    - target: {fileID: 7955655358815273944, guid: 4d0ddd89d442a8a46a34b7b036f21766, type: 3}
+      propertyPath: moveSound.Guid.Data4
+      value: 80026707
       objectReference: {fileID: 0}
     - target: {fileID: 7955655358815273944, guid: 4d0ddd89d442a8a46a34b7b036f21766, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
