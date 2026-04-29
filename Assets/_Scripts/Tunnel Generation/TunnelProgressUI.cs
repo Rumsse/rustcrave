@@ -108,7 +108,14 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
         if (darkScreen != null)
             darkScreen.gameObject.SetActive(false);
 
-        Time.timeScale = 1f;
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.ShowStep(0);
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
     }
 
     #endregion

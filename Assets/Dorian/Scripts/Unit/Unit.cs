@@ -245,7 +245,10 @@ public class Unit : UnitBase
         if (currentInteractable is OrePickUp pickup)
         {
             if (inventory.InventorySO.AddItem(pickup.item, pickup.oreValueAmount))
+            {
+                pickup.Interact();
                 Destroy(pickup.gameObject);
+            }
         }
         else
             currentInteractable.Interact();
