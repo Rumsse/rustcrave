@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using FMODUnity;
 
 public class GadgetsCraftController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class GadgetsCraftController : MonoBehaviour
     }
 
     [SerializeField] private List<GadgetCraftData> gadgetCraftDataList;
+    [SerializeField] private EventReference gadgetSound;
 
     private Action<GadgetSO> requestCraftGadget;
     private GlobalInventorySO globalInventory;
@@ -79,6 +81,7 @@ public class GadgetsCraftController : MonoBehaviour
             return;
 
         ConsumeResources(recipe);
+        AudioManager.PlayOneShot(gadgetSound);
         requestCraftGadget?.Invoke(recipe.CraftedGadget);
     }
 

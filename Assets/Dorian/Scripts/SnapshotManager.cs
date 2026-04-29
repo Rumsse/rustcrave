@@ -26,7 +26,7 @@ public class SnapshotManager : MonoBehaviour
     {
         string name = scene.name;
 
-        if (name == "Boss Scene")
+        if (name == "BossTest")
         {
             PlaySnapshot(bossSnapshot);
         }
@@ -34,6 +34,10 @@ public class SnapshotManager : MonoBehaviour
         {
             PlaySnapshot(biomSnapshot);
         }
+        else if (name == "new Tunel Generation Rumsse")
+        {
+            PlaySnapshot(biomSnapshot);
+        } 
         else
         {
             StopSnapshot(false);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using FMODUnity;
 
 public class RobotsCraftController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class RobotsCraftController : MonoBehaviour
     }
 
     [SerializeField] private List<RobotCraftData> robotsCraftDataList;
+    [SerializeField] private EventReference craftSound;
 
     private Action<UnitSO> requestCraftRobot;
     private GlobalInventorySO globalInventory;
@@ -79,6 +81,7 @@ public class RobotsCraftController : MonoBehaviour
             return;
 
         ConsumeResources(recipe);
+        AudioManager.PlayOneShot(craftSound);
         requestCraftRobot?.Invoke(recipe.CraftedUnit);
     }
 

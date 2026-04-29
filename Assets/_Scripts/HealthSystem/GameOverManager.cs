@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using FMODUnity;
 
 public class GameOverManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] private SwarmState swarmState;
     [SerializeField] private PauseMenuManager pauseMenuManager;
     [SerializeField] private string playerTag = "Player";
+    [SerializeField] private EventReference gameoverSound;
 
     private HealthManager playerHealth;
 
@@ -51,7 +53,10 @@ public class GameOverManager : MonoBehaviour
             pauseMenuManager.enabled = false;
 
         if (gameOverPanel)
+        {
             gameOverPanel.SetActive(true);
+            AudioManager.PlayOneShot(gameoverSound);
+        }
 
         ResetGameState();
     }

@@ -44,7 +44,7 @@ public class HealthManager : MonoBehaviour, IDamageable
     private void Awake()
     {
         _baseStats = GetComponent<StatsManager>();
-        
+
         _baseMaxHP = _baseStats.MaxHP;
         _currentHP = MaxHp;
         
@@ -98,7 +98,7 @@ public class HealthManager : MonoBehaviour, IDamageable
         OnDeath();
         
         AudioManager.PlayOneShot(_baseStats.Sounds.deathSound);
-        
+
         if(_baseStats.PrefabT) PoolManager.Instance.Release(transform, _baseStats.PrefabT);
         else gameObject.SetActive(false);
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyUnit : UnitBase
 {
+    
     [SerializeField] private Transform guardPoint;
 
     public ItemSO StolenItem { get; private set; } // I need to reset that after we are hidden again + i think i need some time offset between attacks
@@ -11,8 +12,9 @@ public class EnemyUnit : UnitBase
     private List<Unit> playerUnits = new();
     
     private Dictionary<Unit, Action> deathCallbacks = new();
-    
+
     #region Unity Lifecycle
+
 
     protected override void OnDestroy()
     {
@@ -58,20 +60,31 @@ public class EnemyUnit : UnitBase
     }
 
     #endregion
-    
+
     private void RemoveUnit(Unit unit)
     {
         if (!playerUnits.Remove(unit))
             return;
-        
+
         if (deathCallbacks.TryGetValue(unit, out Action callback))
         {
             unit.HealthManager.onDeath -= callback;
             deathCallbacks.Remove(unit);
         }
-        
+
         if (AttackTarget == unit)
-            AttackTarget = GetClosestUnit();
+        {
+            Unit newTarget = GetClosestUnit();
+
+            if (newTarget != null)
+            {
+                AttackTarget = newTarget;
+            }
+            else
+            {
+                StopAttacking();
+            }
+        }
     }
 
     private void RemoveOnDeath(Unit unit)

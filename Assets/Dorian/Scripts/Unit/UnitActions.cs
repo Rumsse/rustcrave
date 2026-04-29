@@ -1,4 +1,5 @@
 using UnityEngine;
+using FMODUnity;
 
 public class UnitActions : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class UnitActions : MonoBehaviour
 
     [Header("Visualizers")]
     [SerializeField] private CommandVisualizer commandVisualizer;
+
+    [Header("Sounds")]
+    [SerializeField] private EventReference orderSound;
 
     private bool isDraggingCommand;
 
@@ -76,6 +80,7 @@ public class UnitActions : MonoBehaviour
             if (commandVisualizer != null)
             {
                 commandVisualizer.UpdateVisuals(unit);
+                AudioManager.PlayOneShot(orderSound);
             }
         }
 

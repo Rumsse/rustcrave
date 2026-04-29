@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using UnityEngine.AI;
+using FMODUnity;
 
 public class MCFormController : MonoBehaviour
 {
@@ -27,6 +28,10 @@ public class MCFormController : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private UnitSO conductorStats;
     [SerializeField] private UnitSO spiderStats;
+
+    [Header("Sounds")]
+    [SerializeField] private EventReference connectSound;
+    [SerializeField] private EventReference disconnectSound;
 
     [Header("Animations")]
     [SerializeField] private string disconnectTriggerName = "Disconnect";
@@ -78,11 +83,13 @@ public class MCFormController : MonoBehaviour
         if (currentForm == CharacterForm.Conductor)
         {
             StartCoroutine(SwitchToSpiderRoutine());
+            AudioManager.PlayOneShot(disconnectSound);
             CheckTutorialSpiderDetachAsync(); 
         }
         else if (currentForm == CharacterForm.Spider)
         {
             StartCoroutine(SwitchToConductorRoutine());
+            AudioManager.PlayOneShot(connectSound);
         }
     }
 

@@ -1556,6 +1556,13 @@ MonoBehaviour:
   - ButtonId: btn-craft-specialist
     ContainerId: container-specialist
     Recipe: {fileID: 11400000, guid: 1043cc94c2c35054d9516c79ba459d13, type: 2}
+  craftSound:
+    Guid:
+      Data1: 378511850
+      Data2: 1255245289
+      Data3: -1116032095
+      Data4: 877990809
+    Path: event:/Menu/sx_crafting
 --- !u!114 &810971831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1587,6 +1594,13 @@ MonoBehaviour:
   - ButtonId: btn-craft-copper
     ContainerId: container-copper
     Recipe: {fileID: 11400000, guid: d6ec775fa79f271428af906f237d2e77, type: 2}
+  gadgetSound:
+    Guid:
+      Data1: 378511850
+      Data2: 1255245289
+      Data3: -1116032095
+      Data4: 877990809
+    Path: event:/Menu/sx_crafting
 --- !u!1 &828975488
 GameObject:
   m_ObjectHideFlags: 0
@@ -1599,6 +1613,7 @@ GameObject:
   - component: {fileID: 828975489}
   - component: {fileID: 828975491}
   - component: {fileID: 828975492}
+  - component: {fileID: 828975493}
   m_Layer: 5
   m_Name: UIDocument
   m_TagString: Untagged
@@ -1685,6 +1700,32 @@ MonoBehaviour:
   uiDocument: {fileID: 828975489}
   optionsPanel: {fileID: 82116468}
   buttonName: btn-options
+--- !u!114 &828975493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828975488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e1152ef02232e4a9a277fc71fb221c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalButtonAudio
+  hoverSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  clickSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!1 &883714861
 GameObject:
   m_ObjectHideFlags: 0
@@ -3265,6 +3306,13 @@ MonoBehaviour:
   mainMenuSceneName: Main Menu
   pausePanel: {fileID: 82116468}
   pauseKey: 27
+  interactionSound:
+    Guid:
+      Data1: 1895508101
+      Data2: 1259155327
+      Data3: 177183113
+      Data4: 1071439846
+    Path: "event:/Mr\xF3wka/sx_Dostawanie_DMG"
 --- !u!4 &1435208049
 Transform:
   m_ObjectHideFlags: 0
@@ -3319,6 +3367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
   gameSceneName: 
+  tutorialSceneName: 
   optionsPanel: {fileID: 0}
   creditsPanel: {fileID: 0}
   settingsPanel: {fileID: 0}
@@ -3327,6 +3376,13 @@ MonoBehaviour:
   mapState: {fileID: 0}
   globalInventory: {fileID: 0}
   gadgetsInventory: {fileID: 0}
+  interactionButtonSound:
+    Guid:
+      Data1: 1895508101
+      Data2: 1259155327
+      Data3: 177183113
+      Data4: 1071439846
+    Path: "event:/Mr\xF3wka/sx_Dostawanie_DMG"
 --- !u!114 &1435208052
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -243,7 +243,7 @@ public abstract class UnitBase : MonoBehaviour
         }
     }
 
-    protected void StopAttackSound()
+    protected virtual void StopAttackSound()
     {
         if (attackSoundInstance.isValid())
         {
