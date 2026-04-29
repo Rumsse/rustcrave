@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public enum TutorialTaskType
 {
@@ -63,21 +64,42 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private ActiveModifier globalActiveModifier;
     [SerializeField] private PathModifierData calmModifierData;
 
+    /*[SerializeField]*/ private CameraZoom cameraZoom;
+
     private int currentStepIndex = 0;
     private int currentPageIndex = 0;
     
-    private CameraZoom cameraZoom;
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        //DontDestroyOnLoad(gameObject);
 
         if (globalActiveModifier != null && calmModifierData != null)
-        {
             globalActiveModifier.Set(calmModifierData);
-        }
+
     }
+
+    /*private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        cameraZoom = FindAnyObjectByType<CameraZoom>();
+    }*/
 
     private void Start()
     {

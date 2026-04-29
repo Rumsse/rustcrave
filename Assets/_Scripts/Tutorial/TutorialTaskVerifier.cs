@@ -22,6 +22,7 @@ public class TutorialTaskVerifier : MonoBehaviour
         }
 
         Instance = this;
+        //DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()
