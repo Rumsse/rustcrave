@@ -14,7 +14,7 @@ public class EnemyUnit : UnitBase
     
     #region Unity Lifecycle
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         foreach (var kvp in deathCallbacks)
         {
