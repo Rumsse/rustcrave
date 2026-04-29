@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] private string gameSceneName;
+    [SerializeField] private string tutorialSceneName;
     [SerializeField] private GameObject optionsPanel;
     [SerializeField] private GameObject creditsPanel;
     [SerializeField] private GameObject settingsPanel;
@@ -29,6 +30,15 @@ public class MainMenuManager : MonoBehaviour
         globalInventory.Reset();
         gadgetsInventory.Reset();
         SceneManager.LoadScene(gameSceneName);
+    }
+
+    public void StartTutorial()
+    {
+        swarmState.Initialize();
+        mapState.Initialize();
+        globalInventory.Reset();
+        gadgetsInventory.Reset();
+        SceneManager.LoadScene(tutorialSceneName);
     }
 
     public void OpenOptions()
