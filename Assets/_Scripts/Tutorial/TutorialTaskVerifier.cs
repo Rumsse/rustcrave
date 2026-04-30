@@ -32,6 +32,7 @@ public class TutorialTaskVerifier : MonoBehaviour
         EventPanelController.OnAnyEventResolved += OnEventResolved;
         CameraCraftingController.OnCameraReachedCraftedRobot += OnRobotCrafted;
         MainCraftController.OnAnyGadgetCrafted += OnGadgetCrafted;
+        UnitMaintanceController.OnAnyUnitCharged += OnEnergyRestored;
     }
 
     private void OnDisable()
@@ -42,6 +43,7 @@ public class TutorialTaskVerifier : MonoBehaviour
         EventPanelController.OnAnyEventResolved -= OnEventResolved;
         CameraCraftingController.OnCameraReachedCraftedRobot -= OnRobotCrafted;
         MainCraftController.OnAnyGadgetCrafted -= OnGadgetCrafted;
+        UnitMaintanceController.OnAnyUnitCharged -= OnEnergyRestored;
     }
 
     public void StartTask(TutorialTaskType taskType, Action onCompleted)
@@ -103,6 +105,12 @@ public class TutorialTaskVerifier : MonoBehaviour
             return;
 
         CompleteTask();
+    }
+
+    private void OnEnergyRestored()
+    {
+        if (CurrentTask == TutorialTaskType.RestoreEnergy)
+            CompleteTask();
     }
 
     public void CompleteTask()
