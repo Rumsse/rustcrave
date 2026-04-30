@@ -12,12 +12,10 @@ public class UnitSelectionSystem : MonoBehaviour
     [SerializeField] private LayerMask mouseWorldLayerMask;
     [SerializeField] private GameObject moveIndicatorPrefab;
 
-    private StatsManager statsManager;
 
     private void Awake()
     {
         Instance = this;
-        statsManager = GetComponent<StatsManager>();
     }
 
     private void Update()
@@ -42,7 +40,6 @@ public class UnitSelectionSystem : MonoBehaviour
             return false;
 
         SetSelectedUnit(unit);
-        AudioManager.PlayOneShot(statsManager.Sounds.selectSound);
         return true;
     }
 
