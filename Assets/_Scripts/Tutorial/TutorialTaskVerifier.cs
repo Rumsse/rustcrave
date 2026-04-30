@@ -22,7 +22,6 @@ public class TutorialTaskVerifier : MonoBehaviour
         }
 
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()
@@ -30,6 +29,9 @@ public class TutorialTaskVerifier : MonoBehaviour
         HealthManagerEvents.OnAnyDeath += OnTargetKilled;
         OrePickUp.OnAnyOrePickedUp += OnResourceGathered;
         TunnelEnd.OnTunnelEndReached += OnTunnelEndReached;
+        EventPanelController.OnAnyEventResolved += OnEventResolved;
+        CameraCraftingController.OnCameraReachedCraftedRobot += OnRobotCrafted;
+        MainCraftController.OnAnyGadgetCrafted += OnGadgetCrafted;
     }
 
     private void OnDisable()
@@ -37,11 +39,13 @@ public class TutorialTaskVerifier : MonoBehaviour
         HealthManagerEvents.OnAnyDeath -= OnTargetKilled;
         OrePickUp.OnAnyOrePickedUp -= OnResourceGathered;
         TunnelEnd.OnTunnelEndReached -= OnTunnelEndReached;
+        EventPanelController.OnAnyEventResolved -= OnEventResolved;
+        CameraCraftingController.OnCameraReachedCraftedRobot -= OnRobotCrafted;
+        MainCraftController.OnAnyGadgetCrafted -= OnGadgetCrafted;
     }
 
     public void StartTask(TutorialTaskType taskType, Action onCompleted)
     {
-        //Debug.Log($"[TutorialTaskVerifier] Starting task: {taskType}");
         currentTask = taskType;
         onTaskCompleted = onCompleted;
 
@@ -63,8 +67,6 @@ public class TutorialTaskVerifier : MonoBehaviour
 
     private void OnResourceGathered()
     {
-        //Debug.Log($"[TutorialTaskVerifier] OnResourceGathered triggered. Current Task: {currentTask}");
-
         if (currentTask != TutorialTaskType.GatherResources)
             return;
 
@@ -73,9 +75,31 @@ public class TutorialTaskVerifier : MonoBehaviour
 
     private void OnTunnelEndReached()
     {
-        //Debug.Log($"[TutorialTaskVerifier] OnTunnelEndReached triggered. Current Task: {currentTask}");
-
         if (currentTask != TutorialTaskType.EnterRestroom)
+            return;
+
+        CompleteTask();
+    }
+
+    private void OnEventResolved()
+    {
+        if (currentTask != TutorialTaskType.InteractWithEvent)
+            return;
+
+        CompleteTask();
+    }
+
+    private void OnRobotCrafted()
+    {
+        if (currentTask != TutorialTaskType.CraftRobot)
+            return;
+
+        CompleteTask();
+    }
+
+    private void OnGadgetCrafted()
+    {
+        if (currentTask != TutorialTaskType.CraftGadget)
             return;
 
         CompleteTask();
@@ -85,8 +109,6 @@ public class TutorialTaskVerifier : MonoBehaviour
     {
         if (currentTask == TutorialTaskType.None)
             return;
-
-        //Debug.Log($"[TutorialTaskVerifier] Completing task: {currentTask}");
 
         TutorialTaskType finishedTask = currentTask;
         currentTask = TutorialTaskType.None;

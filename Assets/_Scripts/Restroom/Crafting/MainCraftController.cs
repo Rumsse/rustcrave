@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class MainCraftController : MonoBehaviour
 {
     public event Action OnCraftPanelClosed;
     public event Action OnCraftPanelOpened;
+
+    public static event Action OnAnyRobotCrafted;
+    public static event Action OnAnyGadgetCrafted;
 
     [SerializeField] SwarmState swarmState;
     [SerializeField] GlobalInventorySO globalInventory;
@@ -161,7 +165,18 @@ public class MainCraftController : MonoBehaviour
         gadgetsGlobalInventory.AddGadget(gadget);
 
         if (gadgetCraftParticle != null)
-            gadgetCraftParticle.Play();
+            StartCoroutine(PlayParticleAndNotifyRoutine());
+        else
+            OnAnyGadgetCrafted?.Invoke();
+    }
+
+    IEnumerator PlayParticleAndNotifyRoutine()
+    {
+        gadgetCraftParticle.Play();
+
+        yield return new WaitForSeconds(1.3f);
+
+        OnAnyGadgetCrafted?.Invoke();
     }
 
     void AddSingleUnitToUI(SwarmUnitsData unitData)

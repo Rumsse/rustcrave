@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class CameraCraftingController : MonoBehaviour
 {
+    public static event Action OnCameraReachedCraftedRobot;
+
     [SerializeField] Camera mainCamera;
     [SerializeField] DisplayUnitSpawner unitSpawner;
     [SerializeField] MainCraftController craftController;
@@ -131,7 +134,7 @@ public class CameraCraftingController : MonoBehaviour
 
     #region Camera Logic
 
-    void ZoomToCraftedRobot(Transform target) => ExecuteZoom(target, robotZoomOffset, robotFramingOffset);
+    void ZoomToCraftedRobot(Transform target) => ExecuteZoom(target, robotZoomOffset, robotFramingOffset, () => OnCameraReachedCraftedRobot?.Invoke());
 
     void ZoomToPlayer()
     {
@@ -159,7 +162,7 @@ public class CameraCraftingController : MonoBehaviour
             ExecuteZoom(unitTransform, unitZoomOffset, unitFramingOffset);
     }
 
-    void ExecuteZoom(Transform target, Vector3 currentZoomOffset, Vector3 currentFramingOffset)
+    void ExecuteZoom(Transform target, Vector3 currentZoomOffset, Vector3 currentFramingOffset, Action onComplete = null)
     {
         if (target == null)
             return;
@@ -173,7 +176,7 @@ public class CameraCraftingController : MonoBehaviour
 
         Quaternion targetRot = Quaternion.LookRotation(lookDirection);
 
-        StartTransition(targetPos, targetRot);
+        StartTransition(targetPos, targetRot, onComplete);
     }
 
     void SaveOriginalPosition()
@@ -191,15 +194,15 @@ public class CameraCraftingController : MonoBehaviour
             StartTransition(originalPosition, originalRotation);
     }
 
-    void StartTransition(Vector3 targetPos, Quaternion targetRot)
+    void StartTransition(Vector3 targetPos, Quaternion targetRot, Action onComplete = null)
     {
         if (transitionCoroutine != null)
             StopCoroutine(transitionCoroutine);
 
-        transitionCoroutine = StartCoroutine(CameraTransitionRoutine(targetPos, targetRot));
+        transitionCoroutine = StartCoroutine(CameraTransitionRoutine(targetPos, targetRot, onComplete));
     }
 
-    IEnumerator CameraTransitionRoutine(Vector3 targetPos, Quaternion targetRot)
+    IEnumerator CameraTransitionRoutine(Vector3 targetPos, Quaternion targetRot, Action onComplete)
     {
         while (Vector3.Distance(mainCamera.transform.position, targetPos) > 0.01f)
         {
@@ -210,6 +213,8 @@ public class CameraCraftingController : MonoBehaviour
 
         mainCamera.transform.position = targetPos;
         mainCamera.transform.rotation = targetRot;
+
+        onComplete?.Invoke();
     }
 
     #endregion

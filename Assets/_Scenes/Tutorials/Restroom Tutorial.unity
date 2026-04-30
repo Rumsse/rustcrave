@@ -319,16 +319,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 127021838}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -68.78645}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 777521668}
-  m_Father: {fileID: 1185288737}
+  m_Father: {fileID: 911632916}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.6170654, y: -297}
+  m_AnchoredPosition: {x: 1157.0117, y: 243}
   m_SizeDelta: {x: 1923.2, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &127021840
@@ -1096,7 +1096,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EventPanelController
   swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
   eventDatabase: {fileID: 11400000, guid: 6282c60626c911947a0487d4a3798d28, type: 2}
-  eventTriggerChance: 0.5
+  eventTriggerChance: 1
 --- !u!4 &363767987
 Transform:
   m_ObjectHideFlags: 0
@@ -1769,6 +1769,13 @@ MonoBehaviour:
   - ButtonId: btn-craft-specialist
     ContainerId: container-specialist
     Recipe: {fileID: 11400000, guid: 1043cc94c2c35054d9516c79ba459d13, type: 2}
+  craftSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!114 &810971831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1800,6 +1807,13 @@ MonoBehaviour:
   - ButtonId: btn-craft-copper
     ContainerId: container-copper
     Recipe: {fileID: 11400000, guid: d6ec775fa79f271428af906f237d2e77, type: 2}
+  gadgetSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!1 &828975488
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,6 +1826,7 @@ GameObject:
   - component: {fileID: 828975489}
   - component: {fileID: 828975491}
   - component: {fileID: 828975492}
+  - component: {fileID: 828975493}
   m_Layer: 5
   m_Name: UIDocument
   m_TagString: Untagged
@@ -1898,6 +1913,40 @@ MonoBehaviour:
   uiDocument: {fileID: 828975489}
   optionsPanel: {fileID: 82116468}
   buttonName: btn-options
+--- !u!114 &828975493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828975488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b5c63e958f59a48abd1f3891f25b48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialUIHighlighter
+  uiDocument: {fileID: 828975489}
+  highlightClassName: tutorial-highlight
+  highlightRules:
+  - taskType: 7
+    elementNames:
+    - background-tutorial-event-highlight
+  - taskType: 8
+    elementNames:
+    - btn-craft
+    - btn-tab-robots
+    - btn-craft-miner
+  - taskType: 9
+    elementNames:
+    - btn-craft
+    - btn-tab-gadgets
+    - btn-craft-kinetic
+  - taskType: 10
+    elementNames: []
+  - taskType: 11
+    elementNames: []
+  - taskType: 12
+    elementNames: []
 --- !u!1 &883714861
 GameObject:
   m_ObjectHideFlags: 0
@@ -1986,6 +2035,11 @@ Transform:
   - {fileID: 170843694}
   m_Father: {fileID: 1435208049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &911632916 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4335006620908961584, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+  m_PrefabInstance: {fileID: 1185288736}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &929856445
 GameObject:
   m_ObjectHideFlags: 0
@@ -3091,19 +3145,30 @@ PrefabInstance:
         and upgrading. You are now ready for the real challenge. \n\nThe depths of
         Aion await you. Good luck, Conductor!"
       objectReference: {fileID: 0}
+    - target: {fileID: 8415639917389934182, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8415639917389934182, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: m_FillMethod
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8415639917389934182, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: m_UseSpriteMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8415639917389934182, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 6608820092745547278, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 4335006620908961584, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       insertIndex: 0
       addedObject: {fileID: 127021839}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
---- !u!224 &1185288737 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6608820092745547278, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
-  m_PrefabInstance: {fileID: 1185288736}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1198212857
 GameObject:
   m_ObjectHideFlags: 0
@@ -3167,7 +3232,7 @@ MonoBehaviour:
   mapState: {fileID: 11400000, guid: 18f918ded4fcc85458c274981b815dda, type: 2}
   activeModifier: {fileID: 11400000, guid: d373c29c877b50b43b30a9a517ecce77, type: 2}
   globalInventory: {fileID: 11400000, guid: f715252bf3a047d429a856ce045a8873, type: 2}
-  pulsiteOre: {fileID: 0}
+  pulsiteOre: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
   nodeButtonAsset: {fileID: 9197481963319205126, guid: df6ea6f039476844a8b90d08bd55835b, type: 3}
   tooltipAsset: {fileID: 9197481963319205126, guid: 02252f9e4166ef94ab467c186386ea09, type: 3}
   mainGameScene: Tutorial
@@ -3837,6 +3902,13 @@ MonoBehaviour:
   mainMenuSceneName: Main Menu
   pausePanel: {fileID: 82116468}
   pauseKey: 27
+  interactionSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!4 &1435208049
 Transform:
   m_ObjectHideFlags: 0
@@ -3900,6 +3972,13 @@ MonoBehaviour:
   mapState: {fileID: 0}
   globalInventory: {fileID: 0}
   gadgetsInventory: {fileID: 0}
+  interactionButtonSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!114 &1435208052
 MonoBehaviour:
   m_ObjectHideFlags: 0
