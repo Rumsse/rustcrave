@@ -1,5 +1,6 @@
 using UnityEngine;
 using FMODUnity;
+using System.Collections;
 
 public class UnitActions : MonoBehaviour
 {
@@ -94,7 +95,7 @@ public class UnitActions : MonoBehaviour
                 {
                     commandVisualizer.StopVisuals();
                 }
-                AudioManager.PlayOneShot(statsManager.Sounds.commandSound);
+                StartCoroutine(delayCommandSound());
 
                 ExecuteCommand();
             }
@@ -202,6 +203,13 @@ public class UnitActions : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private IEnumerator delayCommandSound()
+    {
+        float delaySoundSeconds = 0.2f;
+        yield return new WaitForSeconds(delaySoundSeconds);
+        AudioManager.PlayOneShot(statsManager.Sounds.commandSound);
     }
 
     private void ShowMoveIndicator(Vector3 position)

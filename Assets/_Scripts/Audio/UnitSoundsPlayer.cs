@@ -6,7 +6,7 @@ public class UnitSoundsPlayer : MonoBehaviour
     
     public void PlayStepSound()
     {
-        AudioManager.PlayOneShot(_stats.Sounds.walkSound);
+        //AudioManager.PlayOneShot(_stats.Sounds.walkSound);
     }
     
     public void PlayOneShotByPath()

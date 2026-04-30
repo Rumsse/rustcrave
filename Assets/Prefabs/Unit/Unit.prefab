@@ -1649,6 +1649,7 @@ GameObject:
   - component: {fileID: 4335424780625957900}
   - component: {fileID: 8095920988146755371}
   - component: {fileID: -3094097742101887942}
+  - component: {fileID: 964235151767764532}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Unit
@@ -1808,6 +1809,13 @@ MonoBehaviour:
   interactFeedbackPrefab: {fileID: 5139645850685759854, guid: 476266acd767ac04f91a5d3b3487f3de, type: 3}
   indicatorYOffset: 0.05
   commandVisualizer: {fileID: 6395918954233476704}
+  orderSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!114 &6395918954233476704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2096,6 +2104,20 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &964235151767764532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7761914581179952719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cb362d7719e16445991ab65f3527706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HydraulicPressUnit
+  swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
+  unitId: 
 --- !u!1001 &5245529970806278457
 PrefabInstance:
   m_ObjectHideFlags: 0
