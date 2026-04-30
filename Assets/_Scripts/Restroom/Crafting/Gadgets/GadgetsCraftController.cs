@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using FMODUnity;
 
 public class GadgetsCraftController : MonoBehaviour
 {
@@ -14,9 +15,11 @@ public class GadgetsCraftController : MonoBehaviour
     }
 
     [SerializeField] private List<GadgetCraftData> gadgetCraftDataList;
+    [SerializeField] private EventReference gadgetSound;
 
     private Action<GadgetSO> requestCraftGadget;
     private GlobalInventorySO globalInventory;
+    private InfoTooltipController infoTooltip;
 
 
 
@@ -28,10 +31,14 @@ public class GadgetsCraftController : MonoBehaviour
         var infoBtn = root.Q<Button>("btn-info-gadgets");
         var infoPanel = root.Q<VisualElement>("gadgets-info-panel");
 
-        if (infoBtn != null && infoPanel != null)
+        if (infoPanel != null)
+            infoTooltip = new InfoTooltipController(infoPanel);
+
+        if (infoBtn != null && infoTooltip != null)
         {
-            infoBtn.clicked += () => ShowInfo(infoPanel);
-            infoBtn.clicked -= () => ShowInfo(infoPanel);
+            infoBtn.RegisterCallback<PointerEnterEvent>(evt => infoTooltip.Show(evt.position));
+            infoBtn.RegisterCallback<PointerLeaveEvent>(evt => infoTooltip.Hide());
+            infoBtn.RegisterCallback<PointerMoveEvent>(evt => infoTooltip.UpdatePosition(evt.position));
         }
 
         foreach (var data in gadgetCraftDataList)
@@ -74,6 +81,7 @@ public class GadgetsCraftController : MonoBehaviour
             return;
 
         ConsumeResources(recipe);
+        AudioManager.PlayOneShot(gadgetSound);
         requestCraftGadget?.Invoke(recipe.CraftedGadget);
     }
 

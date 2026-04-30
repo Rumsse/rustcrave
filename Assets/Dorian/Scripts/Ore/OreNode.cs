@@ -28,6 +28,7 @@ public class OreNode : MonoBehaviour, IMineable
 
     public ItemSO Mine()
     {
+        Debug.Log(amount);
         if (amount <= 0)
             return null;
 
@@ -65,6 +66,7 @@ public class OreNode : MonoBehaviour, IMineable
 
     private void OnMouseEnter()
     {
+        if (Time.timeScale == 0f) return;
         oreTooltip.ShowTooltip();
     }
 

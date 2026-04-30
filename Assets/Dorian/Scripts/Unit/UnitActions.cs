@@ -1,20 +1,35 @@
 using UnityEngine;
+using FMODUnity;
+using System.Collections;
 
 public class UnitActions : MonoBehaviour
 {
+    [Header("Layer Masks")]
     [SerializeField] private LayerMask interactableLayerMask;
     [SerializeField] private LayerMask oreLayerMask;
     [SerializeField] private LayerMask unitLayerMask;
     [SerializeField] private LayerMask mouseWorldLayerMask;
+    [SerializeField] private StatsManager statsManager;
 
+    [Header("Visual Feedback Prefabs")]
     [SerializeField] private GameObject moveIndicatorPrefab;
-    [SerializeField] private CommandVisualizer commandVisualizer;
+    [SerializeField] private GameObject attackFeedbackPrefab;
+    [SerializeField] private GameObject mineFeedbackPrefab;
+    [SerializeField] private GameObject interactFeedbackPrefab;
     [SerializeField] private float indicatorYOffset;
+
+    [Header("Visualizers")]
+    [SerializeField] private CommandVisualizer commandVisualizer;
+
+    [Header("Sounds")]
+    [SerializeField] private EventReference orderSound;
 
     private bool isDraggingCommand;
 
     private void Update()
     {
+        if (Time.timeScale == 0f) return;
+
         HandleAbilityInput();
         HandleCommandInput();
     }
@@ -38,13 +53,15 @@ public class UnitActions : MonoBehaviour
     private void HandleCommandInput()
     {
         Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
-        
+
+        if (unit != null && unit.IsMainCharacter && MCFormController.Instance != null)
+        {
+            if (MCFormController.Instance.IsTransitioning) return;
+        }
+
         if (unit != null && !unit.IsMainCharacter && MCFormController.Instance != null)
         {
-            if (MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider)
-            {
-                return;
-            }
+            if (MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider) return;
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -64,6 +81,7 @@ public class UnitActions : MonoBehaviour
             if (commandVisualizer != null)
             {
                 commandVisualizer.UpdateVisuals(unit);
+                AudioManager.PlayOneShot(orderSound);
             }
         }
 
@@ -77,8 +95,8 @@ public class UnitActions : MonoBehaviour
                 {
                     commandVisualizer.StopVisuals();
                 }
+                StartCoroutine(delayCommandSound());
 
-                unit.PlayCommandSound();
                 ExecuteCommand();
             }
         }
@@ -122,17 +140,10 @@ public class UnitActions : MonoBehaviour
         Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
         if (unit == null || !unit.enabled) return false;
 
-        var hitCheck = GetRaycastHit(interactableLayerMask);
-
-        if (!hitCheck.HasValue)
-            return false;
-
-        RaycastHit hit = hitCheck.Value;
-
-        if (hit.transform.TryGetComponent(out IInteractable interactable))
+        if (TryGetTargetUnderMouse<IInteractable>(interactableLayerMask, out var interactable, out Vector3 hitPoint, out Transform targetTransform))
         {
-            unit.MoveToInteract(interactable, hit.point);
-            ShowMoveIndicator(hit.point);
+            unit.MoveToInteract(interactable, hitPoint);
+            ShowActionFeedback(interactFeedbackPrefab, targetTransform);
             return true;
         }
 
@@ -146,23 +157,13 @@ public class UnitActions : MonoBehaviour
 
         if (unit.IsMainCharacter && MCFormController.Instance != null)
         {
-            if (MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor)
-            {
-                return false;
-            }
+            if (MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor) return false;
         }
 
-        var hitCheck = GetRaycastHit(unitLayerMask);
-
-        if (!hitCheck.HasValue)
-            return false;
-
-        RaycastHit hit = hitCheck.Value;
-
-        if (hit.transform.TryGetComponent(out EnemyUnit enemy))
+        if (TryGetTargetUnderMouse<EnemyUnit>(unitLayerMask, out var enemy, out Vector3 hitPoint, out Transform targetTransform))
         {
-            unit.MoveToAttack(enemy, hit.point);
-            ShowMoveIndicator(hit.point);
+            unit.MoveToAttack(enemy, hitPoint);
+            ShowActionFeedback(attackFeedbackPrefab, targetTransform);
             return true;
         }
 
@@ -176,23 +177,13 @@ public class UnitActions : MonoBehaviour
 
         if (unit.IsMainCharacter && MCFormController.Instance != null)
         {
-            if (MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor)
-            {
-                return false;
-            }
+            if (MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor) return false;
         }
 
-        var hitCheck = GetRaycastHit(oreLayerMask);
-
-        if (!hitCheck.HasValue)
-            return false;
-
-        RaycastHit hit = hitCheck.Value;
-
-        if (hit.transform.TryGetComponent(out IMineable mineable))
+        if (TryGetTargetUnderMouse<IMineable>(oreLayerMask, out var mineable, out Vector3 hitPoint, out Transform targetTransform))
         {
-            unit.MoveToMine(mineable, hit.point);
-            ShowMoveIndicator(hit.point);
+            unit.MoveToMine(mineable, hitPoint);
+            ShowActionFeedback(mineFeedbackPrefab, targetTransform);
             return true;
         }
 
@@ -204,16 +195,21 @@ public class UnitActions : MonoBehaviour
         Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
         if (unit == null || !unit.enabled) return false;
 
-        var hitCheck = GetRaycastHit(mouseWorldLayerMask);
-
-        if (hitCheck.HasValue)
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, mouseWorldLayerMask))
         {
-            RaycastHit hit = hitCheck.Value;
             unit.HandleMovement(hit.point);
             ShowMoveIndicator(hit.point);
             return true;
         }
         return false;
+    }
+
+    private IEnumerator delayCommandSound()
+    {
+        float delaySoundSeconds = 0.2f;
+        yield return new WaitForSeconds(delaySoundSeconds);
+        AudioManager.PlayOneShot(statsManager.Sounds.commandSound);
     }
 
     private void ShowMoveIndicator(Vector3 position)
@@ -224,15 +220,44 @@ public class UnitActions : MonoBehaviour
         }
     }
 
-    private RaycastHit? GetRaycastHit(LayerMask mask)
+    private void ShowActionFeedback(GameObject prefab, Transform target)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, mask))
+        if (prefab != null && target != null)
         {
-            return hit;
+            Instantiate(prefab, target.position, Quaternion.identity, target);
         }
+    }
 
-        return null;
+    private bool TryGetTargetUnderMouse<T>(LayerMask mask, out T targetComponent, out Vector3 point, out Transform targetTransform) where T : class
+    {
+        targetComponent = null;
+        point = Vector3.zero;
+        targetTransform = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, float.MaxValue, mask);
+
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (var hit in hits)
+        {
+            if (hit.transform.TryGetComponent(out T component))
+            {
+                targetComponent = component;
+                point = hit.point;
+                targetTransform = hit.transform;
+                return true;
+            }
+
+            T parentComponent = hit.transform.GetComponentInParent<T>();
+            if (parentComponent != null)
+            {
+                targetComponent = parentComponent;
+                point = hit.point;
+                targetTransform = hit.transform;
+                return true;
+            }
+        }
+        return false;
     }
 }

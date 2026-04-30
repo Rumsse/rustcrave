@@ -10,15 +10,7 @@ public class ActiveModifier : ScriptableObject
     public float PulsiteSpawnMultiplier => current != null ? current.PulsiteSpawnMultiplier : 1f;
     public bool IsCameraUnstable => current != null && current.IsCameraUnstable;
 
-    public void Set(PathModifierData modifier)
-    {
-        current = modifier;
-        //Debug.Log($"<color=green>[ActiveModifier]</color> new modifier set: {(current != null ? current.DisplayName : "NULL")}");
-    }
+    public void Set(PathModifierData modifier) => current = modifier;
 
-    public void Clear()
-    {
-        current = null;
-        //Debug.Log("<color=red>[ActiveModifier]</color> modifier cleared.");
-    }
+    public void Clear() => current = null;
 }

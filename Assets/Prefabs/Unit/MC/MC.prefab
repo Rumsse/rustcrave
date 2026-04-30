@@ -329,6 +329,26 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Unit
       objectReference: {fileID: 0}
+    - target: {fileID: 8052947992562257757, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: orderSound.Path
+      value: event:/Mc_Pacyna/sx_Rozkaz
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052947992562257757, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: orderSound.Guid.Data1
+      value: -152114495
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052947992562257757, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: orderSound.Guid.Data2
+      value: 1096531893
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052947992562257757, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: orderSound.Guid.Data3
+      value: -662483565
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052947992562257757, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: orderSound.Guid.Data4
+      value: 584888760
+      objectReference: {fileID: 0}
     - target: {fileID: 8434320555201164451, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: animator
       value: 
@@ -360,19 +380,19 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3031104613421895505, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       insertIndex: 0
-      addedObject: {fileID: 3658356334716403440}
+      addedObject: {fileID: 9218847013374310037}
     - targetCorrespondingSourceObject: {fileID: 3031104613421895505, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       insertIndex: 1
-      addedObject: {fileID: 4594471408211545411}
+      addedObject: {fileID: 3658356334716403440}
     - targetCorrespondingSourceObject: {fileID: 3031104613421895505, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       insertIndex: 2
-      addedObject: {fileID: 4557002526621026488}
+      addedObject: {fileID: 4594471408211545411}
     - targetCorrespondingSourceObject: {fileID: 3031104613421895505, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       insertIndex: 3
-      addedObject: {fileID: 9205473777908818234}
+      addedObject: {fileID: 4557002526621026488}
     - targetCorrespondingSourceObject: {fileID: 3031104613421895505, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 9218847013374310037}
+      insertIndex: 4
+      addedObject: {fileID: 9205473777908818234}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       insertIndex: 15
@@ -451,15 +471,33 @@ MonoBehaviour:
   switchKey: 101
   conductorBodyPrefab: {fileID: 3785565532985694201}
   spiderDropForwardOffset: 2
+  jumpArcHeight: 0
   hatSlot: {fileID: 2374922274528656194}
+  returnSpeedMultiplier: 6
+  arrivalThreshold: 2
   conductorVisual: {fileID: 3785565532985694201}
   spiderVisual: {fileID: 8398009392491789184}
   conductorStats: {fileID: 11400000, guid: 3bd52a4bb59cb7e4ea6226b709332bb3, type: 2}
   spiderStats: {fileID: 11400000, guid: bc8e3df1ae6af2e4e9ba444f69b9af0e, type: 2}
+  connectSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  disconnectSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   disconnectTriggerName: Disconnect
   connectTriggerName: Connect
   bodyDropTriggerName: Down
   bodyRiseTriggerName: Up
+  walkingBoolName: IsWalking
   connectAnimationDuration: 0.5
   disconnectAnimationDuration: 0.5
 --- !u!114 &6033899236461606731
@@ -947,6 +985,30 @@ PrefabInstance:
     - target: {fileID: 1736244806124851871, guid: 2159b6d14dcf86b4dbd40c423af6acf6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0.858387
+      objectReference: {fileID: 0}
+    - target: {fileID: 1782586677704741354, guid: 2159b6d14dcf86b4dbd40c423af6acf6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.86511946
+      objectReference: {fileID: 0}
+    - target: {fileID: 1782586677704741354, guid: 2159b6d14dcf86b4dbd40c423af6acf6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.86511946
+      objectReference: {fileID: 0}
+    - target: {fileID: 1782586677704741354, guid: 2159b6d14dcf86b4dbd40c423af6acf6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.86511946
+      objectReference: {fileID: 0}
+    - target: {fileID: 1782586677704741354, guid: 2159b6d14dcf86b4dbd40c423af6acf6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0008
+      objectReference: {fileID: 0}
+    - target: {fileID: 1782586677704741354, guid: 2159b6d14dcf86b4dbd40c423af6acf6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.832
+      objectReference: {fileID: 0}
+    - target: {fileID: 1782586677704741354, guid: 2159b6d14dcf86b4dbd40c423af6acf6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0196
       objectReference: {fileID: 0}
     - target: {fileID: 1907450839305934791, guid: 2159b6d14dcf86b4dbd40c423af6acf6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

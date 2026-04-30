@@ -31,5 +31,8 @@ public class OptionsPanelController : MonoBehaviour
         openButton.clicked -= OpenOptions;
     }
 
-    void OpenOptions() => optionsPanel.SetActive(true);
+    void OpenOptions() 
+    {
+        optionsPanel.SetActive(true);
+    } 
 }

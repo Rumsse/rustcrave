@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -30,7 +29,8 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
     #region State
 
     float startPositionZ;
-    float endPositionZ;
+    float inverseTotalDistance;
+    float lastSliderValue = -1f;
     bool isReady;
     Vector2 targetTextPosition;
 
@@ -52,7 +52,7 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
             tunnelGenerator.OnNavMeshReady -= SetupTracking;
     }
 
-    void Start() => StartCoroutine(IntroSequenceRoutine());
+    void Start() => StartIntroSequence();
 
     void SetupTracking()
     {
@@ -62,8 +62,13 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
             return;
 
         startPositionZ = startPos.transform.position.z;
-        endPositionZ = segments[^1].transform.position.z - 10f;
+        float endPositionZ = segments[^1].transform.position.z - 10f;
+        float totalDistance = endPositionZ - startPositionZ;
 
+        if (Mathf.Approximately(totalDistance, 0f))
+            return;
+
+        inverseTotalDistance = 1f / totalDistance;
         tooltipPanel.SetActive(false);
         isReady = true;
     }
@@ -72,7 +77,7 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     #region Intro Sequence
 
-    IEnumerator IntroSequenceRoutine()
+    async void StartIntroSequence()
     {
         UpdateUIInfo();
 
@@ -86,24 +91,31 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
             darkScreen.color = new Color(0f, 0f, 0f, 0.9f);
         }
 
-        yield return new WaitForSecondsRealtime(1f);
+        await Tween.Delay(1f, useUnscaledTime: true);
 
-        Tween.PunchScale(stageInfoText.transform, strength: Vector3.one * 0.5f, duration: 1.7f, frequency: 3, useUnscaledTime: true);
+        _ = Tween.PunchScale(stageInfoText.transform, strength: Vector3.one * 0.5f, duration: 1.7f, frequency: 3, useUnscaledTime: true);
 
-        yield return new WaitForSecondsRealtime(3f);
+        await Tween.Delay(3f, useUnscaledTime: true);
 
-        Tween.UIAnchoredPosition(stageInfoText.rectTransform, targetTextPosition, 1f, Ease.InOutQuad, useUnscaledTime: true);
-        Tween.Scale(stageInfoText.transform, Vector3.one, 1f, Ease.InOutQuad, useUnscaledTime: true);
+        _ = Tween.UIAnchoredPosition(stageInfoText.rectTransform, targetTextPosition, 1f, Ease.InOutQuad, useUnscaledTime: true);
+        _ = Tween.Scale(stageInfoText.transform, Vector3.one, 1f, Ease.InOutQuad, useUnscaledTime: true);
 
         if (darkScreen != null)
-            Tween.Alpha(darkScreen, 0f, 1f, Ease.InOutQuad, useUnscaledTime: true);
+            _ = Tween.Alpha(darkScreen, 0f, 1f, Ease.InOutQuad, useUnscaledTime: true);
 
-        yield return new WaitForSecondsRealtime(1.3f);
+        await Tween.Delay(1.3f, useUnscaledTime: true);
 
         if (darkScreen != null)
             darkScreen.gameObject.SetActive(false);
 
-        Time.timeScale = 1f;
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.ShowStep(0);
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
     }
 
     #endregion
@@ -115,18 +127,19 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
         if (!isReady || cameraTargetTransform == null)
             return;
 
-        float totalDistance = endPositionZ - startPositionZ;
+        float currentDistance = cameraTargetTransform.position.z - startPositionZ;
+        float targetValue = Mathf.Clamp01(currentDistance * inverseTotalDistance);
 
-        if (Mathf.Approximately(totalDistance, 0f))
+        if (Mathf.Abs(lastSliderValue - targetValue) < 0.001f)
             return;
 
-        float currentDistance = cameraTargetTransform.position.z - startPositionZ;
-        progressSlider.value = Mathf.Clamp01(currentDistance / totalDistance);
+        lastSliderValue = targetValue;
+        progressSlider.value = targetValue;
     }
 
     void UpdateUIInfo()
     {
-        int currentStage = mapState.currentRow + 1;
+        int currentStage = mapState.CurrentRow + 1;
         string modifierName = activeModifier.current != null ? activeModifier.current.name : "Standard";
 
         stageInfoText.text = $"CAVE {currentStage} - {modifierName}";

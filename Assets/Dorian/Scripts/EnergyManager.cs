@@ -18,14 +18,15 @@ public class EnergyManager : MonoBehaviour
 
     private int maxEnergy;
     private float currentEnergy;
-
     private float currentDrain;
+    float inverseMaxEnergy;
+    bool isDepleted;
 
     private void Awake()
     {
         maxEnergy = stats.maxEnergy;
         currentEnergy = maxEnergy;
-
+        inverseMaxEnergy = 1f / maxEnergy;
         currentDrain = idleDrain;
     }
 
@@ -33,27 +34,35 @@ public class EnergyManager : MonoBehaviour
     {
         currentEnergy = savedEnergy;
 
-        if (currentEnergy <= 0)
-            onEnergyDepleted?.Invoke();
+        if (currentEnergy > 0f)
+            return;
+
+        isDepleted = true;
+        onEnergyDepleted?.Invoke();
     }
 
     private void Update()
     {
+        if (isDepleted)
+            return;
+
         DrainEnergy();
     }
 
     private void DrainEnergy()
     {
-        if (currentEnergy <= 0)
-            return;
-
         currentEnergy -= currentDrain * Time.deltaTime;
-        currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
 
-        onEnergyPercentChange?.Invoke(currentEnergy / maxEnergy);
-
-        if (currentEnergy == 0)
+        if (currentEnergy <= 0f)
+        {
+            currentEnergy = 0f;
+            isDepleted = true;
+            onEnergyPercentChange?.Invoke(0f);
             onEnergyDepleted?.Invoke();
+            return;
+        }
+
+        onEnergyPercentChange?.Invoke(currentEnergy * inverseMaxEnergy);
     }
 
     public void SetIdleDrain()

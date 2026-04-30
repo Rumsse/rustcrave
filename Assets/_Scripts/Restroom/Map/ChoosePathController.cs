@@ -1,130 +1,195 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class ChoosePathController : MonoBehaviour
 {
+    #region Refs
+
+    [System.Serializable]
+    public class NodeUIComponents
+    {
+        public Button button;
+        public VisualElement icon;
+    }
+
     [SerializeField] MapState mapState;
     [SerializeField] ActiveModifier activeModifier;
     [SerializeField] GlobalInventorySO globalInventory;
-    [SerializeField] OreSO pulsite;
-
+    [SerializeField] OreSO pulsiteOre;
+    [SerializeField] VisualTreeAsset nodeButtonAsset;
     [SerializeField] VisualTreeAsset tooltipAsset;
+
     [SerializeField] string mainGameScene = "new Tunel Generation Rumsse";
     [SerializeField] string mainBossScene = "boss map";
+
+    [SerializeField] Sprite unknownIcon;
+    [SerializeField] Sprite bossIcon;
+
+    [SerializeField] float lineNodePadding = 20f;
+    [SerializeField] float horizontalSpread = 20f;
+    [SerializeField] float verticalSpread = 20f;
     [SerializeField] bool debugMode = true;
 
-    readonly Dictionary<Button, PathNodeData> buttonNodeMap = new();
-
+    readonly Dictionary<string, NodeUIComponents> nodeUIMap = new();
+    VisualElement nodesLayer;
+    VisualElement linesLayer;
     PathNodeTooltipController tooltipController;
-    Label debugLabel;
 
+    #endregion
 
     #region Initialization
 
     public void Initialize(VisualElement panelRoot, VisualElement tooltipLayer)
     {
-        if (mapState.nodes.Count == 0)
+        if (mapState.Nodes.Count == 0)
             mapState.Initialize();
+
+        nodesLayer = panelRoot.Q<VisualElement>("nodes-layer");
+        linesLayer = panelRoot.Q<VisualElement>("path-lines-layer");
 
         if (tooltipController == null)
             tooltipController = new PathNodeTooltipController(tooltipLayer, tooltipAsset);
 
-        buttonNodeMap.Clear();
-        BindButtons(panelRoot);
-        UpdateButtonStates();
+        GenerateUI();
+        linesLayer.generateVisualContent += OnGenerateLines;
 
-        if (debugMode)
-            SetupDebugLabel(panelRoot);
+        UpdateButtonStates();
     }
 
-    void BindButtons(VisualElement root)
+    void GenerateUI()
     {
-        foreach (var node in mapState.nodes)
-        {
-            var btn = root.Q<Button>($"node-{node.row}-{node.column}");
+        nodesLayer.Clear();
+        nodeUIMap.Clear();
 
-            if (btn == null)
+        float startRows = mapState.TotalRows;
+        float verticalOffset = 50f - (((startRows - 1f) / 2f) * verticalSpread);
+
+        float totalColumns = mapState.TotalColumns;
+        float horizontalOffset = 50f - (((totalColumns - 1f) / 2f) * horizontalSpread);
+
+        foreach (var node in mapState.Nodes)
+        {
+            var nodeButton = nodeButtonAsset.Instantiate().Q<Button>();
+            if (nodeButton == null)
             {
-                Debug.LogWarning($"Button node-{node.row}-{node.column} not found!");
+                Debug.LogError("Failed to find button");
                 continue;
             }
 
-            buttonNodeMap[btn] = node;
-            RegisterNodeEvents(btn, node);
+            VisualElement icon = nodeButton.Q<VisualElement>("node-icon");
+            if (icon == null)
+                Debug.LogWarning("node-icon not found in button UXML");
+
+            var uiComponents = new NodeUIComponents { button = nodeButton, icon = icon };
+            nodeUIMap[node.Id] = uiComponents;
+
+            SetupButtonPosition(nodeButton, node, horizontalOffset, verticalOffset);
+            RegisterNodeEvents(nodeButton, node);
+            nodesLayer.Add(nodeButton);
 
             if (debugMode)
-                SetupDebugButton(btn, node);
+                SetupDebugButton(nodeButton, node);
+
+            if (icon != null)
+                icon.style.backgroundImage = new StyleBackground(unknownIcon);
         }
+
+        nodesLayer.RegisterCallback<GeometryChangedEvent>(pointerEvent => linesLayer.MarkDirtyRepaint());
     }
 
-    void RegisterNodeEvents(Button btn, PathNodeData node)
+    void SetupButtonPosition(Button nodeButton, PathNodeData node, float horizontalOffset, float verticalOffset)
     {
-        btn.clicked += () => OnNodeClicked(node);
+        nodeButton.style.position = Position.Absolute;
 
-        if (node.row == mapState.TotalRows - 1)
-            return;
+        float left = node.ColumnPosition * horizontalSpread + horizontalOffset;
+        float bottom = node.Row * verticalSpread + verticalOffset;
 
-        btn.RegisterCallback<PointerEnterEvent>(evt =>
-            tooltipController.Show(node, mapState, evt.position));
-
-        btn.RegisterCallback<PointerLeaveEvent>(evt =>
-            tooltipController.Hide());
-
-        btn.RegisterCallback<PointerMoveEvent>(evt =>
-            tooltipController.UpdatePosition(evt.position));
-
-        btn.RegisterCallback<PointerDownEvent>(evt =>
-        {
-            if (evt.button == 1)
-                OnNodeRightClicked(node);
-        });
+        nodeButton.style.left = new StyleLength(Length.Percent(left));
+        nodeButton.style.bottom = new StyleLength(Length.Percent(bottom));
+        nodeButton.style.translate = new StyleTranslate(new Translate(Length.Percent(-50f), Length.Percent(50f)));
     }
 
     #endregion
 
-    #region Button States
+    #region Main Logic
 
     void UpdateButtonStates()
     {
-        var available = mapState.GetAvailableNodes();
+        var availableNodes = mapState.GetAvailableNodes();
 
-        foreach (var (btn, node) in buttonNodeMap)
+        foreach (var node in mapState.Nodes)
         {
-            bool isAvailable = available.Contains(node);
-            bool isVisited = node.row <= mapState.currentRow;
+            if (!nodeUIMap.TryGetValue(node.Id, out var uiComponents))
+                continue;
 
-            btn.SetEnabled(isAvailable);
+            Button nodeButton = uiComponents.button;
+            VisualElement iconElement = uiComponents.icon;
 
-            btn.RemoveFromClassList("node-available");
-            btn.RemoveFromClassList("node-visited");
-            btn.RemoveFromClassList("node-locked");
+            nodeButton.RemoveFromClassList("node-current");
+            nodeButton.RemoveFromClassList("node-visited");
+            nodeButton.RemoveFromClassList("node-available");
+            nodeButton.RemoveFromClassList("node-locked");
 
-            if (isVisited)
-                btn.AddToClassList("node-visited");
+            bool isBoss = node.Row == mapState.TotalRows - 1;
+            bool isCurrent = node.Id == mapState.CurrentNodeId;
+            bool isVisited = mapState.IsVisited(node);
+            bool isScanned = mapState.IsNodeScanned(node);
+            bool isAvailable = availableNodes.Any(n => n.Id == node.Id);
+            bool isIdentityKnown = isCurrent || isVisited || isScanned;
+
+            Sprite iconToShow = unknownIcon;
+
+            if (isBoss)
+            {
+                iconToShow = bossIcon;
+            }
+            else if (isIdentityKnown)
+            {
+                PathModifierData modifier = mapState.GetModifier(node);
+                iconToShow = modifier.Icon;
+            }
+
+            if (iconElement != null)
+            {
+                if (iconToShow != null)
+                {
+                    iconElement.style.backgroundImage = new StyleBackground(iconToShow);
+                    iconElement.style.display = DisplayStyle.Flex;
+                }
+                else
+                {
+                    iconElement.style.backgroundImage = null;
+                    iconElement.style.display = DisplayStyle.None;
+                }
+            }
+
+            if (isCurrent)
+                nodeButton.AddToClassList("node-current");
+            else if (isVisited)
+                nodeButton.AddToClassList("node-visited");
             else if (isAvailable)
-                btn.AddToClassList("node-available");
+                nodeButton.AddToClassList("node-available");
             else
-                btn.AddToClassList("node-locked");
+                nodeButton.AddToClassList("node-locked");
         }
     }
 
-    #endregion
-
-    #region Node Selection
-
     void OnNodeClicked(PathNodeData node)
     {
+        var availableNodes = mapState.GetAvailableNodes();
+        if (!availableNodes.Any(n => n.Id == node.Id))
+            return;
+
         mapState.MoveToNode(node);
+        activeModifier.Set(mapState.GetModifier(node));
 
-        var modifier = mapState.GetModifier(node);
-        activeModifier.Set(modifier);
+        UpdateButtonStates();
 
-        bool isBoss = node.row == mapState.TotalRows - 1;
-
-        string scene = isBoss ? mainBossScene : mainGameScene;
-        SceneManager.LoadScene(scene);
+        string sceneToLoad = node.Row == mapState.TotalRows - 1 ? mainBossScene : mainGameScene;
+        SceneManager.LoadScene(sceneToLoad);
     }
 
     void OnNodeRightClicked(PathNodeData node)
@@ -132,49 +197,98 @@ public class ChoosePathController : MonoBehaviour
         if (mapState.IsNodeScanned(node))
             return;
 
+        bool isVisitedOrCurrent = mapState.IsVisited(node) || node.Id == mapState.CurrentNodeId;
+        if (isVisitedOrCurrent)
+            return;
+
         if (globalInventory.Pulsite < 1)
             return;
 
-        globalInventory.RemoveItem(pulsite, 1);
+        globalInventory.RemoveItem(pulsiteOre, 1);
         mapState.ScanNode(node);
+
+        UpdateButtonStates();
         tooltipController.RefreshContent();
     }
 
     #endregion
 
-    #region Debug
+    #region Helpers & Lines
 
-    void SetupDebugButton(Button btn, PathNodeData node)
+    void RegisterNodeEvents(Button nodeButton, PathNodeData node)
+    {
+        nodeButton.clicked += () => OnNodeClicked(node);
+        nodeButton.RegisterCallback<PointerEnterEvent>(pointerEvent => tooltipController.Show(node, mapState, pointerEvent.position));
+        nodeButton.RegisterCallback<PointerLeaveEvent>(pointerEvent => tooltipController.Hide());
+        nodeButton.RegisterCallback<PointerMoveEvent>(pointerEvent => tooltipController.UpdatePosition(pointerEvent.position));
+        nodeButton.RegisterCallback<PointerDownEvent>(pointerEvent =>
+        {
+            if (pointerEvent.button == 1)
+                OnNodeRightClicked(node);
+        });
+    }
+
+    void OnGenerateLines(MeshGenerationContext meshContext)
+    {
+        var painter = meshContext.painter2D;
+        painter.strokeColor = new Color(1f, 1f, 1f, 0.35f);
+        painter.lineWidth = 3f;
+
+        var drawnLines = new HashSet<string>();
+
+        foreach (var node in mapState.Nodes)
+        {
+            if (node.ConnectedNodeIds == null)
+                continue;
+
+            if (!nodeUIMap.TryGetValue(node.Id, out var uiComponents) || uiComponents.button.worldBound.width == 0)
+                continue;
+
+            Vector2 startPosition = GetButtonCenter(uiComponents.button);
+
+            foreach (var targetId in node.ConnectedNodeIds)
+            {
+                string lineKey = string.Compare(node.Id, targetId) < 0 ? $"{node.Id}_{targetId}" : $"{targetId}_{node.Id}";
+                if (drawnLines.Contains(lineKey))
+                    continue;
+
+                drawnLines.Add(lineKey);
+
+                if (!nodeUIMap.TryGetValue(targetId, out var endUIComponents) || endUIComponents.button.worldBound.width == 0)
+                    continue;
+
+                Vector2 endPosition = GetButtonCenter(endUIComponents.button);
+                Vector2 direction = (endPosition - startPosition).normalized;
+
+                if (Vector2.Distance(startPosition, endPosition) <= lineNodePadding * 2.5f)
+                    continue;
+
+                painter.BeginPath();
+                painter.MoveTo(startPosition + direction * lineNodePadding);
+                painter.LineTo(endPosition - direction * lineNodePadding);
+                painter.Stroke();
+            }
+        }
+    }
+
+    Vector2 GetButtonCenter(Button nodeButton) => linesLayer.WorldToLocal(nodeButton.worldBound.center);
+
+    void SetupDebugButton(Button nodeButton, PathNodeData node)
     {
         var modifier = mapState.GetModifier(node);
-        btn.text = $"{modifier.DisplayName}\n[{node.row},{node.column}]";
-        btn.tooltip = $"Row: {node.row}\nCol: {node.column}\n{modifier.DisplayName}\n{modifier.Description}";
-    }
+        nodeButton.tooltip = $"[R: {node.Row}, C: {node.ColumnPosition:F1}] {modifier.DisplayName}";
 
-    void SetupDebugLabel(VisualElement root)
-    {
-        debugLabel = new Label();
+        var debugLabel = new Label(modifier.DisplayName);
         debugLabel.style.position = Position.Absolute;
-        debugLabel.style.left = 10;
-        debugLabel.style.bottom = 10;
-        debugLabel.style.color = Color.yellow;
-        debugLabel.style.fontSize = 14;
-        debugLabel.text = BuildDebugText();
-        root.Add(debugLabel);
-    }
+        debugLabel.style.bottom = -15f;
+        debugLabel.style.width = Length.Percent(200f);
+        debugLabel.style.left = Length.Percent(-50f);
+        debugLabel.style.alignSelf = Align.Center;
+        debugLabel.style.fontSize = 9f;
+        debugLabel.style.color = new Color(1f, 1f, 0.4f, 0.8f);
+        debugLabel.style.whiteSpace = WhiteSpace.NoWrap;
 
-    string BuildDebugText()
-    {
-        var text = $"Current: row {mapState.currentRow}, col {mapState.currentColumn}\n";
-        text += "Available nodes:\n";
-
-        foreach (var node in mapState.GetAvailableNodes())
-        {
-            var mod = mapState.GetModifier(node);
-            text += $"  [{node.row},{node.column}] {mod.DisplayName} (enemy x{mod.EnemySpawnMultiplier}, resource x{mod.ResourceSpawnMultiplier})\n";
-        }
-
-        return text;
+        nodeButton.Add(debugLabel);
     }
 
     #endregion

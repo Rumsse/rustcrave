@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 public class EventPanelController : MonoBehaviour
 {
+    public static event System.Action OnAnyEventResolved;
+
     [SerializeField] SwarmState swarmState;
     [SerializeField] EventDatabase eventDatabase;
     [SerializeField] float eventTriggerChance = 0.5f;
@@ -255,6 +257,9 @@ public class EventPanelController : MonoBehaviour
 
     void ClosePanel()
     {
+        if (isShowingResult)
+            OnAnyEventResolved?.Invoke();
+
         if (eventLayer != null)
             eventLayer.style.display = DisplayStyle.None;
 

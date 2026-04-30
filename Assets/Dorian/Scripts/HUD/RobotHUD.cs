@@ -31,6 +31,9 @@ public class RobotHUD : MonoBehaviour
     private MCFormController formController;
     private StatsManager statsManager;
 
+    private int lastDisplayedHP = -1;
+    private int lastDisplayedEnergy = -1;
+
     private List<InventorySlotUI> uiSlots = new List<InventorySlotUI>();
 
     public void OnClickIcon()
@@ -47,6 +50,9 @@ public class RobotHUD : MonoBehaviour
 
         nameText.text = unitData.unitType.robotName;
         icon.sprite = unitData.unitType.robotSprite;
+
+        lastDisplayedHP = -1;
+        lastDisplayedEnergy = -1;
 
         UpdateHealthText(unitData.currentHP, (float)unitData.currentHP / unitData.unitType.maxHP);
         UpdateEnergyText(unitData.currentEnergy, (float)unitData.currentEnergy / unitData.unitType.maxEnergy);
@@ -129,13 +135,13 @@ public class RobotHUD : MonoBehaviour
 
         if (gameObject.activeInHierarchy)
         {
-            StartCoroutine(UpdateStatsAfterInitialization());
+            UpdateStatsAfterInitialization();
         }
     }
 
-    private IEnumerator UpdateStatsAfterInitialization()
+    private async void UpdateStatsAfterInitialization()
     {
-        yield return new WaitForEndOfFrame();
+        await Awaitable.EndOfFrameAsync();
 
         HandleHealthChanged(healthManager != null ? (float)healthManager.CurrentHP / statsManager.MaxHP : 1f);
         HandleEnergyChanged(energyManager != null ? (float)energyManager.CurrentEnergy / statsManager.MaxEnergy : 1f);
@@ -161,14 +167,21 @@ public class RobotHUD : MonoBehaviour
 
     private void UpdateHealthText(int currentHp, float percent)
     {
+        if (currentHp == lastDisplayedHP) return;
+
+        lastDisplayedHP = currentHp;
         int maxHp = statsManager != null ? statsManager.MaxHP : unitData.unitType.maxHP;
         hpText.text = $"HP: {currentHp}/{maxHp}";
     }
 
     private void UpdateEnergyText(float currentEnergy, float percent)
     {
-        int maxEnergy = statsManager != null ? statsManager.MaxEnergy : unitData.unitType.maxEnergy;
         int energyInt = Mathf.CeilToInt(currentEnergy);
+
+        if (energyInt == lastDisplayedEnergy) return;
+
+        lastDisplayedEnergy = energyInt;
+        int maxEnergy = statsManager != null ? statsManager.MaxEnergy : unitData.unitType.maxEnergy;
         energyText.text = $"EN: {energyInt}/{maxEnergy}";
     }
 

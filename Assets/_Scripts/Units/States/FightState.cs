@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FightState : UnitState
+public class FightState : UnitState //here is the attack activation 
 {
     public FightState(UnitBase unit) : base(unit) {}
 

@@ -1,19 +1,25 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.AI;
+using FMODUnity;
 
 public class MCFormController : MonoBehaviour
 {
     public static MCFormController Instance { get; private set; }
 
     public event Action<UnitSO> OnFormChanged;
+    public bool IsTransitioning => isTransitioning;
 
     [Header("Settings")]
     [SerializeField] private CharacterForm currentForm = CharacterForm.Conductor;
     [SerializeField] private KeyCode switchKey;
     [SerializeField] private GameObject conductorBodyPrefab;
     [SerializeField] private float spiderDropForwardOffset;
+    [SerializeField] private float jumpArcHeight;
     [SerializeField] private Transform hatSlot;
+    [SerializeField] private float returnSpeedMultiplier;
+    [SerializeField] private float arrivalThreshold;
 
     [Header("Visuals")]
     [SerializeField] private GameObject conductorVisual;
@@ -23,13 +29,18 @@ public class MCFormController : MonoBehaviour
     [SerializeField] private UnitSO conductorStats;
     [SerializeField] private UnitSO spiderStats;
 
+    [Header("Sounds")]
+    [SerializeField] private EventReference connectSound;
+    [SerializeField] private EventReference disconnectSound;
+
     [Header("Animations")]
     [SerializeField] private string disconnectTriggerName = "Disconnect";
     [SerializeField] private string connectTriggerName = "Connect";
     [SerializeField] private string bodyDropTriggerName = "Down";
     [SerializeField] private string bodyRiseTriggerName = "Up";
+    [SerializeField] private string walkingBoolName = "IsWalking";
     [SerializeField] private float connectAnimationDuration;
-    [SerializeField] private float disconnectAnimationDuration = 0.5f;
+    [SerializeField] private float disconnectAnimationDuration;
 
     private GameObject droppedBodyInstance;
     private Animator spiderAnimator;
@@ -64,13 +75,21 @@ public class MCFormController : MonoBehaviour
 
     private void TryToggleForm()
     {
+        if (TryGetComponent<Unit>(out var unit))
+        {
+            unit.CancelActionAndPath();
+        }
+
         if (currentForm == CharacterForm.Conductor)
         {
             StartCoroutine(SwitchToSpiderRoutine());
+            AudioManager.PlayOneShot(disconnectSound);
+            CheckTutorialSpiderDetachAsync(); 
         }
         else if (currentForm == CharacterForm.Spider)
         {
             StartCoroutine(SwitchToConductorRoutine());
+            AudioManager.PlayOneShot(connectSound);
         }
     }
 
@@ -79,7 +98,7 @@ public class MCFormController : MonoBehaviour
         isTransitioning = true;
         currentForm = CharacterForm.Spider;
 
-        Vector3 startGlobalSpiderPos = hatSlot != null ? hatSlot.position : transform.position + Vector3.up * 2f;
+        Vector3 startGlobalSpiderPos = hatSlot != null ? hatSlot.position : transform.position;
 
         droppedBodyInstance = Instantiate(conductorBodyPrefab, transform.position, transform.rotation);
 
@@ -114,21 +133,35 @@ public class MCFormController : MonoBehaviour
         Vector3 defaultSpiderLocal = spiderVisual.transform.localPosition;
 
         float elapsed = 0f;
+        NavMeshAgent agent = GetComponent<NavMeshAgent>();
 
         while (elapsed < disconnectAnimationDuration)
         {
             float t = elapsed / disconnectAnimationDuration;
 
-            transform.position = Vector3.Lerp(rootStart, rootTarget, t);
+            Vector3 newPos = Vector3.Lerp(rootStart, rootTarget, t);
+
+            if (agent != null && agent.enabled)
+                agent.Warp(newPos);
+            else
+                transform.position = newPos;
 
             Vector3 targetGlobalSpiderPos = transform.TransformPoint(defaultSpiderLocal);
-            spiderVisual.transform.position = Vector3.Lerp(startGlobalSpiderPos, targetGlobalSpiderPos, t);
+            Vector3 linearPos = Vector3.Lerp(startGlobalSpiderPos, targetGlobalSpiderPos, t);
+
+            linearPos.y += Mathf.Sin(t * Mathf.PI) * jumpArcHeight;
+
+            spiderVisual.transform.position = linearPos;
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        transform.position = rootTarget;
+        if (agent != null && agent.enabled)
+            agent.Warp(rootTarget);
+        else
+            transform.position = rootTarget;
+
         spiderVisual.transform.localPosition = defaultSpiderLocal;
         isTransitioning = false;
     }
@@ -139,7 +172,42 @@ public class MCFormController : MonoBehaviour
 
         isTransitioning = true;
 
-        transform.position = droppedBodyInstance.transform.position;
+        if (TryGetComponent<NavMeshAgent>(out var agent) && agent.enabled)
+        {
+            float originalSpeed = agent.speed;
+            agent.speed = originalSpeed * returnSpeedMultiplier;
+
+            agent.SetDestination(droppedBodyInstance.transform.position);
+
+            if (spiderAnimator != null)
+            {
+                spiderAnimator.SetBool(walkingBoolName, true);
+            }
+
+            while (true)
+            {
+                if (!agent.pathPending)
+                {
+                    if (agent.remainingDistance <= arrivalThreshold) break;
+                    if (agent.pathStatus == NavMeshPathStatus.PathInvalid) break;
+                }
+                yield return null;
+            }
+
+            if (spiderAnimator != null)
+            {
+                spiderAnimator.SetBool(walkingBoolName, false);
+            }
+
+            agent.ResetPath();
+            agent.speed = originalSpeed;
+            agent.Warp(droppedBodyInstance.transform.position);
+        }
+        else
+        {
+            transform.position = droppedBodyInstance.transform.position;
+        }
+
         transform.rotation = droppedBodyInstance.transform.rotation;
 
         if (spiderAnimator != null)
@@ -217,6 +285,20 @@ public class MCFormController : MonoBehaviour
     public CharacterForm GetCurrentForm()
     {
         return currentForm;
+    }
+
+    private async void CheckTutorialSpiderDetachAsync()
+    {
+        if (TutorialTaskVerifier.Instance == null) return;
+
+        if (TutorialTaskVerifier.Instance.CurrentTask != TutorialTaskType.DetachSpider) return;
+
+        await Awaitable.WaitForSecondsAsync(1f);
+
+        if (TutorialTaskVerifier.Instance != null && TutorialTaskVerifier.Instance.CurrentTask == TutorialTaskType.DetachSpider)
+        {
+            TutorialTaskVerifier.Instance.CompleteTask();
+        }
     }
 }
 

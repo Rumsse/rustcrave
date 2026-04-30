@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using FMODUnity;
 
 public class RobotsCraftController : MonoBehaviour
 {
@@ -14,9 +15,11 @@ public class RobotsCraftController : MonoBehaviour
     }
 
     [SerializeField] private List<RobotCraftData> robotsCraftDataList;
+    [SerializeField] private EventReference craftSound;
 
     private Action<UnitSO> requestCraftRobot;
     private GlobalInventorySO globalInventory;
+    private InfoTooltipController infoTooltip;
 
 
 
@@ -28,10 +31,14 @@ public class RobotsCraftController : MonoBehaviour
         var infoBtn = root.Q<Button>("btn-info-robots");
         var infoPanel = root.Q<VisualElement>("robots-info-panel");
 
-        if (infoBtn != null && infoPanel != null)
+        if (infoPanel != null)
+            infoTooltip = new InfoTooltipController(infoPanel);
+
+        if (infoBtn != null && infoTooltip != null)
         {
-            infoBtn.clicked += () => ShowInfo(infoPanel);
-            infoBtn.clicked -= () => ShowInfo(infoPanel);
+            infoBtn.RegisterCallback<PointerEnterEvent>(evt => infoTooltip.Show(evt.position));
+            infoBtn.RegisterCallback<PointerLeaveEvent>(evt => infoTooltip.Hide());
+            infoBtn.RegisterCallback<PointerMoveEvent>(evt => infoTooltip.UpdatePosition(evt.position));
         }
 
         foreach (var data in robotsCraftDataList)
@@ -74,6 +81,7 @@ public class RobotsCraftController : MonoBehaviour
             return;
 
         ConsumeResources(recipe);
+        AudioManager.PlayOneShot(craftSound);
         requestCraftRobot?.Invoke(recipe.CraftedUnit);
     }
 

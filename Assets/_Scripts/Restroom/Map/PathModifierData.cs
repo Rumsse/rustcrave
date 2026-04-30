@@ -11,6 +11,7 @@ public class PathModifierData : ScriptableObject
 
     [SerializeField] string displayName;
     [SerializeField] string description;
+    [SerializeField] Sprite icon;
 
     public PathModifier Type => type;
     public float EnemySpawnMultiplier => enemySpawnMultiplier;
@@ -19,4 +20,6 @@ public class PathModifierData : ScriptableObject
     public bool IsCameraUnstable => isCameraUnstable;
     public string DisplayName => displayName;
     public string Description => description;
+
+    public Sprite Icon => icon;
 }

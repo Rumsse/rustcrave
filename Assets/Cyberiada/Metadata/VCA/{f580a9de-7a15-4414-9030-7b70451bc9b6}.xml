@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.03.00">
 	<object class="MixerVCA" id="{f580a9de-7a15-4414-9030-7b70451bc9b6}">
+		<property name="volume">
+			<value>-80</value>
+		</property>
 		<property name="name">
 			<value>Biom</value>
 		</property>
+		<relationship name="modulators">
+			<destination>{121911c4-e405-4398-92e7-cbe7260b7ae3}</destination>
+		</relationship>
 		<relationship name="mixer">
 			<destination>{eaf536b5-3f72-4f88-a54f-cbb20004069a}</destination>
 		</relationship>
+	</object>
+	<object class="ADSRModulator" id="{121911c4-e405-4398-92e7-cbe7260b7ae3}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>volume</value>
+		</property>
+		<property name="initialValue">
+			<value>-80</value>
+		</property>
+		<property name="attackTime">
+			<value>300</value>
+		</property>
+		<property name="finalValue">
+			<value>-80</value>
+		</property>
 	</object>
 </objects>
