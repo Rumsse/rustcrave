@@ -328,7 +328,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.6170654, y: -263.00006}
+  m_AnchoredPosition: {x: -1.6170654, y: -297}
   m_SizeDelta: {x: 1923.2, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &127021840
@@ -2823,11 +2823,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[3].stepName
-      value: SWARM MANAGEMENT
+      value: UNIT MANAGEMENT
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[4].stepName
-      value: PATH SELECTION
+      value: UNIT MANAGEMENT
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[5].stepName
@@ -2835,27 +2835,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[6].stepName
+      value: THE HUNT BEGINS
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[7].stepName
       value: PATH SELECTION
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[0].requiredTask
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
-      propertyPath: steps.Array.data[1].requiredTask
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
-      propertyPath: steps.Array.data[2].requiredTask
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[1].requiredTask
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[2].requiredTask
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[3].requiredTask
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[4].requiredTask
-      value: 0
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[5].requiredTask
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[6].requiredTask
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[0].pages.Array.size
@@ -2871,7 +2883,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[1].taskReminderText
-      value: Open the menu and craft a new robot and one Gadget.
+      value: Open the menu and craft a new robot.
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[2].pages.Array.size
@@ -2879,7 +2891,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[2].taskReminderText
-      value: Open the menu and craft a new robot and one Gadget.
+      value: Open the menu and craft a new Gadget.
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[3].pages.Array.size
@@ -2887,12 +2899,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[3].taskReminderText
-      value: Restore the Mantis's missing vitals and equip it with your new Gadget.
+      value: Open the Mantis detailed unit info by clicking on his image and in gadgets
+        slots assign a gadget.
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[4].taskReminderText
-      value: Enter path selection, Right-click (RMB) on a path to scan, then select
-        it to proceed!
+      value: Open the Mantis detailed unit info by clicking on his image and in gadgets
+        slots assign a gadget.
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[5].pages.Array.size
@@ -2909,11 +2922,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[6].taskReminderText
+      value: Enter path selection, Right-click (RMB) on a path to scan, then select
+        it to proceed!
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[7].pages.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[7].taskReminderText
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[0].pages.Array.data[0].title
-      value: RESTROOM
+      value: THE ASYLUM
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[0].pages.Array.data[1].title
@@ -2949,11 +2971,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[3].pages.Array.data[0].title
-      value: SWARM MANAGEMENT
+      value: UNIT MANAGEMENT
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[4].pages.Array.data[0].title
-      value: PATH SELECTION
+      value: DETAILED UNIT INFORMATION
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[5].pages.Array.data[0].title
@@ -2961,6 +2983,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[6].pages.Array.data[0].title
+      value: THE HUNT BEGINS
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[7].pages.Array.data[0].title
       value: THE HUNT BEGINS
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
@@ -2972,12 +2998,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[0].pages.Array.data[1].explanationText
-      value: 'Every time you enter an Asylum, you might stumble upon a unique event
-        or a remnant of the old world.
+      value: 'Most of the time you enter an Asylum, you might stumble upon a unique
+        event or a remnant of the old world.
 
 
-        Interact with it to make a choice
-        and reap the rewards... or face the consequences!'
+        Interact with it to make a
+        choice and reap the rewards... or face the consequences!'
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[1].pages.Array.data[0].explanationText
@@ -3033,16 +3059,18 @@ PrefabInstance:
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[3].pages.Array.data[0].explanationText
       value: "In the Swarm tab, you can manage your active roster. \n\nHere you can
-        equip the Gadgets you just crafted to specific robots. \n\nYou can also manually
-        restore their missing HP and Energy for a resource cost, and review their
-        detailed stats and descriptions."
+        click on 'Quick Management' to swiftly restore their missing HP and Energy
+        for a resource cost."
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[4].pages.Array.data[0].explanationText
-      value: "When you are ready to delve deeper, you must choose your next path
-        at the crossroads! \n\nThe contents of the upcoming tunnels are hidden by
-        default. \n\nHowever, you can spend 1 Pulsite to run a sonar scan and reveal
-        the hazards and loot that lie ahead."
+      value: 'In the Swarm tab, you can also click on specific unit portrait to review
+        all detailed information about it.
+
+
+        Here you will see their description,
+        class, abilities, every statistic and also their assigned gadgets! Of course
+        to do that firstly you need to craft one, but you already did!'
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[5].pages.Array.data[0].explanationText
@@ -3053,6 +3081,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[6].pages.Array.data[0].explanationText
+      value: "Excellent! \n\nYou have mastered the core loop of gathering, escaping,
+        and upgrading. You are now ready for the real challenge. \n\nThe depths of
+        Aion await you. Good luck, Conductor!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[7].pages.Array.data[0].explanationText
       value: "Excellent! \n\nYou have mastered the core loop of gathering, escaping,
         and upgrading. You are now ready for the real challenge. \n\nThe depths of
         Aion await you. Good luck, Conductor!"
@@ -3136,7 +3170,7 @@ MonoBehaviour:
   pulsiteOre: {fileID: 0}
   nodeButtonAsset: {fileID: 9197481963319205126, guid: df6ea6f039476844a8b90d08bd55835b, type: 3}
   tooltipAsset: {fileID: 9197481963319205126, guid: 02252f9e4166ef94ab467c186386ea09, type: 3}
-  mainGameScene: new Tunel Generation Rumsse
+  mainGameScene: Tutorial
   mainBossScene: BossTest
   unknownIcon: {fileID: 21300000, guid: af265b2fbc97a2045ac7f630d1214705, type: 3}
   bossIcon: {fileID: 21300000, guid: e600b90ad40b15f4386bf18e9dcee3bc, type: 3}

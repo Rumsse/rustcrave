@@ -13,9 +13,12 @@ public enum TutorialTaskType
     BreakWall,
     DetachSpider,
     EnterRestroom,
+    InteractWithEvent,
+    CraftRobot,
     CraftGadget,
+    RestoreEnergy,
     EquipGadget,
-    ScanPath,
+    ScanPathAndGo,
     EndTutorial
 }
 
@@ -116,6 +119,9 @@ public class TutorialManager : MonoBehaviour
             tutorialPanel.SetActive(false);
         if (taskReminderPanel != null)
             taskReminderPanel.SetActive(false);
+
+        if (FindAnyObjectByType<TunnelProgressUI>() == null)
+            ShowStep(0);
     }
 
     public void ShowStep(int index)
