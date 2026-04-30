@@ -57,10 +57,10 @@ public struct UnitSounds
 {
     // todo: later probably should move attackSound to attackSO
     public EventReference attackSound;
-    public EventReference walkSound;
     public EventReference mineSound;
     public EventReference selectSound;
     public EventReference takeDamageSound;
     public EventReference deathSound;
     public EventReference commandSound;
+    public EventReference orderSound;
 }
