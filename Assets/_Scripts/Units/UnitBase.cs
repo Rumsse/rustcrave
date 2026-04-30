@@ -3,7 +3,6 @@ using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public abstract class UnitBase : MonoBehaviour
@@ -146,6 +145,8 @@ public abstract class UnitBase : MonoBehaviour
 
         enemy.HealthManager.onDeath += StopAttacking;
     }
+
+    public virtual bool SpecialReactionForUnit() => false;
 
     #endregion
 

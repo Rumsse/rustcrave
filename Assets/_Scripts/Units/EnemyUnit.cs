@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class EnemyUnit : UnitBase
 {
-    
-    [SerializeField] private Transform guardPoint;
+    [SerializeField] protected Transform guardPoint;
+    [SerializeField] protected bool specialUnit;
 
-    public ItemSO StolenItem { get; private set; } // I need to reset that after we are hidden again + i think i need some time offset between attacks
+    public ItemSO StolenItem { get; private set; } // saves stolen item to drop later
 
-    private List<Unit> playerUnits = new();
+    protected List<Unit> playerUnits = new();
     
     private Dictionary<Unit, Action> deathCallbacks = new();
+    protected bool _available = true;
 
     #region Unity Lifecycle
 
@@ -29,7 +30,9 @@ public class EnemyUnit : UnitBase
     protected override void Update()
     {
         base.Update();
-        
+
+        if (!_available) return;
+
         if(!isAttacking && Stats.PossibleAttacks.Count != 0 && agent.enabled)
             agent.SetDestination(guardPoint.position);
     }
@@ -40,6 +43,8 @@ public class EnemyUnit : UnitBase
 
     public void UnitEnter(Unit unit)
     {
+        if (!_available) return;
+
         if (playerUnits.Contains(unit))
             return;
         
@@ -63,6 +68,8 @@ public class EnemyUnit : UnitBase
 
     private void RemoveUnit(Unit unit)
     {
+        if (!_available) return;
+
         if (!playerUnits.Remove(unit))
             return;
 
@@ -91,6 +98,11 @@ public class EnemyUnit : UnitBase
     {
         RemoveUnit(unit);
     }
+
+    #region Special Enemies Behavior 
+    protected virtual void HandleSpecialReaction() { }
+    public override bool SpecialReactionForUnit() => specialUnit;
+    #endregion
 
     #region Helper
 
@@ -126,12 +138,13 @@ public class EnemyUnit : UnitBase
     #region Stolen Item
 
     //managing stolen item 
-    public void StealItem(ItemSO item)
+    public virtual void StealItem(ItemSO item)
     {
         StolenItem = item;
+        HandleSpecialReaction();
     }
 
-    public void ClearStolenItem()
+    public virtual void ClearStolenItem()
     {
         StolenItem = null;
     }
