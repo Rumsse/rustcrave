@@ -14,7 +14,7 @@ public enum UnitActivity
     Disabled
 }
 
-public class Unit : UnitBase
+public class Unit : UnitBase, ITrackableUnit
 {
     public static Unit MainCharacter { get; private set; }
 
@@ -25,6 +25,8 @@ public class Unit : UnitBase
     public bool IsEnergyDrainDoubled { get; set; }
 
     public UnitInventory Inventory => inventory;
+    public Vector3 Position => transform.position;
+
 
     [SerializeField] private bool isMainCharacter;
     [SerializeField] private string commandTriggerName;
@@ -89,6 +91,9 @@ public class Unit : UnitBase
         energyManager.onEnergyDepleted += HandleEnergyDepleted;
         healthManager.onHit += HandleDamageTaken;
 
+        if (VisibilityManager.Instance != null)
+            VisibilityManager.Instance.Register(this);
+
         if (!units.Contains(this))
             units.Add(this);
     }
@@ -99,6 +104,9 @@ public class Unit : UnitBase
         energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted -= HandleEnergyDepleted;
         healthManager.onHit -= HandleDamageTaken;
+
+        if (VisibilityManager.Instance != null)
+            VisibilityManager.Instance.Unregister(this);
 
         if (units.Contains(this))
             units.Remove(this);
