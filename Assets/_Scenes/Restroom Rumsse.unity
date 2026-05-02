@@ -4008,6 +4008,7 @@ GameObject:
   - component: {fileID: 1830822323}
   - component: {fileID: 1830822322}
   - component: {fileID: 1830822326}
+  - component: {fileID: 1830822327}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4037,7 +4038,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1830822320}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
   m_Name: 
@@ -4178,6 +4179,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraCraftingController
   mainCamera: {fileID: 1830822325}
+  unitSpawner: {fileID: 1435208050}
+  craftController: {fileID: 810971829}
+  swarmController: {fileID: 2140184852}
+  robotZoomOffset: {x: 0, y: 1.3, z: 1.2}
+  robotFramingOffset: {x: 1.7, y: -1.5, z: -2.5}
+  playerZoomOffset: {x: 0, y: 1.5, z: 2.5}
+  playerFramingOffset: {x: 1, y: 1, z: 0}
+  swarmCenter: {fileID: 1198212858}
+  swarmZoomOffset: {x: 0, y: 2.5, z: 0.3}
+  swarmFramingOffset: {x: -1, y: 2.3, z: -0.15}
+  unitZoomOffset: {x: 0, y: 1.15, z: 2}
+  unitFramingOffset: {x: 0.75, y: 0.8, z: 0}
+  transitionSpeed: 5
+--- !u!114 &1830822327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830822320}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4ef747b6e9d4743a12a726001e2df2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraCraftingController
+  mainCamera: {fileID: 0}
   unitSpawner: {fileID: 1435208050}
   craftController: {fileID: 810971829}
   swarmController: {fileID: 2140184852}
