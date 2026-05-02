@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using PrimeTween;
 
 public class MainCraftController : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class MainCraftController : MonoBehaviour
 
     [SerializeField] VisualTreeAsset robotsCraftPanel;
     [SerializeField] VisualTreeAsset gadgetsCraftPanel;
+    //[SerializeField] VisualTreeAsset popupTemplate;
     [SerializeField] RobotsCraftController robotsCraftController;
     [SerializeField] GadgetsCraftController gadgetsCraftController;
     [SerializeField] VisualTreeAsset unitContainer;
@@ -69,6 +71,7 @@ public class MainCraftController : MonoBehaviour
     }
 
     public void NotifyPanelOpened() => OnCraftPanelOpened?.Invoke();
+    
     public void NotifyPanelClosed() => OnCraftPanelClosed?.Invoke();
 
     #endregion
@@ -165,19 +168,59 @@ public class MainCraftController : MonoBehaviour
         gadgetsGlobalInventory.AddGadget(gadget);
 
         if (gadgetCraftParticle != null)
-            StartCoroutine(PlayParticleAndNotifyRoutine());
+            StartCoroutine(PlayParticleAndNotifyRoutine(gadget));
         else
+        {
+           // ShowCraftPopup(gadget);
             OnAnyGadgetCrafted?.Invoke();
+        }
     }
 
-    IEnumerator PlayParticleAndNotifyRoutine()
+    IEnumerator PlayParticleAndNotifyRoutine(GadgetSO gadget)
     {
         gadgetCraftParticle.Play();
 
         yield return new WaitForSeconds(1.3f);
 
+       // ShowCraftPopup(gadget);
         OnAnyGadgetCrafted?.Invoke();
     }
+
+    /*void ShowCraftPopup(GadgetSO gadget)
+    {
+        if (popupTemplate == null)
+        {
+            Debug.LogWarning("Popup template is not assigned.");
+            return;
+        }
+
+        if (craftLayer == null)
+            return;
+
+        var popup = popupTemplate.CloneTree();
+        popup.style.position = Position.Absolute;
+        popup.style.top = new Length(50, LengthUnit.Percent);
+        popup.style.left = new Length(50, LengthUnit.Percent);
+        popup.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent), new Length(-50, LengthUnit.Percent), 0));
+
+        var iconContainer = popup.Q<VisualElement>("gadget-popup-icon");
+        var textLabel = popup.Q<Label>("gadget-popup-text");
+
+        if (iconContainer != null && gadget.gadgetIcon != null)
+            iconContainer.style.backgroundImage = new StyleBackground(gadget.gadgetIcon);
+
+        if (textLabel != null)
+            textLabel.text = $"You crafted: {gadget.name}";
+
+        craftLayer.Add(popup);
+        popup.style.scale = Vector3.zero;
+
+        Sequence.Create()
+            .Chain(Tween.Scale(popup, Vector3.one, 0.5f, Ease.OutBounce))
+            .ChainDelay(1.5f)
+            .Chain(Tween.Scale(popup, Vector3.zero, 0.3f, Ease.InBack))
+            .OnComplete(() => popup?.RemoveFromHierarchy());
+    }*/
 
     void AddSingleUnitToUI(SwarmUnitsData unitData)
     {

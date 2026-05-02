@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: Tutorial Event
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: RANDOM EVENT
+  eventDescription: 'You found a massive wall fully made of shiny stones.
+
+
+    What
+    do you do?'
+  dialogOptions:
+  - optionText: I order ___ to inspect it.
+    isIgnoreOption: 0
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: '___ inspected it and gathered a lot of useful minerals! '
+      actions:
+      - {fileID: 11400000, guid: 844cc8e3cb9ff8549a1e991409cc5f46, type: 2}
+      - {fileID: 11400000, guid: ebf4416832ea30547b3bbf74b6e30c0a, type: 2}
+      - {fileID: 11400000, guid: 844cc8e3cb9ff8549a1e991409cc5f46, type: 2}
+    failureOutcome:
+      resultText: 
+      actions: []
+  - optionText: I order ___ to mine it.
+    isIgnoreOption: 0
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: ___ mined it and received a lot of useful minerals!
+      actions:
+      - {fileID: 11400000, guid: ebf4416832ea30547b3bbf74b6e30c0a, type: 2}
+      - {fileID: 11400000, guid: d676db604354311448821b99ed62f24f, type: 2}
+      - {fileID: 11400000, guid: 844cc8e3cb9ff8549a1e991409cc5f46, type: 2}
+    failureOutcome:
+      resultText: '___ strikes the rock, and it repels him with unimaginable force,
+        emitting sparks!
+
+        ___ He takes 3 DMG!
+
+
+        The rock discharges
+        itself.'
+      actions: []
+  - optionText: Ignore
+    isIgnoreOption: 1
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: 
+      actions: []
+    failureOutcome:
+      resultText: 
+      actions: []

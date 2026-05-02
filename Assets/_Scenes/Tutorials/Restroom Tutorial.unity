@@ -1095,7 +1095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EventPanelController
   swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
-  eventDatabase: {fileID: 11400000, guid: 6282c60626c911947a0487d4a3798d28, type: 2}
+  eventDatabase: {fileID: 11400000, guid: 2b80448ccebf9384baba2ec4fe11bdc6, type: 2}
   eventTriggerChance: 1
 --- !u!4 &363767987
 Transform:
@@ -1743,6 +1743,7 @@ MonoBehaviour:
   gadgetsGlobalInventory: {fileID: 11400000, guid: 5820305f0014e82429e867a180d2aa24, type: 2}
   robotsCraftPanel: {fileID: 9197481963319205126, guid: c8a5f620aef0a024cbd180dfe15d9156, type: 3}
   gadgetsCraftPanel: {fileID: 9197481963319205126, guid: 85b3adb506299cc45a3444c3810153a8, type: 3}
+  popupTemplate: {fileID: 9197481963319205126, guid: be0b089570d492446ae41c51bb5c43a8, type: 3}
   robotsCraftController: {fileID: 810971830}
   gadgetsCraftController: {fileID: 810971831}
   unitContainer: {fileID: 9197481963319205126, guid: 0cbc2e256b9933f4fa75fab81d33d7de, type: 3}
@@ -1920,7 +1921,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 828975488}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93b5c63e958f59a48abd1f3891f25b48, type: 3}
   m_Name: 
@@ -2328,13 +2329,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1097555081}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.32510242, z: -0, w: 0.9456789}
-  m_LocalPosition: {x: 4.13, y: -7.05, z: -10.69}
-  m_LocalScale: {x: 0.30846, y: 0.30846, z: 0.30846}
+  m_LocalRotation: {x: -0, y: 0.24276313, z: -0, w: 0.9700857}
+  m_LocalPosition: {x: 6.26, y: -5.63, z: -13.22}
+  m_LocalScale: {x: 0.4502282, y: 0.4502282, z: 0.4502282}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 645902398}
-  m_LocalEulerAnglesHint: {x: 0, y: 37.944, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 28.099, z: 0}
 --- !u!212 &1097555083
 SpriteRenderer:
   serializedVersion: 2
@@ -2572,8 +2573,8 @@ Transform:
   m_GameObject: {fileID: 1166529609}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.31000042, y: -7.05, z: -2.7700005}
-  m_LocalScale: {x: 0.30846, y: 0.30846, z: 0.30846}
+  m_LocalPosition: {x: 0.07, y: -5.63, z: -2.9500008}
+  m_LocalScale: {x: 0.4609911, y: 0.4609911, z: 0.4609911}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 645902398}
@@ -2816,6 +2817,10 @@ PrefabInstance:
     - target: {fileID: 419825187659857983, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: m_Name
       value: Tutorial Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 419825187659857983, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4335006620908961584, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4253,13 +4258,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622955851}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.94281507, z: -0, w: 0.33331648}
-  m_LocalPosition: {x: 4.21, y: -7.05, z: 5.16}
-  m_LocalScale: {x: 0.30846, y: 0.30846, z: 0.30846}
+  m_LocalRotation: {x: -0, y: 0.95130736, z: -0, w: 0.30824396}
+  m_LocalPosition: {x: 6.2, y: -5.7199993, z: 8.48}
+  m_LocalScale: {x: 0.4747816, y: 0.4747816, z: 0.4747816}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 645902398}
-  m_LocalEulerAnglesHint: {x: 0, y: 141.06, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 144.093, z: 0}
 --- !u!212 &1622955853
 SpriteRenderer:
   serializedVersion: 2
@@ -4307,7 +4312,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 4f38c137210ff49418fa94681da5f1da, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4776,8 +4781,8 @@ MonoBehaviour:
   unitSpawner: {fileID: 1435208050}
   craftController: {fileID: 810971829}
   swarmController: {fileID: 2140184852}
-  robotZoomOffset: {x: 0, y: 1.5, z: 3}
-  robotFramingOffset: {x: -1, y: 1.5, z: 0}
+  robotZoomOffset: {x: 0, y: 1.3, z: 1.2}
+  robotFramingOffset: {x: 1.7, y: -1.5, z: -2.5}
   playerZoomOffset: {x: 0, y: 1.5, z: 2.5}
   playerFramingOffset: {x: 1, y: 1, z: 0}
   swarmCenter: {fileID: 1198212858}
