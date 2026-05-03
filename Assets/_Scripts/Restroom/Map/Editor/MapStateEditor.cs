@@ -12,20 +12,16 @@ public class MapStateEditor : Editor
 
         EditorGUILayout.Space(10);
 
-        if (GUILayout.Button("Reset Map"))
+        if (GUILayout.Button("Reset to Start"))
         {
-            mapState.currentRow = -1;
-            mapState.currentColumn = 1;
-            mapState.nodes.Clear();
+            mapState.ResetProgress();
             EditorUtility.SetDirty(mapState);
-            Debug.Log("Map reset!");
         }
 
         if (GUILayout.Button("Regenerate Map"))
         {
             mapState.Initialize();
             EditorUtility.SetDirty(mapState);
-            Debug.Log($"Map regenerated! {mapState.nodes.Count} nodes created.");
         }
 
         if (Application.isPlaying)
@@ -33,7 +29,7 @@ public class MapStateEditor : Editor
 
         EditorGUILayout.Space(5);
         EditorGUILayout.HelpBox(
-            $"Current: row {mapState.currentRow}, col {mapState.currentColumn}\nNodes: {mapState.nodes.Count}",
+            $"Current Node Row: {mapState.CurrentRow}\nVisited Nodes: {mapState.VisitedNodesCount}\nTotal Generated Nodes: {mapState.Nodes.Count}",
             MessageType.Info
         );
     }

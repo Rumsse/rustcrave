@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TunnelEnd : MonoBehaviour
 {
@@ -11,8 +10,13 @@ public class TunnelEnd : MonoBehaviour
     [SerializeField] private Collider triggerCollider;
     [SerializeField] private float energyRestorePercentage = 0.5f;
 
-    private void OnTriggerEnter(Collider other)
+    private bool isTransitioning;
+
+    private async void OnTriggerEnter(Collider other)
     {
+        if (isTransitioning)
+            return;
+
         if (!other.CompareTag("Unit"))
             return;
 
@@ -22,21 +26,27 @@ public class TunnelEnd : MonoBehaviour
             return;
         }
 
+        isTransitioning = true;
         OnTunnelEndReached?.Invoke();
         RestoreEnergy();
-        SceneManager.LoadScene(sceneToLoad);
+
+        if (SceneTransitionManager.Instance != null)
+            await SceneTransitionManager.Instance.TransitionToScene(sceneToLoad);
+        else
+            Debug.LogError("TunnelEnd: SceneTransitionManager is missing!");
     }
 
     private void RestoreEnergy()
     {
-        if (swarmState == null) return;
+        if (swarmState == null)
+            return;
 
         foreach (var unit in swarmState.SwarmUnits)
         {
-            if (!unit.isAlive || unit.unitType == null) continue;
+            if (!unit.isAlive || unit.unitType == null)
+                continue;
 
-            float restoreAmount = unit.unitType.maxEnergy * energyRestorePercentage;
-            unit.RestoreEnergy(restoreAmount);
+            unit.RestoreEnergy(unit.unitType.maxEnergy * energyRestorePercentage);
         }
     }
 

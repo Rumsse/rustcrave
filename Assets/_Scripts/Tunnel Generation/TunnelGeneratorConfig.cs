@@ -4,6 +4,7 @@ using UnityEngine;
 public class TunnelGeneratorConfig : ScriptableObject
 {
     [Header("Tunnel Pools")]
+    [SerializeField] private TunnelPrefabPool startTunnelPool;
     [SerializeField] private TunnelPrefabPool tunnelPool;
     [SerializeField] private TunnelPrefabPool linkStartPool;
     [SerializeField] private TunnelPrefabPool linkEndPool;
@@ -26,6 +27,7 @@ public class TunnelGeneratorConfig : ScriptableObject
     [SerializeField] private int totalSegmentsToGenerate = 50;
     [SerializeField] private bool autoValidateOnLoad = true;
 
+    public TunnelPrefabPool StartTunnelPool => startTunnelPool;
     public TunnelPrefabPool TunnelPool => tunnelPool;
     public TunnelPrefabPool LinkStartPool => linkStartPool;
     public TunnelPrefabPool LinkEndPool => linkEndPool;
@@ -40,6 +42,7 @@ public class TunnelGeneratorConfig : ScriptableObject
     {
         int baseLength = Random.Range(minSingleTunnelSegments, maxSingleTunnelSegments + 1);
         int variance = Random.Range(-singleTunnelLengthVariance, singleTunnelLengthVariance + 1);
+
         return Mathf.Max(1, baseLength + variance);
     }
 
@@ -47,6 +50,7 @@ public class TunnelGeneratorConfig : ScriptableObject
     {
         int baseLength = Random.Range(minDoubleTunnelSegments, maxDoubleTunnelSegments + 1);
         int variance = Random.Range(-doubleTunnelLengthVariance, doubleTunnelLengthVariance + 1);
+
         return Mathf.Max(1, baseLength + variance);
     }
 
@@ -62,6 +66,13 @@ public class TunnelGeneratorConfig : ScriptableObject
     {
         bool isValid = true;
 
+        if (startTunnelPool == null)
+        {
+            Debug.LogError("Start Tunnel Pool is not assigned!");
+            isValid = false;
+        }
+        else
+            isValid &= startTunnelPool.Validate();
 
         if (tunnelPool == null)
         {

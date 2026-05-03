@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using FMODUnity;
 
 public class PauseMenuManager : MonoBehaviour
 {
     [SerializeField] private string mainMenuSceneName = "Main Menu";
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private KeyCode pauseKey = KeyCode.Escape;
+    [SerializeField] private EventReference interactionSound;
 
     private bool isPaused;
 
@@ -44,12 +46,16 @@ public class PauseMenuManager : MonoBehaviour
         Time.timeScale = 1f;
 
         if (pausePanel != null)
+        {
+            AudioManager.PlayOneShot(interactionSound);
             pausePanel.SetActive(false);
+        }
     }
 
     public void ReturnToMainMenu()
     {
         Time.timeScale = 1f;
+        AudioManager.PlayOneShot(interactionSound);
         SceneManager.LoadScene(mainMenuSceneName);
     }
 }

@@ -20,9 +20,11 @@ public class UIManager : MonoBehaviour
     VisualElement panelLayer;
     VisualElement tooltipLayer;
     VisualElement eventPanelLayer;
+    VisualElement actionButtonsContainer;
 
     readonly Dictionary<string, VisualElement> panelCache = new();
     string activePanelKey;
+    VisualElement activeSlot;
 
     #region Initialization
 
@@ -36,13 +38,36 @@ public class UIManager : MonoBehaviour
         rightPanelSlot = root.Q("right-panel");
         tooltipLayer = root.Q("tooltip-layer");
         eventPanelLayer = root.Q("event-layer");
+        actionButtonsContainer = root.Q("action-buttons");
 
-        root.Q<Button>("btn-craft").clicked += () => 
+        panelLayer.pickingMode = PickingMode.Ignore;
+        leftPanelSlot.pickingMode = PickingMode.Ignore;
+        rightPanelSlot.pickingMode = PickingMode.Ignore;
+        eventPanelLayer.pickingMode = PickingMode.Ignore;
+
+        root.Q<Button>("btn-craft").clicked += () =>
+        {
             TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
-        root.Q<Button>("btn-swarm").clicked += () => 
+
+            if (activePanelKey == "main-craft-panel")
+                mainCraftController.NotifyPanelOpened();
+            else
+                mainCraftController.NotifyPanelClosed();
+        };
+
+        root.Q<Button>("btn-swarm").clicked += () =>
+        {
             TogglePanel("swarm-panel", swarmPanel, leftPanelSlot);
-        root.Q<Button>("btn-choose-path").clicked += () => 
-            TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
+
+            if (activePanelKey == "swarm-panel")
+                swarmPanelController.NotifyPanelOpened();
+            else
+                swarmPanelController.NotifyPanelClosed();
+        };
+
+        root.Q<Button>("btn-choose-path").clicked += () => TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
+
+        root.RegisterCallback<PointerDownEvent>(OnScreenClicked, TrickleDown.TrickleDown);
 
         var popUpContainer = root.Q<VisualElement>("event-pop-up");
         var popUpButton = root.Q<Button>("btn-event-pop-up");
@@ -65,30 +90,32 @@ public class UIManager : MonoBehaviour
 
     #region Tab Management
 
-    void TogglePanel(string key, VisualTreeAsset asset, VisualElement slot)
+    void TogglePanel(string key, VisualTreeAsset asset, VisualElement targetSlot)
     {
         if (activePanelKey == key)
         {
-            CloseCurrentPanel(slot);
+            CloseCurrentPanel();
             return;
         }
 
         if (activePanelKey != null)
-            CloseCurrentPanel(slot);
+            CloseCurrentPanel();
 
         if (!panelCache.TryGetValue(key, out var panel))
         {
             panel = asset.CloneTree();
             panelCache[key] = panel;
-            BindCloseButton(panel, slot);
+            BindCloseButton(panel);
             InitializePanel(key, panel);
         }
 
-        slot.Add(panel);
+        targetSlot.Add(panel);
         panel.style.flexGrow = 1;
-        slot.style.display = DisplayStyle.Flex;
+        targetSlot.style.display = DisplayStyle.Flex;
         panelLayer.style.display = DisplayStyle.Flex;
+
         activePanelKey = key;
+        activeSlot = targetSlot;
     }
 
     void InitializePanel(string key, VisualElement panel)
@@ -103,25 +130,50 @@ public class UIManager : MonoBehaviour
             choosePathController.Initialize(panel, tooltipLayer);
     }
 
-    void BindCloseButton(VisualElement panel, VisualElement slot)
+    void BindCloseButton(VisualElement panel)
     {
         var closeBtn = panel.Q<Button>("btn-close");
 
         if (closeBtn != null)
-            closeBtn.clicked += () => CloseCurrentPanel(slot);
+            closeBtn.clicked += CloseCurrentPanel;
     }
 
-    void CloseCurrentPanel(VisualElement slot)
+    void CloseCurrentPanel()
     {
         if (activePanelKey == null)
             return;
 
+        if (activePanelKey == "main-craft-panel")
+            mainCraftController.NotifyPanelClosed();
+
+        if (activePanelKey == "swarm-panel")
+            swarmPanelController.NotifyPanelClosed();
+
         if (panelCache.TryGetValue(activePanelKey, out var panel))
             panel.RemoveFromHierarchy();
 
-        slot.style.display = DisplayStyle.None;
+        if (activeSlot != null)
+            activeSlot.style.display = DisplayStyle.None;
+
         panelLayer.style.display = DisplayStyle.None;
         activePanelKey = null;
+        activeSlot = null;
+    }
+
+    void OnScreenClicked(PointerDownEvent evt)
+    {
+        if (activeSlot == null)
+            return;
+
+        var target = evt.target as VisualElement;
+
+        if (activeSlot.Contains(target))
+            return;
+
+        if (actionButtonsContainer != null && actionButtonsContainer.Contains(target))
+            return;
+
+        CloseCurrentPanel();
     }
 
     #endregion

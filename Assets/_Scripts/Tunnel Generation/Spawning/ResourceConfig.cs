@@ -1,27 +1,31 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ResourceConfig", menuName = "Tunnel System/Resource Config")]
-public class ResourceConfig : ScriptableObject, ISpawnConfig
+public class ResourceConfig : BaseSpawnConfig
 {
-    [SerializeField] private List<SpawnEntry> resources = new List<SpawnEntry>();
     [SerializeField] private int maxSpawnsPerSegment = 3;
 
-    public IReadOnlyList<SpawnEntry> Entries => resources;
-    public int MaxSpawnsPerSegment => maxSpawnsPerSegment;
-    public float TotalChance => cachedTotalChance;
+    public override int BaseMaxSpawnsPerSegment => maxSpawnsPerSegment;
 
-    private float cachedTotalChance;
-
-    private void OnEnable() => RecalculateTotalChance();
-    private void OnValidate() => RecalculateTotalChance();
-
-    private void RecalculateTotalChance()
+    public override int MaxSpawnsPerSegment
     {
-        cachedTotalChance = 0f;
-        foreach (var entry in resources)
-            cachedTotalChance += entry.SpawnChance;
+        get
+        {
+            float ratio = BaseTotalChance > 0f ? TotalChance / BaseTotalChance : 1f;
+            return Mathf.RoundToInt(maxSpawnsPerSegment * ratio);
+        }
     }
 
-    public bool Validate() => SpawnHelper.ValidateConfig(this, name);
+    public override float GetModifiedChance(SpawnEntry entry)
+    {
+        if (activeModifier == null)
+            return entry.SpawnChance;
+
+        float modifiedChance = entry.SpawnChance * activeModifier.ResourceSpawnMultiplier;
+
+        if (entry.SpawnTag == SpawnTag.Pulsite)
+            modifiedChance *= activeModifier.PulsiteSpawnMultiplier;
+
+        return modifiedChance;
+    }
 }

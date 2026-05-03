@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using PrimeTween;
 
 public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -15,24 +16,29 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     #endregion
 
-    #region State
+    #region UI Elements
 
     [SerializeField] Slider progressSlider;
     [SerializeField] TextMeshProUGUI stageInfoText;
     [SerializeField] GameObject tooltipPanel;
     [SerializeField] TextMeshProUGUI tooltipText;
+    [SerializeField] Image darkScreen;
 
     #endregion
 
     #region State
 
     float startPositionZ;
-    float endPositionZ;
+    float inverseTotalDistance;
+    float lastSliderValue = -1f;
     bool isReady;
+    Vector2 targetTextPosition;
 
     #endregion
 
     #region Initialization
+
+    private void Awake() => Time.timeScale = 0f;
 
     void OnEnable()
     {
@@ -46,6 +52,8 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
             tunnelGenerator.OnNavMeshReady -= SetupTracking;
     }
 
+    void Start() => StartIntroSequence();
+
     void SetupTracking()
     {
         var segments = tunnelGenerator.GetSpawnedSegments();
@@ -53,13 +61,61 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
         if (segments.Count == 0)
             return;
 
-        //startPositionZ = segments[0].transform.position.z;
         startPositionZ = startPos.transform.position.z;
-        endPositionZ = segments[^1].transform.position.z - 10f;
+        float endPositionZ = segments[^1].transform.position.z - 10f;
+        float totalDistance = endPositionZ - startPositionZ;
 
-        UpdateUIInfo();
+        if (Mathf.Approximately(totalDistance, 0f))
+            return;
+
+        inverseTotalDistance = 1f / totalDistance;
         tooltipPanel.SetActive(false);
         isReady = true;
+    }
+
+    #endregion
+
+    #region Intro Sequence
+
+    async void StartIntroSequence()
+    {
+        UpdateUIInfo();
+
+        targetTextPosition = stageInfoText.rectTransform.anchoredPosition;
+        stageInfoText.rectTransform.anchoredPosition = Vector2.zero;
+        stageInfoText.transform.localScale = Vector3.one * 2f;
+
+        if (darkScreen != null)
+        {
+            darkScreen.gameObject.SetActive(true);
+            darkScreen.color = new Color(0f, 0f, 0f, 0.9f);
+        }
+
+        await Tween.Delay(1f, useUnscaledTime: true);
+
+        _ = Tween.PunchScale(stageInfoText.transform, strength: Vector3.one * 0.5f, duration: 1.7f, frequency: 3, useUnscaledTime: true);
+
+        await Tween.Delay(3f, useUnscaledTime: true);
+
+        _ = Tween.UIAnchoredPosition(stageInfoText.rectTransform, targetTextPosition, 1f, Ease.InOutQuad, useUnscaledTime: true);
+        _ = Tween.Scale(stageInfoText.transform, Vector3.one, 1f, Ease.InOutQuad, useUnscaledTime: true);
+
+        if (darkScreen != null)
+            _ = Tween.Alpha(darkScreen, 0f, 1f, Ease.InOutQuad, useUnscaledTime: true);
+
+        await Tween.Delay(1.3f, useUnscaledTime: true);
+
+        if (darkScreen != null)
+            darkScreen.gameObject.SetActive(false);
+
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.ShowStep(0);
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
     }
 
     #endregion
@@ -71,18 +127,19 @@ public class TunnelProgressUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
         if (!isReady || cameraTargetTransform == null)
             return;
 
-        float totalDistance = endPositionZ - startPositionZ;
+        float currentDistance = cameraTargetTransform.position.z - startPositionZ;
+        float targetValue = Mathf.Clamp01(currentDistance * inverseTotalDistance);
 
-        if (Mathf.Approximately(totalDistance, 0f))
+        if (Mathf.Abs(lastSliderValue - targetValue) < 0.001f)
             return;
 
-        float currentDistance = cameraTargetTransform.position.z - startPositionZ;
-        progressSlider.value = Mathf.Clamp01(currentDistance / totalDistance);
+        lastSliderValue = targetValue;
+        progressSlider.value = targetValue;
     }
 
     void UpdateUIInfo()
     {
-        int currentStage = mapState.currentRow + 1;
+        int currentStage = mapState.CurrentRow + 1;
         string modifierName = activeModifier.current != null ? activeModifier.current.name : "Standard";
 
         stageInfoText.text = $"CAVE {currentStage} - {modifierName}";

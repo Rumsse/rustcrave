@@ -6,4 +6,5 @@ public interface IMineable
     float GetDurability();
     bool IsDepleted();
     void PlayEffect();
+    void StopEffect();
 }

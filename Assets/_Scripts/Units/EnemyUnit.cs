@@ -1,19 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using UnityEngine;
 
 public class EnemyUnit : UnitBase
 {
-    [SerializeField] private Transform guardPoint;
     
+    [SerializeField] private Transform guardPoint;
+
+    public ItemSO StolenItem { get; private set; } // I need to reset that after we are hidden again + i think i need some time offset between attacks
+
     private List<Unit> playerUnits = new();
     
     private Dictionary<Unit, Action> deathCallbacks = new();
-    
+
     #region Unity Lifecycle
 
-    private void OnDestroy()
+
+    protected override void OnDestroy()
     {
         foreach (var kvp in deathCallbacks)
         {
@@ -57,20 +60,31 @@ public class EnemyUnit : UnitBase
     }
 
     #endregion
-    
+
     private void RemoveUnit(Unit unit)
     {
         if (!playerUnits.Remove(unit))
             return;
-        
+
         if (deathCallbacks.TryGetValue(unit, out Action callback))
         {
             unit.HealthManager.onDeath -= callback;
             deathCallbacks.Remove(unit);
         }
-        
+
         if (AttackTarget == unit)
-            AttackTarget = GetClosestUnit();
+        {
+            Unit newTarget = GetClosestUnit();
+
+            if (newTarget != null)
+            {
+                AttackTarget = newTarget;
+            }
+            else
+            {
+                StopAttacking();
+            }
+        }
     }
 
     private void RemoveOnDeath(Unit unit)
@@ -105,6 +119,21 @@ public class EnemyUnit : UnitBase
     private void NullCleanup()
     {
         playerUnits.RemoveAll(unit => !unit);
+    }
+
+    #endregion
+
+    #region Stolen Item
+
+    //managing stolen item 
+    public void StealItem(ItemSO item)
+    {
+        StolenItem = item;
+    }
+
+    public void ClearStolenItem()
+    {
+        StolenItem = null;
     }
 
     #endregion

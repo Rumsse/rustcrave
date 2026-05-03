@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 public class EventPanelController : MonoBehaviour
 {
+    public static event System.Action OnAnyEventResolved;
+
     [SerializeField] SwarmState swarmState;
     [SerializeField] EventDatabase eventDatabase;
     [SerializeField] float eventTriggerChance = 0.5f;
@@ -17,6 +19,9 @@ public class EventPanelController : MonoBehaviour
     Label descriptionLabel;
     DropdownField robotDropdown;
     VisualElement buttonsContainer;
+
+    VisualElement mainIcon;
+    VisualElement popUpIcon;
 
     RandomEvent currentEvent;
     List<SwarmUnitsData> activeRobots = new();
@@ -41,6 +46,8 @@ public class EventPanelController : MonoBehaviour
         robotDropdown = root.Q<DropdownField>("robot-dropdown");
         buttonsContainer = root.Q<VisualElement>("event-options");
 
+        mainIcon = root.Q<VisualElement>("icon");
+
         var closeBtn = root.Q<Button>("btn-close");
 
         if (closeBtn != null)
@@ -51,6 +58,9 @@ public class EventPanelController : MonoBehaviour
 
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
+
+        if (popUpContainer != null)
+            popUpIcon = popUpContainer.Q<VisualElement>("icon");
 
         if (robotDropdown != null)
             robotDropdown.RegisterValueChangedCallback(evt => OnRobotSelectionChanged(evt.newValue));
@@ -99,6 +109,7 @@ public class EventPanelController : MonoBehaviour
 
         SetupDropdown();
         SetupButtons();
+        SetupIcons();
         UpdateDynamicTexts();
 
         if (robotDropdown != null)
@@ -128,6 +139,20 @@ public class EventPanelController : MonoBehaviour
     #endregion
 
     #region UI Management
+
+    void SetupIcons()
+    {
+        if (currentEvent == null)
+            return;
+
+        var background = currentEvent.eventIcon != null ? new StyleBackground(currentEvent.eventIcon) : new StyleBackground(StyleKeyword.Initial);
+
+        if (mainIcon != null)
+            mainIcon.style.backgroundImage = background;
+
+        if (popUpIcon != null)
+            popUpIcon.style.backgroundImage = background;
+    }
 
     void SetupDropdown()
     {
@@ -255,6 +280,9 @@ public class EventPanelController : MonoBehaviour
 
     void ClosePanel()
     {
+        if (isShowingResult)
+            OnAnyEventResolved?.Invoke();
+
         if (eventLayer != null)
             eventLayer.style.display = DisplayStyle.None;
 

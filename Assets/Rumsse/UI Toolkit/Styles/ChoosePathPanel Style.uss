@@ -1,29 +1,47 @@
-VisualElement {
-}
-
 .pathButton {
-    color: rgb(255, 244, 232);
-    background-color: rgb(27, 27, 27);
-    border-left-color: rgb(72, 72, 72);
-    border-right-color: rgb(72, 72, 72);
-    border-top-color: rgb(72, 72, 72);
-    border-bottom-color: rgb(72, 72, 72);
+    width: 65px;
+    height: 65px;
+    font-size: 25px;
     border-top-left-radius: 50px;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
     border-bottom-left-radius: 50px;
-    width: 90px;
-    height: 90px;
-    font-size: 25px;
-    margin-top: 0;
-    margin-right: 7%;
-    margin-bottom: 0;
-    margin-left: 7%;
+    border-width: 2px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    transition-duration: 0.2s;
 }
 
-.row {
-    flex-direction: row;
-    align-self: auto;
-    justify-content: center;
-    align-items: center;
+.node-current, .node-current:disabled {
+    background-color: rgb(20, 50, 20);
+    color: rgb(255, 255, 255);
+    border-color: rgb(62, 89, 62);
+    border-width: 5px;
+    opacity: 1;
+}
+
+.node-visited, .node-visited:disabled {
+    background-color: rgb(48, 82, 48);
+    color: rgb(255, 255, 255);
+    border-color: rgb(82, 82, 82);
+    opacity: 0.55;
+}
+
+.node-available {
+    background-color: rgb(20, 20, 20);
+    color: rgb(255, 244, 232);
+    border-color: rgb(0, 0, 0);
+}
+
+.node-locked, .node-locked:disabled {
+    background-color: rgb(35, 35, 35);
+    color: rgb(255, 244, 232);
+    border-color: rgb(82, 82, 82);
+    opacity: 0.55;
+}
+
+.node-boss, .node-boss:disabled {
+    border-color: rgb(64, 34, 34);
 }

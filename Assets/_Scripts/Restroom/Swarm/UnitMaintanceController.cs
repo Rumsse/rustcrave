@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class UnitMaintanceController : MonoBehaviour
 {
+    public static event System.Action OnAnyUnitCharged;
+    public static event System.Action OnAnyUnitHealthRestored;
+
     [SerializeField] GlobalInventorySO globalInventory;
     [SerializeField] CraftingRecipe repairCost;
     [SerializeField] CraftingRecipe chargeCost;
@@ -22,6 +25,8 @@ public class UnitMaintanceController : MonoBehaviour
         ConsumeResources(repairCost);
         unit.RestoreHealth(repairCost.healthRestoreAmount);
 
+        OnAnyUnitHealthRestored?.Invoke();
+
         return true;
     }
 
@@ -40,6 +45,8 @@ public class UnitMaintanceController : MonoBehaviour
 
         float chargeAmount = unit.unitType.maxEnergy * chargeCost.energyRestorePercentage / 100f;
         unit.RestoreEnergy(chargeAmount);
+
+        OnAnyUnitCharged?.Invoke();
 
         return true;
     }

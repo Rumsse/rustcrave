@@ -5,7 +5,7 @@ public interface ICraftingService
     bool TryCraft(CraftingRecipe recipe);
 }
 
-public class CraftingManager : MonoBehaviour, ICraftingService
+public class CraftingManager : MonoBehaviour, ICraftingService // chyba nieaktualny, stary kod lol
 {
     [SerializeField] GlobalInventorySO globalInventory;
 

@@ -43,7 +43,7 @@ public class EnemySpawner : MonoBehaviour
 
             foreach (var point in selected)
             {
-                GameObject prefab = SpawnHelper.GetRandomPrefab(enemyConfig);
+                GameObject prefab = enemyConfig.GetRandomPrefab();
                 if (prefab == null)
                     continue;
 

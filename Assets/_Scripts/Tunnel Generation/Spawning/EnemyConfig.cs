@@ -1,30 +1,26 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemyConfig", menuName = "Tunnel System/Enemy Config")]
-public class EnemyConfig : ScriptableObject, ISpawnConfig
+public class EnemyConfig : BaseSpawnConfig
 {
-    [SerializeField] private List<SpawnEntry> enemies = new List<SpawnEntry>();
     [SerializeField] private int maxSpawnsPerSegment = 2;
-    [SerializeField] ActiveModifier activeModifier;
 
-    public IReadOnlyList<SpawnEntry> Entries => enemies;
-    public int MaxSpawnsPerSegment => Mathf.RoundToInt(maxSpawnsPerSegment * activeModifier.EnemySpawnMultiplier);
-    public float TotalChance => cachedTotalChance;
+    public override int BaseMaxSpawnsPerSegment => maxSpawnsPerSegment;
 
-    private float cachedTotalChance;
-
-    private void OnEnable() => RecalculateTotalChance();
-
-    private void OnValidate() => RecalculateTotalChance();
-
-    private void RecalculateTotalChance()
+    public override int MaxSpawnsPerSegment
     {
-        cachedTotalChance = 0f;
-        foreach (var entry in enemies)
-            cachedTotalChance += entry.SpawnChance;
+        get
+        {
+            float ratio = BaseTotalChance > 0f ? TotalChance / BaseTotalChance : 1f;
+            return Mathf.RoundToInt(maxSpawnsPerSegment * ratio);
+        }
     }
 
-    public bool Validate() => SpawnHelper.ValidateConfig(this, name);
+    public override float GetModifiedChance(SpawnEntry entry)
+    {
+        if (activeModifier == null)
+            return entry.SpawnChance;
 
+        return entry.SpawnChance * activeModifier.EnemySpawnMultiplier;
+    }
 }

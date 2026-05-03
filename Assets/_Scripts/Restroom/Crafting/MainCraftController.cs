@@ -1,19 +1,30 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using PrimeTween;
 
 public class MainCraftController : MonoBehaviour
 {
+    public event Action OnCraftPanelClosed;
+    public event Action OnCraftPanelOpened;
+
+    public static event Action OnAnyRobotCrafted;
+    public static event Action OnAnyGadgetCrafted;
+
     [SerializeField] SwarmState swarmState;
     [SerializeField] GlobalInventorySO globalInventory;
     [SerializeField] GadgetsGlobalInventory gadgetsGlobalInventory;
 
     [SerializeField] VisualTreeAsset robotsCraftPanel;
     [SerializeField] VisualTreeAsset gadgetsCraftPanel;
+    [SerializeField] VisualTreeAsset popupTemplate;
     [SerializeField] RobotsCraftController robotsCraftController;
     [SerializeField] GadgetsCraftController gadgetsCraftController;
     [SerializeField] VisualTreeAsset unitContainer;
+    [SerializeField] ParticleSystem gadgetCraftParticle;
 
     VisualElement rootElement;
     VisualElement leftBar;
@@ -54,8 +65,14 @@ public class MainCraftController : MonoBehaviour
             btnBack.style.display = DisplayStyle.None;
         }
 
+        rootElement.RegisterCallback<DetachFromPanelEvent>(evt => CloseCurrentTab());
+
         UpdateSwarmUI(root);
     }
+
+    public void NotifyPanelOpened() => OnCraftPanelOpened?.Invoke();
+
+    public void NotifyPanelClosed() => OnCraftPanelClosed?.Invoke();
 
     #endregion
 
@@ -117,6 +134,8 @@ public class MainCraftController : MonoBehaviour
 
         activeTabKey = null;
         UpdateButtonStyles(string.Empty);
+
+        OnCraftPanelClosed?.Invoke();
     }
 
     void UpdateButtonStyles(string activeKey)
@@ -125,7 +144,7 @@ public class MainCraftController : MonoBehaviour
 
     #endregion
 
-    #region Swarm UI
+    #region Swarm & Crafting UI
 
     void HandleRobotCraftRequest(UnitSO unitType)
     {
@@ -147,6 +166,60 @@ public class MainCraftController : MonoBehaviour
             return;
 
         gadgetsGlobalInventory.AddGadget(gadget);
+
+        if (gadgetCraftParticle != null)
+            StartCoroutine(PlayParticleAndNotifyRoutine(gadget));
+        else
+        {
+            ShowCraftPopup(gadget);
+            OnAnyGadgetCrafted?.Invoke();
+        }
+    }
+
+    IEnumerator PlayParticleAndNotifyRoutine(GadgetSO gadget)
+    {
+        gadgetCraftParticle.Play();
+
+        yield return new WaitForSeconds(0.1f);
+
+        ShowCraftPopup(gadget);
+        OnAnyGadgetCrafted?.Invoke();
+    }
+
+    void ShowCraftPopup(GadgetSO gadget)
+    {
+        if (popupTemplate == null)
+        {
+            Debug.LogWarning("Popup template is not assigned.");
+            return;
+        }
+
+        var screenRoot = rootElement.panel.visualTree;
+        var targetLayer = screenRoot.Q<VisualElement>("tooltip-layer") ?? screenRoot;
+
+        var popup = popupTemplate.CloneTree();
+        popup.style.position = Position.Absolute;
+        popup.style.top = new Length(35, LengthUnit.Percent);
+        popup.style.left = new Length(75, LengthUnit.Percent);
+        popup.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent), new Length(-50, LengthUnit.Percent), 0));
+
+        var iconContainer = popup.Q<VisualElement>("gadget-popup-icon");
+        var textLabel = popup.Q<Label>("gadget-popup-text");
+
+        if (iconContainer != null && gadget.gadgetIcon != null)
+            iconContainer.style.backgroundImage = new StyleBackground(gadget.gadgetIcon);
+
+        if (textLabel != null)
+            textLabel.text = $"You crafted: {gadget.name}";
+
+        targetLayer.Add(popup);
+        popup.style.scale = Vector3.zero;
+
+        Sequence.Create()
+            .Chain(Tween.Scale(popup, Vector3.one, 0.5f, Ease.OutBounce))
+            .ChainDelay(1f)
+            .Chain(Tween.Scale(popup, Vector3.zero, 0.3f, Ease.InBack))
+            .OnComplete(() => popup?.RemoveFromHierarchy());
     }
 
     void AddSingleUnitToUI(SwarmUnitsData unitData)

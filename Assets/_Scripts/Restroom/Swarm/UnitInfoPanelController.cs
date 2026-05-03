@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 public class UnitInfoPanelController : MonoBehaviour
 {
+    public static event System.Action OnAnyGadgetEquipped;
+
     [SerializeField] UnitMaintanceController maintenanceController;
     [SerializeField] GadgetsGlobalInventory gadgetsGlobalInventory;
     [SerializeField] VisualTreeAsset gadgetIconTemplate;
@@ -35,7 +37,6 @@ public class UnitInfoPanelController : MonoBehaviour
     SwarmUnitsData currentUnit;
     IVisualElementScheduledItem updateTask;
     int currentEditingSlotIndex = -1;
-
 
     #region Initialization
 
@@ -124,11 +125,10 @@ public class UnitInfoPanelController : MonoBehaviour
         unequipBtn.clicked += () => EquipGadget(null);
         gadgetListContainer?.Add(unequipBtn);
 
-        foreach (var gadget in gadgetsGlobalInventory.unlockedGadgets)
-        {
-            if (IsGadgetEquippedByOther(gadget))
-                continue;
+        var availableGadgets = GetAvailableGadgets();
 
+        foreach (var gadget in availableGadgets)
+        {
             var iconBtn = gadgetIconTemplate.Instantiate().Q<Button>();
 
             if (gadget.gadgetIcon != null)
@@ -141,21 +141,24 @@ public class UnitInfoPanelController : MonoBehaviour
         gadgetPopup.style.display = DisplayStyle.Flex;
     }
 
-    bool IsGadgetEquippedByOther(GadgetSO gadget)
+    List<GadgetSO> GetAvailableGadgets()
     {
-        if (swarmState == null || gadget == null)
-            return false;
+        var available = new List<GadgetSO>(gadgetsGlobalInventory.unlockedGadgets);
+
+        if (swarmState == null)
+            return available;
 
         foreach (var unit in swarmState.SwarmUnits)
         {
-            if (unit == currentUnit)
+            if (unit.assignedGadgets == null)
                 continue;
 
-            if (unit.assignedGadgets.Contains(gadget))
-                return true;
+            foreach (var equipped in unit.assignedGadgets)
+                if (equipped != null)
+                    available.Remove(equipped);
         }
 
-        return false;
+        return available;
     }
 
     void CloseGadgetPopup()
@@ -175,19 +178,14 @@ public class UnitInfoPanelController : MonoBehaviour
         while (currentUnit.assignedGadgets.Count <= currentEditingSlotIndex)
             currentUnit.assignedGadgets.Add(null);
 
-        if (gadget != null)
-        {
-            int existingIndex = currentUnit.assignedGadgets.IndexOf(gadget);
-
-            if (existingIndex >= 0 && existingIndex != currentEditingSlotIndex)
-                currentUnit.assignedGadgets[existingIndex] = null;
-        }
-
         currentUnit.assignedGadgets[currentEditingSlotIndex] = gadget;
 
         RefreshGadgetSlotsUI();
         CloseGadgetPopup();
         UpdateStats();
+
+        if (gadget != null)
+            OnAnyGadgetEquipped?.Invoke();
     }
 
     void RefreshGadgetSlotsUI()
@@ -250,6 +248,7 @@ public class UnitInfoPanelController : MonoBehaviour
 
     public void ClosePanel()
     {
+        CloseGadgetPopup();
         updateTask?.Pause();
         currentUnit = null;
     }
