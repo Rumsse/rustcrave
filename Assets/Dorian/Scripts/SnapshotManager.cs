@@ -1,12 +1,19 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using FMODUnity;
+using System.Collections.Generic;
+using System.Linq;
+
+[System.Serializable]
+public struct SceneSnapshotMapping
+{
+    public string sceneName;
+    public EventReference snapshot;
+}
 
 public class SnapshotManager : MonoBehaviour
 {
-    [Header("Settings")]
-    [SerializeField] private EventReference bossSnapshot;
-    [SerializeField] private EventReference biomSnapshot;
+    [SerializeField] private List<SceneSnapshotMapping> sceneSnapshots;
 
     private FMOD.Studio.EventInstance currentSnapshotInstance;
     private FMOD.GUID activeSnapshotGuid;
@@ -24,50 +31,28 @@ public class SnapshotManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        string name = scene.name;
+        var mapping = sceneSnapshots.FirstOrDefault(x => x.sceneName == scene.name);
 
-        if (name == "BossTest")
+        if (!string.IsNullOrEmpty(mapping.sceneName) && !mapping.snapshot.IsNull)
         {
-            PlaySnapshot(bossSnapshot);
+            PlaySnapshot(mapping.snapshot);
         }
-        else if (name == "Tunnels Gameplay")
-        {
-            PlaySnapshot(biomSnapshot);
-        }
-        else if (name == "new Tunel Generation Rumsse")
-        {
-            PlaySnapshot(biomSnapshot);
-        } 
         else
         {
             StopSnapshot(false);
             activeSnapshotGuid = new FMOD.GUID();
-            Debug.Log(IsPlaying(currentSnapshotInstance));
         }
-    }
-
-    bool IsPlaying(FMOD.Studio.EventInstance instance)
-    {
-        FMOD.Studio.PLAYBACK_STATE state;
-        instance.getPlaybackState(out state);
-        return state != FMOD.Studio.PLAYBACK_STATE.STOPPED;
     }
 
     private void PlaySnapshot(EventReference snapshotRef)
     {
-        if (activeSnapshotGuid.Equals(snapshotRef.Guid))
-        {
-            return;
-        }
+        if (activeSnapshotGuid.Equals(snapshotRef.Guid)) return;
 
         StopSnapshot(false);
 
-        if (!snapshotRef.IsNull)
-        {
-            currentSnapshotInstance = RuntimeManager.CreateInstance(snapshotRef);
-            currentSnapshotInstance.start();
-            activeSnapshotGuid = snapshotRef.Guid;
-        }
+        currentSnapshotInstance = RuntimeManager.CreateInstance(snapshotRef);
+        currentSnapshotInstance.start();
+        activeSnapshotGuid = snapshotRef.Guid;
     }
 
     private void StopSnapshot(bool immediate)
@@ -79,9 +64,7 @@ public class SnapshotManager : MonoBehaviour
                 : FMOD.Studio.STOP_MODE.ALLOWFADEOUT;
 
             currentSnapshotInstance.stop(stopMode);
-
             currentSnapshotInstance.release();
-
             currentSnapshotInstance = default;
             activeSnapshotGuid = new FMOD.GUID();
         }
