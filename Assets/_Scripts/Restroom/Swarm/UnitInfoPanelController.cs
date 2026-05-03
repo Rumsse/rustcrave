@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 public class UnitInfoPanelController : MonoBehaviour
 {
+    public static event System.Action OnAnyGadgetEquipped;
+
     [SerializeField] UnitMaintanceController maintenanceController;
     [SerializeField] GadgetsGlobalInventory gadgetsGlobalInventory;
     [SerializeField] VisualTreeAsset gadgetIconTemplate;
@@ -181,6 +183,9 @@ public class UnitInfoPanelController : MonoBehaviour
         RefreshGadgetSlotsUI();
         CloseGadgetPopup();
         UpdateStats();
+
+        if (gadget != null)
+            OnAnyGadgetEquipped?.Invoke();
     }
 
     void RefreshGadgetSlotsUI()

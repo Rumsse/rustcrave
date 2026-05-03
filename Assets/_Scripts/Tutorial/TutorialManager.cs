@@ -67,6 +67,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private ActiveModifier globalActiveModifier;
     [SerializeField] private PathModifierData calmModifierData;
 
+    [SerializeField] private string mainMenuSceneName = "Main Menu";
     /*[SerializeField]*/ private CameraZoom cameraZoom;
 
     private int currentStepIndex = 0;
@@ -229,10 +230,12 @@ public class TutorialManager : MonoBehaviour
         Time.timeScale = 1f;
         
         if (cameraZoom != null)
-        {
             cameraZoom.IsPausedForTutorial = false;
-        }
         
         Debug.Log("Tutorial Finished!");
+
+        if (!string.IsNullOrEmpty(mainMenuSceneName))
+            SceneManager.LoadScene(mainMenuSceneName);
     }
+
 }

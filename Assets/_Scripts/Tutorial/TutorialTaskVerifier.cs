@@ -33,6 +33,8 @@ public class TutorialTaskVerifier : MonoBehaviour
         CameraCraftingController.OnCameraReachedCraftedRobot += OnRobotCrafted;
         MainCraftController.OnAnyGadgetCrafted += OnGadgetCrafted;
         UnitMaintanceController.OnAnyUnitCharged += OnEnergyRestored;
+        UnitInfoPanelController.OnAnyGadgetEquipped += OnGadgetEquipped;
+        ChoosePathController.OnAnyPathNodeEntered += OnPathEntered;
     }
 
     private void OnDisable()
@@ -44,6 +46,8 @@ public class TutorialTaskVerifier : MonoBehaviour
         CameraCraftingController.OnCameraReachedCraftedRobot -= OnRobotCrafted;
         MainCraftController.OnAnyGadgetCrafted -= OnGadgetCrafted;
         UnitMaintanceController.OnAnyUnitCharged -= OnEnergyRestored;
+        UnitInfoPanelController.OnAnyGadgetEquipped -= OnGadgetEquipped;
+        ChoosePathController.OnAnyPathNodeEntered -= OnPathEntered;
     }
 
     public void StartTask(TutorialTaskType taskType, Action onCompleted)
@@ -53,7 +57,7 @@ public class TutorialTaskVerifier : MonoBehaviour
 
         OnTaskStarted?.Invoke(currentTask);
 
-        if (currentTask != TutorialTaskType.None)
+        if (currentTask != TutorialTaskType.None && currentTask != TutorialTaskType.EndTutorial)
             return;
 
         CompleteTask();
@@ -111,6 +115,22 @@ public class TutorialTaskVerifier : MonoBehaviour
     {
         if (CurrentTask == TutorialTaskType.RestoreEnergy)
             CompleteTask();
+    }
+
+    private void OnGadgetEquipped()
+    {
+        if (currentTask != TutorialTaskType.EquipGadget)
+            return;
+
+        CompleteTask();
+    }
+
+    private void OnPathEntered()
+    {
+        if (currentTask != TutorialTaskType.ScanPathAndGo)
+            return;
+
+        CompleteTask();
     }
 
     public void CompleteTask()

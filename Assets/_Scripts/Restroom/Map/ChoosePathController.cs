@@ -15,6 +15,8 @@ public class ChoosePathController : MonoBehaviour
         public VisualElement icon;
     }
 
+    public static event System.Action OnAnyPathNodeEntered;
+
     [SerializeField] MapState mapState;
     [SerializeField] ActiveModifier activeModifier;
     [SerializeField] GlobalInventorySO globalInventory;
@@ -183,13 +185,31 @@ public class ChoosePathController : MonoBehaviour
         if (!availableNodes.Any(n => n.Id == node.Id))
             return;
 
+        bool isTutorialActive = false;
+
+        if (TutorialTaskVerifier.Instance != null && TutorialTaskVerifier.Instance.CurrentTask == TutorialTaskType.ScanPathAndGo)
+        {
+            if (!mapState.IsNodeScanned(node))
+            {
+                Debug.LogWarning("[Tutorial] Node must be scanned first!");
+                return;
+            }
+
+            isTutorialActive = true;
+        }
+
         mapState.MoveToNode(node);
         activeModifier.Set(mapState.GetModifier(node));
 
         UpdateButtonStates();
 
-        string sceneToLoad = node.Row == mapState.TotalRows - 1 ? mainBossScene : mainGameScene;
-        SceneManager.LoadScene(sceneToLoad);
+        OnAnyPathNodeEntered?.Invoke();
+
+        if (!isTutorialActive)
+        {
+            string sceneToLoad = node.Row == mapState.TotalRows - 1 ? mainBossScene : mainGameScene;
+            SceneManager.LoadScene(sceneToLoad);
+        }
     }
 
     void OnNodeRightClicked(PathNodeData node)

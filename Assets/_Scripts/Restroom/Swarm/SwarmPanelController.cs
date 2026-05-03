@@ -209,14 +209,24 @@ public class SwarmPanelController : MonoBehaviour
             rootElement.styleSheets.Add(quickManagementStyleSheet);
 
             foreach (var slot in activeSlots)
+            {
                 slot.styleSheets.Add(quickManagementStyleSheet);
+                var img = slot.Q<VisualElement>("unit-image");
+                img?.RemoveFromClassList("normal-manage-target");
+                img?.AddToClassList("quick-manage-target");
+            }
         }
         else
         {
             rootElement.styleSheets.Remove(quickManagementStyleSheet);
 
             foreach (var slot in activeSlots)
+            {
                 slot.styleSheets.Remove(quickManagementStyleSheet);
+                var img = slot.Q<VisualElement>("unit-image");
+                img?.RemoveFromClassList("quick-manage-target");
+                img?.AddToClassList("normal-manage-target");
+            }
         }
     }
 
@@ -262,10 +272,17 @@ public class SwarmPanelController : MonoBehaviour
         var slot = unitSlotTemplate.CloneTree();
         slot.userData = unitData;
 
-        if (isQuickManagementActive && quickManagementStyleSheet != null)
-            slot.styleSheets.Add(quickManagementStyleSheet);
-
         var unitImage = slot.Q<VisualElement>("unit-image");
+
+        if (isQuickManagementActive && quickManagementStyleSheet != null)
+        {
+            slot.styleSheets.Add(quickManagementStyleSheet);
+            unitImage?.AddToClassList("quick-manage-target");
+        }
+        else
+        {
+            unitImage?.AddToClassList("normal-manage-target");
+        }
 
         if (unitData.unitType != null && unitData.unitType.robotSprite != null)
             unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.robotSprite);
