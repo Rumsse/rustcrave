@@ -13,14 +13,17 @@ MonoBehaviour:
   m_Name: Sparkling mountain
   m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
   eventTitle: SPARKLING MOUNTAIN
+  eventIcon: {fileID: 21300000, guid: dec999d0e63b9f24bb69fd7f28c6a8db, type: 3}
   eventDescription: "A huge rock emits an incredibly large amount of electricity.
     \n\nWhat do you do?"
   dialogOptions:
   - optionText: I order ___ to touch it.
     isIgnoreOption: 0
-    isMiningCheck: 0
     baseSuccessChance: 50
+    isMiningCheck: 0
     bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
     successOutcome:
       resultText: '___ touched it and the gears are working like never before!
 
@@ -36,9 +39,11 @@ MonoBehaviour:
       actions: []
   - optionText: I order ___ to mine it.
     isIgnoreOption: 0
-    isMiningCheck: 1
     baseSuccessChance: 50
+    isMiningCheck: 1
     bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
     successOutcome:
       resultText: 'The rock cracks, and its energy spreads throughout the room!
 
@@ -61,9 +66,11 @@ MonoBehaviour:
       - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
   - optionText: Ignore
     isIgnoreOption: 1
-    isMiningCheck: 0
     baseSuccessChance: 50
+    isMiningCheck: 0
     bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
     successOutcome:
       resultText: 
       actions: []
