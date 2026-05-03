@@ -13161,6 +13161,7 @@ Transform:
   - {fileID: 47819449}
   - {fileID: 1776593394}
   - {fileID: 816960009}
+  - {fileID: 1937066101}
   - {fileID: 1689700543}
   - {fileID: 1129992266}
   - {fileID: 523161284}
@@ -53883,7 +53884,7 @@ Transform:
   m_GameObject: {fileID: 863574975}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 61.800003, y: 0, z: -8.300001}
+  m_LocalPosition: {x: 61.800003, y: 0, z: -8.39}
   m_LocalScale: {x: 0.75, y: 0.6999999, z: 0.75000006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -75306,6 +75307,63 @@ Transform:
   - {fileID: 783335243}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1019911094
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 296164210}
+    m_Modifications:
+    - target: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.024
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -29.496
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.148
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.70710677
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.70710677
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3967151473964373244, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+      propertyPath: m_Name
+      value: Enemy Unit
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
 --- !u!1 &1023063049
 GameObject:
   m_ObjectHideFlags: 0
@@ -95643,7 +95701,7 @@ RectTransform:
   m_Father: {fileID: 1258309081}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -5.0000153, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -96290,7 +96348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1689700543
 Transform:
   m_ObjectHideFlags: 0
@@ -121087,6 +121145,13 @@ MonoBehaviour:
   mainMenuSceneName: Main Menu
   pausePanel: {fileID: 139000359}
   pauseKey: 27
+  interactionSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!114 &1762193606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121109,6 +121174,13 @@ MonoBehaviour:
   mapState: {fileID: 0}
   globalInventory: {fileID: 0}
   gadgetsInventory: {fileID: 0}
+  interactionButtonSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!114 &1762193607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121126,6 +121198,13 @@ MonoBehaviour:
   swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
   pauseMenuManager: {fileID: 1762193605}
   playerTag: Player
+  gameoverSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!114 &1762193608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121141,6 +121220,13 @@ MonoBehaviour:
   controlsPanel: {fileID: 214639561}
   restroomPanel: {fileID: 2020237880}
   bossPanel: {fileID: 36538174}
+  interactionSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!114 &1762193609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121329,7 +121415,7 @@ RectTransform:
   m_Father: {fileID: 1034510038}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -0.5298004, y: 0}
   m_SizeDelta: {x: 8.9404, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -122082,7 +122168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -16, y: -465}
+  m_AnchoredPosition: {x: 12, y: -465}
   m_SizeDelta: {x: 227.8, y: -913.3928}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1805089083
@@ -128394,6 +128480,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f22da7a74e97e40478e5f46780b65104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceSpawnPoint
+--- !u!4 &1937066101 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2564587902155745564, guid: eb885c8ec163a63418d6e245e5524917, type: 3}
+  m_PrefabInstance: {fileID: 1019911094}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1938636555
 GameObject:
   m_ObjectHideFlags: 0
@@ -139556,7 +139647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2046269768
 RectTransform:
   m_ObjectHideFlags: 0
@@ -144585,6 +144676,13 @@ MonoBehaviour:
   controlsPanel: {fileID: 214639561}
   restroomPanel: {fileID: 2020237880}
   bossPanel: {fileID: 36538174}
+  interactionSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!114 &2069130249
 MonoBehaviour:
   m_ObjectHideFlags: 0
