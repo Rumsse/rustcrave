@@ -105,12 +105,12 @@ public class CameraZoom : MonoBehaviour
         }
         else if (roll < 0.65f)
         {
-            targetSpeed = baseSpeed * Random.Range(1f, 4.2f);
-            timer = Random.Range(0.4f, 2f);
+            targetSpeed = baseSpeed * Random.Range(1.2f, 1.5f);
+            timer = Random.Range(0.7f, 2f);
         }
         else
         {
-            targetSpeed = baseSpeed * Random.Range(0.7f, 0.9f);
+            targetSpeed = baseSpeed * Random.Range(0.5f, 0.7f);
             timer = Random.Range(0.5f, 3f);
         }
     }
