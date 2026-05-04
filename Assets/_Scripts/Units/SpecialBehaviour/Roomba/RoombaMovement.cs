@@ -7,8 +7,10 @@ public class RoombaMovement : MonoBehaviour
 {
     public Transform[] waypoints;
     public float waitAtPoint = 0f;
-    [SerializeField] private EventReference moveSound;
+    [SerializeField] private EventReference moveSound; 
+    
 
+    private FMOD.Studio.EventInstance moveSoundInstance;
     private NavMeshAgent agent;
     private int currentIndex = 0;
 
@@ -17,7 +19,7 @@ public class RoombaMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         currentIndex = 0;
         StartCoroutine(PatrolLoop());
-        AudioManager.PlayOneShot(moveSound);
+        PlaySound();
     }
 
     void OnDisable()
@@ -26,11 +28,29 @@ public class RoombaMovement : MonoBehaviour
         StopSound();
     }
 
+    private void OnDestroy()
+    {
+        StopSound();
+    }
+
+    private void PlaySound()
+    {
+        if (!moveSound.IsNull)
+        {
+            moveSoundInstance = RuntimeManager.CreateInstance(moveSound);
+            RuntimeManager.AttachInstanceToGameObject(moveSoundInstance, gameObject);
+            moveSoundInstance.start();
+        }
+    }
+
     private void StopSound()
     {
-        var instance = RuntimeManager.CreateInstance(moveSound);
-        instance.start();
-        instance.release();
+        if (moveSoundInstance.isValid())
+        {
+            moveSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            moveSoundInstance.release();
+            moveSoundInstance = default;
+        }
     }
 
 

@@ -20,7 +20,7 @@ public class MainCraftController : MonoBehaviour
 
     [SerializeField] VisualTreeAsset robotsCraftPanel;
     [SerializeField] VisualTreeAsset gadgetsCraftPanel;
-    //[SerializeField] VisualTreeAsset popupTemplate;
+    [SerializeField] VisualTreeAsset popupTemplate;
     [SerializeField] RobotsCraftController robotsCraftController;
     [SerializeField] GadgetsCraftController gadgetsCraftController;
     [SerializeField] VisualTreeAsset unitContainer;
@@ -71,7 +71,7 @@ public class MainCraftController : MonoBehaviour
     }
 
     public void NotifyPanelOpened() => OnCraftPanelOpened?.Invoke();
-    
+
     public void NotifyPanelClosed() => OnCraftPanelClosed?.Invoke();
 
     #endregion
@@ -144,7 +144,7 @@ public class MainCraftController : MonoBehaviour
 
     #endregion
 
-    #region Swarm UI
+    #region Swarm & Crafting UI
 
     void HandleRobotCraftRequest(UnitSO unitType)
     {
@@ -171,7 +171,7 @@ public class MainCraftController : MonoBehaviour
             StartCoroutine(PlayParticleAndNotifyRoutine(gadget));
         else
         {
-           // ShowCraftPopup(gadget);
+            ShowCraftPopup(gadget);
             OnAnyGadgetCrafted?.Invoke();
         }
     }
@@ -180,13 +180,13 @@ public class MainCraftController : MonoBehaviour
     {
         gadgetCraftParticle.Play();
 
-        yield return new WaitForSeconds(1.3f);
+        yield return new WaitForSeconds(0.1f);
 
-       // ShowCraftPopup(gadget);
+        ShowCraftPopup(gadget);
         OnAnyGadgetCrafted?.Invoke();
     }
 
-    /*void ShowCraftPopup(GadgetSO gadget)
+    void ShowCraftPopup(GadgetSO gadget)
     {
         if (popupTemplate == null)
         {
@@ -194,13 +194,13 @@ public class MainCraftController : MonoBehaviour
             return;
         }
 
-        if (craftLayer == null)
-            return;
+        var screenRoot = rootElement.panel.visualTree;
+        var targetLayer = screenRoot.Q<VisualElement>("tooltip-layer") ?? screenRoot;
 
         var popup = popupTemplate.CloneTree();
         popup.style.position = Position.Absolute;
-        popup.style.top = new Length(50, LengthUnit.Percent);
-        popup.style.left = new Length(50, LengthUnit.Percent);
+        popup.style.top = new Length(35, LengthUnit.Percent);
+        popup.style.left = new Length(75, LengthUnit.Percent);
         popup.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent), new Length(-50, LengthUnit.Percent), 0));
 
         var iconContainer = popup.Q<VisualElement>("gadget-popup-icon");
@@ -212,15 +212,15 @@ public class MainCraftController : MonoBehaviour
         if (textLabel != null)
             textLabel.text = $"You crafted: {gadget.name}";
 
-        craftLayer.Add(popup);
+        targetLayer.Add(popup);
         popup.style.scale = Vector3.zero;
 
         Sequence.Create()
             .Chain(Tween.Scale(popup, Vector3.one, 0.5f, Ease.OutBounce))
-            .ChainDelay(1.5f)
+            .ChainDelay(1f)
             .Chain(Tween.Scale(popup, Vector3.zero, 0.3f, Ease.InBack))
             .OnComplete(() => popup?.RemoveFromHierarchy());
-    }*/
+    }
 
     void AddSingleUnitToUI(SwarmUnitsData unitData)
     {

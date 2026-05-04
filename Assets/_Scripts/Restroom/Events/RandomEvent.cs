@@ -31,6 +31,7 @@ public class DialogOption
 public class RandomEvent : ScriptableObject
 {
     public string eventTitle;
+    public Sprite eventIcon;
     [TextArea(4, 6)] public string eventDescription;
     public List<DialogOption> dialogOptions = new();
 }

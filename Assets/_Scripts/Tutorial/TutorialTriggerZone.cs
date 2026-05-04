@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class TutorialTriggerZone : MonoBehaviour
 {
@@ -7,7 +7,9 @@ public class TutorialTriggerZone : MonoBehaviour
     [SerializeField] private bool completeTaskOnEnter = true;
     [SerializeField] private TutorialTaskType targetTaskType = TutorialTaskType.MoveUnits;
     [SerializeField] private GameObject visualEffect;
-    [SerializeField] private int requiredUnitsCount = 4;
+
+    [Header("Swarm Data")]
+    [SerializeField] private SwarmState swarmState; 
 
     private HashSet<Unit> unitsInZone = new();
 
@@ -53,7 +55,6 @@ public class TutorialTriggerZone : MonoBehaviour
             return;
 
         unitsInZone.Add(unit);
-        //Debug.Log($"[TutorialTriggerZone] Unit entered. Count: {unitsInZone.Count}/{requiredUnitsCount}");
 
         CheckCompletion();
     }
@@ -66,16 +67,14 @@ public class TutorialTriggerZone : MonoBehaviour
         if (!other.TryGetComponent<Unit>(out var unit))
             return;
 
+        unitsInZone.RemoveWhere(u => u == null || !u.gameObject.activeInHierarchy);
         unitsInZone.Remove(unit);
-        //Debug.Log($"[TutorialTriggerZone] Unit left. Count: {unitsInZone.Count}/{requiredUnitsCount}");
     }
 
     private void CheckCompletion()
     {
-        if (unitsInZone.Count < requiredUnitsCount)
+        if (swarmState == null || unitsInZone.Count < swarmState.AliveCount)
             return;
-
-        //Debug.Log("[TutorialTriggerZone] All required units are in the zone. Completing task.");
 
         if (TutorialTaskVerifier.Instance != null && completeTaskOnEnter)
             TutorialTaskVerifier.Instance.CompleteTask();

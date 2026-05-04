@@ -20,6 +20,9 @@ public class EventPanelController : MonoBehaviour
     DropdownField robotDropdown;
     VisualElement buttonsContainer;
 
+    VisualElement mainIcon;
+    VisualElement popUpIcon;
+
     RandomEvent currentEvent;
     List<SwarmUnitsData> activeRobots = new();
     SwarmUnitsData currentSelectedRobot;
@@ -43,6 +46,8 @@ public class EventPanelController : MonoBehaviour
         robotDropdown = root.Q<DropdownField>("robot-dropdown");
         buttonsContainer = root.Q<VisualElement>("event-options");
 
+        mainIcon = root.Q<VisualElement>("icon");
+
         var closeBtn = root.Q<Button>("btn-close");
 
         if (closeBtn != null)
@@ -53,6 +58,9 @@ public class EventPanelController : MonoBehaviour
 
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
+
+        if (popUpContainer != null)
+            popUpIcon = popUpContainer.Q<VisualElement>("icon");
 
         if (robotDropdown != null)
             robotDropdown.RegisterValueChangedCallback(evt => OnRobotSelectionChanged(evt.newValue));
@@ -101,6 +109,7 @@ public class EventPanelController : MonoBehaviour
 
         SetupDropdown();
         SetupButtons();
+        SetupIcons();
         UpdateDynamicTexts();
 
         if (robotDropdown != null)
@@ -130,6 +139,20 @@ public class EventPanelController : MonoBehaviour
     #endregion
 
     #region UI Management
+
+    void SetupIcons()
+    {
+        if (currentEvent == null)
+            return;
+
+        var background = currentEvent.eventIcon != null ? new StyleBackground(currentEvent.eventIcon) : new StyleBackground(StyleKeyword.Initial);
+
+        if (mainIcon != null)
+            mainIcon.style.backgroundImage = background;
+
+        if (popUpIcon != null)
+            popUpIcon.style.backgroundImage = background;
+    }
 
     void SetupDropdown()
     {
