@@ -19,20 +19,32 @@ public class EnemyUnit : UnitBase
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        
+
         foreach (var kvp in deathCallbacks)
         {
             if (kvp.Key)
                 kvp.Key.HealthManager.onDeath -= kvp.Value;
         }
+
         deathCallbacks.Clear();
     }
 
     protected override void Update()
     {
         base.Update();
-        
-        if(!isAttacking && Stats.PossibleAttacks.Count != 0 && agent.enabled)
+
+        if (isAttacking || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
+            return;
+
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            animator.SetBool("IsWalking", false);
+            return;
+        }
+
+        animator.SetBool("IsWalking", true);
+
+        if (Vector3.Distance(agent.destination, guardPoint.position) > 0.1f)
             agent.SetDestination(guardPoint.position);
     }
 
@@ -44,10 +56,10 @@ public class EnemyUnit : UnitBase
     {
         if (playerUnits.Contains(unit))
             return;
-        
+
         playerUnits.Add(unit);
-        
-        if(!AttackTarget)
+
+        if (!AttackTarget)
             AttackTarget = unit;
 
         Action callback = () => RemoveOnDeath(unit);
@@ -79,49 +91,42 @@ public class EnemyUnit : UnitBase
             Unit newTarget = GetClosestUnit();
 
             if (newTarget != null)
-            {
                 AttackTarget = newTarget;
-            }
             else
-            {
                 StopAttacking();
-            }
         }
     }
 
-    private void RemoveOnDeath(Unit unit)
-    {
-        RemoveUnit(unit);
-    }
+    private void RemoveOnDeath(Unit unit) => RemoveUnit(unit);
 
     #region Helper
 
     private Unit GetClosestUnit()
     {
-        if (playerUnits.Count == 0) return null;
-        
+        if (playerUnits.Count == 0)
+            return null;
+
         Unit closest = playerUnits[0];
         float closestDist = Vector3.Distance(transform.position, closest.transform.position);
-        
+
         for (int i = 1; i < playerUnits.Count; i++)
         {
-            if (playerUnits[i] == null) continue;
-            
+            if (playerUnits[i] == null)
+                continue;
+
             float dist = Vector3.Distance(transform.position, playerUnits[i].transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                closest = playerUnits[i];
-            }
+
+            if (dist >= closestDist)
+                continue;
+
+            closestDist = dist;
+            closest = playerUnits[i];
         }
-        
+
         return closest;
     }
-    
-    private void NullCleanup()
-    {
-        playerUnits.RemoveAll(unit => !unit);
-    }
+
+    private void NullCleanup() => playerUnits.RemoveAll(unit => !unit);
 
     #endregion
 
