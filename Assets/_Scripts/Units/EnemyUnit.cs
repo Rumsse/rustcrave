@@ -18,6 +18,8 @@ public class EnemyUnit : UnitBase
 
     protected override void OnDestroy()
     {
+        base.OnDestroy();
+        
         foreach (var kvp in deathCallbacks)
         {
             if (kvp.Key)
