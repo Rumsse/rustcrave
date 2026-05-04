@@ -35,6 +35,7 @@ public class TutorialTaskVerifier : MonoBehaviour
         UnitMaintanceController.OnAnyUnitCharged += OnEnergyRestored;
         UnitInfoPanelController.OnAnyGadgetEquipped += OnGadgetEquipped;
         ChoosePathController.OnAnyPathNodeEntered += OnPathEntered;
+        DestructibleWall.OnAnyWallDestroyed += OnWallDestroyed;
     }
 
     private void OnDisable()
@@ -48,6 +49,7 @@ public class TutorialTaskVerifier : MonoBehaviour
         UnitMaintanceController.OnAnyUnitCharged -= OnEnergyRestored;
         UnitInfoPanelController.OnAnyGadgetEquipped -= OnGadgetEquipped;
         ChoosePathController.OnAnyPathNodeEntered -= OnPathEntered;
+        DestructibleWall.OnAnyWallDestroyed -= OnWallDestroyed;
     }
 
     public void StartTask(TutorialTaskType taskType, Action onCompleted)
@@ -74,6 +76,14 @@ public class TutorialTaskVerifier : MonoBehaviour
     private void OnResourceGathered()
     {
         if (currentTask != TutorialTaskType.GatherResources)
+            return;
+
+        CompleteTask();
+    }
+
+    private void OnWallDestroyed()
+    {
+        if (currentTask != TutorialTaskType.BreakWall)
             return;
 
         CompleteTask();

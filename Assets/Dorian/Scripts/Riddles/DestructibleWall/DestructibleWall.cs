@@ -1,8 +1,11 @@
 using UnityEngine;
+using System;
 using UnityEngine.AI;
 
 public class DestructibleWall : MonoBehaviour, IMineable
 {
+    public static event Action OnAnyWallDestroyed;
+
     [SerializeField] private OreSO wallOreSO;
     [SerializeField] private int amount;
     [SerializeField] private ParticleSystem miningEffect;
@@ -29,7 +32,10 @@ public class DestructibleWall : MonoBehaviour, IMineable
         amount--;
 
         if (amount <= 0)
+        {
+            OnAnyWallDestroyed?.Invoke();
             Destroy(gameObject);
+        }
 
         return wallOreSO;
     }

@@ -231,11 +231,21 @@ public class TutorialManager : MonoBehaviour
         
         if (cameraZoom != null)
             cameraZoom.IsPausedForTutorial = false;
-        
-        Debug.Log("Tutorial Finished!");
 
-        if (!string.IsNullOrEmpty(mainMenuSceneName))
-            SceneManager.LoadScene(mainMenuSceneName);
+        bool isFinalTutorialStep = false;
+        if (steps != null && currentStepIndex >= 0 && currentStepIndex < steps.Count)
+        {
+            if (steps[currentStepIndex].requiredTask == TutorialTaskType.EndTutorial)
+                isFinalTutorialStep = true;
+        }
+
+        if (isFinalTutorialStep)
+        {
+            Debug.Log("Tutorial Finished! Loading Main Menu...");
+
+            if (!string.IsNullOrEmpty(mainMenuSceneName))
+                SceneManager.LoadScene(mainMenuSceneName);
+        }
     }
 
 }
