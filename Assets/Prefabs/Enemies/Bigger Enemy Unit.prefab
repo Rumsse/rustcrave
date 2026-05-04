@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthManager
   _hitEffect: {fileID: 5320617027888536597}
+  _deathEffectPrefab: {fileID: 2765045808344548612, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
   _healthBarRend: {fileID: 4111269178738068048}
 --- !u!114 &3155833242318412233
 MonoBehaviour:
@@ -635,6 +636,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -3248884600684474535, guid: 8e0c60864057677438e3959cc64990e2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 16b9c147fece9754aa4ca3ad6905e4fb, type: 2}
     - target: {fileID: 919132149155446097, guid: 8e0c60864057677438e3959cc64990e2, type: 3}
       propertyPath: m_Name
       value: big_robot

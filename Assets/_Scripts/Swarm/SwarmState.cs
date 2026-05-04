@@ -66,5 +66,5 @@ public class SwarmState : ScriptableObject
 
     public List<SwarmUnitsData> GetAliveUnits() => swarmUnits.Where(u => u.isAlive).ToList();
 
-    public void Reset() => swarmUnits.Clear();
+    public void Reset() => Initialize();
 }

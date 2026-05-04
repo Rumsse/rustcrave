@@ -117,7 +117,10 @@ public class TutorialUIHighlighter : MonoBehaviour
     {
         for (int i = names.Count - 1; i >= 0; i--)
         {
-            var el = uiDocument.rootVisualElement.Q(names[i]);
+            string identifier = names[i];
+            VisualElement el = identifier.StartsWith(".")
+                ? uiDocument.rootVisualElement.Q(className: identifier.Substring(1))
+                : uiDocument.rootVisualElement.Q(identifier);
 
             if (IsElementVisible(el)) return el;
         }

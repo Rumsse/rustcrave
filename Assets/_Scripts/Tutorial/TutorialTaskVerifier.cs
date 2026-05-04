@@ -32,6 +32,10 @@ public class TutorialTaskVerifier : MonoBehaviour
         EventPanelController.OnAnyEventResolved += OnEventResolved;
         CameraCraftingController.OnCameraReachedCraftedRobot += OnRobotCrafted;
         MainCraftController.OnAnyGadgetCrafted += OnGadgetCrafted;
+        UnitMaintanceController.OnAnyUnitCharged += OnEnergyRestored;
+        UnitInfoPanelController.OnAnyGadgetEquipped += OnGadgetEquipped;
+        ChoosePathController.OnAnyPathNodeEntered += OnPathEntered;
+        DestructibleWall.OnAnyWallDestroyed += OnWallDestroyed;
     }
 
     private void OnDisable()
@@ -42,6 +46,10 @@ public class TutorialTaskVerifier : MonoBehaviour
         EventPanelController.OnAnyEventResolved -= OnEventResolved;
         CameraCraftingController.OnCameraReachedCraftedRobot -= OnRobotCrafted;
         MainCraftController.OnAnyGadgetCrafted -= OnGadgetCrafted;
+        UnitMaintanceController.OnAnyUnitCharged -= OnEnergyRestored;
+        UnitInfoPanelController.OnAnyGadgetEquipped -= OnGadgetEquipped;
+        ChoosePathController.OnAnyPathNodeEntered -= OnPathEntered;
+        DestructibleWall.OnAnyWallDestroyed -= OnWallDestroyed;
     }
 
     public void StartTask(TutorialTaskType taskType, Action onCompleted)
@@ -51,7 +59,7 @@ public class TutorialTaskVerifier : MonoBehaviour
 
         OnTaskStarted?.Invoke(currentTask);
 
-        if (currentTask != TutorialTaskType.None)
+        if (currentTask != TutorialTaskType.None && currentTask != TutorialTaskType.EndTutorial)
             return;
 
         CompleteTask();
@@ -68,6 +76,14 @@ public class TutorialTaskVerifier : MonoBehaviour
     private void OnResourceGathered()
     {
         if (currentTask != TutorialTaskType.GatherResources)
+            return;
+
+        CompleteTask();
+    }
+
+    private void OnWallDestroyed()
+    {
+        if (currentTask != TutorialTaskType.BreakWall)
             return;
 
         CompleteTask();
@@ -100,6 +116,28 @@ public class TutorialTaskVerifier : MonoBehaviour
     private void OnGadgetCrafted()
     {
         if (currentTask != TutorialTaskType.CraftGadget)
+            return;
+
+        CompleteTask();
+    }
+
+    private void OnEnergyRestored()
+    {
+        if (CurrentTask == TutorialTaskType.RestoreEnergy)
+            CompleteTask();
+    }
+
+    private void OnGadgetEquipped()
+    {
+        if (currentTask != TutorialTaskType.EquipGadget)
+            return;
+
+        CompleteTask();
+    }
+
+    private void OnPathEntered()
+    {
+        if (currentTask != TutorialTaskType.ScanPathAndGo)
             return;
 
         CompleteTask();
