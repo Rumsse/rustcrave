@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class EnemyUnit : UnitBase
 {
-    [SerializeField] protected Transform guardPoint;
-    [SerializeField] protected bool specialUnit;
+    
+    [SerializeField] private Transform guardPoint;
 
-    public ItemSO StolenItem { get; private set; } // saves stolen item to drop later
+    public ItemSO StolenItem { get; private set; } // I need to reset that after we are hidden again + i think i need some time offset between attacks
 
-    protected List<Unit> playerUnits = new();
+    private List<Unit> playerUnits = new();
     
     private Dictionary<Unit, Action> deathCallbacks = new();
-    protected bool _available = true;
 
     #region Unity Lifecycle
 
@@ -34,7 +33,7 @@ public class EnemyUnit : UnitBase
     {
         base.Update();
 
-        if (!_available || isAttacking || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
+        if (isAttacking || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
             return;
 
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
@@ -55,8 +54,6 @@ public class EnemyUnit : UnitBase
 
     public void UnitEnter(Unit unit)
     {
-        if (!_available) return;
-
         if (playerUnits.Contains(unit))
             return;
 
@@ -80,8 +77,6 @@ public class EnemyUnit : UnitBase
 
     private void RemoveUnit(Unit unit)
     {
-        if (!_available) return;
-
         if (!playerUnits.Remove(unit))
             return;
 
@@ -103,11 +98,6 @@ public class EnemyUnit : UnitBase
     }
 
     private void RemoveOnDeath(Unit unit) => RemoveUnit(unit);
-
-    #region Special Enemies Behavior 
-    protected virtual void HandleSpecialReaction() { }
-    public override bool SpecialReactionForUnit() => specialUnit;
-    #endregion
 
     #region Helper
 
@@ -143,13 +133,12 @@ public class EnemyUnit : UnitBase
     #region Stolen Item
 
     //managing stolen item 
-    public virtual void StealItem(ItemSO item)
+    public void StealItem(ItemSO item)
     {
         StolenItem = item;
-        HandleSpecialReaction();
     }
 
-    public virtual void ClearStolenItem()
+    public void ClearStolenItem()
     {
         StolenItem = null;
     }

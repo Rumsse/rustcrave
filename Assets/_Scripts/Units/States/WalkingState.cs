@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WalkingState : UnitState 
+public class WalkingState : UnitState
 {
     private Vector3 _targetPos;
     
@@ -13,16 +13,9 @@ public class WalkingState : UnitState
         _unit.Animator.SetBool("IsWalking", true);
     }
 
-    //updates to handle digging enemies
     override public void Tick()
     {
         if(_agent.enabled && _agent.remainingDistance <= _agent.stoppingDistance && !_agent.pathPending)
-        {
-            if (_unit.SpecialReactionForUnit())
-                _unit.SetState(new DiggingState(_unit));
-            else
-                _unit.SetState(new IdleState(_unit));
-        }
-            
+            _unit.SetState(new IdleState(_unit));
     }
 }
