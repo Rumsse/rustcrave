@@ -18,15 +18,21 @@ public class RobotHUD : MonoBehaviour
     [SerializeField] private Transform inventoryPanel;
     [SerializeField] private GameObject inventorySlotPrefab;
 
-    [Header("Bar Settings")]
-    [SerializeField] private float maxFillLimit = 0.25f;
-    [SerializeField] private float minVisibleFillOffset = 0.03f;
-
     [Header("Selection Visuals")]
     [SerializeField] private Outline outline;
     [SerializeField] private Color32 defaultOutlineColor = new Color32(25, 19, 17, 255);
     [SerializeField] private Color32 selectedOutlineColor = new Color32(40, 150, 44, 255);
     [SerializeField] private Image selectionBackground;
+
+    [Header("Bar Settings")]
+    [SerializeField] private float maxFillLimit = 0.25f;
+    [SerializeField] private float minVisibleFillOffset = 0.03f;
+
+    [Header("Circular Inventory")]
+    [SerializeField] private CircularInventorySlot circularSlotPrefab;
+    [SerializeField] private Transform circularInventoryContainer;
+    [SerializeField] private float slotGap = 0.01f;
+    [SerializeField] private float startAngleOffset = 0f;
 
     private SwarmUnitsData unitData;
     private Unit selectedUnit;
@@ -42,6 +48,8 @@ public class RobotHUD : MonoBehaviour
     private int lastDisplayedEnergy = -1;
 
     private List<InventorySlotUI> uiSlots = new List<InventorySlotUI>();
+    private List<CircularInventorySlot> circularSlots = new List<CircularInventorySlot>();
+
 
     public void OnClickIcon()
     {
@@ -255,23 +263,31 @@ public class RobotHUD : MonoBehaviour
 
     private void RefreshInventoryVisuals()
     {
-        if (currentInventory == null || currentInventory.InventorySO == null) return;
+        if (currentInventory == null || currentInventory.InventorySO == null)
+            return;
 
         int requiredSlots = currentInventory.InventorySO.maxCapacity;
 
-        while (uiSlots.Count < requiredSlots)
+        while (circularSlots.Count < requiredSlots)
         {
-            GameObject slotGO = Instantiate(inventorySlotPrefab, inventoryPanel);
-            InventorySlotUI slotUI = slotGO.GetComponent<InventorySlotUI>();
-            uiSlots.Add(slotUI);
-            slotUI.ClearSlot();
+            CircularInventorySlot slot = Instantiate(circularSlotPrefab, circularInventoryContainer);
+            circularSlots.Add(slot);
         }
 
-        while (uiSlots.Count > requiredSlots)
+        while (circularSlots.Count > requiredSlots)
         {
-            int lastIndex = uiSlots.Count - 1;
-            Destroy(uiSlots[lastIndex].gameObject);
-            uiSlots.RemoveAt(lastIndex);
+            int lastIndex = circularSlots.Count - 1;
+            Destroy(circularSlots[lastIndex].gameObject);
+            circularSlots.RemoveAt(lastIndex);
+        }
+
+        float fillPerSlot = (1f / requiredSlots) - slotGap;
+        float anglePerSlot = 360f / requiredSlots;
+
+        for (int i = 0; i < circularSlots.Count; i++)
+        {
+            float angle = startAngleOffset + (i * anglePerSlot);
+            circularSlots[i].Setup(fillPerSlot, angle);
         }
 
         int currentVisualSlotIndex = 0;
@@ -280,18 +296,16 @@ public class RobotHUD : MonoBehaviour
         {
             for (int i = 0; i < inventorySlot.amount; i++)
             {
-                if (currentVisualSlotIndex < uiSlots.Count)
+                if (currentVisualSlotIndex < circularSlots.Count)
                 {
-                    uiSlots[currentVisualSlotIndex].SetItem(inventorySlot.item);
+                    circularSlots[currentVisualSlotIndex].SetItem(inventorySlot.item.itemColor);
                     currentVisualSlotIndex++;
                 }
             }
         }
 
-        for (int i = currentVisualSlotIndex; i < uiSlots.Count; i++)
-        {
-            uiSlots[i].ClearSlot();
-        }
+        for (int i = currentVisualSlotIndex; i < circularSlots.Count; i++)
+            circularSlots[i].SetEmpty();
     }
 
     private void OnDestroy()
