@@ -13,13 +13,20 @@ public class RobotHUD : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI hpText;
     [SerializeField] private TextMeshProUGUI energyText;
+    [SerializeField] private Image hpFillImage;
+    [SerializeField] private Image energyFillImage;
     [SerializeField] private Transform inventoryPanel;
     [SerializeField] private GameObject inventorySlotPrefab;
+
+    [Header("Bar Settings")]
+    [SerializeField] private float maxFillLimit = 0.25f;
+    [SerializeField] private float minVisibleFillOffset = 0.03f;
 
     [Header("Selection Visuals")]
     [SerializeField] private Outline outline;
     [SerializeField] private Color32 defaultOutlineColor = new Color32(25, 19, 17, 255);
     [SerializeField] private Color32 selectedOutlineColor = new Color32(40, 150, 44, 255);
+    [SerializeField] private Image selectionBackground;
 
     private SwarmUnitsData unitData;
     private Unit selectedUnit;
@@ -53,6 +60,9 @@ public class RobotHUD : MonoBehaviour
 
         lastDisplayedHP = -1;
         lastDisplayedEnergy = -1;
+
+        UpdateHealthVisuals(unitData.currentHP, (float)unitData.currentHP / unitData.unitType.maxHP);
+        UpdateEnergyVisuals(unitData.currentEnergy, (float)unitData.currentEnergy / unitData.unitType.maxEnergy);
 
         UpdateHealthText(unitData.currentHP, (float)unitData.currentHP / unitData.unitType.maxHP);
         UpdateEnergyText(unitData.currentEnergy, (float)unitData.currentEnergy / unitData.unitType.maxEnergy);
@@ -131,7 +141,8 @@ public class RobotHUD : MonoBehaviour
             formController.OnFormChanged += HandleFormChanged;
         }
 
-        UpdateOutlineState();
+        UpdateSelectionState();
+        //UpdateOutlineState();
 
         if (gameObject.activeInHierarchy)
         {
@@ -147,6 +158,34 @@ public class RobotHUD : MonoBehaviour
         HandleEnergyChanged(energyManager != null ? (float)energyManager.CurrentEnergy / statsManager.MaxEnergy : 1f);
     }
 
+    private void UpdateHealthVisuals(int currentHp, float percent)
+    {
+        if (currentHp != lastDisplayedHP)
+        {
+            lastDisplayedHP = currentHp;
+            int maxHp = statsManager != null ? statsManager.MaxHP : unitData.unitType.maxHP;
+            hpText.text = $"HP: {currentHp}/{maxHp}";
+        }
+
+        if (hpFillImage != null)
+            hpFillImage.fillAmount = percent > 0f ? Mathf.Lerp(minVisibleFillOffset, maxFillLimit, percent) : 0f;
+    }
+
+    private void UpdateEnergyVisuals(float currentEnergy, float percent)
+    {
+        int energyInt = Mathf.CeilToInt(currentEnergy);
+
+        if (energyInt != lastDisplayedEnergy)
+        {
+            lastDisplayedEnergy = energyInt;
+            int maxEnergy = statsManager != null ? statsManager.MaxEnergy : unitData.unitType.maxEnergy;
+            energyText.text = $"EN: {energyInt}/{maxEnergy}";
+        }
+
+        if (energyFillImage != null)
+            energyFillImage.fillAmount = percent > 0f ? Mathf.Lerp(minVisibleFillOffset, maxFillLimit, percent) : 0f;
+    }
+
     private void HandleFormChanged(UnitSO newStats)
     {
         nameText.text = newStats.robotName;
@@ -157,12 +196,14 @@ public class RobotHUD : MonoBehaviour
     {
         if (healthManager == null || unitData == null) return;
         UpdateHealthText(healthManager.CurrentHP, percent);
+        UpdateHealthVisuals(healthManager.CurrentHP, percent);
     }
 
     private void HandleEnergyChanged(float percent)
     {
         if (energyManager == null || unitData == null) return;
         UpdateEnergyText(energyManager.CurrentEnergy, percent);
+        UpdateEnergyVisuals(energyManager.CurrentEnergy, percent);
     }
 
     private void UpdateHealthText(int currentHp, float percent)
@@ -190,7 +231,7 @@ public class RobotHUD : MonoBehaviour
         RefreshInventoryVisuals();
     }
 
-    private void HandleSelectionChanged(object sender, EventArgs e) => UpdateOutlineState();
+    private void HandleSelectionChanged(object sender, EventArgs e) => UpdateSelectionState();
 
     private void UpdateOutlineState()
     {
@@ -199,6 +240,17 @@ public class RobotHUD : MonoBehaviour
 
         bool isSelected = UnitSelectionSystem.Instance.GetSelectedUnit() == selectedUnit;
         outline.effectColor = isSelected ? selectedOutlineColor : defaultOutlineColor;
+    }
+
+    private void UpdateSelectionState()
+    {
+        if (selectionBackground == null || selectedUnit == null || UnitSelectionSystem.Instance == null)
+            return;
+
+        bool isSelected = UnitSelectionSystem.Instance.GetSelectedUnit() == selectedUnit;
+
+        if (selectionBackground.enabled != isSelected)
+            selectionBackground.enabled = isSelected;
     }
 
     private void RefreshInventoryVisuals()
