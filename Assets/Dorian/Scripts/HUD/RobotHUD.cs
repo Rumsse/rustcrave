@@ -53,10 +53,13 @@ public class RobotHUD : MonoBehaviour
 
     public void OnClickIcon()
     {
-        if (inventoryUI != null)
-        {
-            inventoryUI.TogglePanel();
-        }
+        if (selectedUnit == null)
+            return;
+
+        UnitPanel.Instance.TogglePanel(selectedUnit);
+
+        if (UnitSelectionSystem.Instance != null)
+            UnitSelectionSystem.Instance.SetSelectedUnit(selectedUnit);
     }
 
     public void Setup(SwarmUnitsData data)

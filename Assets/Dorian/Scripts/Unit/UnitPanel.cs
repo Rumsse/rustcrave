@@ -1,10 +1,29 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UnitPanel : MonoBehaviour
 {
-    [SerializeField] private Unit unit;
+    #region Singleton
+
+    public static UnitPanel Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+
+    #endregion
+
+    #region UI References
+
     [SerializeField] private Image sprite;
     [SerializeField] private Image hpBar;
     [SerializeField] private Image energyBar;
@@ -16,80 +35,167 @@ public class UnitPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI capacityText;
     [SerializeField] private TextMeshProUGUI robotTypeText;
     [SerializeField] private TextMeshProUGUI robotNameText;
+    [SerializeField] private UnitStateUI stateUI;
+    [SerializeField] private UnitEquipmentUI equipmentUI;
 
-    private HealthManager healthManager;
-    private EnergyManager energyManager;
-    private StatsManager statsManager;
-    private MCFormController formController;
+    #endregion
 
-    private void Awake()
-    {
-        healthManager = unit.GetComponent<HealthManager>();
-        energyManager = unit.GetComponent<EnergyManager>();
-        statsManager = unit.GetComponent<StatsManager>();
-        formController = unit.GetComponent<MCFormController>();
+    #region Private Fields
 
-        sprite.sprite = statsManager.RobotSprite;
-    }
+    private Unit currentUnit;
+    private HealthManager currentHealthManager;
+    private EnergyManager currentEnergyManager;
+    private StatsManager currentStatsManager;
+    private MCFormController currentFormController;
+
+    #endregion
+
+    #region Unity Methods
 
     private void Start()
     {
-        UpdateUI();
+        if (UnitSelectionSystem.Instance != null)
+            UnitSelectionSystem.Instance.OnSelectedUnitChanged += HandleSelectionChanged;
+
+        gameObject.SetActive(false);
     }
 
-    private void OnEnable()
+    private void OnDestroy()
     {
-        healthManager.onHealthPercentChange += UpdateHealthBar;
-        energyManager.onEnergyPercentChange += UpdateEnergyBar;
+        if (UnitSelectionSystem.Instance != null)
+            UnitSelectionSystem.Instance.OnSelectedUnitChanged -= HandleSelectionChanged;
 
-        if (formController != null)
+        UnbindUnit();
+    }
+
+    #endregion
+
+    #region Unit Binding
+
+    public void TogglePanel(Unit unit)
+    {
+        if (gameObject.activeSelf && currentUnit == unit)
         {
-            formController.OnFormChanged += HandleFormChanged;
+            gameObject.SetActive(false);
+            UnbindUnit();
+            return;
         }
 
-        UpdateUI();
+        BindUnit(unit);
     }
 
-    private void OnDisable()
+    private void HandleSelectionChanged(object sender, EventArgs e) => BindUnit(UnitSelectionSystem.Instance.GetSelectedUnit());
+
+    private void BindUnit(Unit unit)
     {
-        healthManager.onHealthPercentChange -= UpdateHealthBar;
-        energyManager.onEnergyPercentChange -= UpdateEnergyBar;
+        UnbindUnit();
 
-        if (formController != null)
+        currentUnit = unit;
+
+        if (currentUnit == null)
         {
-            formController.OnFormChanged -= HandleFormChanged;
+            gameObject.SetActive(false);
+            return;
         }
+
+        currentHealthManager = currentUnit.GetComponent<HealthManager>();
+        currentEnergyManager = currentUnit.GetComponent<EnergyManager>();
+        currentStatsManager = currentUnit.GetComponent<StatsManager>();
+        currentFormController = currentUnit.GetComponent<MCFormController>();
+
+        if (currentHealthManager != null)
+            currentHealthManager.onHealthPercentChange += UpdateHealthBar;
+
+        if (currentEnergyManager != null)
+            currentEnergyManager.onEnergyPercentChange += UpdateEnergyBar;
+
+        if (currentFormController != null)
+            currentFormController.OnFormChanged += HandleFormChanged;
+
+        if (stateUI != null)
+            stateUI.SetUnit(currentUnit);
+
+        if (equipmentUI != null)
+            equipmentUI.RefreshSlots(currentUnit);
+
+        UpdateFullUI();
+        gameObject.SetActive(true);
     }
+
+    private void UnbindUnit()
+    {
+        if (currentUnit == null)
+            return;
+
+        if (currentHealthManager != null)
+            currentHealthManager.onHealthPercentChange -= UpdateHealthBar;
+
+        if (currentEnergyManager != null)
+            currentEnergyManager.onEnergyPercentChange -= UpdateEnergyBar;
+
+        if (currentFormController != null)
+            currentFormController.OnFormChanged -= HandleFormChanged;
+
+        if (stateUI != null)
+            stateUI.SetUnit(null);
+
+        currentUnit = null;
+        currentHealthManager = null;
+        currentEnergyManager = null;
+        currentStatsManager = null;
+        currentFormController = null;
+    }
+
+    #endregion
+
+    #region UI Updates
 
     private void HandleFormChanged(UnitSO newStats)
     {
-        sprite.sprite = statsManager.RobotSprite;
-        UpdateUI();
+        sprite.sprite = currentStatsManager.RobotSprite;
+        UpdateFullUI();
     }
 
-    private void UpdateUI()
+    private void UpdateFullUI()
     {
-        hpText.text = $"HP: {healthManager.CurrentHP}/{statsManager.MaxHP}\n";
-        int energyBarInt = Mathf.CeilToInt(energyManager.CurrentEnergy);
-        energyText.text = $"Energy: {energyBarInt}/{statsManager.MaxEnergy}\n";
-        moveSpeedText.text = $"MoveSpeed: {statsManager.MoveSpeed}";
-        attackText.text = $"Attack: {statsManager.Damage}";
-        digText.text = $"Dig: {statsManager.MiningPower}";
-        capacityText.text = $"Capacity: {statsManager.CarryCapacity}";
-        robotTypeText.text = $"{statsManager.UnitType}";
-        robotNameText.text = $"{statsManager.RobotName}";
+        if (currentStatsManager == null)
+        {
+            Debug.LogError("StatsManager is missing on the selected unit.");
+            return;
+        }
+
+        sprite.sprite = currentStatsManager.RobotSprite;
+        hpText.text = $"HP: {currentHealthManager.CurrentHP}/{currentStatsManager.MaxHP}\n";
+
+        int energyBarInt = Mathf.CeilToInt(currentEnergyManager.CurrentEnergy);
+        energyText.text = $"Energy: {energyBarInt}/{currentStatsManager.MaxEnergy}\n";
+
+        moveSpeedText.text = $"MoveSpeed: {currentStatsManager.MoveSpeed}";
+        attackText.text = $"Attack: {currentStatsManager.Damage}";
+        digText.text = $"Dig: {currentStatsManager.MiningPower}";
+        capacityText.text = $"Capacity: {currentStatsManager.CarryCapacity}";
+        robotTypeText.text = $"{currentStatsManager.UnitType}";
+        robotNameText.text = $"{currentStatsManager.RobotName}";
+
+        float hpPercent = (float)currentHealthManager.CurrentHP / currentStatsManager.MaxHP;
+        hpBar.fillAmount = hpPercent;
+
+        float energyPercent = currentEnergyManager.CurrentEnergy / currentStatsManager.MaxEnergy;
+        energyBar.fillAmount = energyPercent;
     }
 
     private void UpdateHealthBar(float percent)
     {
         hpBar.fillAmount = percent;
-        hpText.text = $"HP: {healthManager.CurrentHP}/{statsManager.MaxHP}\n";
+        hpText.text = $"HP: {currentHealthManager.CurrentHP}/{currentStatsManager.MaxHP}\n";
     }
 
     private void UpdateEnergyBar(float percent)
     {
         energyBar.fillAmount = percent;
-        int energyBarInt = Mathf.CeilToInt(energyManager.CurrentEnergy);
-        energyText.text = $"Energy: {energyBarInt}/{statsManager.MaxEnergy}\n";
+        int energyBarInt = Mathf.CeilToInt(currentEnergyManager.CurrentEnergy);
+        energyText.text = $"Energy: {energyBarInt}/{currentStatsManager.MaxEnergy}\n";
     }
+
+    #endregion
 }

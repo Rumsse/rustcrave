@@ -1,39 +1,48 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class UnitEquipmentUI : MonoBehaviour
 {
     [SerializeField] private Transform slotsContainer;
-    [SerializeField] private GameObject gadgetSlotPrefab;
 
-    public void RefreshSlots(Unit unit)
+    private readonly List<GadgetSlotUI> spawnedSlots = new();
+
+    private void Awake()
     {
         foreach (Transform child in slotsContainer)
         {
-            Destroy(child.gameObject);
+            if (child.TryGetComponent<GadgetSlotUI>(out var slot))
+                spawnedSlots.Add(slot);
+        }
+    }
+
+    public void RefreshSlots(Unit unit)
+    {
+        if (unit == null || !unit.TryGetComponent<UnitEquipment>(out var equipment))
+        {
+            foreach (var slot in spawnedSlots)
+                slot.gameObject.SetActive(false);
+
+            return;
         }
 
-        if (unit.TryGetComponent<UnitEquipment>(out var equipment))
+        List<GadgetSO> gadgets = equipment.GetEquippedGadgets();
+        int maxSlots = equipment.GetMaxSlots();
+
+        for (int i = 0; i < spawnedSlots.Count; i++)
         {
-            List<GadgetSO> gadgets = equipment.GetEquippedGadgets();
-            int maxSlots = equipment.GetMaxSlots();
-
-            for (int i = 0; i < maxSlots; i++)
+            if (i >= maxSlots)
             {
-                GameObject slotGO = Instantiate(gadgetSlotPrefab, slotsContainer);
-
-                if (slotGO.TryGetComponent<GadgetSlotUI>(out var slotUI))
-                {
-                    if (i < gadgets.Count)
-                    {
-                        slotUI.SetItem(gadgets[i]);
-                    }
-                    else
-                    {
-                        slotUI.ClearSlot();
-                    }
-                }
+                spawnedSlots[i].gameObject.SetActive(false);
+                continue;
             }
+
+            spawnedSlots[i].gameObject.SetActive(true);
+
+            if (i < gadgets.Count)
+                spawnedSlots[i].SetItem(gadgets[i]);
+            else
+                spawnedSlots[i].ClearSlot();
         }
     }
 }
