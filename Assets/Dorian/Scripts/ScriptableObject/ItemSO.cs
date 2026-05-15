@@ -4,6 +4,7 @@ using UnityEngine;
 public abstract class ItemSO : ScriptableObject
 {
     public Sprite itemSprite;
+    public Color itemColor;
     public GameObject prefab;
     public ItemType itemType;
 

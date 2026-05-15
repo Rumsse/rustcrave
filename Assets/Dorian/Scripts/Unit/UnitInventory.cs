@@ -22,19 +22,19 @@ public class UnitInventory : MonoBehaviour
 
     public void UpdateCapacity()
     {
-        if (statsManager != null)
-        {
-            int newCapacity = statsManager.CarryCapacity;
-            if (inventorySO.maxCapacity != newCapacity)
-            {
-                inventorySO.maxCapacity = newCapacity;
-                inventorySO.ForceRefresh();
-            }
-        }
-        else
+        if (statsManager == null)
         {
             inventorySO.maxCapacity = unitSO.carryCapacity;
+            return;
         }
+
+        int newCapacity = statsManager.CarryCapacity;
+
+        if (inventorySO.maxCapacity == newCapacity)
+            return;
+
+        inventorySO.maxCapacity = newCapacity;
+        inventorySO.ForceRefresh();
     }
 
     private void OnApplicationQuit()
