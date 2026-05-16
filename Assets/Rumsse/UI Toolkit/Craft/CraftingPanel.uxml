@@ -4,7 +4,7 @@
     <Style src="project://database/Assets/Rumsse/UI%20Toolkit/Styles/Tutorial%20Styles.uss?fileID=7433441132597879392&amp;guid=0edd93bd5a288e949b4f97a3e8f650e9&amp;type=3#Tutorial Styles"/>
     <ui:VisualElement name="Root" picking-mode="Ignore" style="flex-grow: 1; background-color: rgba(74, 63, 1, 0); border-top-left-radius: 0%; border-bottom-left-radius: 0%; align-content: center; align-items: stretch; background-image: none; width: 100%; height: 100%; border-top-right-radius: 7%; border-bottom-right-radius: 7%; flex-wrap: wrap; align-self: center; flex-direction: row;">
         <ui:VisualElement name="left-bar" style="flex-grow: 1; width: 15%; height: 100%; background-color: rgb(92, 82, 26); background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Rura_z_lewej.PNG?fileID=2800000&amp;guid=2d2be30c8af2ea94c9fa30f9bc2a7006&amp;type=3#Rura_z_lewej&quot;);">
-            <ui:Label text="SWARM" name="header" style="align-self: center; align-items: center; justify-content: center; align-content: center; font-size: 25px; -unity-text-align: middle-center; white-space: nowrap; -unity-font-style: bold; margin-top: 35px; margin-bottom: 35px; color: rgb(164, 160, 155);"/>
+            <ui:Label text="SWARM" name="header" style="align-self: center; align-items: center; justify-content: center; align-content: center; font-size: 25px; -unity-text-align: middle-center; white-space: nowrap; -unity-font-style: bold; margin-top: 35px; margin-bottom: 35px; color: rgb(137, 131, 116);"/>
             <ui:VisualElement name="unit-container" class="unit-container" style="flex-grow: 0; width: 90px; height: 90px; align-items: auto; align-self: center; align-content: flex-start; justify-content: center; margin-top: 15px; margin-right: 15px; margin-bottom: 15px; margin-left: 15px;">
                 <ui:Button text="" name="unit-image" style="width: 90px; height: 90px; align-self: center; background-color: rgb(61, 54, 17); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; background-image: none; border-left-color: rgb(61, 54, 17); border-right-color: rgb(61, 54, 17); border-top-color: rgb(61, 54, 17); border-bottom-color: rgb(61, 54, 17);"/>
             </ui:VisualElement>
@@ -41,7 +41,7 @@
                     <ui:Label text="You have:" name="Label" style="align-self: center; align-content: flex-start; align-items: center; justify-content: center; -unity-font-style: bold; font-size: 20px; color: rgb(171, 155, 130); -unity-font-definition: url(&quot;project://database/Assets/Fonts/FhaCondensedFrenchNc-O2n3%20SDF%201.asset?fileID=11400000&amp;guid=6b5bfbd6dafc19d4e9983ca25d6da867&amp;type=2#FhaCondensedFrenchNc-O2n3 SDF 1&quot;); top: 1px;"/>
                     <ui:VisualElement name="resource-bar" style="flex-grow: 0; flex-direction: row; align-content: center; height: 25%; flex-wrap: nowrap; align-self: center; justify-content: center; align-items: center; width: 100%; left: auto;">
                         <ui:VisualElement name="resource-sparklite" data-source-path="" class="resource-item">
-                            <ui:VisualElement name="icon" class="resource-icon resource-icon-spark"/>
+                            <ui:VisualElement name="icon" class="resource-icon resource-icon-spark" style="height: 90%; width: 17%;"/>
                             <ui:Label text="0" name="amount" class="resource-amount">
                                 <Bindings>
                                     <ui:DataBinding property="text" data-source-path="Sparklite" binding-mode="ToTarget"/>
@@ -50,7 +50,7 @@
                             <ui:Label text="Sparklite" name="name" class="resource-name"/>
                         </ui:VisualElement>
                         <ui:VisualElement name="resource-scraponite" data-source-path="" class="resource-item">
-                            <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite"/>
+                            <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite" style="height: 90%;"/>
                             <ui:Label text="0" name="amount" class="resource-amount">
                                 <Bindings>
                                     <ui:DataBinding property="text" data-source-path="Scraponite" binding-mode="ToTarget"/>
@@ -59,7 +59,7 @@
                             <ui:Label text="Scraponite" name="name" class="resource-name"/>
                         </ui:VisualElement>
                         <ui:VisualElement name="resource-pulsite" data-source-path="" class="resource-item">
-                            <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite"/>
+                            <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite" style="height: 90%; width: 17%;"/>
                             <ui:Label text="0" name="amount" class="resource-amount">
                                 <Bindings>
                                     <ui:DataBinding property="text" data-source-path="Pulsite" binding-mode="ToTarget"/>
@@ -72,6 +72,6 @@
             </ui:VisualElement>
             <ui:VisualElement name="craft-content-container" picking-mode="Ignore" style="flex-grow: 1; height: 100%; width: 100%; align-items: stretch; align-self: center; flex-direction: column; flex-wrap: nowrap; position: absolute; flex-shrink: 0;"/>
         </ui:VisualElement>
-        <ui:Button text="" name="btn-close" style="border-top-left-radius: 127px; border-top-right-radius: 127px; border-bottom-right-radius: 127px; border-bottom-left-radius: 127px; border-left-color: rgb(72, 72, 72); border-right-color: rgb(72, 72, 72); border-top-color: rgb(72, 72, 72); border-bottom-color: rgb(72, 72, 72); background-color: rgb(27, 27, 27); color: rgb(255, 244, 232); width: 40px; height: 40px; margin-top: 23px; margin-right: 23px; margin-bottom: 23px; margin-left: 23px; align-self: flex-start; position: absolute; top: 10px; left: 846px; align-items: auto; align-content: center; justify-content: flex-start; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/General/X.PNG?fileID=2800000&amp;guid=cb89d58f426c8b549a79aa764ec1ad30&amp;type=3#X&quot;);"/>
+        <ui:Button text="" name="btn-close" style="background-color: rgba(27, 27, 27, 0); color: rgb(255, 244, 232); width: 40px; height: 40px; margin-top: 23px; margin-right: 23px; margin-bottom: 23px; margin-left: 23px; align-self: flex-start; position: absolute; top: 10px; left: 845px; align-items: auto; align-content: center; justify-content: flex-start; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/General/X.PNG?fileID=2800000&amp;guid=cb89d58f426c8b549a79aa764ec1ad30&amp;type=3#X&quot;); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0);"/>
     </ui:VisualElement>
 </ui:UXML>

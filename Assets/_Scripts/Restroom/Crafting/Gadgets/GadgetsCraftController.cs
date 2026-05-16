@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using FMODUnity;
+using PrimeTween;
 
 public class GadgetsCraftController : MonoBehaviour
 {
@@ -17,13 +18,11 @@ public class GadgetsCraftController : MonoBehaviour
     [SerializeField] private List<GadgetCraftData> gadgetCraftDataList;
     [SerializeField] private EventReference gadgetSound;
 
-    private Action<GadgetSO> requestCraftGadget;
+    private Func<GadgetSO, bool> requestCraftGadget;
     private GlobalInventorySO globalInventory;
     private InfoTooltipController infoTooltip;
 
-
-
-    public void Initialize(VisualElement root, Action<GadgetSO> onCraftRequested, GlobalInventorySO inventory)
+    public void Initialize(VisualElement root, Func<GadgetSO, bool> onCraftRequested, GlobalInventorySO inventory)
     {
         requestCraftGadget = onCraftRequested;
         globalInventory = inventory;
@@ -52,27 +51,40 @@ public class GadgetsCraftController : MonoBehaviour
             if (button == null)
                 continue;
 
-            button.clicked -= () => OnCraftClicked(data.Recipe);
-            button.clicked += () => OnCraftClicked(data.Recipe);
+            button.clicked -= () => OnCraftClicked(data.Recipe, button);
+            button.clicked += () => OnCraftClicked(data.Recipe, button);
         }
-
     }
 
     #region UI Logic
 
     public void ShowInfo(VisualElement infoPanel)
     {
-        if (infoPanel == null) return;
+        if (infoPanel == null)
+            return;
 
         bool isHidden = infoPanel.style.display == DisplayStyle.None;
         infoPanel.style.display = isHidden ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    private void AnimateButton(Button button)
+    {
+        Tween.StopAll(button);
+        Tween.Custom(
+            target: button,
+            startValue: 0f,
+            endValue: 360f,
+            duration: 0.85f,
+            onValueChange: (btn, val) => btn.style.rotate = new StyleRotate(new Rotate(new Angle(val, AngleUnit.Degree))),
+            ease: Ease.InOutBack
+        );
     }
 
     #endregion
 
     #region Crafting Logic
 
-    private void OnCraftClicked(CraftingRecipe recipe)
+    private void OnCraftClicked(CraftingRecipe recipe, Button button)
     {
         if (recipe == null)
             return;
@@ -80,9 +92,12 @@ public class GadgetsCraftController : MonoBehaviour
         if (!CanAfford(recipe))
             return;
 
+        if (requestCraftGadget == null || !requestCraftGadget.Invoke(recipe.CraftedGadget))
+            return;
+
         ConsumeResources(recipe);
         AudioManager.PlayOneShot(gadgetSound);
-        requestCraftGadget?.Invoke(recipe.CraftedGadget);
+        AnimateButton(button);
     }
 
     private bool CanAfford(CraftingRecipe recipe)
