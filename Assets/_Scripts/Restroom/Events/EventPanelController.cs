@@ -262,7 +262,7 @@ public class EventPanelController : MonoBehaviour
         {
             if (i == 0)
             {
-                optionButtons[i].text = "Continue.";
+                optionButtons[i].text = "    Continue.";
                 optionButtons[i].style.display = DisplayStyle.Flex;
             }
             else
