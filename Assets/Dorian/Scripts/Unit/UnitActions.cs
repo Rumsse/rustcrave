@@ -29,9 +29,13 @@ public class UnitActions : MonoBehaviour
     [SerializeField] private float executionSoundCooldown = 0.5f;
     [SerializeField] private float executionSoundDelay = 0.2f;
 
+    [Header("Animation Settings")]
+    [SerializeField] private float commandAnimationCooldown = 0.5f;
+
     private bool isDraggingCommand;
     private float lastDragSoundTime;
     private float lastExecutionSoundTime;
+    private float lastCommandAnimationTime;
 
     private void Update()
     {
@@ -159,10 +163,13 @@ public class UnitActions : MonoBehaviour
 
     private void PlayMCCommandAnimation()
     {
+        if (Time.time - lastCommandAnimationTime < commandAnimationCooldown) return;
+
         Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
         if (unit != null && !unit.IsMainCharacter)
         {
             Unit.MainCharacter?.PlayCommandAnimation();
+            lastCommandAnimationTime = Time.time;
         }
     }
 
