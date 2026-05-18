@@ -4,7 +4,6 @@ public class IdleState : UnitState
 {
     public IdleState(UnitBase unit) : base(unit) { }
 
-    //maybe extra logic here for new enemy 
     public override void EnterState()
     {
         if(_agent.enabled)
