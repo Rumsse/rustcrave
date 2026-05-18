@@ -31,7 +31,8 @@ public class SwarmPanelController : MonoBehaviour
     bool isQuickManagementActive;
 
     const string DefaultSubtitle = "Click on the unit image to get more information about it";
-    const string QuickSubtitle = "LMB to repair | RMB to charge";
+    //const string QuickSubtitle = "LMB to repair | RMB to charge";
+    const string QuickSubtitle = "Click on the unit image to get more information about it";
 
     #region Initialization
 
