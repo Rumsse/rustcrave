@@ -25,6 +25,8 @@ public class DiggingState : UnitState
 
     override public void Tick()
     {
+        Debug.Log("Digging...");
+
         _currentPassed += Time.deltaTime * _multiplier;
 
         if (_currentPassed >= _duration)
@@ -34,6 +36,8 @@ public class DiggingState : UnitState
 
     public override void ExitState()
     {
+        Debug.Log("Finished Digging");
+
         _currentSpecialUnit.ClearStolenItem();
         _currentSpecialUnit = null;
     }

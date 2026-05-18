@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DiggingEnemyUnit : EnemyUnit
 {
@@ -18,8 +19,10 @@ public class DiggingEnemyUnit : EnemyUnit
 
     public override void StealItem(ItemSO item)
     {
+        Debug.Log("Stealing item...");
         _available = false;
         base.StealItem(item);
+        HandleSpecialReaction();
     }
 
     public override void ClearStolenItem()

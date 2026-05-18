@@ -60,7 +60,10 @@ public class EnemyUnit : UnitBase
     public void UnitEnter(Unit unit)
     {
         if (!_available || playerUnits.Contains(unit))
+        {
+            Debug.Log(_available);
             return;
+        }
 
         playerUnits.Add(unit);
 
@@ -82,8 +85,17 @@ public class EnemyUnit : UnitBase
 
     private void RemoveUnit(Unit unit)
     {
-        if (!_available || !playerUnits.Remove(unit))
+        //if (!_available || !playerUnits.Remove(unit)) // not sure 
+        //{
+        //    Debug.Log(_available);
+        //    return;
+        //}
+
+        if (!playerUnits.Remove(unit)) // not sure 
+        {
+            Debug.Log(_available);
             return;
+        }
 
         if (deathCallbacks.TryGetValue(unit, out Action callback))
         {
