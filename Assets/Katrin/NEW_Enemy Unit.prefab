@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8560540031305533798}
   - component: {fileID: 6756173981024589019}
   - component: {fileID: 4380223622731129259}
-  - component: {fileID: 2784189041895778029}
+  - component: {fileID: 4787530802923081933}
   - component: {fileID: 6661612963204746029}
   - component: {fileID: 3155833242318412233}
   - component: {fileID: 5698830170423056329}
@@ -88,7 +88,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &2784189041895778029
+--- !u!114 &4787530802923081933
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,9 +97,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3215094073417232085}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f4da75bcd085b049880927c25356410, type: 3}
+  m_Script: {fileID: 11500000, guid: 85f57a59910fc8c419f9674accd43de9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyUnit
+  m_EditorClassIdentifier: Assembly-CSharp::DiggingEnemyUnit
   rotateSpeed: 10
   stoppingDistance: 0.2
   loopThroughAttacks: 0
@@ -110,6 +110,8 @@ MonoBehaviour:
   modelMidPoint: {fileID: 5803494211623994103}
   guardPoint: {fileID: 8730813952283317411}
   specialUnit: 1
+  diggingDuration: 2
+  multiplier: 0.5
 --- !u!114 &6661612963204746029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,7 +390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60b22bf91f69f594ebc61bea730f4dc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerUnitDetector
-  unit: {fileID: 2784189041895778029}
+  unit: {fileID: 0}
 --- !u!54 &8446205252468188834
 Rigidbody:
   m_ObjectHideFlags: 0
