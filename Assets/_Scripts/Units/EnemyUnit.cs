@@ -5,13 +5,15 @@ using UnityEngine;
 public class EnemyUnit : UnitBase
 {
     
-    [SerializeField] private Transform guardPoint;
+    [SerializeField] protected Transform guardPoint;
+    [SerializeField] protected bool specialUnit;
 
-    public ItemSO StolenItem { get; private set; } // I need to reset that after we are hidden again + i think i need some time offset between attacks
+    public ItemSO StolenItem { get; private set; } // saves stolen item to drop later
 
-    private List<Unit> playerUnits = new();
+    protected List<Unit> playerUnits = new();
     
     private Dictionary<Unit, Action> deathCallbacks = new();
+    protected bool _available = true;
 
     #region Unity Lifecycle
 
@@ -32,6 +34,9 @@ public class EnemyUnit : UnitBase
     protected override void Update()
     {
         base.Update();
+
+        if (!_available)
+            return;
 
         if (isAttacking || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
             return;
@@ -54,8 +59,11 @@ public class EnemyUnit : UnitBase
 
     public void UnitEnter(Unit unit)
     {
-        if (playerUnits.Contains(unit))
+        if (!_available || playerUnits.Contains(unit))
+        {
+            Debug.Log(_available);
             return;
+        }
 
         playerUnits.Add(unit);
 
@@ -77,8 +85,17 @@ public class EnemyUnit : UnitBase
 
     private void RemoveUnit(Unit unit)
     {
-        if (!playerUnits.Remove(unit))
+        //if (!_available || !playerUnits.Remove(unit)) // not sure 
+        //{
+        //    Debug.Log(_available);
+        //    return;
+        //}
+
+        if (!playerUnits.Remove(unit)) // not sure 
+        {
+            Debug.Log(_available);
             return;
+        }
 
         if (deathCallbacks.TryGetValue(unit, out Action callback))
         {
@@ -130,15 +147,20 @@ public class EnemyUnit : UnitBase
 
     #endregion
 
+    #region Special Enemy Behavior
+    protected virtual void HandleSpecialReaction() {}
+    public override bool SpecialReactionForUnits() => specialUnit;
+    #endregion
+
     #region Stolen Item
 
     //managing stolen item 
-    public void StealItem(ItemSO item)
+    public virtual void StealItem(ItemSO item)
     {
         StolenItem = item;
     }
 
-    public void ClearStolenItem()
+    public virtual void ClearStolenItem()
     {
         StolenItem = null;
     }

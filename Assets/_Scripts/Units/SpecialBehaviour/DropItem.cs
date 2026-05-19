@@ -8,7 +8,6 @@ public class DropItem : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float _dropChance;
     [SerializeField] private List<DropInstance> _possibleDrops = new();
 
-    //here extra for droping what was steaeld 
     public void Drop()
     {
         if (_possibleDrops.Count == 0) return;

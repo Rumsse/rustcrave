@@ -5,6 +5,8 @@ public class MeleeAttack : AttackBase
 {
     public override void Execute(UnitBase target, UnitBase attacker)
     {
+        Debug.Log("Executing Melee Attack");
+
         if (!attacker || !target)
             return;
         
