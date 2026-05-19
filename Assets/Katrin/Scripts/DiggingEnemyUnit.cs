@@ -1,19 +1,26 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class DiggingEnemyUnit : EnemyUnit
 {
-    [Header("Digging Details")]
-    [SerializeField] private float diggingDuration;
-    [SerializeField] private float multiplier;
+    [Header("Digging Enemy Details")]
+    [SerializeField] private string specialAnimationName;
 
+    protected override void Start()
+    {
+        base.Start();
+        selectedVisualObject.SetActive(false);
+    }
     protected override void HandleSpecialReaction()
     {
         playerUnits.Clear();
         HandleMovement(guardPoint.position);
     }
 
-    public (float, float) GetDiggingDetails() => (diggingDuration, multiplier);
+    public override void PrepareUnit()
+    {
+        selectedVisualObject.SetActive(true);
+        animator.Play(specialAnimationName);
+    }
 
     #region Stolen Item
 
@@ -28,6 +35,7 @@ public class DiggingEnemyUnit : EnemyUnit
     public override void ClearStolenItem()
     {
         _available = true;
+        selectedVisualObject.SetActive(false);
         base.ClearStolenItem();
     }
 

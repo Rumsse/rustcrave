@@ -59,6 +59,7 @@ public abstract class UnitBase : MonoBehaviour
     [SerializeField] protected HealthManager healthManager;
     [SerializeField] protected Transform projectileSpawnT;
     [SerializeField] protected Transform modelMidPoint;
+    [SerializeField] protected GameObject selectedVisualObject;
 
     protected NavMeshAgent agent;
     private UnitBase attackTarget;
@@ -88,8 +89,9 @@ public abstract class UnitBase : MonoBehaviour
     }
 
     public virtual bool SpecialReactionForUnits() => false;
+    public virtual void PrepareUnit() { }
 
-    private void Start()
+    protected virtual void Start()
     {
         SetState(new IdleState(this));
     }
