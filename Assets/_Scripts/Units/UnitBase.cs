@@ -130,6 +130,10 @@ public abstract class UnitBase : MonoBehaviour
 
     public virtual void MoveToAttack(UnitBase enemy, Vector3 position)
     {
+        if (AttackTarget == enemy) return;
+
+        StopAttacking();
+
         AttackTarget = enemy;
         SetState(new FightState(this));
 
