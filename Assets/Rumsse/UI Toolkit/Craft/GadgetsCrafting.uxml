@@ -2,15 +2,60 @@
     <Style src="project://database/Assets/Rumsse/UI%20Toolkit/Styles/CraftingPanel%20Style.uss?fileID=7433441132597879392&amp;guid=ed0427495a2070a4f8dc6b7019b00d9e&amp;type=3#CraftingPanel Style"/>
     <Style src="project://database/Assets/Rumsse/UI%20Toolkit/Styles/HUD%20Style.uss?fileID=7433441132597879392&amp;guid=7b47a7b00a228194890309076bd0a8b2&amp;type=3#HUD Style"/>
     <Style src="project://database/Assets/Rumsse/UI%20Toolkit/Styles/Tutorial%20Styles.uss?fileID=7433441132597879392&amp;guid=0edd93bd5a288e949b4f97a3e8f650e9&amp;type=3#Tutorial Styles"/>
-    <ui:VisualElement name="gadgets" picking-mode="Ignore" style="flex-grow: 1; background-color: rgb(74, 63, 1); border-top-left-radius: 0%; border-bottom-left-radius: 0%; align-content: center; align-items: stretch; background-image: none; border-top-right-radius: 70px; border-bottom-right-radius: 70px; flex-wrap: wrap; align-self: center; flex-direction: row; width: 100%; height: 100%; flex-shrink: 0;">
+    <ui:VisualElement name="gadgets" picking-mode="Ignore" style="flex-grow: 1; background-color: rgba(74, 63, 1, 0); align-content: center; align-items: stretch; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/T%C5%82o_Crafting.PNG?fileID=2800000&amp;guid=78f004ca403aca44ea56fc1453454447&amp;type=3#T&#322;o_Crafting&quot;); flex-wrap: wrap; align-self: center; flex-direction: row; width: 100%; height: 100%; flex-shrink: 0;">
         <ui:VisualElement name="right-bar" style="flex-grow: 1; height: 100%; width: 100%; align-items: center; align-self: center; flex-direction: column; flex-wrap: nowrap; flex-shrink: 0;">
             <ui:VisualElement name="upper-section" style="flex-grow: 1; width: 100%; height: 20%; flex-shrink: 1; align-self: auto; align-content: center; align-items: flex-start; justify-content: center; flex-direction: row;">
-                <ui:Label text="GADGETS" name="header" style="align-self: auto; align-content: center; align-items: center; justify-content: center; font-size: 55px; -unity-text-align: middle-center; -unity-font-style: bold; width: 470px; height: 80px; margin-top: 55px;">
-                    <ui:Button text="?" name="btn-info-gadgets" style="border-left-color: rgb(87, 83, 64); border-right-color: rgb(87, 83, 64); border-top-color: rgb(87, 83, 64); border-bottom-color: rgb(87, 83, 64); border-top-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px; align-items: flex-end; align-self: flex-end; align-content: center; flex-shrink: 1; width: 50px; height: 50px; font-size: 35px; color: rgb(0, 0, 0); background-color: rgb(94, 90, 68); margin-right: 12px; justify-content: center;"/>
+                <ui:Label text="GADGETS" name="header" style="align-self: auto; align-content: center; align-items: center; justify-content: center; font-size: 55px; -unity-text-align: middle-center; -unity-font-style: bold; width: 470px; height: 80px; margin-top: 55px; color: rgb(140, 124, 99);">
+                    <ui:Button text="" name="btn-info-gadgets" style="border-left-color: rgba(87, 83, 64, 0); border-right-color: rgba(87, 83, 64, 0); border-top-color: rgba(87, 83, 64, 0); border-bottom-color: rgba(87, 83, 64, 0); border-top-left-radius: 46px; border-top-right-radius: 46px; border-bottom-right-radius: 46px; border-bottom-left-radius: 46px; align-items: flex-end; align-self: flex-end; align-content: center; flex-shrink: 1; width: 50px; height: 50px; font-size: 35px; color: rgb(0, 0, 0); background-color: rgba(94, 90, 68, 0); margin-right: 12px; justify-content: center; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/General/_.PNG?fileID=2800000&amp;guid=8408f9c08e5b5914aafafb738fbcdb47&amp;type=3#_&quot;); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
                 </ui:Label>
             </ui:VisualElement>
             <ui:VisualElement name="middle-section" style="flex-grow: 1; width: 100%; height: 100%; flex-shrink: 1; flex-direction: column; flex-wrap: wrap; align-content: flex-start;">
                 <ui:VisualElement name="container-kinetic" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap;">
+                    <ui:VisualElement name="craft-btn" style="background-color: rgba(92, 82, 26, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 20px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_1.PNG?fileID=2800000&amp;guid=3fc626de5072ec94f89a9716f2e3fecc&amp;type=3#Okienko_do_Craftu_1&quot;); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement name="name" style="flex-grow: 0; flex-shrink: 0; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_2.PNG?fileID=2800000&amp;guid=34717594fd1f5684fb37a947b8a6ae41&amp;type=3#Okienko_do_Craftu_2&quot;); margin-left: 45px; width: 175px; height: 100px;">
+                            <ui:Label text="Kinetic Piston" name="gadget-name" style="-unity-font-style: bold; font-size: 17px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px; margin-top: 20px; color: rgb(171, 150, 115);">
+                                <ui:Label text="+1 to Attack Damage" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: center; align-items: center; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 19px; color: rgb(171, 150, 114);"/>
+                            </ui:Label>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="resources" style="flex-grow: 0; flex-shrink: 0; width: 250px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_3.PNG?fileID=2800000&amp;guid=593148d3c054c3c4593a689f4b4b248d&amp;type=3#Okienko_do_Craftu_3&quot;); background-size: 100% 100%; margin-left: 40px; height: 100px; align-self: center; align-content: center; justify-content: center; align-items: stretch;">
+                            <ui:VisualElement name="craft-cost" style="flex-grow: 0; align-self: center; align-items: stretch; flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: stretch; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; height: 90px;">
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); justify-content: flex-start; align-content: center; flex-direction: row; flex-wrap: nowrap; background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-spark" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="SparkliteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Sparklite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="ScraponiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Scraponite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="PulsiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Pulsite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="gear" style="flex-grow: 1; flex-shrink: 1; align-self: center; align-content: center; align-items: stretch; justify-content: center;">
+                            <ui:VisualElement name="craft" style="flex-grow: 0; flex-direction: row; flex-wrap: nowrap; background-color: rgba(0, 0, 0, 0); background-image: url(&quot;project://database/Assets/UnityTechnologies/ParticlePack/EffectExamples/Misc%20Effects/Textures/DustMote.png?fileID=2800000&amp;guid=394e93ce356b57344903a08ff72fcab2&amp;type=3#DustMote&quot;); -unity-background-image-tint-color: rgba(31, 31, 31, 0.6); background-size: 155% 155%; flex-shrink: 0; margin-right: 15px; align-items: center; justify-content: center; align-self: center; align-content: center;">
+                                <ui:Button text="" name="btn-craft-kinetic" class="standard-gear-btn"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="container-kinetic" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap; display: none;">
                     <ui:VisualElement name="craft-btn" style="background-color: rgb(92, 82, 26); border-top-left-radius: 60px; border-top-right-radius: 60px; border-bottom-right-radius: 60px; border-bottom-left-radius: 60px; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 10px;">
                         <ui:Label text="Kinetic Piston" name="gadget-name" style="-unity-font-style: bold; font-size: 25px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px;">
                             <ui:Label text="+1 to Attack Damage" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: flex-end; align-items: flex-end; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 6px;"/>
@@ -50,6 +95,51 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="container-hammer" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap;">
+                    <ui:VisualElement name="craft-btn" style="background-color: rgba(92, 82, 26, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 20px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_1.PNG?fileID=2800000&amp;guid=3fc626de5072ec94f89a9716f2e3fecc&amp;type=3#Okienko_do_Craftu_1&quot;); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement name="name" style="flex-grow: 0; flex-shrink: 0; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_2.PNG?fileID=2800000&amp;guid=34717594fd1f5684fb37a947b8a6ae41&amp;type=3#Okienko_do_Craftu_2&quot;); margin-left: 45px; width: 175px; height: 100px;">
+                            <ui:Label text="Hammer Drill" name="gadget-name" style="-unity-font-style: bold; font-size: 17px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px; margin-top: 20px; color: rgb(171, 150, 115);">
+                                <ui:Label text="+1 to Digging Power" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: center; align-items: center; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 19px; color: rgb(171, 150, 114);"/>
+                            </ui:Label>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="resources" style="flex-grow: 0; flex-shrink: 0; width: 250px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_3.PNG?fileID=2800000&amp;guid=593148d3c054c3c4593a689f4b4b248d&amp;type=3#Okienko_do_Craftu_3&quot;); background-size: 100% 100%; margin-left: 40px; height: 100px; align-self: center; align-content: center; justify-content: center; align-items: stretch;">
+                            <ui:VisualElement name="craft-cost" style="flex-grow: 0; align-self: center; align-items: stretch; flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: stretch; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; height: 90px;">
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); justify-content: flex-start; align-content: center; flex-direction: row; flex-wrap: nowrap; background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-spark" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="SparkliteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Sparklite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="ScraponiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Scraponite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="PulsiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Pulsite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="gear" style="flex-grow: 1; flex-shrink: 1; align-self: center; align-content: center; align-items: stretch; justify-content: center;">
+                            <ui:VisualElement name="craft" style="flex-grow: 0; flex-direction: row; flex-wrap: nowrap; background-color: rgba(0, 0, 0, 0); background-image: url(&quot;project://database/Assets/UnityTechnologies/ParticlePack/EffectExamples/Misc%20Effects/Textures/DustMote.png?fileID=2800000&amp;guid=394e93ce356b57344903a08ff72fcab2&amp;type=3#DustMote&quot;); -unity-background-image-tint-color: rgba(31, 31, 31, 0.6); background-size: 155% 155%; flex-shrink: 0; margin-right: 15px; align-items: center; justify-content: center; align-self: center; align-content: center;">
+                                <ui:Button text="" name="btn-craft-hammer" class="standard-gear-btn"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="container-hammer" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap; display: none;">
                     <ui:VisualElement name="craft-btn" style="background-color: rgb(92, 82, 26); border-top-left-radius: 60px; border-top-right-radius: 60px; border-bottom-right-radius: 60px; border-bottom-left-radius: 60px; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 10px;">
                         <ui:Label text="HammerDrill" name="gadget-name" style="-unity-font-style: bold; font-size: 25px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px; margin-top: 30px;">
                             <ui:Label text="+1 to Digging Power" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: center; align-items: flex-end; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 6px;"/>
@@ -89,6 +179,51 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="container-electro" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap;">
+                    <ui:VisualElement name="craft-btn" style="background-color: rgba(92, 82, 26, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 20px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_1.PNG?fileID=2800000&amp;guid=3fc626de5072ec94f89a9716f2e3fecc&amp;type=3#Okienko_do_Craftu_1&quot;); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement name="name" style="flex-grow: 0; flex-shrink: 0; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_2.PNG?fileID=2800000&amp;guid=34717594fd1f5684fb37a947b8a6ae41&amp;type=3#Okienko_do_Craftu_2&quot;); margin-left: 45px; width: 175px; height: 100px;">
+                            <ui:Label text="Electro-Magnet" name="gadget-name" style="-unity-font-style: bold; font-size: 16px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px; margin-top: 20px; color: rgb(171, 150, 115);">
+                                <ui:Label text="Adds +2 to Capacity" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: center; align-items: center; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 19px; color: rgb(171, 150, 114);"/>
+                            </ui:Label>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="resources" style="flex-grow: 0; flex-shrink: 0; width: 250px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_3.PNG?fileID=2800000&amp;guid=593148d3c054c3c4593a689f4b4b248d&amp;type=3#Okienko_do_Craftu_3&quot;); background-size: 100% 100%; margin-left: 40px; height: 100px; align-self: center; align-content: center; justify-content: center; align-items: stretch;">
+                            <ui:VisualElement name="craft-cost" style="flex-grow: 0; align-self: center; align-items: stretch; flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: stretch; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; height: 90px;">
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); justify-content: flex-start; align-content: center; flex-direction: row; flex-wrap: nowrap; background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-spark" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="SparkliteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Sparklite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="ScraponiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Scraponite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="PulsiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Pulsite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="gear" style="flex-grow: 1; flex-shrink: 1; align-self: center; align-content: center; align-items: stretch; justify-content: center;">
+                            <ui:VisualElement name="craft" style="flex-grow: 0; flex-direction: row; flex-wrap: nowrap; background-color: rgba(0, 0, 0, 0); background-image: url(&quot;project://database/Assets/UnityTechnologies/ParticlePack/EffectExamples/Misc%20Effects/Textures/DustMote.png?fileID=2800000&amp;guid=394e93ce356b57344903a08ff72fcab2&amp;type=3#DustMote&quot;); -unity-background-image-tint-color: rgba(31, 31, 31, 0.6); background-size: 155% 155%; flex-shrink: 0; margin-right: 15px; align-items: center; justify-content: center; align-self: center; align-content: center;">
+                                <ui:Button text="" name="btn-craft-electro" class="standard-gear-btn"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="container-electro" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap; display: none;">
                     <ui:VisualElement name="craft-btn" style="background-color: rgb(92, 82, 26); border-top-left-radius: 60px; border-top-right-radius: 60px; border-bottom-right-radius: 60px; border-bottom-left-radius: 60px; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 10px;">
                         <ui:Label text="Electro-Magnet" name="gadget-name" style="-unity-font-style: bold; font-size: 25px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px;">
                             <ui:Label text="Adds +2 to Capacity" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: flex-end; align-items: flex-end; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 6px;"/>
@@ -128,6 +263,51 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="container-spark" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap;">
+                    <ui:VisualElement name="craft-btn" style="background-color: rgba(92, 82, 26, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 20px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_1.PNG?fileID=2800000&amp;guid=3fc626de5072ec94f89a9716f2e3fecc&amp;type=3#Okienko_do_Craftu_1&quot;); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement name="name" style="flex-grow: 0; flex-shrink: 0; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_2.PNG?fileID=2800000&amp;guid=34717594fd1f5684fb37a947b8a6ae41&amp;type=3#Okienko_do_Craftu_2&quot;); margin-left: 45px; width: 175px; height: 100px;">
+                            <ui:Label text="Sparking Capacitor" name="gadget-name" style="-unity-font-style: bold; font-size: 14px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px; margin-top: 20px; color: rgb(171, 150, 115);">
+                                <ui:Label text="+20 to Energy" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: center; align-items: center; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 19px; color: rgb(171, 150, 114);"/>
+                            </ui:Label>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="resources" style="flex-grow: 0; flex-shrink: 0; width: 250px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_3.PNG?fileID=2800000&amp;guid=593148d3c054c3c4593a689f4b4b248d&amp;type=3#Okienko_do_Craftu_3&quot;); background-size: 100% 100%; margin-left: 40px; height: 100px; align-self: center; align-content: center; justify-content: center; align-items: stretch;">
+                            <ui:VisualElement name="craft-cost" style="flex-grow: 0; align-self: center; align-items: stretch; flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: stretch; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; height: 90px;">
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); justify-content: flex-start; align-content: center; flex-direction: row; flex-wrap: nowrap; background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-spark" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="SparkliteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Sparklite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="ScraponiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Scraponite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="PulsiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Pulsite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="gear" style="flex-grow: 1; flex-shrink: 1; align-self: center; align-content: center; align-items: stretch; justify-content: center;">
+                            <ui:VisualElement name="craft" style="flex-grow: 0; flex-direction: row; flex-wrap: nowrap; background-color: rgba(0, 0, 0, 0); background-image: url(&quot;project://database/Assets/UnityTechnologies/ParticlePack/EffectExamples/Misc%20Effects/Textures/DustMote.png?fileID=2800000&amp;guid=394e93ce356b57344903a08ff72fcab2&amp;type=3#DustMote&quot;); -unity-background-image-tint-color: rgba(31, 31, 31, 0.6); background-size: 155% 155%; flex-shrink: 0; margin-right: 15px; align-items: center; justify-content: center; align-self: center; align-content: center;">
+                                <ui:Button text="" name="btn-craft-spark" class="standard-gear-btn"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="container-spark" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap; display: none;">
                     <ui:VisualElement name="craft-btn" style="background-color: rgb(92, 82, 26); border-top-left-radius: 60px; border-top-right-radius: 60px; border-bottom-right-radius: 60px; border-bottom-left-radius: 60px; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 10px;">
                         <ui:Label text="Sparking Capacitor" name="gadget-name" style="-unity-font-style: bold; font-size: 25px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px;">
                             <ui:Label text="+20 to Energy" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: flex-end; align-items: flex-end; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 6px;"/>
@@ -167,6 +347,51 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="container-oiled" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap;">
+                    <ui:VisualElement name="craft-btn" style="background-color: rgba(92, 82, 26, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 20px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_1.PNG?fileID=2800000&amp;guid=3fc626de5072ec94f89a9716f2e3fecc&amp;type=3#Okienko_do_Craftu_1&quot;); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement name="name" style="flex-grow: 0; flex-shrink: 0; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_2.PNG?fileID=2800000&amp;guid=34717594fd1f5684fb37a947b8a6ae41&amp;type=3#Okienko_do_Craftu_2&quot;); margin-left: 45px; width: 175px; height: 100px;">
+                            <ui:Label text="Oiled Bearings" name="gadget-name" style="-unity-font-style: bold; font-size: 17px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px; margin-top: 20px; color: rgb(171, 150, 115);">
+                                <ui:Label text="+1 to SPD (movement speed)" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: center; align-items: center; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 19px; color: rgb(171, 150, 114);"/>
+                            </ui:Label>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="resources" style="flex-grow: 0; flex-shrink: 0; width: 250px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_3.PNG?fileID=2800000&amp;guid=593148d3c054c3c4593a689f4b4b248d&amp;type=3#Okienko_do_Craftu_3&quot;); background-size: 100% 100%; margin-left: 40px; height: 100px; align-self: center; align-content: center; justify-content: center; align-items: stretch;">
+                            <ui:VisualElement name="craft-cost" style="flex-grow: 0; align-self: center; align-items: stretch; flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: stretch; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; height: 90px;">
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); justify-content: flex-start; align-content: center; flex-direction: row; flex-wrap: nowrap; background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-spark" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="SparkliteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Sparklite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="ScraponiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Scraponite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="PulsiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Pulsite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="gear" style="flex-grow: 1; flex-shrink: 1; align-self: center; align-content: center; align-items: stretch; justify-content: center;">
+                            <ui:VisualElement name="craft" style="flex-grow: 0; flex-direction: row; flex-wrap: nowrap; background-color: rgba(0, 0, 0, 0); background-image: url(&quot;project://database/Assets/UnityTechnologies/ParticlePack/EffectExamples/Misc%20Effects/Textures/DustMote.png?fileID=2800000&amp;guid=394e93ce356b57344903a08ff72fcab2&amp;type=3#DustMote&quot;); -unity-background-image-tint-color: rgba(31, 31, 31, 0.6); background-size: 155% 155%; flex-shrink: 0; margin-right: 15px; align-items: center; justify-content: center; align-self: center; align-content: center;">
+                                <ui:Button text="" name="btn-craft-oiled" class="standard-gear-btn"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="container-oiled" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap; display: none;">
                     <ui:VisualElement name="craft-btn" style="background-color: rgb(92, 82, 26); border-top-left-radius: 60px; border-top-right-radius: 60px; border-bottom-right-radius: 60px; border-bottom-left-radius: 60px; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 10px;">
                         <ui:Label text="Oiled Bearings" name="gadget-name" style="-unity-font-style: bold; font-size: 25px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px;">
                             <ui:Label text="+1 to SPD (movement speed)" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: flex-end; align-items: flex-end; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 6px;"/>
@@ -206,6 +431,51 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="container-copper" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap;">
+                    <ui:VisualElement name="craft-btn" style="background-color: rgba(92, 82, 26, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 20px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_1.PNG?fileID=2800000&amp;guid=3fc626de5072ec94f89a9716f2e3fecc&amp;type=3#Okienko_do_Craftu_1&quot;); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement name="name" style="flex-grow: 0; flex-shrink: 0; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_2.PNG?fileID=2800000&amp;guid=34717594fd1f5684fb37a947b8a6ae41&amp;type=3#Okienko_do_Craftu_2&quot;); margin-left: 45px; width: 175px; height: 100px;">
+                            <ui:Label text="Copper Sheets" name="gadget-name" style="-unity-font-style: bold; font-size: 17px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px; margin-top: 20px; color: rgb(171, 150, 115);">
+                                <ui:Label text="+3 to HP (health points)" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: center; align-items: center; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 19px; color: rgb(171, 150, 114);"/>
+                            </ui:Label>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="resources" style="flex-grow: 0; flex-shrink: 0; width: 250px; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_3.PNG?fileID=2800000&amp;guid=593148d3c054c3c4593a689f4b4b248d&amp;type=3#Okienko_do_Craftu_3&quot;); background-size: 100% 100%; margin-left: 40px; height: 100px; align-self: center; align-content: center; justify-content: center; align-items: stretch;">
+                            <ui:VisualElement name="craft-cost" style="flex-grow: 0; align-self: center; align-items: stretch; flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: stretch; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; height: 90px;">
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); justify-content: flex-start; align-content: center; flex-direction: row; flex-wrap: nowrap; background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-spark" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="SparkliteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Sparklite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="ScraponiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Scraponite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="resource-item" class="resource-item" style="background-color: rgba(118, 105, 33, 0); background-image: none;">
+                                    <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite" style="width: 15%; height: 202%; margin-top: 5%; margin-bottom: 5%;"/>
+                                    <ui:Label text="0" name="amount" class="resource-amount" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;">
+                                        <Bindings>
+                                            <ui:DataBinding property="text" data-source-path="PulsiteCost" binding-mode="ToTarget"/>
+                                        </Bindings>
+                                    </ui:Label>
+                                    <ui:Label text="Pulsite" name="name" class="resource-name" style="color: rgb(171, 150, 114); -unity-text-align: middle-left;"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="gear" style="flex-grow: 1; flex-shrink: 1; align-self: center; align-content: center; align-items: stretch; justify-content: center;">
+                            <ui:VisualElement name="craft" style="flex-grow: 0; flex-direction: row; flex-wrap: nowrap; background-color: rgba(0, 0, 0, 0); background-image: url(&quot;project://database/Assets/UnityTechnologies/ParticlePack/EffectExamples/Misc%20Effects/Textures/DustMote.png?fileID=2800000&amp;guid=394e93ce356b57344903a08ff72fcab2&amp;type=3#DustMote&quot;); -unity-background-image-tint-color: rgba(31, 31, 31, 0.6); background-size: 155% 155%; flex-shrink: 0; margin-right: 15px; align-items: center; justify-content: center; align-self: center; align-content: center;">
+                                <ui:Button text="" name="btn-craft-copper" class="standard-gear-btn"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="container-copper" style="flex-grow: 1; align-self: auto; align-content: center; justify-content: center; align-items: auto; flex-wrap: wrap; display: none;">
                     <ui:VisualElement name="craft-btn" style="background-color: rgb(92, 82, 26); border-top-left-radius: 60px; border-top-right-radius: 60px; border-bottom-right-radius: 60px; border-bottom-left-radius: 60px; flex-direction: row; flex-wrap: wrap; align-self: center; align-content: center; align-items: center; flex-grow: 0; flex-shrink: 1; justify-content: flex-start; width: 685px; height: 100px; top: 10px;">
                         <ui:Label text="Copper Sheets" name="gadget-name" style="-unity-font-style: bold; font-size: 25px; width: 175px; height: 90px; align-self: center; align-content: center; -unity-text-align: upper-center; align-items: stretch; justify-content: center; flex-direction: row; margin-left: 35px; white-space: normal; padding-bottom: 0; margin-right: 30px;">
                             <ui:Label text="+3 to HP (health points)" name="info" style="flex-wrap: wrap; flex-direction: row; align-self: flex-end; align-items: flex-end; justify-content: center; align-content: center; display: flex; font-size: 10px; margin-right: 2px; padding-bottom: 0; margin-bottom: 6px;"/>
@@ -245,42 +515,42 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="bottom-section" style="flex-grow: 1; width: 100%; height: 15%; flex-shrink: 1; align-content: flex-end; justify-content: center; align-items: center; align-self: auto; margin-bottom: 34px;">
-                <ui:Label text="You have:" style="align-self: center; align-content: flex-start; align-items: center; justify-content: center; -unity-font-style: bold; font-size: 20px;"/>
-                <ui:VisualElement name="resource-bar" style="flex-grow: 0; flex-direction: row; align-content: stretch; height: 30%; flex-wrap: nowrap; align-self: stretch; justify-content: space-evenly; align-items: stretch; width: 100%; left: auto;">
-                    <ui:VisualElement name="resource-sparklite" class="resource-item" style="flex-direction: row; flex-wrap: nowrap; align-content: stretch; align-self: stretch; align-items: stretch; justify-content: space-evenly;">
-                        <ui:VisualElement name="icon" class="resource-icon resource-icon-spark" style="justify-content: center; align-self: center; align-content: center; align-items: center; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 9px; margin-right: 9px; margin-bottom: 9px; margin-left: 9px;"/>
-                        <ui:Label text="0" name="amount" class="resource-amount" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;">
+            <ui:VisualElement name="bottom-section" style="flex-grow: 1; width: 100%; height: 23%; flex-shrink: 1; align-content: flex-end; justify-content: flex-end; align-items: center; align-self: auto; margin-bottom: 32px;">
+                <ui:Label text="You have:" name="Label" style="align-self: center; align-content: flex-start; align-items: center; justify-content: center; -unity-font-style: bold; font-size: 20px; color: rgb(171, 155, 130); -unity-font-definition: url(&quot;project://database/Assets/Fonts/FhaCondensedFrenchNc-O2n3%20SDF%201.asset?fileID=11400000&amp;guid=6b5bfbd6dafc19d4e9983ca25d6da867&amp;type=2#FhaCondensedFrenchNc-O2n3 SDF 1&quot;); margin-bottom: 1px;"/>
+                <ui:VisualElement name="resource-bar" style="flex-grow: 0; flex-direction: row; align-content: center; height: 25%; flex-wrap: nowrap; align-self: center; justify-content: center; align-items: center; width: 100%; left: auto;">
+                    <ui:VisualElement name="resource-sparklite" data-source-path="" class="resource-item">
+                        <ui:VisualElement name="icon" class="resource-icon resource-icon-spark"/>
+                        <ui:Label text="0" name="amount" class="resource-amount">
                             <Bindings>
                                 <ui:DataBinding property="text" data-source-path="Sparklite" binding-mode="ToTarget"/>
                             </Bindings>
                         </ui:Label>
-                        <ui:Label text="Sparklite" name="name" class="resource-name" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;"/>
+                        <ui:Label text="Sparklite" name="name" class="resource-name"/>
                     </ui:VisualElement>
-                    <ui:VisualElement name="resource-scraponite" class="resource-item" style="flex-direction: row; flex-wrap: nowrap; align-content: stretch; align-self: stretch; align-items: stretch; justify-content: space-evenly;">
-                        <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite" style="justify-content: center; align-self: center; align-content: center; align-items: center; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 9px; margin-right: 9px; margin-bottom: 9px; margin-left: 9px;"/>
-                        <ui:Label text="0" name="amount" class="resource-amount" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;">
+                    <ui:VisualElement name="resource-scraponite" data-source-path="" class="resource-item">
+                        <ui:VisualElement name="icon" class="resource-icon resource-icon-scraponite"/>
+                        <ui:Label text="0" name="amount" class="resource-amount">
                             <Bindings>
                                 <ui:DataBinding property="text" data-source-path="Scraponite" binding-mode="ToTarget"/>
                             </Bindings>
                         </ui:Label>
-                        <ui:Label text="Scraponite" name="name" class="resource-name" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;"/>
+                        <ui:Label text="Scraponite" name="name" class="resource-name"/>
                     </ui:VisualElement>
-                    <ui:VisualElement name="resource-pulsite" class="resource-item" style="flex-direction: row; flex-wrap: nowrap; align-content: stretch; align-self: stretch; align-items: stretch; justify-content: space-evenly;">
-                        <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite" style="justify-content: center; align-self: center; align-content: center; align-items: center; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-top: 9px; margin-right: 9px; margin-bottom: 9px; margin-left: 9px; height: 120%;"/>
-                        <ui:Label text="0" name="amount" class="resource-amount" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;">
+                    <ui:VisualElement name="resource-pulsite" data-source-path="" class="resource-item">
+                        <ui:VisualElement name="icon" class="resource-icon resource-icon-pulsite"/>
+                        <ui:Label text="0" name="amount" class="resource-amount">
                             <Bindings>
                                 <ui:DataBinding property="text" data-source-path="Pulsite" binding-mode="ToTarget"/>
                             </Bindings>
                         </ui:Label>
-                        <ui:Label text="Pulsite" name="name" class="resource-name" style="justify-content: space-evenly; align-self: stretch; align-content: stretch;"/>
+                        <ui:Label text="Pulsite" name="name" class="resource-name"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="gadgets-info-panel" style="flex-grow: 1; position: absolute; width: 400px; height: 150px; margin-top: 40px; background-color: rgb(61, 54, 17); border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; border-bottom-left-radius: 25px; display: none; right: auto; align-self: center; align-content: auto; align-items: auto;">
-            <ui:Label text="You can craft gadgets and assign them to your swarm unit in swarm panel. A gadget adds a particular additional value to the base stat value of a unit. You can always change the assigned gadgets of your unit and assign them to another later." name="info-text" style="font-size: 15px; align-self: center; align-content: stretch; flex-direction: row; flex-wrap: wrap; white-space: normal; color: rgb(161, 154, 150); justify-content: space-evenly; flex-grow: 1; margin-top: 15px; margin-right: 15px; margin-bottom: 15px; margin-left: 15px; -unity-font-style: normal;"/>
+        <ui:VisualElement name="gadgets-info-panel" style="flex-grow: 1; position: absolute; width: 400px; height: 150px; margin-top: 40px; background-color: rgba(82, 60, 41, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; display: none; right: auto; align-self: center; align-content: auto; align-items: auto; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/Crafting/Okienko_do_Craftu_1.PNG?fileID=2800000&amp;guid=3fc626de5072ec94f89a9716f2e3fecc&amp;type=3#Okienko_do_Craftu_1&quot;); -unity-slice-left: 30; -unity-slice-top: 30; -unity-slice-right: 30; -unity-slice-bottom: 30;">
+            <ui:Label text="You can craft gadgets and assign them to your swarm unit in swarm panel. A gadget adds a particular additional value to the base stat value of a unit. You can always change the assigned gadgets of your unit and assign them to another later." name="info-text" style="font-size: 14px; align-self: center; align-content: stretch; flex-direction: row; flex-wrap: wrap; white-space: normal; color: rgb(197, 178, 148); justify-content: space-evenly; flex-grow: 1; margin-top: 15px; margin-right: 25px; margin-bottom: 15px; margin-left: 30px; -unity-font-style: normal;"/>
         </ui:VisualElement>
-        <ui:Button text="X" name="btn-back" style="border-top-left-radius: 127px; border-top-right-radius: 127px; border-bottom-right-radius: 127px; border-bottom-left-radius: 127px; border-left-color: rgb(72, 72, 72); border-right-color: rgb(72, 72, 72); border-top-color: rgb(72, 72, 72); border-bottom-color: rgb(72, 72, 72); background-color: rgb(27, 27, 27); color: rgb(255, 244, 232); width: 40px; height: 40px; margin-top: 23px; margin-right: 23px; margin-bottom: 23px; margin-left: 23px; align-self: flex-start; position: absolute; top: 10px; left: 701px; align-items: auto; align-content: center; justify-content: flex-start;"/>
+        <ui:Button text="" name="btn-back" style="border-top-left-radius: 127px; border-top-right-radius: 127px; border-bottom-right-radius: 127px; border-bottom-left-radius: 127px; border-left-color: rgba(72, 72, 72, 0); border-right-color: rgba(72, 72, 72, 0); border-top-color: rgba(72, 72, 72, 0); border-bottom-color: rgba(72, 72, 72, 0); background-color: rgba(27, 27, 27, 0); color: rgb(255, 244, 232); width: 40px; height: 40px; margin-top: 23px; margin-right: 23px; margin-bottom: 23px; margin-left: 23px; align-self: flex-start; position: absolute; top: 10px; left: 701px; align-items: auto; align-content: center; justify-content: flex-start; background-image: url(&quot;project://database/Assets/Graphics%202D/Restroom/General/X.PNG?fileID=2800000&amp;guid=cb89d58f426c8b549a79aa764ec1ad30&amp;type=3#X&quot;); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
     </ui:VisualElement>
 </ui:UXML>

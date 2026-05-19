@@ -4,12 +4,12 @@ VisualElement {
 .resource-item {
     flex-direction: row;
     align-content: center;
-    background-color: rgb(118, 105, 33);
+    background-color: rgba(118, 105, 33, 0);
     height: 35px;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
     margin-top: 6px;
     margin-right: 6px;
     margin-bottom: 6px;
@@ -17,6 +17,13 @@ VisualElement {
     width: 225px;
     align-self: center;
     align-items: center;
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Crafting/Kafelek.PNG?fileID=2800000&guid=ff4e62c733a4df04bb54d11e6c4295b9&type=3#Kafelek");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 45;
+    -unity-slice-top: 2;
+    -unity-slice-right: 100;
+    -unity-slice-bottom: 2;
+    -unity-slice-scale: 0.6px;
 }
 
 .resource-item-sparklite {
@@ -80,8 +87,8 @@ VisualElement {
     margin-right: 6%;
     margin-bottom: 6%;
     margin-left: 14%;
-    height: 120%;
-    width: 20%;
+    height: 90%;
+    width: 18%;
 }
 
 .resource-icon-scraponite {
@@ -91,8 +98,8 @@ VisualElement {
     margin-right: 6%;
     margin-bottom: 6%;
     margin-left: 14%;
-    height: 120%;
-    width: 20%;
+    height: 90%;
+    width: 17%;
 }
 
 .resource-icon-pulsite {
@@ -102,19 +109,19 @@ VisualElement {
     margin-right: 6%;
     margin-bottom: 6%;
     margin-left: 14%;
-    height: 120%;
-    width: 20%;
+    height: 90%;
+    width: 18%;
 }
 
 .resource-amount {
     -unity-font-style: bold;
     width: 25px;
-    -unity-font-definition: url('project://database/Assets/Fonts/FhaCondensedFrenchNc-O2n3 SDF 1.asset');
+    -unity-font-definition: url("project://database/Assets/Fonts/FhaCondensedFrenchNc-O2n3%20SDF%201.asset?fileID=11400000&guid=6b5bfbd6dafc19d4e9983ca25d6da867&type=2#FhaCondensedFrenchNc-O2n3 SDF 1");
 }
 
 .resource-name {
     width: 90px;
-    -unity-font-definition: url('project://database/Assets/Fonts/FhaCondensedFrenchNc-O2n3 SDF 1.asset');
+    -unity-font-definition: url("project://database/Assets/Fonts/FhaCondensedFrenchNc-O2n3%20SDF%201.asset?fileID=11400000&guid=6b5bfbd6dafc19d4e9983ca25d6da867&type=2#FhaCondensedFrenchNc-O2n3 SDF 1");
 }
 
 .button {
@@ -129,29 +136,47 @@ VisualElement {
     height: 70px;
     width: 290px;
     font-size: 27px;
-    background-color: rgb(117, 105, 33);
+    background-color: rgba(117, 105, 33, 0);
     -unity-font-style: bold;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Guziczek.PNG?fileID=2800000&guid=7d82f8beff807a5478920b9a79624bca&type=3#Guziczek");
+    -unity-slice-scale: 0;
+    -unity-slice-left: 0;
+    -unity-slice-top: 0;
+    -unity-slice-right: 0;
+    -unity-slice-bottom: 0;
 }
 
 .standard-event-popup-background {
     flex-grow: 0;
     height: 200px;
     width: 350px;
-    background-color: rgb(118, 105, 33);
-    border-top-right-radius: 30px;
-    border-bottom-right-radius: 30px;
+    background-color: rgba(118, 105, 33, 0);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     border-top-width: 10px;
     border-right-width: 10px;
     border-bottom-width: 10px;
     border-left-width: 10px;
-    border-left-color: rgb(61, 54, 17);
-    border-right-color: rgb(61, 54, 17);
-    border-top-color: rgb(61, 54, 17);
-    border-bottom-color: rgb(61, 54, 17);
+    border-left-color: rgba(61, 54, 17, 0);
+    border-right-color: rgba(61, 54, 17, 0);
+    border-top-color: rgba(61, 54, 17, 0);
+    border-bottom-color: rgba(61, 54, 17, 0);
     align-content: center;
     align-self: center;
     justify-content: center;
     align-items: center;
+    background-image: url("project://database/Assets/Graphics%202D/UI%20tunnel/Ramka_2.PNG?fileID=2800000&guid=6b1cf70c2a464454f8bb19d490b51829&type=3#Ramka_2");
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    -unity-slice-left: 815;
+    -unity-slice-top: 320;
+    -unity-slice-right: 611;
+    -unity-slice-bottom: 320;
+    color: rgb(166, 150, 126);
 }
 
 .standard-robot-craft-btn {
@@ -218,19 +243,20 @@ VisualElement {
     margin-right: 10px;
     margin-bottom: 10px;
     margin-left: 10px;
-    background-color: rgb(117, 105, 33);
-    border-left-color: rgb(51, 46, 21);
-    border-right-color: rgb(51, 46, 21);
-    border-top-color: rgb(51, 46, 21);
-    border-bottom-color: rgb(51, 46, 21);
+    background-color: rgba(117, 105, 33, 0);
+    border-left-color: rgba(51, 46, 21, 0);
+    border-right-color: rgba(51, 46, 21, 0);
+    border-top-color: rgba(51, 46, 21, 0);
+    border-bottom-color: rgba(51, 46, 21, 0);
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Crafting/Kafelek.PNG?fileID=2800000&guid=ff4e62c733a4df04bb54d11e6c4295b9&type=3#Kafelek");
 }
 
 .standard-btn-q-management {
@@ -238,17 +264,33 @@ VisualElement {
     align-self: center;
     align-items: stretch;
     align-content: center;
-    background-color: rgb(92, 82, 26);
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
+    background-color: rgba(92, 82, 26, 0);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
     width: 40%;
     height: 20%;
-    color: rgb(27, 27, 27);
+    color: rgb(190, 172, 144);
     font-size: 27px;
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Okno_wybor%C3%B3w.PNG?fileID=2800000&guid=b3384c6617274914b9b5733c72795ef9&type=3#Okno_wyborów");
+}
+
+.standard-gadget-slot-1 {
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    background-color: rgba(117, 105, 33, 0);
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Crafting/Kafelek.PNG?fileID=2800000&guid=ff4e62c733a4df04bb54d11e6c4295b9&type=3#Kafelek");
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }

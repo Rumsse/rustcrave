@@ -6,10 +6,11 @@ public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] private string gameSceneName;
     [SerializeField] private string tutorialSceneName;
-    [SerializeField] private GameObject optionsPanel;
+    [SerializeField] private GameObject optionsPanelMainMenuOnly;
     [SerializeField] private GameObject creditsPanel;
-    [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject settingsSoundsPanel;
     [SerializeField] private GameObject guidePanel;
+    [SerializeField] private GameObject quittingPanel;
     [SerializeField] private SwarmState swarmState;
     [SerializeField] private MapState mapState;
     [SerializeField] private GlobalInventorySO globalInventory;
@@ -20,8 +21,8 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start()
     {
-        if (optionsPanel != null)
-            optionsPanel.SetActive(false);
+        if (optionsPanelMainMenuOnly != null)
+            optionsPanelMainMenuOnly.SetActive(false);
 
         if (creditsPanel != null)
             creditsPanel.SetActive(false);
@@ -49,15 +50,15 @@ public class MainMenuManager : MonoBehaviour
 
     public void OpenOptions()
     {
-        if (optionsPanel != null)
-            optionsPanel.SetActive(true);
+        if (optionsPanelMainMenuOnly != null)
+            optionsPanelMainMenuOnly.SetActive(true);
         AudioManager.PlayOneShot(interactionButtonSound);
     }
 
     public void CloseOptions()
     {
-        if (optionsPanel != null)
-            optionsPanel.SetActive(false);
+        if (optionsPanelMainMenuOnly != null)
+            optionsPanelMainMenuOnly.SetActive(false);
         AudioManager.PlayOneShot(interactionButtonSound);
     }
 
@@ -77,15 +78,15 @@ public class MainMenuManager : MonoBehaviour
 
     public void OpenSettings()
     {
-        if (settingsPanel != null)
-            settingsPanel.SetActive(true);
+        if (settingsSoundsPanel != null)
+            settingsSoundsPanel.SetActive(true);
         AudioManager.PlayOneShot(interactionButtonSound);
     }
 
     public void CloseSettings()
     {
-        if (settingsPanel != null)
-            settingsPanel.SetActive(false);
+        if (settingsSoundsPanel != null)
+            settingsSoundsPanel.SetActive(false);
         AudioManager.PlayOneShot(interactionButtonSound);
     }
 
@@ -100,6 +101,20 @@ public class MainMenuManager : MonoBehaviour
     {
         if (guidePanel != null)
             guidePanel.SetActive(false);
+        AudioManager.PlayOneShot(interactionButtonSound);
+    }
+
+    public void OpenQuittingPanel()
+    {
+        if (quittingPanel != null)
+            quittingPanel.SetActive(true);
+        AudioManager.PlayOneShot(interactionButtonSound);
+    }
+
+    public void CloseQuittingPanel()
+    {
+        if (quittingPanel != null)
+            quittingPanel.SetActive(false);
         AudioManager.PlayOneShot(interactionButtonSound);
     }
 
