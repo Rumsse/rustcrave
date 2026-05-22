@@ -3,7 +3,6 @@ using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public abstract class UnitBase : MonoBehaviour
@@ -60,6 +59,7 @@ public abstract class UnitBase : MonoBehaviour
     [SerializeField] protected HealthManager healthManager;
     [SerializeField] protected Transform projectileSpawnT;
     [SerializeField] protected Transform modelMidPoint;
+    [SerializeField] protected GameObject selectedVisualObject;
 
     protected NavMeshAgent agent;
     private UnitBase attackTarget;
@@ -88,7 +88,10 @@ public abstract class UnitBase : MonoBehaviour
         }
     }
 
-    private void Start()
+    public virtual bool SpecialReactionForUnits() => false;
+    public virtual void PrepareUnit() { }
+
+    protected virtual void Start()
     {
         SetState(new IdleState(this));
     }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 829275997c2ba9448aed1ee9f0a6735a, type: 3}
-  m_Name: NEW_EnemyUnit
+  m_Name: Mole_SO
   m_EditorClassIdentifier: Assembly-CSharp::UnitSO
   unitType: 0
   prefab: {fileID: 3967151473964373244, guid: bf15c5e4457affb43b7d375ea967afe8, type: 3}
@@ -20,7 +20,7 @@ MonoBehaviour:
   abilityDescription: 
   moveSpeed: 2
   maxEnergy: 0
-  maxHP: 2
+  maxHP: 4
   typeImmunities: 0
   deliveryMethodImmunities: 0
   damage: 1
@@ -32,18 +32,11 @@ MonoBehaviour:
   sounds:
     attackSound:
       Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
-      Path: 
-    walkSound:
-      Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
-      Path: 
+        Data1: 1950237969
+        Data2: 1151773289
+        Data3: -1731596656
+        Data4: 209011347
+      Path: event:/Kret/sx_Atak
     mineSound:
       Guid:
         Data1: 0
@@ -60,19 +53,26 @@ MonoBehaviour:
       Path: 
     takeDamageSound:
       Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
-      Path: 
+        Data1: 1512978496
+        Data2: 1299583983
+        Data3: -1715904845
+        Data4: -507597345
+      Path: event:/Kret/sx_Dostawanie_DMG
     deathSound:
+      Guid:
+        Data1: 679884571
+        Data2: 1247844648
+        Data3: -1480836701
+        Data4: -2001406378
+      Path: "event:/Kret/sx_\u015Amier\u0107"
+    commandSound:
       Guid:
         Data1: 0
         Data2: 0
         Data3: 0
         Data4: 0
       Path: 
-    commandSound:
+    orderSound:
       Guid:
         Data1: 0
         Data2: 0

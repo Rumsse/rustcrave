@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FightState : UnitState //here is the attack activation 
+public class FightState : UnitState 
 {
     public FightState(UnitBase unit) : base(unit) {}
 
@@ -37,6 +37,7 @@ public class FightState : UnitState //here is the attack activation
         {
             if(_agent.enabled)
                 _agent.SetDestination(_unit.AttackTarget.transform.position);
+
             _unit.Animator.SetBool("IsWalking", true);
         }
     }

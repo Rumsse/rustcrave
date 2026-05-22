@@ -5,6 +5,8 @@ public class StealAttack : AttackBase // logic for stealing random item from the
 {
     public override void Execute(UnitBase target, UnitBase attacker)
     {
+        Debug.Log("Executing Steal Attack");
+
         if (!attacker || !target)
             return;
 
