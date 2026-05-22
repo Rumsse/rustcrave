@@ -37,6 +37,7 @@ public class FightState : UnitState
         {
             if(_agent.enabled)
                 _agent.SetDestination(_unit.AttackTarget.transform.position);
+
             _unit.Animator.SetBool("IsWalking", true);
         }
     }

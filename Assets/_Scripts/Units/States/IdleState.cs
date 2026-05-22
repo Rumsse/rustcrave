@@ -14,6 +14,9 @@ public class IdleState : UnitState
     public override void Tick()
     {
         if (_unit.AttackTarget != null && _unit.Stats.PossibleAttacks.Count != 0)
+        {
+            _unit.PrepareUnit();
             _unit.SetState(new FightState(_unit));
+        }
     }
 }

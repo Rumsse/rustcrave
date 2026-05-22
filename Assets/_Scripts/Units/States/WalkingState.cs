@@ -7,9 +7,10 @@ public class WalkingState : UnitState
     public WalkingState(UnitBase unit, Vector3 pos) : base(unit) => _targetPos = pos;
 
     public override void EnterState()
-    {
-        if(_agent.enabled)
+    {      
+        if (_agent.enabled)
             _agent.SetDestination(_targetPos);
+
         _unit.Animator.SetBool("IsWalking", true);
     }
 
