@@ -47,6 +47,8 @@ public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager Instance { get; private set; }
 
+    public bool IsTutorialPaused => tutorialPanel != null && tutorialPanel.activeSelf;
+
     [Header("UI References")]
     [SerializeField] private GameObject tutorialPanel;
     [SerializeField] private TMP_Text titleText;
@@ -241,6 +243,8 @@ public class TutorialManager : MonoBehaviour
 
         if (isFinalTutorialStep)
         {
+            currentStepIndex = 0;
+
             Debug.Log("Tutorial Finished! Loading Main Menu...");
 
             if (!string.IsNullOrEmpty(mainMenuSceneName))

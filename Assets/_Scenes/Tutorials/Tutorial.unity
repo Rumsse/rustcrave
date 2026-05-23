@@ -260,6 +260,7 @@ RectTransform:
   - {fileID: 151744011}
   - {fileID: 1258495098}
   - {fileID: 135091952}
+  - {fileID: 2016001143}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6102,6 +6103,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5001075980898024117, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1762193606}
+    - target: {fileID: 5001075980898024117, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: QuitGame
+      objectReference: {fileID: 0}
     - target: {fileID: 8520260764961628912, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
       propertyPath: m_Name
       value: quitting panel
@@ -6109,6 +6118,14 @@ PrefabInstance:
     - target: {fileID: 8520260764961628912, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825168540899921564, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1762193606}
+    - target: {fileID: 8825168540899921564, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseQuittingPanel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6388,6 +6405,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 30319467}
     m_Modifications:
+    - target: {fileID: 355705761345998220, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1762193606}
+    - target: {fileID: 355705761345998220, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseGuide
+      objectReference: {fileID: 0}
     - target: {fileID: 3056896926083751967, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6398,27 +6423,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3056896926083751967, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3056896926083751967, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3056896926083751967, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3056896926083751967, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3056896926083751967, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1500
       objectReference: {fileID: 0}
     - target: {fileID: 3056896926083751967, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 1390
       objectReference: {fileID: 0}
     - target: {fileID: 3056896926083751967, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37473,7 +37498,9 @@ MonoBehaviour:
   healthManager: {fileID: 675200805}
   projectileSpawnT: {fileID: 686254085}
   modelMidPoint: {fileID: 772620344}
+  selectedVisualObject: {fileID: 0}
   guardPoint: {fileID: 1244699331}
+  specialUnit: 0
 --- !u!114 &675200805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76056,7 +76083,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1762193605}
         m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
         m_MethodName: Pause
         m_Mode: 1
@@ -79217,11 +79244,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1148035082336451659, guid: 684483b2c6bad7e438ba8b1d6860c9d2, type: 3}
   m_PrefabInstance: {fileID: 1258495097}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1258495099 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6748793034376265595, guid: 684483b2c6bad7e438ba8b1d6860c9d2, type: 3}
-  m_PrefabInstance: {fileID: 1258495097}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1265518066
 GameObject:
   m_ObjectHideFlags: 0
@@ -79660,6 +79682,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb6ecd3fbd077774d8d5dde4af4bea55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
+--- !u!1 &1320445376 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6748793034376265595, guid: 684483b2c6bad7e438ba8b1d6860c9d2, type: 3}
+  m_PrefabInstance: {fileID: 1258495097}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1330844830
 GameObject:
   m_ObjectHideFlags: 0
@@ -84932,7 +84959,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 139000360}
-  - {fileID: 2016001143}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -123082,9 +123108,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
   gameSceneName: 
   tutorialSceneName: 
-  optionsPanel: {fileID: 0}
+  optionsPanelMainMenuOnly: {fileID: 0}
   creditsPanel: {fileID: 0}
-  settingsPanel: {fileID: 1258495099}
+  settingsSoundsPanel: {fileID: 1320445376}
   guidePanel: {fileID: 151744012}
   quittingPanel: {fileID: 135091951}
   swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
@@ -123139,11 +123165,11 @@ MonoBehaviour:
   tunnelGenerator: {fileID: 1830855794}
   cameraTargetTransform: {fileID: 783335243}
   startPos: {fileID: 783335243}
-  progressSlider: {fileID: 2046269769}
-  stageInfoText: {fileID: 1770720359}
+  progressSlider: {fileID: 523944879}
+  stageInfoText: {fileID: 240420084}
   tooltipPanel: {fileID: 477648181}
-  tooltipText: {fileID: 1596145302}
-  darkScreen: {fileID: 862281270}
+  tooltipText: {fileID: 1691324647}
+  darkScreen: {fileID: 1533384627}
 --- !u!1 &1767491973
 GameObject:
   m_ObjectHideFlags: 0
@@ -141036,7 +141062,7 @@ RectTransform:
   - {fileID: 1066684433}
   - {fileID: 1256267273}
   - {fileID: 623267636}
-  m_Father: {fileID: 1391810040}
+  m_Father: {fileID: 30319467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -156047,7 +156073,9 @@ MonoBehaviour:
   healthManager: {fileID: 2101763325}
   projectileSpawnT: {fileID: 1419939684}
   modelMidPoint: {fileID: 154726081}
+  selectedVisualObject: {fileID: 0}
   guardPoint: {fileID: 1146520945}
+  specialUnit: 0
 --- !u!114 &2101763325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157042,6 +157070,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: calmModifierData
+      value: 
+      objectReference: {fileID: 11400000, guid: c920305368c31234e84233ba5c035943, type: 2}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.size
       value: 6
       objectReference: {fileID: 0}
@@ -157227,11 +157259,11 @@ SceneRoots:
   - {fileID: 672248864}
   - {fileID: 1091167508}
   - {fileID: 1849475456}
-  - {fileID: 1391810040}
   - {fileID: 920702296}
   - {fileID: 1554600055}
   - {fileID: 163673486}
   - {fileID: 263122253}
+  - {fileID: 1391810040}
   - {fileID: 30319467}
   - {fileID: 1271262031}
   - {fileID: 1236649594}
