@@ -37473,7 +37473,9 @@ MonoBehaviour:
   healthManager: {fileID: 675200805}
   projectileSpawnT: {fileID: 686254085}
   modelMidPoint: {fileID: 772620344}
+  selectedVisualObject: {fileID: 0}
   guardPoint: {fileID: 1244699331}
+  specialUnit: 0
 --- !u!114 &675200805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79215,11 +79217,6 @@ PrefabInstance:
 --- !u!224 &1258495098 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1148035082336451659, guid: 684483b2c6bad7e438ba8b1d6860c9d2, type: 3}
-  m_PrefabInstance: {fileID: 1258495097}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1258495099 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6748793034376265595, guid: 684483b2c6bad7e438ba8b1d6860c9d2, type: 3}
   m_PrefabInstance: {fileID: 1258495097}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1265518066
@@ -123082,9 +123079,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
   gameSceneName: 
   tutorialSceneName: 
-  optionsPanel: {fileID: 0}
+  optionsPanelMainMenuOnly: {fileID: 0}
   creditsPanel: {fileID: 0}
-  settingsPanel: {fileID: 1258495099}
+  settingsSoundsPanel: {fileID: 0}
   guidePanel: {fileID: 151744012}
   quittingPanel: {fileID: 135091951}
   swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
@@ -156047,7 +156044,9 @@ MonoBehaviour:
   healthManager: {fileID: 2101763325}
   projectileSpawnT: {fileID: 1419939684}
   modelMidPoint: {fileID: 154726081}
+  selectedVisualObject: {fileID: 0}
   guardPoint: {fileID: 1146520945}
+  specialUnit: 0
 --- !u!114 &2101763325
 MonoBehaviour:
   m_ObjectHideFlags: 0
