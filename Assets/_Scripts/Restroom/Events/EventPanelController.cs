@@ -241,7 +241,7 @@ public class EventPanelController : MonoBehaviour
 
         if (selectedOption.isIgnoreOption)
         {
-            ClosePanel();
+            CloseEventForNow();
             return;
         }
 
@@ -289,6 +289,15 @@ public class EventPanelController : MonoBehaviour
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
     }
+
+    void CloseEventForNow()
+    {
+        if (eventLayer != null)
+            eventLayer.style.display = DisplayStyle.None;
+
+        if (popUpContainer != null)
+            popUpContainer.style.display = DisplayStyle.Flex;
+    }   
 
     #endregion
 
