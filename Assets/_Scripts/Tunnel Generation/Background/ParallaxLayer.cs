@@ -18,7 +18,10 @@ public class ParallaxLayer : MonoBehaviour, IParallaxLayer
     public void MoveParallax(Vector3 cameraDelta, Vector3 cameraPosition)
     {
         if (segments == null || segments.Length == 0)
+        {
+            Debug.LogWarning("ParallaxLayer: Segments array is empty or null.");
             return;
+        }
 
         if (segmentLengthZ <= 0f)
             return;
@@ -42,15 +45,17 @@ public class ParallaxLayer : MonoBehaviour, IParallaxLayer
         float totalLength = segmentLengthZ * segments.Length;
         float offScreenThreshold = segmentLengthZ * 1.5f;
 
+        Vector3 offset = new Vector3(0f, 0f, totalLength);
+
         foreach (var segment in segments)
         {
             float distanceBehindCamera = cameraZ - segment.position.z;
 
             if (distanceBehindCamera > offScreenThreshold)
-                segment.position += new Vector3(0f, 0f, totalLength);
+                segment.position += offset;
 
             if (distanceBehindCamera < -offScreenThreshold)
-                segment.position -= new Vector3(0f, 0f, totalLength);
+                segment.position -= offset;
         }
     }
 }
