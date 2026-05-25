@@ -5,7 +5,7 @@
 			<value>sx_Śmierć</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>0</value>
 		</property>
 		<relationship name="folder">
 			<destination>{825deb37-dadd-433f-b29b-93de13848843}</destination>
@@ -62,18 +62,11 @@
 	<object class="EventAutomatableProperties" id="{c935a44e-4e0a-4573-b8ed-7948f6b225df}" />
 	<object class="MarkerTrack" id="{4f9797dd-2d21-4f14-93d3-b4bfedc1b506}" />
 	<object class="GroupTrack" id="{8fb902d3-758d-40cf-8d52-7cb27df86682}">
-		<relationship name="modules">
-			<destination>{b847e5dc-7be8-43cc-a902-27ac462cb9ba}</destination>
-		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{b1cf7527-d5c4-4e3b-96e3-f7f2a3b3ae93}</destination>
 		</relationship>
 	</object>
-	<object class="Timeline" id="{3079925d-6fb6-4d09-8c23-9dd32224edf7}">
-		<relationship name="modules">
-			<destination>{b847e5dc-7be8-43cc-a902-27ac462cb9ba}</destination>
-		</relationship>
-	</object>
+	<object class="Timeline" id="{3079925d-6fb6-4d09-8c23-9dd32224edf7}" />
 	<object class="EventMixerMaster" id="{040a5406-7649-41c5-922c-3bb9c6e1023b}">
 		<relationship name="effectChain">
 			<destination>{d2683424-8432-454a-83bc-63749a3cad7a}</destination>
@@ -91,21 +84,7 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{8ff6ed12-aef0-44ec-bfde-65f5296ac4ee}" />
-	<object class="SingleSound" id="{b847e5dc-7be8-43cc-a902-27ac462cb9ba}">
-		<property name="length">
-			<value>0.80000000000000004</value>
-		</property>
-		<property name="timelockedOffset">
-			<value>0.20000000000000001</value>
-		</property>
-		<relationship name="audioFile">
-			<destination>{22a2ff81-d4a5-42cd-a477-425caf0295af}</destination>
-		</relationship>
-	</object>
 	<object class="EventMixerGroup" id="{b1cf7527-d5c4-4e3b-96e3-f7f2a3b3ae93}">
-		<property name="volume">
-			<value>-17.5</value>
-		</property>
 		<property name="name">
 			<value>Audio 1</value>
 		</property>
