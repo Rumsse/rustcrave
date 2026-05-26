@@ -271,7 +271,22 @@ public class Unit : UnitBase, ITrackableUnit
 
         if (!miningSoundInstance.isValid())
         {
-            miningSoundInstance = RuntimeManager.CreateInstance(stats.Sounds.mineSound);
+            EventReference soundToPlay = stats.Sounds.mineSound;
+            OreSO targetOre = currentMineable.GetOreData();
+
+            if (targetOre != null && stats.Sounds.oreMiningSounds != null)
+            {
+                foreach (OreMiningSound oreSound in stats.Sounds.oreMiningSounds)
+                {
+                    if (oreSound.ore == targetOre)
+                    {
+                        soundToPlay = oreSound.sound;
+                        break;
+                    }
+                }
+            }
+
+            miningSoundInstance = RuntimeManager.CreateInstance(soundToPlay);
         }
 
         miningSoundInstance.getPlaybackState(out PLAYBACK_STATE playbackState);
@@ -291,6 +306,8 @@ public class Unit : UnitBase, ITrackableUnit
         if (miningSoundInstance.isValid())
         {
             miningSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            miningSoundInstance.release();
+            miningSoundInstance.clearHandle();
         }
     }
 
