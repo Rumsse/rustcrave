@@ -15,6 +15,7 @@ public class IdleState : UnitState
     {
         if (_unit.AttackTarget != null && _unit.Stats.PossibleAttacks.Count != 0)
         {
+            Debug.Log("Switching to fight state");
             _unit.PrepareUnit();
             _unit.SetState(new FightState(_unit));
         }
