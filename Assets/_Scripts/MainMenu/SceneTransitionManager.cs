@@ -6,8 +6,9 @@ public class SceneTransitionManager : MonoBehaviour
 {
     public static SceneTransitionManager Instance { get; private set; }
 
-    [SerializeField] private Image fadeImage;
+    [SerializeField] private Image transitionImage;
     [SerializeField] private float fadeDuration = 1f;
+    [SerializeField] private float wipeDuration = 0.4f;
 
     private void Awake()
     {
@@ -21,29 +22,69 @@ public class SceneTransitionManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public async Awaitable TransitionToScene(string sceneName)
+    public async Awaitable FadeToScene(string sceneName)
     {
-        fadeImage.raycastTarget = true;
+        transitionImage.raycastTarget = true;
+        transitionImage.fillAmount = 1f;
 
         await Fade(1f);
         await SceneManager.LoadSceneAsync(sceneName);
         await Fade(0f);
 
-        fadeImage.raycastTarget = false;
+        transitionImage.raycastTarget = false;
+    }
+
+    public async Awaitable WipeToScene(string sceneName)
+    {
+        transitionImage.raycastTarget = true;
+
+        transitionImage.color = new Color(0f, 0f, 0f, 0f);
+        transitionImage.fillAmount = 0f;
+        transitionImage.fillOrigin = (int)Image.OriginHorizontal.Right;
+        await WipeAndFade(1f, 1f);
+
+        await SceneManager.LoadSceneAsync(sceneName);
+
+        transitionImage.fillOrigin = (int)Image.OriginHorizontal.Left;
+
+        await WipeAndFade(0f, 0f);
+
+        transitionImage.raycastTarget = false;
     }
 
     private async Awaitable Fade(float targetAlpha)
     {
-        float startAlpha = fadeImage.color.a;
+        float startAlpha = transitionImage.color.a;
         float time = 0f;
 
         while (time < fadeDuration)
         {
-            time += Time.deltaTime;
-            fadeImage.color = new Color(0f, 0f, 0f, Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration));
+            time += Time.unscaledDeltaTime;
+            transitionImage.color = new Color(0f, 0f, 0f, Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration));
             await Awaitable.NextFrameAsync();
         }
 
-        fadeImage.color = new Color(0f, 0f, 0f, targetAlpha);
+        transitionImage.color = new Color(0f, 0f, 0f, targetAlpha);
+    }
+
+    private async Awaitable WipeAndFade(float targetFill, float targetAlpha)
+    {
+        float startFill = transitionImage.fillAmount;
+        float startAlpha = transitionImage.color.a;
+        float time = 0f;
+
+        while (time < wipeDuration)
+        {
+            time += Time.unscaledDeltaTime;
+            float progress = time / wipeDuration;
+
+            transitionImage.fillAmount = Mathf.Lerp(startFill, targetFill, progress);
+            transitionImage.color = new Color(0f, 0f, 0f, Mathf.Lerp(startAlpha, targetAlpha, progress));
+
+            await Awaitable.NextFrameAsync();
+        }
+
+        transitionImage.fillAmount = targetFill;
+        transitionImage.color = new Color(0f, 0f, 0f, targetAlpha);
     }
 }

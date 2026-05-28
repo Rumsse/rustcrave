@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using FMODUnity;
 
 public class MainMenuManager : MonoBehaviour
 {
+
     #region Serialized Fields
 
     [SerializeField] private string gameSceneName;
@@ -20,13 +20,14 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GlobalInventorySO globalInventory;
     [SerializeField] private GadgetsGlobalInventory gadgetsInventory;
 
-    [Header("Character Movement")]
+    [Header("Character Movement & Animations")]
     [SerializeField] private Animator characterAnimator;
     [SerializeField] private Transform characterTransform;
     [SerializeField] private Transform startGameTarget;
     [SerializeField] private Transform quitGameTarget;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float prepareAnimationDuration = 1.5f;
+    [SerializeField] private float panelAnimationDuration = 1f;
 
     [Header("Sounds")]
     [SerializeField] private EventReference interactionButtonSound;
@@ -48,17 +49,9 @@ public class MainMenuManager : MonoBehaviour
 
     #region Menu Actions
 
-    public void StartGame()
-    {
-        InitializeGameStates();
-        StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => SceneManager.LoadScene(gameSceneName)));
-    }
+    public void StartGame() => StartPlaySequence(gameSceneName);
 
-    public void StartTutorial()
-    {
-        InitializeGameStates();
-        StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => SceneManager.LoadScene(tutorialSceneName)));
-    }
+    public void StartTutorial() => StartPlaySequence(tutorialSceneName);
 
     public void QuitGame()
     {
@@ -68,89 +61,67 @@ public class MainMenuManager : MonoBehaviour
         StartCoroutine(MoveCharacterAndExecute(quitGameTarget, QuitApplication));
     }
 
-    public void OpenOptions()
-    {
-        if (optionsPanelMainMenuOnly)
-            optionsPanelMainMenuOnly.SetActive(true);
+    public void OpenOptions() => StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", () => ActivatePanel(optionsPanelMainMenuOnly)));
 
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
+    public void CloseOptions() => SetPanelState(optionsPanelMainMenuOnly, false);
 
-    public void CloseOptions()
-    {
-        if (optionsPanelMainMenuOnly)
-            optionsPanelMainMenuOnly.SetActive(false);
+    public void OpenCredits() => StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", () => ActivatePanel(creditsPanel)));
 
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
+    public void CloseCredits() => SetPanelState(creditsPanel, false);
 
-    public void OpenCredits()
-    {
-        if (creditsPanel)
-            creditsPanel.SetActive(true);
+    public void OpenSettings() => SetPanelState(settingsSoundsPanel, true);
 
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
+    public void CloseSettings() => SetPanelState(settingsSoundsPanel, false);
 
-    public void CloseCredits()
-    {
-        if (creditsPanel)
-            creditsPanel.SetActive(false);
+    public void OpenGuide() => SetPanelState(guidePanel, true);
 
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
+    public void CloseGuide() => SetPanelState(guidePanel, false);
 
-    public void OpenSettings()
-    {
-        if (settingsSoundsPanel)
-            settingsSoundsPanel.SetActive(true);
+    public void OpenQuittingPanel() => SetPanelState(quittingPanel, true);
 
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
-
-    public void CloseSettings()
-    {
-        if (settingsSoundsPanel)
-            settingsSoundsPanel.SetActive(false);
-
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
-
-    public void OpenGuide()
-    {
-        if (guidePanel)
-            guidePanel.SetActive(true);
-
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
-
-    public void CloseGuide()
-    {
-        if (guidePanel)
-            guidePanel.SetActive(false);
-
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
-
-    public void OpenQuittingPanel()
-    {
-        if (quittingPanel)
-            quittingPanel.SetActive(true);
-
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
-
-    public void CloseQuittingPanel()
-    {
-        if (quittingPanel)
-            quittingPanel.SetActive(false);
-
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
+    public void CloseQuittingPanel() => SetPanelState(quittingPanel, false);
 
     #endregion
 
-    #region Coroutines And Logic
+    #region Logic And Coroutines
+
+    private void StartPlaySequence(string sceneName)
+    {
+        InitializeGameStates();
+        StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(sceneName)));
+    }
+
+    private void ActivatePanel(GameObject panel)
+    {
+        if (panel)
+            panel.SetActive(true);
+    }
+
+    private void SetPanelState(GameObject panel, bool state)
+    {
+        if (panel)
+            panel.SetActive(state);
+
+        AudioManager.PlayOneShot(interactionButtonSound);
+    }
+
+    private IEnumerator PlayAnimationAndExecute(string animationStateName, Action onComplete)
+    {
+        AudioManager.PlayOneShot(interactionButtonSound);
+
+        if (!characterAnimator)
+        {
+            Debug.LogError("Missing Animator reference.");
+            onComplete?.Invoke();
+            yield break;
+        }
+
+        characterAnimator.Play(animationStateName);
+
+        yield return new WaitForSeconds(panelAnimationDuration);
+
+        onComplete?.Invoke();
+    }
 
     private IEnumerator MoveCharacterAndExecute(Transform target, Action onComplete)
     {

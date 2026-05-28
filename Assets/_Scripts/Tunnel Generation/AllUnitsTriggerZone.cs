@@ -14,6 +14,9 @@ public class AllUnitsTriggerZone : MonoBehaviour
     private HashSet<Unit> unitsInZone = new();
     private bool isTransitioning;
 
+
+    #region Unity Methods
+
     private void OnTriggerEnter(Collider other)
     {
         if (isTransitioning)
@@ -44,6 +47,18 @@ public class AllUnitsTriggerZone : MonoBehaviour
         unitsInZone.Remove(unit);
     }
 
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (triggerCollider != null && !triggerCollider.isTrigger)
+            triggerCollider.isTrigger = true;
+    }
+#endif
+
+    #endregion
+
+    #region Logic
+
     private async void CheckCompletion()
     {
         if (swarmState == null)
@@ -65,7 +80,7 @@ public class AllUnitsTriggerZone : MonoBehaviour
         RestoreEnergy();
 
         if (SceneTransitionManager.Instance != null)
-            await SceneTransitionManager.Instance.TransitionToScene(sceneToLoad);
+            await SceneTransitionManager.Instance.FadeToScene(sceneToLoad);
         else
             Debug.LogError("[AllUnitsTriggerZone] SceneTransitionManager is missing!");
     }
@@ -84,11 +99,5 @@ public class AllUnitsTriggerZone : MonoBehaviour
         }
     }
 
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        if (triggerCollider != null && !triggerCollider.isTrigger)
-            triggerCollider.isTrigger = true;
-    }
-#endif
+    #endregion
 }
