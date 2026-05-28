@@ -892,6 +892,7 @@ GameObject:
   - component: {fileID: 246176330}
   - component: {fileID: 246176329}
   - component: {fileID: 246176328}
+  - component: {fileID: 246176331}
   m_Layer: 5
   m_Name: settings
   m_TagString: Untagged
@@ -1013,6 +1014,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 246176326}
   m_CullTransparentMesh: 1
+--- !u!114 &246176331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246176326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 1173927944}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &287159408
 GameObject:
   m_ObjectHideFlags: 0
@@ -2333,6 +2350,7 @@ GameObject:
   - component: {fileID: 1066841855}
   - component: {fileID: 1066841854}
   - component: {fileID: 1066841853}
+  - component: {fileID: 1066841856}
   m_Layer: 5
   m_Name: resume
   m_TagString: Untagged
@@ -2454,6 +2472,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1066841851}
   m_CullTransparentMesh: 1
+--- !u!114 &1066841856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066841851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 1392818361}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &1097555081
 GameObject:
   m_ObjectHideFlags: 0
@@ -2557,6 +2591,7 @@ GameObject:
   - component: {fileID: 1127723262}
   - component: {fileID: 1127723261}
   - component: {fileID: 1127723260}
+  - component: {fileID: 1127723263}
   m_Layer: 5
   m_Name: guide
   m_TagString: Untagged
@@ -2678,6 +2713,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1127723258}
   m_CullTransparentMesh: 1
+--- !u!114 &1127723263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127723258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 242589962}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &1156131040
 GameObject:
   m_ObjectHideFlags: 0
@@ -3878,6 +3929,7 @@ GameObject:
   - component: {fileID: 1396445794}
   - component: {fileID: 1396445793}
   - component: {fileID: 1396445792}
+  - component: {fileID: 1396445795}
   m_Layer: 5
   m_Name: swarm
   m_TagString: Untagged
@@ -3987,6 +4039,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1396445790}
   m_CullTransparentMesh: 1
+--- !u!114 &1396445795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1396445790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 770889596}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &1401290249
 GameObject:
   m_ObjectHideFlags: 0
@@ -4156,6 +4224,13 @@ MonoBehaviour:
   mapState: {fileID: 11400000, guid: 18f918ded4fcc85458c274981b815dda, type: 2}
   globalInventory: {fileID: 11400000, guid: f715252bf3a047d429a856ce045a8873, type: 2}
   gadgetsInventory: {fileID: 11400000, guid: 5820305f0014e82429e867a180d2aa24, type: 2}
+  characterAnimator: {fileID: 0}
+  characterTransform: {fileID: 0}
+  startGameTarget: {fileID: 0}
+  quitGameTarget: {fileID: 0}
+  moveSpeed: 5
+  prepareAnimationDuration: 1.5
+  panelAnimationDuration: 1
   interactionButtonSound:
     Guid:
       Data1: 0
@@ -5307,6 +5382,7 @@ GameObject:
   - component: {fileID: 1924609310}
   - component: {fileID: 1924609309}
   - component: {fileID: 1924609308}
+  - component: {fileID: 1924609311}
   m_Layer: 5
   m_Name: main menu
   m_TagString: Untagged
@@ -5428,6 +5504,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1924609306}
   m_CullTransparentMesh: 1
+--- !u!114 &1924609311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924609306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 415482181}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &1942935528
 GameObject:
   m_ObjectHideFlags: 0
@@ -5502,6 +5594,7 @@ GameObject:
   - component: {fileID: 2042009399}
   - component: {fileID: 2042009398}
   - component: {fileID: 2042009397}
+  - component: {fileID: 2042009400}
   m_Layer: 5
   m_Name: quit
   m_TagString: Untagged
@@ -5623,6 +5716,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2042009395}
   m_CullTransparentMesh: 1
+--- !u!114 &2042009400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042009395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 287159410}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &2051398739
 GameObject:
   m_ObjectHideFlags: 0

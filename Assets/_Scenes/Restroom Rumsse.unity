@@ -901,7 +901,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4452001903793172754, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 433178334}
+    - targetCorrespondingSourceObject: {fileID: 645128056979083, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 433178333}
   m_SourcePrefab: {fileID: 100100000, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
 --- !u!1 &433178327 stripped
 GameObject:
@@ -913,6 +919,70 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2607274016516896274, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
   m_PrefabInstance: {fileID: 433178326}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &433178329 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7250823870554341950, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
+  m_PrefabInstance: {fileID: 433178326}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &433178330 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 92627149654861137, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
+  m_PrefabInstance: {fileID: 433178326}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &433178331 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4452001903793172754, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
+  m_PrefabInstance: {fileID: 433178326}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &433178332 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 645128056979083, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
+  m_PrefabInstance: {fileID: 433178326}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &433178333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 433178332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 433178329}
+  hoverScale: {x: 4.53, y: 4.53, z: 4.53}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
+--- !u!114 &433178334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 433178331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 433178330}
+  hoverScale: {x: 4.53, y: 4.53, z: 4.53}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &441383024
 GameObject:
   m_ObjectHideFlags: 0
@@ -2605,6 +2675,13 @@ MonoBehaviour:
   mapState: {fileID: 11400000, guid: 18f918ded4fcc85458c274981b815dda, type: 2}
   globalInventory: {fileID: 11400000, guid: f715252bf3a047d429a856ce045a8873, type: 2}
   gadgetsInventory: {fileID: 11400000, guid: 5820305f0014e82429e867a180d2aa24, type: 2}
+  characterAnimator: {fileID: 0}
+  characterTransform: {fileID: 0}
+  startGameTarget: {fileID: 0}
+  quitGameTarget: {fileID: 0}
+  moveSpeed: 5
+  prepareAnimationDuration: 1.5
+  panelAnimationDuration: 1
   interactionButtonSound:
     Guid:
       Data1: -292657007
