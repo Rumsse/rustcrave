@@ -7,6 +7,8 @@ public class PlayerUnitDetector : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
+        if (!unit) return;
+        
         if (!other.CompareTag("Unit"))
             return;
 
@@ -18,6 +20,8 @@ public class PlayerUnitDetector : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (!unit) return;
+
         if (!other.CompareTag("Unit"))
             return;
         

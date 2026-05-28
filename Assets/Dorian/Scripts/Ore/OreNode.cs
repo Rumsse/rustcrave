@@ -3,9 +3,9 @@ using UnityEngine.AI;
 
 public class OreNode : MonoBehaviour, IMineable
 {
-    #region Configuration
+    #region Configuration
 
-    [SerializeField] private OreSO ore;
+    [SerializeField] private OreSO ore;
     [SerializeField] private OreTooltip oreTooltip;
     [SerializeField] private int amount;
     [SerializeField] private OrePickUp dropPrefab;
@@ -16,11 +16,11 @@ public class OreNode : MonoBehaviour, IMineable
     [SerializeField] private float navMeshSampleDistance = 2.0f;
     [SerializeField] private int dropAmount;
 
-    #endregion
+    #endregion
 
-    #region Unity Lifecycle
+    #region Unity Lifecycle
 
-    private void OnMouseEnter()
+    private void OnMouseEnter()
     {
         if (Time.timeScale == 0f)
             return;
@@ -30,11 +30,11 @@ public class OreNode : MonoBehaviour, IMineable
 
     private void OnMouseExit() => oreTooltip.HideTooltip();
 
-    #endregion
+    #endregion
 
-    #region Mining Logic
+    #region Mining Logic
 
-    public ItemSO Mine()
+    public ItemSO Mine()
     {
         if (amount <= 0)
             return null;
@@ -66,21 +66,23 @@ public class OreNode : MonoBehaviour, IMineable
         droppedItem.SpawnDrop(transform.position, targetPosition);
     }
 
-    #endregion
+    #endregion
 
-    #region Interface Implementations
+    #region Interface Implementations
 
-    public float GetDurability() => ore != null ? ore.oreDurability : 0f;
+    public float GetDurability() => ore != null ? ore.oreDurability : 0f;
 
     public bool IsDepleted() => amount <= 0;
 
-    #endregion
+    public OreSO GetOreData() => ore;
 
-    #region Effects
+    #endregion
 
-    public void PlayEffect() => miningEffect?.Play(true);
+    #region Effects
+
+    public void PlayEffect() => miningEffect?.Play(true);
 
     public void StopEffect() => miningEffect?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
-    #endregion
+    #endregion
 }

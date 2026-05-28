@@ -1,6 +1,5 @@
-using UnityEngine;
 using System;
-using UnityEngine.AI;
+using UnityEngine;
 
 public class DestructibleWall : MonoBehaviour, IMineable
 {
@@ -9,7 +8,6 @@ public class DestructibleWall : MonoBehaviour, IMineable
     [SerializeField] private OreSO wallOreSO;
     [SerializeField] private int amount;
     [SerializeField] private ParticleSystem miningEffect;
-
 
     public void PlayEffect()
     {
@@ -25,7 +23,6 @@ public class DestructibleWall : MonoBehaviour, IMineable
 
     public ItemSO Mine()
     {
-        Debug.Log(amount);
         if (amount <= 0)
             return null;
 
@@ -49,4 +46,6 @@ public class DestructibleWall : MonoBehaviour, IMineable
     {
         return amount <= 0;
     }
+
+    public OreSO GetOreData() => wallOreSO;
 }

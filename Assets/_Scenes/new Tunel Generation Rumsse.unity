@@ -16837,6 +16837,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4701337305738002, guid: 9e03786a9517b604d8e930182607a128, type: 3}
       insertIndex: 1
       addedObject: {fileID: 957111904}
+    - targetCorrespondingSourceObject: {fileID: 4701337305738002, guid: 9e03786a9517b604d8e930182607a128, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1466636598}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1344314377593938, guid: 9e03786a9517b604d8e930182607a128, type: 3}
       insertIndex: -1
@@ -23873,6 +23876,58 @@ Transform:
   m_Children: []
   m_Father: {fileID: 422177249}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1466636597
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1466636598}
+  - component: {fileID: 1466636599}
+  m_Layer: 0
+  m_Name: CollapsingSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1466636598
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466636597}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7227674, y: -0.26039797, z: 0.5636663, w: 0.30344784}
+  m_LocalPosition: {x: -14.680978, y: 22.320974, z: 6.485096}
+  m_LocalScale: {x: 0.8761167, y: 0.8761167, z: 0.8761167}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 688170147}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1466636599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466636597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3caf61b56bb1cc4397a590bcc75cf42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollapsingMineSound
+  collapseSound:
+    Guid:
+      Data1: -1221231722
+      Data2: 1173128575
+      Data3: -423458413
+      Data4: -1555809769
+    Path: event:/Amb/mx_zawalenie_jaskini_Amb
+  delayBeforeStart: 0.1
 --- !u!1001 &1477307922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35188,6 +35243,7 @@ GameObject:
   - component: {fileID: 1938636559}
   - component: {fileID: 1938636558}
   - component: {fileID: 1938636557}
+  - component: {fileID: 1938636562}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -35349,6 +35405,20 @@ Transform:
   - {fileID: 659544755}
   m_Father: {fileID: 1017172256}
   m_LocalEulerAnglesHint: {x: 41.781, y: -90, z: 0.03}
+--- !u!114 &1938636562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938636555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
 --- !u!1 &1957697193
 GameObject:
   m_ObjectHideFlags: 0
