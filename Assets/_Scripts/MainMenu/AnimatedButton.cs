@@ -3,11 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class AnimatedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class AnimatedTextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private TMP_Text targetText;
     [SerializeField] private Vector3 hoverScale = new Vector3(1.05f, 1.05f, 1.05f);
-    [SerializeField] private Color hoverColor = Color.gray;
+    [SerializeField] private Color hoverColor = Color.white;
     [SerializeField] private float tweenDuration = 0.15f;
 
     private Vector3 defaultScale;
@@ -29,11 +29,11 @@ public class AnimatedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private void Animate(Vector3 targetScale, Color targetColor)
     {
-        Tween.Scale(transform, targetScale, tweenDuration, Ease.OutQuad);
+        Tween.Scale(transform, targetScale, tweenDuration, Ease.OutQuad, useUnscaledTime: true);
 
         if (targetText == null)
             return;
 
-        Tween.Color(targetText, targetColor, tweenDuration, Ease.OutQuad);
+        Tween.Color(targetText, targetColor, tweenDuration, Ease.OutQuad, useUnscaledTime: true);
     }
 }
