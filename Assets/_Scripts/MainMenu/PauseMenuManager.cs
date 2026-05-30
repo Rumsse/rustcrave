@@ -58,10 +58,17 @@ public class PauseMenuManager : MonoBehaviour
         pausePanel.SetActive(false);
     }
 
-    public void ReturnToMainMenu()
+    public async void ReturnToMainMenu()
     {
         Time.timeScale = 1f;
         AudioManager.PlayOneShot(interactionSound);
-        SceneManager.LoadScene(mainMenuSceneName);
+
+        if (SceneTransitionManager.Instance == null)
+        {
+            SceneManager.LoadScene(mainMenuSceneName);
+            return;
+        }
+
+        await SceneTransitionManager.Instance.FadeToScene(mainMenuSceneName);
     }
 }

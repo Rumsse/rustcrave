@@ -1,9 +1,11 @@
-using UnityEngine;
 using System.Collections;
+using TMPro;
+using UnityEngine;
 
 public class EndScreen : MonoBehaviour
 {
     [SerializeField] private GameObject winScreenPanel;
+    [SerializeField] private TextMeshProUGUI timeResultText;
     [SerializeField] private MapState mapState;
     [SerializeField] private SwarmState swarmState;
     [SerializeField] private GlobalInventorySO globalInventory;
@@ -24,6 +26,17 @@ public class EndScreen : MonoBehaviour
 
         if (pauseMenuManager)
             pauseMenuManager.enabled = false;
+
+        if (timeResultText == null)
+            return;
+
+        if (GameTimerManager.Instance == null)
+        {
+            timeResultText.text = "Time: --:--";
+            return;
+        }
+
+        timeResultText.text = $"You managed to survive and bring The Core back to your lovely Mother. She was thrilled to finally have it in her grasp. All it took for her was to wait for:  <color=#FFD700>{GameTimerManager.Instance.GetFormattedTime()}</color>";
 
         if (winScreenPanel)
             winScreenPanel.SetActive(true);

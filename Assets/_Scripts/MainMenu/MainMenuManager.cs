@@ -152,6 +152,12 @@ public class MainMenuManager : MonoBehaviour
 
     private void InitializeGameStates()
     {
+        if (GameTimerManager.Instance != null)
+        {
+            GameTimerManager.Instance.ResetTimer();
+            GameTimerManager.Instance.StartTimer();
+        }
+
         swarmState.Initialize();
         mapState.Initialize();
         globalInventory.Reset();
@@ -165,6 +171,12 @@ public class MainMenuManager : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    void StopTimer()
+    {
+        if (GameTimerManager.Instance != null)
+            GameTimerManager.Instance.StopTimer();
     }
 
     #endregion

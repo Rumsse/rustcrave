@@ -22,6 +22,8 @@ public class SceneTransitionManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    #region Transitions
+
     public async Awaitable FadeToScene(string sceneName)
     {
         transitionImage.raycastTarget = true;
@@ -29,28 +31,37 @@ public class SceneTransitionManager : MonoBehaviour
 
         await Fade(1f);
         await SceneManager.LoadSceneAsync(sceneName);
+
+        await Awaitable.NextFrameAsync();
+        await Awaitable.NextFrameAsync();
+
         await Fade(0f);
 
         transitionImage.raycastTarget = false;
     }
 
-    public async Awaitable WipeToScene(string sceneName)
+    public async Awaitable WipeToScene(string sceneName, bool reverse = false)
     {
         transitionImage.raycastTarget = true;
-
         transitionImage.color = new Color(0f, 0f, 0f, 0f);
         transitionImage.fillAmount = 0f;
-        transitionImage.fillOrigin = (int)Image.OriginHorizontal.Right;
-        await WipeAndFade(1f, 1f);
+        transitionImage.fillOrigin = reverse ? (int)Image.OriginHorizontal.Left : (int)Image.OriginHorizontal.Right;
 
+        await WipeAndFade(1f, 1f);
         await SceneManager.LoadSceneAsync(sceneName);
 
-        transitionImage.fillOrigin = (int)Image.OriginHorizontal.Left;
+        await Awaitable.NextFrameAsync();
+        await Awaitable.NextFrameAsync();
 
+        transitionImage.fillOrigin = reverse ? (int)Image.OriginHorizontal.Right : (int)Image.OriginHorizontal.Left;
         await WipeAndFade(0f, 0f);
 
         transitionImage.raycastTarget = false;
     }
+
+    #endregion
+
+    #region Core Logic
 
     private async Awaitable Fade(float targetAlpha)
     {
@@ -87,4 +98,6 @@ public class SceneTransitionManager : MonoBehaviour
         transitionImage.fillAmount = targetFill;
         transitionImage.color = new Color(0f, 0f, 0f, targetAlpha);
     }
+
+    #endregion
 }

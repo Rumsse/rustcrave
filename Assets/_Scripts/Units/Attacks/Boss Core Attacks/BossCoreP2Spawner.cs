@@ -48,6 +48,8 @@ public class BossCoreP2Spawner : MonoBehaviour
 
     public void Execute(int phaseIndex)
     {
+        Debug.Log($"BossCoreP2Spawner received Execute call for phase index: {phaseIndex}. Current execution state: {_isExecuted}");
+
         if (phaseIndex != _phaseIndex || _isExecuted)
             return;
 
