@@ -87,10 +87,12 @@ public class SceneTransitionManager : MonoBehaviour
         while (time < wipeDuration)
         {
             time += Time.unscaledDeltaTime;
-            float progress = time / wipeDuration;
+
+            float progress = Mathf.Clamp01(time / wipeDuration);
+            float alphaProgress = 1f - Mathf.Pow(1f - progress, 3f);
 
             transitionImage.fillAmount = Mathf.Lerp(startFill, targetFill, progress);
-            transitionImage.color = new Color(0f, 0f, 0f, Mathf.Lerp(startAlpha, targetAlpha, progress));
+            transitionImage.color = new Color(0f, 0f, 0f, Mathf.Lerp(startAlpha, targetAlpha, alphaProgress));
 
             await Awaitable.NextFrameAsync();
         }

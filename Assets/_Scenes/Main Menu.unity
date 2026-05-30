@@ -2575,6 +2575,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &638929691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 638929693}
+  - component: {fileID: 638929692}
+  m_Layer: 0
+  m_Name: GameTimer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &638929692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638929691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373522a0acc29ed409b65ac77e47d285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameTimerManager
+--- !u!4 &638929693
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638929691}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -628.6104, y: 0.00002, z: -1636.7656}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &695766545
 GameObject:
   m_ObjectHideFlags: 0
@@ -8960,7 +9004,6 @@ GameObject:
   - component: {fileID: 1064248021}
   - component: {fileID: 1064248024}
   - component: {fileID: 1064248023}
-  - component: {fileID: 1064248025}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -9030,7 +9073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d933d09dc364cf047bf169e100cec284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
-  gameSceneName: BossTest
+  gameSceneName: new Tunel Generation Rumsse
   tutorialSceneName: Tutorial
   optionsPanelMainMenuOnly: {fileID: 324235899}
   creditsPanel: {fileID: 806850367}
@@ -9055,18 +9098,6 @@ MonoBehaviour:
       Data3: 505545873
       Data4: -1615872410
     Path: event:/Menu/sx_interaction
---- !u!114 &1064248025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1064248020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 373522a0acc29ed409b65ac77e47d285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameTimerManager
 --- !u!1 &1114541550
 GameObject:
   m_ObjectHideFlags: 0
@@ -15174,7 +15205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionManager
   transitionImage: {fileID: 1648200330}
   fadeDuration: 0.5
-  wipeDuration: 0.4
+  wipeDuration: 0.5
 --- !u!114 &1459636125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18275,6 +18306,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1126869789}
   - {fileID: 1064248022}
+  - {fileID: 638929693}
   - {fileID: 1938380866}
   - {fileID: 1132761551}
   - {fileID: 1459636128}
