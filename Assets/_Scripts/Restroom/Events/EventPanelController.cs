@@ -286,8 +286,8 @@ public class EventPanelController : MonoBehaviour
         if (eventLayer != null)
             eventLayer.style.display = DisplayStyle.None;
 
-        if (popUpContainer != null)
-            popUpContainer.style.display = DisplayStyle.None;
+       // if (popUpContainer != null)
+         //   popUpContainer.style.display = DisplayStyle.None;
     }
 
     void CloseEventForNow()

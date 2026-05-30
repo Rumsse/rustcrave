@@ -14,6 +14,7 @@ public class UnitSO : ScriptableObject
     public GameObject Prefab => prefab;
 
     [Header("Robot Informations")]
+    public bool isMainCharacter;
     public string robotName;
     [TextArea]
     public string robotDescription;

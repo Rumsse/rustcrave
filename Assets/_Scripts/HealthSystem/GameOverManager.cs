@@ -37,6 +37,9 @@ public class GameOverManager : MonoBehaviour
             contentCanvasGroup.blocksRaycasts = false;
         }
 
+        if (swarmState)
+            swarmState.OnUnitRemoved += HandleUnitRemovedFromSwarm;
+
         InitializePlayerSubscription();
     }
 
@@ -44,6 +47,9 @@ public class GameOverManager : MonoBehaviour
     {
         if (playerHealth)
             playerHealth.onDeath -= HandlePlayerDeath;
+
+        if (swarmState)
+            swarmState.OnUnitRemoved -= HandleUnitRemovedFromSwarm;
     }
 
     #endregion
@@ -66,6 +72,12 @@ public class GameOverManager : MonoBehaviour
             return;
 
         playerHealth.onDeath += HandlePlayerDeath;
+    }
+
+    private void HandleUnitRemovedFromSwarm(SwarmUnitsData deadUnit)
+    {
+        if (deadUnit.unitType.isMainCharacter)
+            HandlePlayerDeath();
     }
 
     private async void HandlePlayerDeath()

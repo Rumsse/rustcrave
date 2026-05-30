@@ -7,6 +7,8 @@ using UnityEngine;
 public class SwarmState : ScriptableObject
 {
     public event Action OnSwarmChanged;
+    public event Action<SwarmUnitsData> OnUnitAdded;
+    public event Action<SwarmUnitsData> OnUnitRemoved;
 
     [SerializeField] private List<UnitSO> startingSwarm = new();
     [SerializeField] private List<SwarmUnitsData> swarmUnits = new();
@@ -20,8 +22,6 @@ public class SwarmState : ScriptableObject
     public int MaxSwarmSize => maxSwarmSize;
     public IReadOnlyList<SwarmUnitsData> SwarmUnits => swarmUnits;
     public int AliveCount => swarmUnits.Count(m => m.isAlive);
-
-    public event Action<SwarmUnitsData> OnUnitAdded;
 
     public void Initialize()
     {
@@ -53,6 +53,8 @@ public class SwarmState : ScriptableObject
             return;
 
         unit.isAlive = false;
+
+        OnUnitRemoved?.Invoke(unit);
 
         RemoveDead();
         OnSwarmChanged?.Invoke();

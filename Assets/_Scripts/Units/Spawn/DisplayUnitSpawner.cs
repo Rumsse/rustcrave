@@ -18,14 +18,20 @@ public class DisplayUnitSpawner : MonoBehaviour
 
     void OnEnable()
     {
-        if (swarmState != null)
-            swarmState.OnUnitAdded += HandleNewUnitCrafted;
+        if (swarmState == null)
+            return;
+
+        swarmState.OnUnitAdded += HandleNewUnitCrafted;
+        swarmState.OnUnitRemoved += HandleUnitDied;
     }
 
     void OnDisable()
     {
-        if (swarmState != null)
-            swarmState.OnUnitAdded -= HandleNewUnitCrafted;
+        if (swarmState == null)
+            return;
+
+        swarmState.OnUnitAdded -= HandleNewUnitCrafted;
+        swarmState.OnUnitRemoved -= HandleUnitDied;
     }
 
     void Start() => SpawnDisplayModels();
@@ -54,6 +60,15 @@ public class DisplayUnitSpawner : MonoBehaviour
 
         if (spawnedUnit != null)
             OnNewUnitSpawned?.Invoke(spawnedUnit);
+    }
+
+    void HandleUnitDied(SwarmUnitsData deadUnit)
+    {
+        if (!spawnedModels.TryGetValue(deadUnit, out Transform unitTransform))
+            return;
+
+        Destroy(unitTransform.gameObject);
+        spawnedModels.Remove(deadUnit);
     }
 
     public Transform GetUnitTransform(SwarmUnitsData unitData)
