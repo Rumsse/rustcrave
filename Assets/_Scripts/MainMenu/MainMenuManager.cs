@@ -5,13 +5,13 @@ using FMODUnity;
 
 public class MainMenuManager : MonoBehaviour
 {
-
     #region Serialized Fields
 
     [SerializeField] private string gameSceneName;
     [SerializeField] private string tutorialSceneName;
     [SerializeField] private GameObject optionsPanelMainMenuOnly;
     [SerializeField] private GameObject creditsPanel;
+    [SerializeField] private CreditsController creditsController;
     [SerializeField] private GameObject settingsSoundsPanel;
     [SerializeField] private GameObject guidePanel;
     [SerializeField] private GameObject quittingPanel;
@@ -65,9 +65,15 @@ public class MainMenuManager : MonoBehaviour
 
     public void CloseOptions() => SetPanelState(optionsPanelMainMenuOnly, false);
 
-    public void OpenCredits() => StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", () => ActivatePanel(creditsPanel)));
+    public void OpenCredits() => StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", StartCreditsSequence));
 
-    public void CloseCredits() => SetPanelState(creditsPanel, false);
+    public void CloseCredits()
+    {
+        SetPanelState(creditsPanel, false);
+
+        if (creditsController)
+            creditsController.Stop();
+    }
 
     public void OpenSettings() => SetPanelState(settingsSoundsPanel, true);
 
@@ -89,6 +95,14 @@ public class MainMenuManager : MonoBehaviour
     {
         InitializeGameStates();
         StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(sceneName)));
+    }
+
+    private void StartCreditsSequence()
+    {
+        ActivatePanel(creditsPanel);
+
+        if (creditsController)
+            creditsController.Play();
     }
 
     private void ActivatePanel(GameObject panel)
