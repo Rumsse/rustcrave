@@ -4,11 +4,12 @@ public class DiggingEnemyUnit : EnemyUnit
 {
     [Header("Digging Enemy Details")]
     [SerializeField] private string specialAnimationName;
+    [SerializeField] private ParticleSystem diggingEffect;
 
     protected override void Start()
     {
         base.Start();
-        selectedVisualObject.SetActive(false);
+        HandleSpecialEffects();
     }
     protected override void HandleSpecialReaction()
     {
@@ -19,7 +20,18 @@ public class DiggingEnemyUnit : EnemyUnit
     public override void PrepareUnit()
     {
         selectedVisualObject.SetActive(true);
+        diggingEffect?.Stop();
         animator.Play(specialAnimationName);
+    }
+
+    public override void HandleSpecialEffects()
+    {
+        if (!selectedVisualObject.activeSelf) return;
+
+        animator.SetBool("IsWalking", false); //?
+        SetState(new IdleState(this)); // maybe digging first 
+        selectedVisualObject.SetActive(false);
+        diggingEffect?.Play();
     }
 
     #region Stolen Item
@@ -35,7 +47,6 @@ public class DiggingEnemyUnit : EnemyUnit
     public override void ClearStolenItem()
     {
         _available = true;
-        selectedVisualObject.SetActive(false);
         base.ClearStolenItem();
     }
 

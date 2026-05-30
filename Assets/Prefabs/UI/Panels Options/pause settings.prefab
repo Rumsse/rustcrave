@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 6340599819606991541}
   - component: {fileID: 3694732295549769831}
   - component: {fileID: 2674228084317510490}
+  - component: {fileID: 7091747035953346035}
   m_Layer: 5
   m_Name: main menu
   m_TagString: Untagged
@@ -118,7 +119,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -50.99999}
-  m_SizeDelta: {x: 370, y: 65}
+  m_SizeDelta: {x: 300, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6340599819606991541
 CanvasRenderer:
@@ -214,6 +215,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7091747035953346035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497293860388282061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 7663142426869165348}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &1206431776651696314
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,6 +243,7 @@ GameObject:
   - component: {fileID: 3636723364194903772}
   - component: {fileID: 279852807033716538}
   - component: {fileID: 4885649938983078808}
+  - component: {fileID: 4447042990938125529}
   m_Layer: 5
   m_Name: settings
   m_TagString: Untagged
@@ -251,7 +269,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 123.000015}
-  m_SizeDelta: {x: 370, y: 65}
+  m_SizeDelta: {x: 300, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3636723364194903772
 CanvasRenderer:
@@ -347,6 +365,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4447042990938125529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206431776651696314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 8950623383173864876}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &2421328497367479109
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,6 +393,7 @@ GameObject:
   - component: {fileID: 1704894152683343321}
   - component: {fileID: 8563645783475183602}
   - component: {fileID: 1529110720896713570}
+  - component: {fileID: 8811037727575414447}
   m_Layer: 5
   m_Name: swarm
   m_TagString: Untagged
@@ -480,6 +515,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8811037727575414447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2421328497367479109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 9161529549270989312}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &2864923956868779735
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,6 +680,7 @@ GameObject:
   - component: {fileID: 4527834553889645256}
   - component: {fileID: 6996006084187009749}
   - component: {fileID: 1757648242881566885}
+  - component: {fileID: 330512377787349929}
   m_Layer: 5
   m_Name: quit
   m_TagString: Untagged
@@ -654,7 +706,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -137.99998}
-  m_SizeDelta: {x: 370, y: 65}
+  m_SizeDelta: {x: 300, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4527834553889645256
 CanvasRenderer:
@@ -750,6 +802,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &330512377787349929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2974181157360390849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 4042435596709791495}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &4427148780442811483
 GameObject:
   m_ObjectHideFlags: 0
@@ -1036,6 +1104,7 @@ GameObject:
   - component: {fileID: 6687943858083573790}
   - component: {fileID: 5817364647640832121}
   - component: {fileID: 1823497532587793711}
+  - component: {fileID: 1652435242445262259}
   m_Layer: 5
   m_Name: resume
   m_TagString: Untagged
@@ -1061,7 +1130,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 211}
-  m_SizeDelta: {x: 370, y: 65}
+  m_SizeDelta: {x: 300, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6687943858083573790
 CanvasRenderer:
@@ -1157,6 +1226,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1652435242445262259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6869641374418984842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 8740907126634982946}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &7077860938313432333
 GameObject:
   m_ObjectHideFlags: 0
@@ -1580,6 +1665,7 @@ GameObject:
   - component: {fileID: 8776129357809621734}
   - component: {fileID: 435051526439335626}
   - component: {fileID: 5556054678926354596}
+  - component: {fileID: 3280167614185772001}
   m_Layer: 5
   m_Name: guide
   m_TagString: Untagged
@@ -1605,7 +1691,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 33.00001}
-  m_SizeDelta: {x: 370, y: 65}
+  m_SizeDelta: {x: 300, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8776129357809621734
 CanvasRenderer:
@@ -1701,3 +1787,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3280167614185772001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8427541977671191033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedButton
+  targetText: {fileID: 218415817150264211}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15

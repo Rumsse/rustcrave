@@ -9,6 +9,7 @@ public class DiggingState : UnitState
     {
     }
 
+    //probably i need to add actual digging as it disappears too fast
     public override void EnterState()
     {
         Debug.Log("Digging...");
@@ -22,7 +23,7 @@ public class DiggingState : UnitState
     {
         Debug.Log("Finished Digging");
 
-        _currentSpecialUnit.ClearStolenItem();
+        _currentSpecialUnit?.ClearStolenItem();
         _currentSpecialUnit = null;
     }
 

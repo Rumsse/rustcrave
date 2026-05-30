@@ -12,10 +12,10 @@ public class DamageEventAction : EventAction
 
         selectedUnit.currentHP -= damageAmount;
 
-        if (selectedUnit.currentHP <= 0)
-        {
-            selectedUnit.currentHP = 0;
-            selectedUnit.isAlive = false;
-        }
+        if (selectedUnit.currentHP > 0)
+            return;
+
+        selectedUnit.currentHP = 0;
+        swarmState.MarkDead(selectedUnit.id);
     }
 }

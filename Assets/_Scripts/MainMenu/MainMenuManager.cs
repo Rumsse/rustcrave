@@ -1,13 +1,17 @@
+using System;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using FMODUnity;
 
 public class MainMenuManager : MonoBehaviour
 {
+    #region Serialized Fields
+
     [SerializeField] private string gameSceneName;
     [SerializeField] private string tutorialSceneName;
     [SerializeField] private GameObject optionsPanelMainMenuOnly;
     [SerializeField] private GameObject creditsPanel;
+    [SerializeField] private CreditsController creditsController;
     [SerializeField] private GameObject settingsSoundsPanel;
     [SerializeField] private GameObject guidePanel;
     [SerializeField] private GameObject quittingPanel;
@@ -16,115 +20,178 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GlobalInventorySO globalInventory;
     [SerializeField] private GadgetsGlobalInventory gadgetsInventory;
 
+    [Header("Character Movement & Animations")]
+    [SerializeField] private Animator characterAnimator;
+    [SerializeField] private Transform characterTransform;
+    [SerializeField] private Transform startGameTarget;
+    [SerializeField] private Transform quitGameTarget;
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float prepareAnimationDuration = 1.5f;
+    [SerializeField] private float panelAnimationDuration = 1f;
+
     [Header("Sounds")]
     [SerializeField] private EventReference interactionButtonSound;
 
+    #endregion
+
+    #region Unity Methods
+
     private void Start()
     {
-        if (optionsPanelMainMenuOnly != null)
+        if (optionsPanelMainMenuOnly)
             optionsPanelMainMenuOnly.SetActive(false);
 
-        if (creditsPanel != null)
+        if (creditsPanel)
             creditsPanel.SetActive(false);
     }
 
-    public void StartGame()
+    #endregion
+
+    #region Menu Actions
+
+    public void StartGame() => StartPlaySequence(gameSceneName);
+
+    public void StartTutorial() => StartPlaySequence(tutorialSceneName);
+
+    public void QuitGame()
     {
-        swarmState.Initialize();
-        mapState.Initialize();
-        globalInventory.Reset();
-        gadgetsInventory.Reset();
-        AudioManager.PlayOneShot(interactionButtonSound);
-        SceneManager.LoadScene(gameSceneName);
+        if (quittingPanel)
+            quittingPanel.SetActive(false);
+
+        StartCoroutine(MoveCharacterAndExecute(quitGameTarget, QuitApplication));
     }
 
-    public void StartTutorial()
-    {
-        swarmState.Initialize();
-        mapState.Initialize();
-        globalInventory.Reset();
-        gadgetsInventory.Reset();
-        AudioManager.PlayOneShot(interactionButtonSound);
-        SceneManager.LoadScene(tutorialSceneName);
-    }
+    public void OpenOptions() => StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", () => ActivatePanel(optionsPanelMainMenuOnly)));
 
-    public void OpenOptions()
-    {
-        if (optionsPanelMainMenuOnly != null)
-            optionsPanelMainMenuOnly.SetActive(true);
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
+    public void CloseOptions() => SetPanelState(optionsPanelMainMenuOnly, false);
 
-    public void CloseOptions()
-    {
-        if (optionsPanelMainMenuOnly != null)
-            optionsPanelMainMenuOnly.SetActive(false);
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
-
-    public void OpenCredits()
-    {
-        if (creditsPanel != null)
-            creditsPanel.SetActive(true);
-        AudioManager.PlayOneShot(interactionButtonSound);
-    }
+    public void OpenCredits() => StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", StartCreditsSequence));
 
     public void CloseCredits()
     {
-        if (creditsPanel != null)
-            creditsPanel.SetActive(false);
-        AudioManager.PlayOneShot(interactionButtonSound);
+        SetPanelState(creditsPanel, false);
+
+        if (creditsController)
+            creditsController.Stop();
     }
 
-    public void OpenSettings()
+    public void OpenSettings() => SetPanelState(settingsSoundsPanel, true);
+
+    public void CloseSettings() => SetPanelState(settingsSoundsPanel, false);
+
+    public void OpenGuide() => SetPanelState(guidePanel, true);
+
+    public void CloseGuide() => SetPanelState(guidePanel, false);
+
+    public void OpenQuittingPanel() => SetPanelState(quittingPanel, true);
+
+    public void CloseQuittingPanel() => SetPanelState(quittingPanel, false);
+
+    #endregion
+
+    #region Logic And Coroutines
+
+    private void StartPlaySequence(string sceneName)
     {
-        if (settingsSoundsPanel != null)
-            settingsSoundsPanel.SetActive(true);
-        AudioManager.PlayOneShot(interactionButtonSound);
+        InitializeGameStates();
+        StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(sceneName)));
     }
 
-    public void CloseSettings()
+    private void StartCreditsSequence()
     {
-        if (settingsSoundsPanel != null)
-            settingsSoundsPanel.SetActive(false);
-        AudioManager.PlayOneShot(interactionButtonSound);
+        ActivatePanel(creditsPanel);
+
+        if (creditsController)
+            creditsController.Play();
     }
 
-    public void OpenGuide()
+    private void ActivatePanel(GameObject panel)
     {
-        if (guidePanel != null)
-            guidePanel.SetActive(true);
-        AudioManager.PlayOneShot(interactionButtonSound);
+        if (panel)
+            panel.SetActive(true);
     }
 
-    public void CloseGuide()
+    private void SetPanelState(GameObject panel, bool state)
     {
-        if (guidePanel != null)
-            guidePanel.SetActive(false);
+        if (panel)
+            panel.SetActive(state);
+
         AudioManager.PlayOneShot(interactionButtonSound);
     }
 
-    public void OpenQuittingPanel()
+    private IEnumerator PlayAnimationAndExecute(string animationStateName, Action onComplete)
     {
-        if (quittingPanel != null)
-            quittingPanel.SetActive(true);
         AudioManager.PlayOneShot(interactionButtonSound);
+
+        if (!characterAnimator)
+        {
+            Debug.LogError("Missing Animator reference.");
+            onComplete?.Invoke();
+            yield break;
+        }
+
+        characterAnimator.Play(animationStateName);
+
+        yield return new WaitForSeconds(panelAnimationDuration);
+
+        onComplete?.Invoke();
     }
 
-    public void CloseQuittingPanel()
+    private IEnumerator MoveCharacterAndExecute(Transform target, Action onComplete)
     {
-        if (quittingPanel != null)
-            quittingPanel.SetActive(false);
         AudioManager.PlayOneShot(interactionButtonSound);
+
+        if (!characterAnimator || !characterTransform || !target)
+        {
+            Debug.LogError("Missing references for character movement.");
+            onComplete?.Invoke();
+            yield break;
+        }
+
+        characterTransform.rotation = Quaternion.LookRotation(target.position - characterTransform.position);
+        characterAnimator.SetTrigger("PrepareToWalk");
+
+        yield return new WaitForSeconds(prepareAnimationDuration);
+
+        characterAnimator.SetBool("IsWalking", true);
+
+        while (Vector3.Distance(characterTransform.position, target.position) > 0.1f)
+        {
+            characterTransform.position = Vector3.MoveTowards(characterTransform.position, target.position, moveSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        onComplete?.Invoke();
     }
 
-    public void QuitGame()
+    private void InitializeGameStates()
+    {
+        if (GameTimerManager.Instance != null)
+        {
+            GameTimerManager.Instance.ResetTimer();
+            GameTimerManager.Instance.StartTimer();
+        }
+
+        swarmState.Initialize();
+        mapState.Initialize();
+        globalInventory.Reset();
+        gadgetsInventory.Reset();
+    }
+
+    private void QuitApplication()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-        AudioManager.PlayOneShot(interactionButtonSound);
         Application.Quit();
 #endif
     }
+
+    void StopTimer()
+    {
+        if (GameTimerManager.Instance != null)
+            GameTimerManager.Instance.StopTimer();
+    }
+
+    #endregion
 }

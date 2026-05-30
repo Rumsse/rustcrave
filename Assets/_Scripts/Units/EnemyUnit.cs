@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyUnit : UnitBase
-{
-    
+{  
     [SerializeField] protected Transform guardPoint;
     [SerializeField] protected bool specialUnit;
 
@@ -44,6 +43,7 @@ public class EnemyUnit : UnitBase
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             animator.SetBool("IsWalking", false);
+            HandleSpecialEffects();
             return;
         }
 
@@ -85,13 +85,7 @@ public class EnemyUnit : UnitBase
 
     private void RemoveUnit(Unit unit)
     {
-        //if (!_available || !playerUnits.Remove(unit)) // not sure 
-        //{
-        //    Debug.Log(_available);
-        //    return;
-        //}
-
-        if (!playerUnits.Remove(unit)) // not sure 
+        if (!playerUnits.Remove(unit))
         {
             Debug.Log(_available);
             return;
@@ -149,6 +143,7 @@ public class EnemyUnit : UnitBase
 
     #region Special Enemy Behavior
     protected virtual void HandleSpecialReaction() {}
+    public virtual void HandleSpecialEffects() { }
     public override bool SpecialReactionForUnits() => specialUnit;
     #endregion
 

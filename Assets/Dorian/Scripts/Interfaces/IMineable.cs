@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public interface IMineable
 {
     ItemSO Mine();
@@ -7,4 +5,5 @@ public interface IMineable
     bool IsDepleted();
     void PlayEffect();
     void StopEffect();
+    OreSO GetOreData();
 }

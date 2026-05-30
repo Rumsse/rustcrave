@@ -25,7 +25,7 @@ Shader "Custom/XRayVisibilityLit"
     {
         Tags { "RenderType"="Transparent" "Queue"="Transparent" "RenderPipeline"="UniversalPipeline" }
         Blend SrcAlpha OneMinusSrcAlpha
-        ZWrite Off
+        ZWrite On
 
         Pass
         {
@@ -87,6 +87,39 @@ Shader "Custom/XRayVisibilityLit"
             float4 _TrackedUnitPositions[100];
             float3 _MainCameraPosition;
 
+            float CalculateAlpha(float3 positionWS)
+            {
+                if (_TrackedUnitCount <= 0)
+                    return 1.0;
+
+                float minLineDist = 10000.0;
+                int count = min(_TrackedUnitCount, 8);
+
+                for (int i = 0; i < count; i++)
+                {
+                    float3 unitPos = _TrackedUnitPositions[i].xyz;
+                    float3 lineDir = normalize(unitPos - _MainCameraPosition);
+                    float3 pointVec = positionWS - _MainCameraPosition;
+                    float proj = dot(pointVec, lineDir);
+                    float lineLength = distance(unitPos, _MainCameraPosition);
+
+                    if (proj < 0 || proj > lineLength)
+                        continue;
+
+                    float3 closestPoint = _MainCameraPosition + lineDir * proj;
+                    float dist = distance(positionWS, closestPoint);
+
+                    if (dist < minLineDist)
+                        minLineDist = dist;
+                }
+
+                if (minLineDist >= _Radius)
+                    return 1.0;
+
+                float edgeDist = _Radius * 0.8;
+                return lerp(_FadeOpacity, 1.0, smoothstep(edgeDist, _Radius, minLineDist));
+            }
+
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
@@ -121,37 +154,7 @@ Shader "Custom/XRayVisibilityLit"
                 half occlusion = lerp(1.0, SAMPLE_TEXTURE2D(_OcclusionMap, sampler_BaseMap, uv).g, _OcclusionStrength);
                 half3 emission = SAMPLE_TEXTURE2D(_EmissionMap, sampler_BaseMap, uv).rgb * _EmissionColor.rgb;
 
-                float minLineDist = 10000.0;
-                float outAlpha = 1.0;
-
-                if (_TrackedUnitCount > 0)
-                {
-                    for (int i = 0; i < _TrackedUnitCount; i++)
-                    {
-                        float3 unitPos = _TrackedUnitPositions[i].xyz;
-                        float3 lineDir = normalize(unitPos - _MainCameraPosition);
-                        float3 pointVec = IN.positionWS - _MainCameraPosition;
-                        float proj = dot(pointVec, lineDir);
-                        float lineLength = distance(unitPos, _MainCameraPosition);
-
-                        if (proj < 0 || proj > lineLength)
-                            continue;
-
-                        float3 closestPoint = _MainCameraPosition + lineDir * proj;
-                        float dist = distance(IN.positionWS, closestPoint);
-
-                        if (dist < minLineDist)
-                            minLineDist = dist;
-                    }
-
-                    if (minLineDist < _Radius)
-                    {
-                        float edgeDist = _Radius * 0.8;
-                        outAlpha = lerp(_FadeOpacity, 1.0, smoothstep(edgeDist, _Radius, minLineDist));
-                    }
-                }
-
-                baseColor.a *= outAlpha;
+                baseColor.a *= CalculateAlpha(IN.positionWS);
 
                 InputData inputData = (InputData)0;
                 inputData.positionWS = IN.positionWS;
@@ -180,5 +183,9 @@ Shader "Custom/XRayVisibilityLit"
             }
             ENDHLSL
         }
+
+        UsePass "Universal Render Pipeline/Lit/ShadowCaster"
+        UsePass "Universal Render Pipeline/Lit/DepthOnly"
+        UsePass "Universal Render Pipeline/Lit/DepthNormals"
     }
 }

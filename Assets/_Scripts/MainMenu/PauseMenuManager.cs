@@ -36,26 +36,39 @@ public class PauseMenuManager : MonoBehaviour
         isPaused = true;
         Time.timeScale = 0f;
 
-        if (pausePanel != null)
-            pausePanel.SetActive(true);
+        if (pausePanel == null) 
+            return;
+
+        pausePanel.SetActive(true);
     }
 
     public void Resume()
     {
         isPaused = false;
-        Time.timeScale = 1f;
 
-        if (pausePanel != null)
-        {
-            AudioManager.PlayOneShot(interactionSound);
-            pausePanel.SetActive(false);
-        }
+        if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialPaused)
+            Time.timeScale = 0f;
+        else
+            Time.timeScale = 1f;
+
+        if (pausePanel == null) 
+            return;
+
+        AudioManager.PlayOneShot(interactionSound);
+        pausePanel.SetActive(false);
     }
 
-    public void ReturnToMainMenu()
+    public async void ReturnToMainMenu()
     {
         Time.timeScale = 1f;
         AudioManager.PlayOneShot(interactionSound);
-        SceneManager.LoadScene(mainMenuSceneName);
+
+        if (SceneTransitionManager.Instance == null)
+        {
+            SceneManager.LoadScene(mainMenuSceneName);
+            return;
+        }
+
+        await SceneTransitionManager.Instance.FadeToScene(mainMenuSceneName);
     }
 }

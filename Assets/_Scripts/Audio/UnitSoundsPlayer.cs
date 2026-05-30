@@ -11,6 +11,5 @@ public class UnitSoundsPlayer : MonoBehaviour
     
     public void PlayOneShotByPath()
     {
-        AudioManager.PlayOneShot(_stats.Sounds.mineSound);
     }
 }

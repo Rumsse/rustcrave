@@ -1,10 +1,14 @@
-using System.Collections;
 using UnityEngine;
 using FMODUnity;
 
 public class GameOverManager : MonoBehaviour
 {
-    [SerializeField] private GameObject gameOverPanel;
+    #region Refs
+
+    [SerializeField] private CanvasGroup backgroundCanvasGroup;
+    [SerializeField] private CanvasGroup contentCanvasGroup;
+    [SerializeField] private float backgroundFadeDuration = 1f;
+    [SerializeField] private float contentFadeDuration = 2f;
     [SerializeField] private MapState mapState;
     [SerializeField] private SwarmState swarmState;
     [SerializeField] private PauseMenuManager pauseMenuManager;
@@ -13,52 +17,106 @@ public class GameOverManager : MonoBehaviour
 
     private HealthManager playerHealth;
 
+    #endregion
+
+    #region Unity Methods
+
     private void Start()
     {
-        if (gameOverPanel)
-            gameOverPanel.SetActive(false);
-
-        StartCoroutine(WaitForPlayerAndSubscribe());
-    }
-
-    private IEnumerator WaitForPlayerAndSubscribe()
-    {
-        GameObject player = null;
-
-        while (!player)
+        if (backgroundCanvasGroup)
         {
-            player = GameObject.FindGameObjectWithTag(playerTag);
-            yield return null;
+            backgroundCanvasGroup.alpha = 0f;
+            backgroundCanvasGroup.gameObject.SetActive(false);
         }
 
-        playerHealth = player.GetComponentInParent<HealthManager>();
+        if (contentCanvasGroup)
+        {
+            contentCanvasGroup.alpha = 0f;
+            contentCanvasGroup.gameObject.SetActive(false);
+            contentCanvasGroup.interactable = false;
+            contentCanvasGroup.blocksRaycasts = false;
+        }
 
-        if (!playerHealth)
-            yield break;
+        if (swarmState)
+            swarmState.OnUnitRemoved += HandleUnitRemovedFromSwarm;
 
-        playerHealth.onDeath += HandlePlayerDeath;
+        InitializePlayerSubscription();
     }
 
     private void OnDestroy()
     {
         if (playerHealth)
             playerHealth.onDeath -= HandlePlayerDeath;
+
+        if (swarmState)
+            swarmState.OnUnitRemoved -= HandleUnitRemovedFromSwarm;
     }
 
-    private void HandlePlayerDeath()
+    #endregion
+
+    #region Core Logic
+
+    private async void InitializePlayerSubscription()
+    {
+        GameObject player = null;
+
+        while (!player)
+        {
+            player = GameObject.FindGameObjectWithTag(playerTag);
+            await Awaitable.NextFrameAsync();
+        }
+
+        playerHealth = player.GetComponentInParent<HealthManager>();
+
+        if (!playerHealth)
+            return;
+
+        playerHealth.onDeath += HandlePlayerDeath;
+    }
+
+    private void HandleUnitRemovedFromSwarm(SwarmUnitsData deadUnit)
+    {
+        if (deadUnit.unitType.isMainCharacter)
+            HandlePlayerDeath();
+    }
+
+    private async void HandlePlayerDeath()
     {
         Time.timeScale = 0f;
 
         if (pauseMenuManager)
             pauseMenuManager.enabled = false;
 
-        if (gameOverPanel)
+        ResetGameState();
+
+        if (!backgroundCanvasGroup || !contentCanvasGroup)
+            return;
+
+        backgroundCanvasGroup.gameObject.SetActive(true);
+        contentCanvasGroup.gameObject.SetActive(true);
+
+        AudioManager.PlayOneShot(gameoverSound);
+
+        await FadeCanvasGroup(backgroundCanvasGroup, backgroundFadeDuration);
+
+        await FadeCanvasGroup(contentCanvasGroup, contentFadeDuration);
+
+        contentCanvasGroup.interactable = true;
+        contentCanvasGroup.blocksRaycasts = true;
+    }
+
+    private async Awaitable FadeCanvasGroup(CanvasGroup canvasGroup, float duration)
+    {
+        float time = 0f;
+
+        while (time < duration)
         {
-            gameOverPanel.SetActive(true);
-            AudioManager.PlayOneShot(gameoverSound);
+            time += Time.unscaledDeltaTime;
+            canvasGroup.alpha = Mathf.Lerp(0f, 1f, time / duration);
+            await Awaitable.NextFrameAsync();
         }
 
-        ResetGameState();
+        canvasGroup.alpha = 1f;
     }
 
     private void ResetGameState()
@@ -69,4 +127,6 @@ public class GameOverManager : MonoBehaviour
         if (swarmState)
             swarmState.Initialize();
     }
+
+    #endregion
 }
