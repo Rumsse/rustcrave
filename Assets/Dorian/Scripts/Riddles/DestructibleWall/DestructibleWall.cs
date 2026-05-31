@@ -49,7 +49,6 @@ public class DestructibleWall : MonoBehaviour, IMineable
     private IEnumerator DestroyRoutine()
     {
         isDestroying = true;
-        OnAnyWallDestroyed?.Invoke();
 
         yield return null;
 
@@ -76,5 +75,6 @@ public class DestructibleWall : MonoBehaviour, IMineable
         }
 
         Destroy(gameObject);
+        OnAnyWallDestroyed?.Invoke();
     }
 }

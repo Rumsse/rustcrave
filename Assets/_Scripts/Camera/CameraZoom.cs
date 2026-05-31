@@ -29,24 +29,6 @@ public class CameraZoom : MonoBehaviour
 
     private void Start() => currentSpeed = baseSpeed;
 
-    private void OnEnable()
-    {
-        if (TutorialTaskVerifier.Instance == null)
-            return;
-
-        TutorialTaskVerifier.Instance.OnTaskStarted += HandleTutorialTaskStarted;
-        TutorialTaskVerifier.Instance.OnTaskEnded += HandleTutorialTaskEnded;
-    }
-
-    private void OnDisable()
-    {
-        if (TutorialTaskVerifier.Instance == null)
-            return;
-
-        TutorialTaskVerifier.Instance.OnTaskStarted -= HandleTutorialTaskStarted;
-        TutorialTaskVerifier.Instance.OnTaskEnded -= HandleTutorialTaskEnded;
-    }
-
     private void Update()
     {
         if (Time.timeScale == 0f)
@@ -69,20 +51,6 @@ public class CameraZoom : MonoBehaviour
         if (other.CompareTag("ZoomInZone"))
             ZoomIn();
     }
-
-    #endregion
-
-    #region Tutorial Handling
-
-    private void HandleTutorialTaskStarted(TutorialTaskType taskType)
-    {
-        if (taskType == TutorialTaskType.None)
-            return;
-
-        IsPausedForTutorial = false;
-    }
-
-    private void HandleTutorialTaskEnded(TutorialTaskType taskType) => IsPausedForTutorial = true;
 
     #endregion
 
