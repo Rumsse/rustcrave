@@ -15,6 +15,8 @@ public class DialogOption
     public string optionText;
     public bool isIgnoreOption;
 
+    public bool isLuckCheck;
+
     [Range(0, 100)] public int baseSuccessChance = 50;
 
     public bool isMiningCheck;

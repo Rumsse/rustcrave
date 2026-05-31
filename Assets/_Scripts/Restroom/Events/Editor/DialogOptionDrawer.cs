@@ -19,9 +19,9 @@ public class DialogOptionDrawer : PropertyDrawer
         var optionTextProp = property.FindPropertyRelative("optionText");
         var isIgnoreProp = property.FindPropertyRelative("isIgnoreOption");
 
+        var isLuckProp = property.FindPropertyRelative("isLuckCheck");
         var isMiningProp = property.FindPropertyRelative("isMiningCheck");
         var bonusMiningProp = property.FindPropertyRelative("bonusPerMiningPower");
-
         var isAttackProp = property.FindPropertyRelative("isAttackCheck");
         var bonusAttackProp = property.FindPropertyRelative("bonusPerDamage");
 
@@ -34,6 +34,7 @@ public class DialogOptionDrawer : PropertyDrawer
 
         var optionTextField = new PropertyField(optionTextProp);
         var isIgnoreField = new PropertyField(isIgnoreProp);
+        var isLuckField = new PropertyField(isLuckProp);
         var isMiningField = new PropertyField(isMiningProp);
         var bonusMiningField = new PropertyField(bonusMiningProp);
         var isAttackField = new PropertyField(isAttackProp);
@@ -44,6 +45,7 @@ public class DialogOptionDrawer : PropertyDrawer
 
         foldout.Add(optionTextField);
         foldout.Add(isIgnoreField);
+        foldout.Add(isLuckField);
         foldout.Add(isMiningField);
         foldout.Add(bonusMiningField);
         foldout.Add(isAttackField);
@@ -55,21 +57,41 @@ public class DialogOptionDrawer : PropertyDrawer
         void UpdateVisibility()
         {
             bool isIgnore = isIgnoreProp.boolValue;
+            bool isLuck = isLuckProp.boolValue;
             bool isMining = isMiningProp.boolValue;
             bool isAttack = isAttackProp.boolValue;
 
-            if (isMining && isAttack)
+            if (isLuck && (isMining || isAttack))
             {
+                isMiningProp.boolValue = false;
                 isAttackProp.boolValue = false;
                 property.serializedObject.ApplyModifiedProperties();
+                isMining = false;
                 isAttack = false;
             }
+            else if (isMining && (isLuck || isAttack))
+            {
+                isLuckProp.boolValue = false;
+                isAttackProp.boolValue = false;
+                property.serializedObject.ApplyModifiedProperties();
+                isLuck = false;
+                isAttack = false;
+            }
+            else if (isAttack && (isLuck || isMining))
+            {
+                isLuckProp.boolValue = false;
+                isMiningProp.boolValue = false;
+                property.serializedObject.ApplyModifiedProperties();
+                isLuck = false;
+                isMining = false;
+            }
 
+            isLuckField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
             isMiningField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
             isAttackField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
             successField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
 
-            bool isAnyCheck = !isIgnore && (isMining || isAttack);
+            bool isAnyCheck = !isIgnore && (isLuck || isMining || isAttack);
 
             baseChanceField.style.display = isAnyCheck ? DisplayStyle.Flex : DisplayStyle.None;
             failureField.style.display = isAnyCheck ? DisplayStyle.Flex : DisplayStyle.None;
@@ -81,6 +103,7 @@ public class DialogOptionDrawer : PropertyDrawer
         }
 
         foldout.TrackPropertyValue(isIgnoreProp, _ => UpdateVisibility());
+        foldout.TrackPropertyValue(isLuckProp, _ => UpdateVisibility());
         foldout.TrackPropertyValue(isMiningProp, _ => UpdateVisibility());
         foldout.TrackPropertyValue(isAttackProp, _ => UpdateVisibility());
 

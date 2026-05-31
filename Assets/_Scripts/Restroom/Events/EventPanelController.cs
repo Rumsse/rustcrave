@@ -297,7 +297,7 @@ public class EventPanelController : MonoBehaviour
 
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.Flex;
-    }   
+    }
 
     #endregion
 
@@ -305,7 +305,7 @@ public class EventPanelController : MonoBehaviour
 
     EventOutcome DetermineOutcome(DialogOption option, SwarmUnitsData robot)
     {
-        if (!option.isMiningCheck && !option.isAttackCheck)
+        if (!option.isMiningCheck && !option.isAttackCheck && !option.isLuckCheck)
             return option.successOutcome;
 
         int statValue = 0;
