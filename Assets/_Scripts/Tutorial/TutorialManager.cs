@@ -229,7 +229,7 @@ public class TutorialManager : MonoBehaviour
         ShowStep(currentStepIndex + 1);
     }
 
-    private void EndTutorial()
+    private async void EndTutorial()
     {
         if (tutorialPanel != null)
             tutorialPanel.SetActive(false);
@@ -250,8 +250,16 @@ public class TutorialManager : MonoBehaviour
         currentStepIndex = 0;
         Debug.Log("Tutorial Finished! Loading Main Menu...");
 
-        if (!string.IsNullOrEmpty(mainMenuSceneName))
-            SceneManager.LoadScene(mainMenuSceneName);
+        if (string.IsNullOrEmpty(mainMenuSceneName))
+            return;
+
+        if (SceneTransitionManager.Instance != null)
+        {
+            await SceneTransitionManager.Instance.WipeToScene(mainMenuSceneName, true);
+            return;
+        }
+
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 
     #endregion

@@ -185,7 +185,7 @@ public class ChoosePathController : MonoBehaviour
         if (!availableNodes.Any(n => n.Id == node.Id))
             return;
 
-        bool isTutorialActive = false;
+        bool isCompletingTutorialTask = false;
 
         if (TutorialTaskVerifier.Instance != null && TutorialTaskVerifier.Instance.CurrentTask == TutorialTaskType.ScanPathAndGo)
         {
@@ -195,7 +195,7 @@ public class ChoosePathController : MonoBehaviour
                 return;
             }
 
-            isTutorialActive = true;
+            isCompletingTutorialTask = true;
         }
 
         mapState.MoveToNode(node);
@@ -204,6 +204,9 @@ public class ChoosePathController : MonoBehaviour
         UpdateButtonStates();
 
         OnAnyPathNodeEntered?.Invoke();
+
+        if (isCompletingTutorialTask)
+            return;
 
         string sceneToLoad = node.Row == mapState.TotalRows - 1 ? mainBossScene : mainGameScene;
 
