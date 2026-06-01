@@ -97,7 +97,7 @@ public class MainCraftController : MonoBehaviour
             InitializeSubController(tabKey, panel);
         }
 
-        var innerBtnBack = panel.Q<Button>("btn-back");
+        var innerBtnBack = panel.Q<Button>("btn-back-gadgets") ?? panel.Q<Button>("btn-back-robots") ?? panel.Q<Button>("btn-back");
 
         if (innerBtnBack != null)
         {
@@ -107,6 +107,9 @@ public class MainCraftController : MonoBehaviour
 
         if (btnClose != null)
             btnClose.style.display = DisplayStyle.None;
+
+        if (btnBack != null)
+            btnBack.style.display = DisplayStyle.None;
 
         contentContainer.Add(panel);
         activeTabKey = tabKey;
@@ -185,6 +188,8 @@ public class MainCraftController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         ShowCraftPopup(gadget);
+
+        yield return new WaitForSeconds(0.4f);
         OnAnyGadgetCrafted?.Invoke();
     }
 

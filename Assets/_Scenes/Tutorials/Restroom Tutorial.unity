@@ -2288,33 +2288,103 @@ MonoBehaviour:
   highlightClassName: tutorial-highlight
   highlightRules:
   - taskType: 7
-    elementNames:
-    - background-tutorial-event-highlight
+    targets:
+    - identifier: background-tutorial-event-highlight
+      borderThickness: 8
+      padding: 10
+      cornerRadius: 3
+    allowedInteractionElements:
+    - robot-dropdown
+    - option-1
+    - option-2
+    - option-3
+    - options
   - taskType: 8
-    elementNames:
+    targets:
+    - identifier: btn-craft
+      borderThickness: 7
+      padding: 0
+      cornerRadius: 12
+    - identifier: btn-tab-robots
+      borderThickness: 9
+      padding: 1
+      cornerRadius: 50
+    - identifier: btn-craft-miner
+      borderThickness: 4
+      padding: -5
+      cornerRadius: 75
+    allowedInteractionElements:
     - btn-craft
-    - btn-tab-robots
-    - btn-craft-miner
+    - options
   - taskType: 9
-    elementNames:
+    targets:
+    - identifier: btn-tab-gadgets
+      borderThickness: 9
+      padding: 1
+      cornerRadius: 50
+    - identifier: btn-back-robots
+      borderThickness: 3
+      padding: 0
+      cornerRadius: 75
+    - identifier: btn-craft-kinetic
+      borderThickness: 4
+      padding: -5
+      cornerRadius: 75
+    allowedInteractionElements:
     - btn-craft
-    - btn-tab-gadgets
-    - btn-craft-kinetic
+    - options
   - taskType: 10
-    elementNames:
+    targets:
+    - identifier: btn-swarm
+      borderThickness: 7
+      padding: 0
+      cornerRadius: 12
+    - identifier: btn-quick-management
+      borderThickness: 6
+      padding: 0
+      cornerRadius: 12
+    - identifier: .quick-manage-target
+      borderThickness: 4
+      padding: 10
+      cornerRadius: 2
+    allowedInteractionElements:
     - btn-swarm
-    - btn-quick-management
-    - .quick-manage-target
+    - options
   - taskType: 11
-    elementNames:
+    targets:
+    - identifier: btn-quick-management
+      borderThickness: 6
+      padding: 0
+      cornerRadius: 12
+    - identifier: .normal-manage-target
+      borderThickness: 4
+      padding: 10
+      cornerRadius: 2
+    - identifier: gadget-slot-0
+      borderThickness: 3
+      padding: 4
+      cornerRadius: 5
+    - identifier: .gadget-iconn
+      borderThickness: 3
+      padding: 4
+      cornerRadius: 5
+    allowedInteractionElements:
+    - gadget-iconn
     - btn-swarm
-    - btn-quick-management
-    - .normal-manage-target
-    - gadget-slot-0
+    - options
   - taskType: 12
-    elementNames:
+    targets:
+    - identifier: btn-choose-path
+      borderThickness: 7
+      padding: 0
+      cornerRadius: 12
+    - identifier: .node-available
+      borderThickness: 3
+      padding: 0
+      cornerRadius: 75
+    allowedInteractionElements:
     - btn-choose-path
-    - .node-available
+    - options
 --- !u!1 &883714861
 GameObject:
   m_ObjectHideFlags: 0
