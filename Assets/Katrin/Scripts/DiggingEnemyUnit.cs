@@ -28,8 +28,8 @@ public class DiggingEnemyUnit : EnemyUnit
     {
         if (!selectedVisualObject.activeSelf) return;
 
-        animator.SetBool("IsWalking", false); //?
-        SetState(new IdleState(this)); // maybe digging first 
+        animator.SetBool("IsWalking", false); 
+        SetState(new IdleState(this)); 
         selectedVisualObject.SetActive(false);
         diggingEffect?.Play();
     }
