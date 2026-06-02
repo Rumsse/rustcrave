@@ -8,6 +8,9 @@ public class GameSaveData
     public InventorySaveData inventoryData = new();
     public GadgetsSaveData gadgetsData = new();
     public MapSaveData mapData = new();
+    public EventSaveData eventData = new();
+
+    public float totalPlayTime;
 }
 
 [Serializable]

@@ -19,6 +19,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private MapState mapState;
     [SerializeField] private GlobalInventorySO globalInventory;
     [SerializeField] private GadgetsGlobalInventory gadgetsInventory;
+    [SerializeField] private EventState eventState;
 
     [Header("Character Movement & Animations")]
     [SerializeField] private Animator characterAnimator;
@@ -88,6 +89,7 @@ public class MainMenuManager : MonoBehaviour
     public void CloseQuittingPanel() => SetPanelState(quittingPanel, false);
 
     #endregion
+
 
     #region Logic And Coroutines
 
@@ -176,6 +178,7 @@ public class MainMenuManager : MonoBehaviour
         mapState.Initialize();
         globalInventory.Reset();
         gadgetsInventory.Reset();
+        eventState.Reset();
     }
 
     private void QuitApplication()

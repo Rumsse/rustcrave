@@ -125,7 +125,7 @@ public class SwarmState : ScriptableObject
 
             if (unitType == null)
             {
-                Debug.LogError($"Cannot load unit. {unitData.unitTypeName} is missing in GameDatabaseSO!");
+                Debug.LogError($"Cannot load unit. {unitData.unitTypeName} is missing in GameDatabase!");
                 continue;
             }
 
