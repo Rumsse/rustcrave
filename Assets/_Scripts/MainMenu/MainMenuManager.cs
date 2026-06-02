@@ -194,4 +194,22 @@ public class MainMenuManager : MonoBehaviour
     }
 
     #endregion
+
+
+    #region Save System UI
+
+    public void OnSaveGameClicked() => SaveManager.Instance.SaveGame();
+
+    public void OnLoadGameClicked()
+    {
+        if (!SaveManager.Instance.HasSaveFile())
+        {
+            Debug.Log("No save file found.");
+            return;
+        }
+
+        SaveManager.Instance.LoadGame();
+    }
+
+    #endregion
 }

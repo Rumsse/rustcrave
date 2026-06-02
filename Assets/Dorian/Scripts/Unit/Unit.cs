@@ -86,7 +86,7 @@ public class Unit : UnitBase, ITrackableUnit
 
     private void OnEnable()
     {
-        TunnelEnd.OnTunnelEndReached += SyncDataToState;
+        //AllUnitsTriggerZone.OnTunnelEndReached -= SyncDataToState;
         energyManager.onEnergyPercentChange += HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted += HandleEnergyDepleted;
         healthManager.onHit += HandleDamageTaken;
@@ -100,7 +100,7 @@ public class Unit : UnitBase, ITrackableUnit
 
     private void OnDisable()
     {
-        TunnelEnd.OnTunnelEndReached -= SyncDataToState;
+        //AllUnitsTriggerZone.OnTunnelEndReached -= SyncDataToState;
         energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted -= HandleEnergyDepleted;
         healthManager.onHit -= HandleDamageTaken;

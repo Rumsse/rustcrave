@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DisplayUnitSpawner : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class DisplayUnitSpawner : MonoBehaviour
         if (swarmState == null)
             return;
 
+        swarmState.OnSwarmChanged += HandleSwarmChanged;
         swarmState.OnUnitAdded += HandleNewUnitCrafted;
         swarmState.OnUnitRemoved += HandleUnitDied;
     }
@@ -30,6 +32,7 @@ public class DisplayUnitSpawner : MonoBehaviour
         if (swarmState == null)
             return;
 
+        swarmState.OnSwarmChanged -= HandleSwarmChanged;
         swarmState.OnUnitAdded -= HandleNewUnitCrafted;
         swarmState.OnUnitRemoved -= HandleUnitDied;
     }
@@ -52,6 +55,22 @@ public class DisplayUnitSpawner : MonoBehaviour
             if (swarmUnit.isAlive)
                 SpawnSingleUnit(swarmUnit);
         }
+    }
+
+    void HandleSwarmChanged()
+    {
+        ClearAllModels();
+        SpawnDisplayModels();
+    }
+
+    void ClearAllModels()
+    {
+        foreach (var modelTransform in spawnedModels.Values)
+            if (modelTransform != null)
+                Destroy(modelTransform.gameObject);
+
+        spawnedModels.Clear();
+        currentSpawnIndex = 0;
     }
 
     void HandleNewUnitCrafted(SwarmUnitsData newUnit)
@@ -96,7 +115,7 @@ public class DisplayUnitSpawner : MonoBehaviour
         foreach (var script in allScripts)
             DestroyImmediate(script);
 
-        var agent = go.GetComponent<UnityEngine.AI.NavMeshAgent>();
+        var agent = go.GetComponent<NavMeshAgent>();
 
         if (agent != null)
             DestroyImmediate(agent);

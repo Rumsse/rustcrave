@@ -77,4 +77,27 @@ public class SwarmUnitsData
 
         return total;
     }
+
+    public void LoadData(UnitSaveData data, GameDatabase db)
+    {
+        id = data.id;
+        currentHP = data.currentHP;
+        currentEnergy = data.currentEnergy;
+        isAlive = data.isAlive;
+
+        assignedGadgets.Clear();
+
+        foreach (var gadgetName in data.assignedGadgetNames)
+        {
+            var gadget = db.GetGadget(gadgetName);
+
+            if (gadget == null)
+            {
+                Debug.LogError($"Cannot load gadget. {gadgetName} is missing in GameDatabaseSO!");
+                continue;
+            }
+
+            assignedGadgets.Add(gadget);
+        }
+    }
 }
