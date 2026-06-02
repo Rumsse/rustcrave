@@ -145,8 +145,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000030517578, y: 0.000030517578}
-  m_SizeDelta: {x: 289.919, y: 89.026}
+  m_AnchoredPosition: {x: 0.00031376, y: 0.000030517578}
+  m_SizeDelta: {x: 577.44, y: 89.026}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &669670522411005084
 CanvasRenderer:
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Load
+  m_text: Load Game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
   m_sharedMaterial: {fileID: -4099103005339705998, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
@@ -815,6 +815,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2042496566338860549}
   - component: {fileID: 3036759737333516098}
+  - component: {fileID: 5638884673202566875}
   m_Layer: 5
   m_Name: Load
   m_TagString: Untagged
@@ -839,8 +840,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -440.80615, y: -263}
-  m_SizeDelta: {x: 270.7737, y: 102.46912}
+  m_AnchoredPosition: {x: -306.54114, y: -271.99997}
+  m_SizeDelta: {x: 539.304, y: 102.4691}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3036759737333516098
 MonoBehaviour:
@@ -887,17 +888,33 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: SaveSlotSelectionUI, Assembly-CSharp
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5638884673202566875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4367587716125008754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedTextButton
+  targetText: {fileID: 1579549526670051712}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &5244888910057846669
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,6 +961,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4829740668822835347}
   - component: {fileID: 7456945112211251339}
+  - component: {fileID: 2220558009033880764}
   m_Layer: 5
   m_Name: Save
   m_TagString: Untagged
@@ -968,8 +986,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -440.80615, y: -108}
-  m_SizeDelta: {x: 270.7737, y: 102.46912}
+  m_AnchoredPosition: {x: -306.54114, y: -117}
+  m_SizeDelta: {x: 539.304, y: 102.4691}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7456945112211251339
 MonoBehaviour:
@@ -1016,17 +1034,33 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+        m_TargetAssemblyTypeName: SaveSlotSelectionUI, Assembly-CSharp
+        m_MethodName: OpenForSave
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2220558009033880764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5593521148505924045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedTextButton
+  targetText: {fileID: 3432091379441420976}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  tweenDuration: 0.15
 --- !u!1 &6660356155613971043
 GameObject:
   m_ObjectHideFlags: 0
@@ -1130,7 +1164,7 @@ GameObject:
   - component: {fileID: 6526929206571043701}
   - component: {fileID: 3123273603870722251}
   m_Layer: 5
-  m_Name: settings sounds Panel
+  m_Name: settings sounds & saves Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1523,8 +1557,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000030517578, y: -0.000030517578}
-  m_SizeDelta: {x: 289.919, y: 89.026}
+  m_AnchoredPosition: {x: 0.00030231, y: -0.000030517578}
+  m_SizeDelta: {x: 577.44, y: 89.026}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8829627383346129511
 CanvasRenderer:
@@ -1554,7 +1588,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Save
+  m_text: Save Game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
   m_sharedMaterial: {fileID: -4099103005339705998, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}

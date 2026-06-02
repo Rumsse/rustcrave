@@ -50,6 +50,30 @@ public class MainMenuManager : MonoBehaviour
 
     #region Menu Actions
 
+    public void StartNewMission()
+    {
+        InitializeGameStates();
+        StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(gameSceneName)));
+    }
+
+    public void ContinueMission()
+    {
+        if (!SaveManager.Instance.HasAnySave())
+        {
+            Debug.Log("[MainMenuManager] No saves found to continue.");
+            return;
+        }
+
+        SaveManager.Instance.ContinueGame();
+        StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(gameSceneName)));
+    }
+
+    public void LoadMissionFromSlot(int slotIndex)
+    {
+        SaveManager.Instance.LoadGame(slotIndex);
+        StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(gameSceneName)));
+    }
+
     public void StartGame() => StartPlaySequence(gameSceneName);
 
     public void StartTutorial() => StartPlaySequence(tutorialSceneName);
@@ -166,7 +190,7 @@ public class MainMenuManager : MonoBehaviour
         onComplete?.Invoke();
     }
 
-    private void InitializeGameStates()
+    public void InitializeGameStates()
     {
         if (GameTimerManager.Instance != null)
         {
@@ -201,17 +225,40 @@ public class MainMenuManager : MonoBehaviour
 
     #region Save System UI
 
-    public void OnSaveGameClicked() => SaveManager.Instance.SaveGame();
-
-    public void OnLoadGameClicked()
+    public void OnContinueClicked()
     {
-        if (!SaveManager.Instance.HasSaveFile())
-        {
-            Debug.Log("No save file found.");
+        if (!SaveManager.Instance.HasAnySave())
             return;
-        }
 
-        SaveManager.Instance.LoadGame();
+        SaveManager.Instance.ContinueGame();
+        StartGame();
+    }
+
+    public void OnSlotClicked(int slotIndex)
+    {
+        if (SaveManager.Instance.HasSaveFile(slotIndex))
+        {
+            // Opcja A: Nadpisywanie zapisu (jeœli klikasz z poziomu opcji w Restroomie)
+            SaveManager.Instance.SetCurrentSlot(slotIndex);
+            SaveManager.Instance.SaveGame();
+
+            // Opcja B: Wczytywanie zapisu (jeœli klikasz z poziomu Main Menu)
+            // SaveManager.Instance.LoadGame(slotIndex);
+            // StartGame();
+        }
+        else
+        {
+            SaveManager.Instance.SetCurrentSlot(slotIndex);
+            InitializeGameStates();
+            StartGame();
+        }
+    }
+
+    public void UpdateSlotUI(TMPro.TextMeshProUGUI textSlot1, TMPro.TextMeshProUGUI textSlot2, TMPro.TextMeshProUGUI textSlot3)
+    {
+        textSlot1.text = $"Save 1\n{SaveManager.Instance.GetSlotDate(1)}";
+        textSlot2.text = $"Save 2\n{SaveManager.Instance.GetSlotDate(2)}";
+        textSlot3.text = $"Save 3\n{SaveManager.Instance.GetSlotDate(3)}";
     }
 
     #endregion

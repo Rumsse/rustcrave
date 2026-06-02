@@ -83,6 +83,7 @@ public class AllUnitsTriggerZone : MonoBehaviour
 
         OnTunnelEndReached?.Invoke();
         RestoreEnergy();
+        SaveManager.Instance.SaveGame();
 
         if (SceneTransitionManager.Instance != null)
             await SceneTransitionManager.Instance.FadeToScene(sceneToLoad);

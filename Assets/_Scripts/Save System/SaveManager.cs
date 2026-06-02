@@ -19,7 +19,7 @@ public class SaveManager : MonoBehaviour
     readonly byte[] encryptionKey = Encoding.UTF8.GetBytes("8x/A?D(G+KbPeShV");
     readonly byte[] encryptionIV = Encoding.UTF8.GetBytes("F-JaNdRgUkXp2s5v");
 
-    string SavePath => Path.Combine(Application.persistentDataPath, "gamesave.sav");
+    public int CurrentSlot { get; private set; } = 1;
 
     #region Unity Lifecycle
 
@@ -37,7 +37,32 @@ public class SaveManager : MonoBehaviour
 
     #endregion
 
-    #region Public API
+    #region Slots & Meta API
+
+    string GetSavePath(int slot) => Path.Combine(Application.persistentDataPath, $"gamesave_slot_{slot}.sav");
+
+    public bool HasSaveFile(int slot) => File.Exists(GetSavePath(slot));
+
+    public bool HasAnySave() => HasSaveFile(1) || HasSaveFile(2) || HasSaveFile(3);
+
+    public string GetSlotDate(int slot)
+    {
+        if (!HasSaveFile(slot))
+            return "Empty Slot";
+
+        return PlayerPrefs.GetString($"Slot_{slot}_Date", "Unknown Date");
+    }
+
+    public void SetCurrentSlot(int slot)
+    {
+        CurrentSlot = slot;
+        PlayerPrefs.SetInt("LastPlayedSlot", slot);
+        PlayerPrefs.Save();
+    }
+
+    #endregion
+
+    #region Main Save / Load API
 
     public void SaveGame()
     {
@@ -55,17 +80,27 @@ public class SaveManager : MonoBehaviour
         string json = JsonUtility.ToJson(data, true);
         string finalData = useEncryption ? Encrypt(json) : json;
 
-        File.WriteAllText(SavePath, finalData);
+        File.WriteAllText(GetSavePath(CurrentSlot), finalData);
 
-        Debug.Log($"[SaveManager] Game saved successfully at: {SavePath}");
+        PlayerPrefs.SetString($"Slot_{CurrentSlot}_Date", DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+        PlayerPrefs.Save();
+
+        Debug.Log($"[SaveManager] Game saved successfully to Slot {CurrentSlot}.");
     }
 
-    public void LoadGame()
+    public void LoadGame(int slot)
     {
-        if (!File.Exists(SavePath))
-            return;
+        string path = GetSavePath(slot);
 
-        string rawData = File.ReadAllText(SavePath);
+        if (!File.Exists(path))
+        {
+            Debug.LogError($"[SaveManager] No save file in Slot {slot}!");
+            return;
+        }
+
+        SetCurrentSlot(slot);
+
+        string rawData = File.ReadAllText(path);
         string json = useEncryption ? Decrypt(rawData) : rawData;
 
         var data = JsonUtility.FromJson<GameSaveData>(json);
@@ -85,19 +120,28 @@ public class SaveManager : MonoBehaviour
         if (GameTimerManager.Instance != null)
             GameTimerManager.Instance.LoadFromSave(data.totalPlayTime);
 
-        Debug.Log("[SaveManager] Game loaded successfully.");
+        Debug.Log($"[SaveManager] Loaded Slot {slot} successfully.");
     }
 
-    public void DeleteSave()
+    public void ContinueGame()
     {
-        if (!File.Exists(SavePath))
+        int lastSlot = PlayerPrefs.GetInt("LastPlayedSlot", 1);
+        LoadGame(lastSlot);
+    }
+
+    public void DeleteSave(int slot)
+    {
+        string path = GetSavePath(slot);
+
+        if (!File.Exists(path))
             return;
 
-        File.Delete(SavePath);
-        Debug.Log("[SaveManager] Save file deleted.");
-    }
+        File.Delete(path);
+        PlayerPrefs.DeleteKey($"Slot_{slot}_Date");
+        PlayerPrefs.Save();
 
-    public bool HasSaveFile() => File.Exists(SavePath);
+        Debug.Log($"[SaveManager] Save slot {slot} deleted.");
+    }
 
     #endregion
 
