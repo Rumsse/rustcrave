@@ -18,12 +18,17 @@ public class SnapshotManager : MonoBehaviour
     private FMOD.Studio.EventInstance currentSnapshotInstance;
     private FMOD.GUID activeSnapshotGuid;
 
-    void OnEnable()
+    private void Start()
+    {
+        CheckAndPlaySnapshot(SceneManager.GetActiveScene());
+    }
+
+    private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
         StopSnapshot(true);
@@ -31,7 +36,14 @@ public class SnapshotManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        var mapping = sceneSnapshots.FirstOrDefault(x => x.sceneName == scene.name);
+        CheckAndPlaySnapshot(scene);
+    }
+
+    private void CheckAndPlaySnapshot(Scene scene)
+    {
+        var mapping = sceneSnapshots.FirstOrDefault(x =>
+            !string.IsNullOrEmpty(x.sceneName) &&
+            string.Equals(x.sceneName.Trim(), scene.name.Trim(), System.StringComparison.OrdinalIgnoreCase));
 
         if (!string.IsNullOrEmpty(mapping.sceneName) && !mapping.snapshot.IsNull)
         {
@@ -40,7 +52,6 @@ public class SnapshotManager : MonoBehaviour
         else
         {
             StopSnapshot(false);
-            activeSnapshotGuid = new FMOD.GUID();
         }
     }
 
