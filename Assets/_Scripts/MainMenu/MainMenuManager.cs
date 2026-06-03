@@ -238,13 +238,8 @@ public class MainMenuManager : MonoBehaviour
     {
         if (SaveManager.Instance.HasSaveFile(slotIndex))
         {
-            // Opcja A: Nadpisywanie zapisu (jeœli klikasz z poziomu opcji w Restroomie)
             SaveManager.Instance.SetCurrentSlot(slotIndex);
             SaveManager.Instance.SaveGame();
-
-            // Opcja B: Wczytywanie zapisu (jeœli klikasz z poziomu Main Menu)
-            // SaveManager.Instance.LoadGame(slotIndex);
-            // StartGame();
         }
         else
         {
