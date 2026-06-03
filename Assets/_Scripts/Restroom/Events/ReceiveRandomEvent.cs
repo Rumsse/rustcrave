@@ -5,20 +5,35 @@ using UnityEngine;
 public class ReceiveRandomItemAction : EventAction
 {
     [SerializeField] List<ItemSO> possibleItems = new();
-    [SerializeField] int amount = 1;
+    [SerializeField] int minItemsToDraw = 1;
+    [SerializeField] int maxItemsToDraw = 1;
+    [SerializeField] int amountPerItem = 1;
 
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)
     {
-        if (possibleItems.Count == 0 || swarmState.GlobalGadgetsInventory == null)
+        if (possibleItems.Count == 0)
             return;
 
-        int randomIndex = Random.Range(0, possibleItems.Count);
-        var itemToGive = possibleItems[randomIndex];
+        int draws = Random.Range(minItemsToDraw, maxItemsToDraw + 1);
 
-        if (itemToGive != null && itemToGive is GadgetSO gadget)
-            swarmState.GlobalGadgetsInventory.AddGadget(gadget);
+        for (int i = 0; i < draws; i++)
+        {
+            int randomIndex = Random.Range(0, possibleItems.Count);
+            var itemToGive = possibleItems[randomIndex];
 
-        if (itemToGive != null && itemToGive is not GadgetSO)
-            swarmState.GlobalInventory.AddItem(itemToGive, amount);
+            if (itemToGive == null)
+                continue;
+
+            if (itemToGive is GadgetSO gadget)
+            {
+                if (swarmState.GlobalGadgetsInventory != null)
+                    swarmState.GlobalGadgetsInventory.AddGadget(gadget);
+            }
+            else
+            {
+                if (swarmState.GlobalInventory != null)
+                    swarmState.GlobalInventory.AddItem(itemToGive, amountPerItem);
+            }
+        }
     }
 }

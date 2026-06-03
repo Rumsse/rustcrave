@@ -13,6 +13,8 @@ public class RobotHUD : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI hpText;
     [SerializeField] private TextMeshProUGUI energyText;
+    [SerializeField] private Image hpFillImage;
+    [SerializeField] private Image energyFillImage;
     [SerializeField] private Transform inventoryPanel;
     [SerializeField] private GameObject inventorySlotPrefab;
 
@@ -20,6 +22,17 @@ public class RobotHUD : MonoBehaviour
     [SerializeField] private Outline outline;
     [SerializeField] private Color32 defaultOutlineColor = new Color32(25, 19, 17, 255);
     [SerializeField] private Color32 selectedOutlineColor = new Color32(40, 150, 44, 255);
+    [SerializeField] private Image selectionBackground;
+
+    [Header("Bar Settings")]
+    [SerializeField] private float maxFillLimit = 0.25f;
+    [SerializeField] private float minVisibleFillOffset = 0.03f;
+
+    [Header("Circular Inventory")]
+    [SerializeField] private CircularInventorySlot circularSlotPrefab;
+    [SerializeField] private Transform circularInventoryContainer;
+    [SerializeField] private float slotGap = 0.01f;
+    [SerializeField] private float startAngleOffset = 0f;
 
     private SwarmUnitsData unitData;
     private Unit selectedUnit;
@@ -35,13 +48,18 @@ public class RobotHUD : MonoBehaviour
     private int lastDisplayedEnergy = -1;
 
     private List<InventorySlotUI> uiSlots = new List<InventorySlotUI>();
+    private List<CircularInventorySlot> circularSlots = new List<CircularInventorySlot>();
+
 
     public void OnClickIcon()
     {
-        if (inventoryUI != null)
-        {
-            inventoryUI.TogglePanel();
-        }
+        if (selectedUnit == null)
+            return;
+
+        UnitPanel.Instance.TogglePanel(selectedUnit);
+
+        if (UnitSelectionSystem.Instance != null)
+            UnitSelectionSystem.Instance.SetSelectedUnit(selectedUnit);
     }
 
     public void Setup(SwarmUnitsData data)
@@ -53,6 +71,9 @@ public class RobotHUD : MonoBehaviour
 
         lastDisplayedHP = -1;
         lastDisplayedEnergy = -1;
+
+        UpdateHealthVisuals(unitData.currentHP, (float)unitData.currentHP / unitData.unitType.maxHP);
+        UpdateEnergyVisuals(unitData.currentEnergy, (float)unitData.currentEnergy / unitData.unitType.maxEnergy);
 
         UpdateHealthText(unitData.currentHP, (float)unitData.currentHP / unitData.unitType.maxHP);
         UpdateEnergyText(unitData.currentEnergy, (float)unitData.currentEnergy / unitData.unitType.maxEnergy);
@@ -131,7 +152,8 @@ public class RobotHUD : MonoBehaviour
             formController.OnFormChanged += HandleFormChanged;
         }
 
-        UpdateOutlineState();
+        UpdateSelectionState();
+        //UpdateOutlineState();
 
         if (gameObject.activeInHierarchy)
         {
@@ -147,6 +169,34 @@ public class RobotHUD : MonoBehaviour
         HandleEnergyChanged(energyManager != null ? (float)energyManager.CurrentEnergy / statsManager.MaxEnergy : 1f);
     }
 
+    private void UpdateHealthVisuals(int currentHp, float percent)
+    {
+        if (currentHp != lastDisplayedHP)
+        {
+            lastDisplayedHP = currentHp;
+            int maxHp = statsManager != null ? statsManager.MaxHP : unitData.unitType.maxHP;
+            hpText.text = $"HP: {currentHp}/{maxHp}";
+        }
+
+        if (hpFillImage != null)
+            hpFillImage.fillAmount = percent > 0f ? Mathf.Lerp(minVisibleFillOffset, maxFillLimit, percent) : 0f;
+    }
+
+    private void UpdateEnergyVisuals(float currentEnergy, float percent)
+    {
+        int energyInt = Mathf.CeilToInt(currentEnergy);
+
+        if (energyInt != lastDisplayedEnergy)
+        {
+            lastDisplayedEnergy = energyInt;
+            int maxEnergy = statsManager != null ? statsManager.MaxEnergy : unitData.unitType.maxEnergy;
+            energyText.text = $"EN: {energyInt}/{maxEnergy}";
+        }
+
+        if (energyFillImage != null)
+            energyFillImage.fillAmount = percent > 0f ? Mathf.Lerp(minVisibleFillOffset, maxFillLimit, percent) : 0f;
+    }
+
     private void HandleFormChanged(UnitSO newStats)
     {
         nameText.text = newStats.robotName;
@@ -157,12 +207,14 @@ public class RobotHUD : MonoBehaviour
     {
         if (healthManager == null || unitData == null) return;
         UpdateHealthText(healthManager.CurrentHP, percent);
+        UpdateHealthVisuals(healthManager.CurrentHP, percent);
     }
 
     private void HandleEnergyChanged(float percent)
     {
         if (energyManager == null || unitData == null) return;
         UpdateEnergyText(energyManager.CurrentEnergy, percent);
+        UpdateEnergyVisuals(energyManager.CurrentEnergy, percent);
     }
 
     private void UpdateHealthText(int currentHp, float percent)
@@ -190,7 +242,7 @@ public class RobotHUD : MonoBehaviour
         RefreshInventoryVisuals();
     }
 
-    private void HandleSelectionChanged(object sender, EventArgs e) => UpdateOutlineState();
+    private void HandleSelectionChanged(object sender, EventArgs e) => UpdateSelectionState();
 
     private void UpdateOutlineState()
     {
@@ -201,25 +253,44 @@ public class RobotHUD : MonoBehaviour
         outline.effectColor = isSelected ? selectedOutlineColor : defaultOutlineColor;
     }
 
+    private void UpdateSelectionState()
+    {
+        if (selectionBackground == null || selectedUnit == null || UnitSelectionSystem.Instance == null)
+            return;
+
+        bool isSelected = UnitSelectionSystem.Instance.GetSelectedUnit() == selectedUnit;
+
+        if (selectionBackground.enabled != isSelected)
+            selectionBackground.enabled = isSelected;
+    }
+
     private void RefreshInventoryVisuals()
     {
-        if (currentInventory == null || currentInventory.InventorySO == null) return;
+        if (currentInventory == null || currentInventory.InventorySO == null)
+            return;
 
         int requiredSlots = currentInventory.InventorySO.maxCapacity;
 
-        while (uiSlots.Count < requiredSlots)
+        while (circularSlots.Count < requiredSlots)
         {
-            GameObject slotGO = Instantiate(inventorySlotPrefab, inventoryPanel);
-            InventorySlotUI slotUI = slotGO.GetComponent<InventorySlotUI>();
-            uiSlots.Add(slotUI);
-            slotUI.ClearSlot();
+            CircularInventorySlot slot = Instantiate(circularSlotPrefab, circularInventoryContainer);
+            circularSlots.Add(slot);
         }
 
-        while (uiSlots.Count > requiredSlots)
+        while (circularSlots.Count > requiredSlots)
         {
-            int lastIndex = uiSlots.Count - 1;
-            Destroy(uiSlots[lastIndex].gameObject);
-            uiSlots.RemoveAt(lastIndex);
+            int lastIndex = circularSlots.Count - 1;
+            Destroy(circularSlots[lastIndex].gameObject);
+            circularSlots.RemoveAt(lastIndex);
+        }
+
+        float fillPerSlot = (1f / requiredSlots) - slotGap;
+        float anglePerSlot = 360f / requiredSlots;
+
+        for (int i = 0; i < circularSlots.Count; i++)
+        {
+            float angle = startAngleOffset + (i * anglePerSlot);
+            circularSlots[i].Setup(fillPerSlot, angle);
         }
 
         int currentVisualSlotIndex = 0;
@@ -228,18 +299,16 @@ public class RobotHUD : MonoBehaviour
         {
             for (int i = 0; i < inventorySlot.amount; i++)
             {
-                if (currentVisualSlotIndex < uiSlots.Count)
+                if (currentVisualSlotIndex < circularSlots.Count)
                 {
-                    uiSlots[currentVisualSlotIndex].SetItem(inventorySlot.item);
+                    circularSlots[currentVisualSlotIndex].SetItem(inventorySlot.item.itemColor);
                     currentVisualSlotIndex++;
                 }
             }
         }
 
-        for (int i = currentVisualSlotIndex; i < uiSlots.Count; i++)
-        {
-            uiSlots[i].ClearSlot();
-        }
+        for (int i = currentVisualSlotIndex; i < circularSlots.Count; i++)
+            circularSlots[i].SetEmpty();
     }
 
     private void OnDestroy()

@@ -22,21 +22,22 @@ public class HealthManager : MonoBehaviour, IDamageable
     public int MaxHp => _baseMaxHP;
 
     #endregion
-    
+
     #region Inspector Fields
 
     [SerializeField] private ParticleSystem _hitEffect;
+    [SerializeField] private DeathEffect _deathEffectPrefab;
     [SerializeField] private MeshRenderer _healthBarRend;
-    
+
     #endregion
 
     #region Private Fields
 
     private int _baseMaxHP;
     private int _currentHP;
-    private Material _healthMaterial; 
+    private Material _healthMaterial;
     private StatsManager _baseStats;
-    
+
     #endregion
 
     #region Unity Lifecycle
@@ -44,10 +45,8 @@ public class HealthManager : MonoBehaviour, IDamageable
     private void Awake()
     {
         _baseStats = GetComponent<StatsManager>();
-
         _baseMaxHP = _baseStats.MaxHP;
         _currentHP = MaxHp;
-        
         _healthMaterial = _healthBarRend.material;
     }
 
@@ -75,44 +74,55 @@ public class HealthManager : MonoBehaviour, IDamageable
     {
         if (_baseStats.TypeImmunities.HasFlag(damage.AttackType))
             return;
-        
-        if(_baseStats.DeliveryMethodImmunities.HasFlag(damage.DeliveryMethod))
+
+        if (_baseStats.DeliveryMethodImmunities.HasFlag(damage.DeliveryMethod))
             return;
-        
+
         _hitEffect?.Play();
-        
+
         _currentHP -= damage.Value;
         UpdateHealthVisuals();
-        
+
         OnHealthPercentChange((float)_currentHP / MaxHp);
         OnHit(_currentHP);
-        
+
         AudioManager.PlayOneShot(_baseStats.Sounds.takeDamageSound);
-        
-        if(_currentHP <= 0)
+
+        if (_currentHP <= 0)
             Death();
     }
-    
+
     public void Death()
     {
         OnDeath();
-        
+
         AudioManager.PlayOneShot(_baseStats.Sounds.deathSound);
 
-        if(_baseStats.PrefabT) PoolManager.Instance.Release(transform, _baseStats.PrefabT);
-        else gameObject.SetActive(false);
+        if (_deathEffectPrefab)
+            SpawnDeathEffect();
+
+        if (_baseStats.PrefabT)
+            PoolManager.Instance.Release(transform, _baseStats.PrefabT);
+        else
+            gameObject.SetActive(false);
     }
-    
+
     #endregion
 
-    #region Hitable Itergration
+    #region Hitable Integration
 
-    public void Hit(DamageInfo damage)
-    {
-        Damage(damage);
-    }
-    
+    public void Hit(DamageInfo damage) => Damage(damage);
+
     #endregion
 
     private void UpdateHealthVisuals() => _healthMaterial.SetFloat("_FillAmount", (float)CurrentHP / MaxHp);
+
+    private void SpawnDeathEffect()
+    {
+        DeathEffect effect = PoolManager.Instance.Get(_deathEffectPrefab);
+        effect.transform.position = transform.position;
+        effect.transform.rotation = transform.rotation;
+
+        effect.Initialize(_deathEffectPrefab);
+    }
 }

@@ -4,7 +4,6 @@ public class IdleState : UnitState
 {
     public IdleState(UnitBase unit) : base(unit) { }
 
-    //maybe extra logic here for new enemy 
     public override void EnterState()
     {
         if(_agent.enabled)
@@ -15,6 +14,10 @@ public class IdleState : UnitState
     public override void Tick()
     {
         if (_unit.AttackTarget != null && _unit.Stats.PossibleAttacks.Count != 0)
+        {
+            Debug.Log("Switching to fight state");
+            _unit.PrepareUnit();
             _unit.SetState(new FightState(_unit));
+        }
     }
 }

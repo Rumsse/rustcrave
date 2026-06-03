@@ -3,7 +3,9 @@ using UnityEngine.AI;
 
 public class OreNode : MonoBehaviour, IMineable
 {
-    [SerializeField] private OreSO ore;
+    #region Configuration
+
+    [SerializeField] private OreSO ore;
     [SerializeField] private OreTooltip oreTooltip;
     [SerializeField] private int amount;
     [SerializeField] private OrePickUp dropPrefab;
@@ -14,39 +16,33 @@ public class OreNode : MonoBehaviour, IMineable
     [SerializeField] private float navMeshSampleDistance = 2.0f;
     [SerializeField] private int dropAmount;
 
-    public void PlayEffect()
+    #endregion
+
+    #region Unity Lifecycle
+
+    private void OnMouseEnter()
     {
-        if (miningEffect != null)
-            miningEffect.Play(true);
+        if (Time.timeScale == 0f)
+            return;
+
+        oreTooltip.ShowTooltip();
     }
 
-    public void StopEffect()
-    {
-        if (miningEffect != null)
-            miningEffect.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-    }
+    private void OnMouseExit() => oreTooltip.HideTooltip();
 
-    public ItemSO Mine()
+    #endregion
+
+    #region Mining Logic
+
+    public ItemSO Mine()
     {
-        Debug.Log(amount);
         if (amount <= 0)
             return null;
 
         amount--;
 
         if (dropPrefab != null)
-        {
-            Vector2 randomCircle = Random.insideUnitCircle.normalized * Random.Range(minDropRadius, maxDropRadius);
-            Vector3 rawDropPosition = transform.position + new Vector3(randomCircle.x, 0f, randomCircle.y);
-            Vector3 spawnPosition = transform.position;
-
-            if (NavMesh.SamplePosition(rawDropPosition, out NavMeshHit hit, navMeshSampleDistance, NavMesh.AllAreas))
-                spawnPosition = hit.position;
-
-            OrePickUp droppedItem = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
-            droppedItem.item = ore;
-            dropAmount = droppedItem.oreValueAmount;
-        }
+            SpawnDropItem();
 
         if (amount <= 0)
             Destroy(gameObject);
@@ -54,24 +50,39 @@ public class OreNode : MonoBehaviour, IMineable
         return ore;
     }
 
-    public float GetDurability()
+    private void SpawnDropItem()
     {
-        return ore != null ? ore.oreDurability : 0f;
+        Vector2 randomCircle = Random.insideUnitCircle.normalized * Random.Range(minDropRadius, maxDropRadius);
+        Vector3 rawDropPosition = transform.position + new Vector3(randomCircle.x, 0f, randomCircle.y);
+        Vector3 targetPosition = transform.position;
+
+        if (NavMesh.SamplePosition(rawDropPosition, out NavMeshHit hit, navMeshSampleDistance, NavMesh.AllAreas))
+            targetPosition = hit.position;
+
+        OrePickUp droppedItem = Instantiate(dropPrefab, transform.position, Quaternion.identity);
+        droppedItem.item = ore;
+        dropAmount = droppedItem.oreValueAmount;
+
+        droppedItem.SpawnDrop(transform.position, targetPosition);
     }
 
-    public bool IsDepleted()
-    {
-        return amount <= 0;
-    }
+    #endregion
 
-    private void OnMouseEnter()
-    {
-        if (Time.timeScale == 0f) return;
-        oreTooltip.ShowTooltip();
-    }
+    #region Interface Implementations
 
-    private void OnMouseExit()
-    {
-        oreTooltip.HideTooltip();
-    }
+    public float GetDurability() => ore != null ? ore.oreDurability : 0f;
+
+    public bool IsDepleted() => amount <= 0;
+
+    public OreSO GetOreData() => ore;
+
+    #endregion
+
+    #region Effects
+
+    public void PlayEffect() => miningEffect?.Play(true);
+
+    public void StopEffect() => miningEffect?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+
+    #endregion
 }

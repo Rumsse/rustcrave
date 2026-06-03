@@ -179,13 +179,13 @@ public class ChoosePathController : MonoBehaviour
         }
     }
 
-    void OnNodeClicked(PathNodeData node)
+    async void OnNodeClicked(PathNodeData node)
     {
         var availableNodes = mapState.GetAvailableNodes();
         if (!availableNodes.Any(n => n.Id == node.Id))
             return;
 
-        bool isTutorialActive = false;
+        bool isCompletingTutorialTask = false;
 
         if (TutorialTaskVerifier.Instance != null && TutorialTaskVerifier.Instance.CurrentTask == TutorialTaskType.ScanPathAndGo)
         {
@@ -195,7 +195,7 @@ public class ChoosePathController : MonoBehaviour
                 return;
             }
 
-            isTutorialActive = true;
+            isCompletingTutorialTask = true;
         }
 
         mapState.MoveToNode(node);
@@ -205,11 +205,18 @@ public class ChoosePathController : MonoBehaviour
 
         OnAnyPathNodeEntered?.Invoke();
 
-        if (!isTutorialActive)
+        if (isCompletingTutorialTask)
+            return;
+
+        string sceneToLoad = node.Row == mapState.TotalRows - 1 ? mainBossScene : mainGameScene;
+
+        if (SceneTransitionManager.Instance == null)
         {
-            string sceneToLoad = node.Row == mapState.TotalRows - 1 ? mainBossScene : mainGameScene;
             SceneManager.LoadScene(sceneToLoad);
+            return;
         }
+
+        await SceneTransitionManager.Instance.WipeToScene(sceneToLoad, true);
     }
 
     void OnNodeRightClicked(PathNodeData node)

@@ -22,7 +22,7 @@ public class TutorialSceneLoader : MonoBehaviour
         TutorialTaskVerifier.Instance.OnTaskEnded -= OnTaskEnded;
     }
 
-    private void OnTaskEnded(TutorialTaskType task)
+    private async void OnTaskEnded(TutorialTaskType task)
     {
         if (task != taskToTriggerLoad)
             return;
@@ -34,6 +34,13 @@ public class TutorialSceneLoader : MonoBehaviour
         }
 
         Debug.Log($"[TutorialSceneLoader] Task {task} completed. Loading scene: {sceneName}");
+
+        if (SceneTransitionManager.Instance != null)
+        {
+            await SceneTransitionManager.Instance.FadeToScene(sceneName);
+            return;
+        }
+
         SceneManager.LoadScene(sceneName);
     }
 }

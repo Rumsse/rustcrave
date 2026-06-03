@@ -86,4 +86,23 @@ public class MapState : ScriptableObject
         var node = internalNodes.FirstOrDefault(n => n.Id == CurrentNodeId);
         return node?.Row ?? -1;
     }
+
+    public MapSaveData GetSaveData()
+    {
+        return new MapSaveData
+        {
+            nodes = new List<PathNodeData>(internalNodes),
+            scannedNodeIds = new List<string>(internalScannedNodeIds),
+            visitedNodeIds = new List<string>(internalVisitedNodeIds),
+            currentNodeId = CurrentNodeId
+        };
+    }
+
+    public void LoadFromSave(MapSaveData data)
+    {
+        internalNodes = data.nodes;
+        internalScannedNodeIds = data.scannedNodeIds;
+        internalVisitedNodeIds = data.visitedNodeIds;
+        CurrentNodeId = data.currentNodeId;
+    }
 }

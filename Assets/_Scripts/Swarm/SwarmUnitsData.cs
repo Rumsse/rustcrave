@@ -8,6 +8,13 @@ public class SwarmUnitsData
     public event Action<int> OnHealthRestored;
     public event Action<float> OnEnergyRestored;
 
+    public int bonusMaxHP;
+    public int bonusMaxEnergy;
+    public int bonusDamage;
+    public float bonusMiningPower;
+    public float bonusSpeed;
+    public int bonusCarryCapacity;
+
     public string id;
     public UnitSO unitType;
     public int currentHP;
@@ -48,12 +55,12 @@ public class SwarmUnitsData
         OnHealthRestored?.Invoke(currentHP);
     }
 
-    public int GetTotalMaxHP() => Mathf.RoundToInt(GetTotalStat(unitType.maxHP, StatsType.MaxHP));
-    public int GetTotalMaxEnergy() => Mathf.RoundToInt(GetTotalStat(unitType.maxEnergy, StatsType.MaxEnergy));
-    public int GetTotalDamage() => Mathf.RoundToInt(GetTotalStat(unitType.damage, StatsType.Damage));
-    public float GetTotalMiningPower() => GetTotalStat(unitType.miningPower, StatsType.MiningPower);
-    public float GetTotalSpeed() => GetTotalStat(unitType.moveSpeed, StatsType.Speed);
-    public int GetTotalCapacity() => Mathf.RoundToInt(GetTotalStat(unitType.carryCapacity, StatsType.CarryCapacity));
+    public int GetTotalMaxHP() => Mathf.RoundToInt(GetTotalStat(unitType.maxHP + bonusMaxHP, StatsType.MaxHP));
+    public int GetTotalMaxEnergy() => Mathf.RoundToInt(GetTotalStat(unitType.maxEnergy + bonusMaxEnergy, StatsType.MaxEnergy));
+    public int GetTotalDamage() => Mathf.RoundToInt(GetTotalStat(unitType.damage + bonusDamage, StatsType.Damage));
+    public float GetTotalMiningPower() => GetTotalStat(unitType.miningPower + bonusMiningPower, StatsType.MiningPower);
+    public float GetTotalSpeed() => GetTotalStat(unitType.moveSpeed + bonusSpeed, StatsType.Speed);
+    public int GetTotalCapacity() => Mathf.RoundToInt(GetTotalStat(unitType.carryCapacity + bonusCarryCapacity, StatsType.CarryCapacity));
 
     private float GetTotalStat(float baseValue, StatsType statType)
     {
@@ -69,5 +76,28 @@ public class SwarmUnitsData
         }
 
         return total;
+    }
+
+    public void LoadData(UnitSaveData data, GameDatabase db)
+    {
+        id = data.id;
+        currentHP = data.currentHP;
+        currentEnergy = data.currentEnergy;
+        isAlive = data.isAlive;
+
+        assignedGadgets.Clear();
+
+        foreach (var gadgetName in data.assignedGadgetNames)
+        {
+            var gadget = db.GetGadget(gadgetName);
+
+            if (gadget == null)
+            {
+                Debug.LogError($"Cannot load gadget. {gadgetName} is missing in GameDatabaseSO!");
+                continue;
+            }
+
+            assignedGadgets.Add(gadget);
+        }
     }
 }

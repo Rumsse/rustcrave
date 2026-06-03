@@ -1,39 +1,44 @@
 using UnityEngine;
-using System.Collections;
+using PrimeTween;
 
+[RequireComponent(typeof(Collider))]
 public class HydraulicPressMovement : MonoBehaviour
 {
     [SerializeField] private Transform pressTransform;
-    [SerializeField] private Transform topPosition;
     [SerializeField] private Transform bottomPosition;
     [SerializeField] private float smashSpeed = 20f;
-    [SerializeField] private float retractSpeed = 3f;
-    [SerializeField] private float waitTimeAtTop = 4f;
-    [SerializeField] private float waitTimeAtBottom = 0.5f;
+    [SerializeField] private ParticleSystem impactParticles;
 
-    private void Start()
+    private Vector3 _targetBottomLocal;
+    private bool _hasTriggered;
+
+    private void Awake() => _targetBottomLocal = pressTransform.parent.InverseTransformPoint(bottomPosition.position);
+
+    private void OnTriggerEnter(Collider other)
     {
-        StartCoroutine(PressRoutine());
+        if (_hasTriggered)
+            return;
+
+        if (!other.CompareTag("Unit"))
+            return;
+
+        _hasTriggered = true;
+        Debug.Log("Unit entered trigger. Executing one-time smash.");
+        ExecuteSmash();
     }
 
-    private IEnumerator PressRoutine()
+    private void ExecuteSmash()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(waitTimeAtTop);
-            yield return StartCoroutine(MovePress(bottomPosition.position, smashSpeed));
+        float distance = Vector3.Distance(pressTransform.localPosition, _targetBottomLocal);
+        float smashDuration = distance / smashSpeed;
 
-            yield return new WaitForSeconds(waitTimeAtBottom);
-            yield return StartCoroutine(MovePress(topPosition.position, retractSpeed));
-        }
+        Tween.LocalPosition(pressTransform, _targetBottomLocal, smashDuration, Ease.InCubic)
+            .OnComplete(PlayImpactParticles);
     }
 
-    private IEnumerator MovePress(Vector3 targetPosition, float speed)
+    private void PlayImpactParticles()
     {
-        while (pressTransform.position != targetPosition)
-        {
-            pressTransform.position = Vector3.MoveTowards(pressTransform.position, targetPosition, speed * Time.deltaTime);
-            yield return null;
-        }
+        if (impactParticles != null)
+            impactParticles.Play();
     }
 }

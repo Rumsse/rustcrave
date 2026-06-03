@@ -14,6 +14,7 @@ public class UnitSO : ScriptableObject
     public GameObject Prefab => prefab;
 
     [Header("Robot Informations")]
+    public bool isMainCharacter;
     public string robotName;
     [TextArea]
     public string robotDescription;
@@ -34,14 +35,13 @@ public class UnitSO : ScriptableObject
 
     [Header("Miner")]
     public float miningPower;
-    
+
     [Header("Toter")]
     public int carryCapacity;
 
     public List<AttackBase> possibleAttacks;
 
     public UnitSounds sounds;
-
 }
 
 public enum UnitType
@@ -53,11 +53,19 @@ public enum UnitType
 }
 
 [Serializable]
+public struct OreMiningSound
+{
+    public OreSO ore;
+    public EventReference sound;
+}
+
+[Serializable]
 public struct UnitSounds
 {
     // todo: later probably should move attackSound to attackSO
     public EventReference attackSound;
     public EventReference mineSound;
+    public List<OreMiningSound> oreMiningSounds;
     public EventReference selectSound;
     public EventReference takeDamageSound;
     public EventReference deathSound;

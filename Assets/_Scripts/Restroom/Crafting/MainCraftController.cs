@@ -97,7 +97,7 @@ public class MainCraftController : MonoBehaviour
             InitializeSubController(tabKey, panel);
         }
 
-        var innerBtnBack = panel.Q<Button>("btn-back");
+        var innerBtnBack = panel.Q<Button>("btn-back-gadgets") ?? panel.Q<Button>("btn-back-robots") ?? panel.Q<Button>("btn-back");
 
         if (innerBtnBack != null)
         {
@@ -107,6 +107,9 @@ public class MainCraftController : MonoBehaviour
 
         if (btnClose != null)
             btnClose.style.display = DisplayStyle.None;
+
+        if (btnBack != null)
+            btnBack.style.display = DisplayStyle.None;
 
         contentContainer.Add(panel);
         activeTabKey = tabKey;
@@ -146,24 +149,25 @@ public class MainCraftController : MonoBehaviour
 
     #region Swarm & Crafting UI
 
-    void HandleRobotCraftRequest(UnitSO unitType)
+    bool HandleRobotCraftRequest(UnitSO unitType)
     {
         if (swarmState == null)
-            return;
+            return false;
 
         if (swarmState.SwarmUnits.Count >= swarmState.MaxSwarmSize)
-            return;
+            return false;
 
         swarmState.AddUnitToSwarm(unitType);
-
         var newUnitData = swarmState.SwarmUnits[^1];
         AddSingleUnitToUI(newUnitData);
+
+        return true;
     }
 
-    void HandleGadgetCraftRequest(GadgetSO gadget)
+    bool HandleGadgetCraftRequest(GadgetSO gadget)
     {
         if (gadgetsGlobalInventory == null)
-            return;
+            return false;
 
         gadgetsGlobalInventory.AddGadget(gadget);
 
@@ -174,15 +178,18 @@ public class MainCraftController : MonoBehaviour
             ShowCraftPopup(gadget);
             OnAnyGadgetCrafted?.Invoke();
         }
+
+        return true;
     }
 
     IEnumerator PlayParticleAndNotifyRoutine(GadgetSO gadget)
     {
         gadgetCraftParticle.Play();
-
         yield return new WaitForSeconds(0.1f);
 
         ShowCraftPopup(gadget);
+
+        yield return new WaitForSeconds(0.4f);
         OnAnyGadgetCrafted?.Invoke();
     }
 

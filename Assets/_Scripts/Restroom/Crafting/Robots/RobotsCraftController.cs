@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using FMODUnity;
+using PrimeTween;
 
 public class RobotsCraftController : MonoBehaviour
 {
@@ -17,13 +18,11 @@ public class RobotsCraftController : MonoBehaviour
     [SerializeField] private List<RobotCraftData> robotsCraftDataList;
     [SerializeField] private EventReference craftSound;
 
-    private Action<UnitSO> requestCraftRobot;
+    private Func<UnitSO, bool> requestCraftRobot;
     private GlobalInventorySO globalInventory;
     private InfoTooltipController infoTooltip;
 
-
-
-    public void Initialize(VisualElement root, Action<UnitSO> onCraftRequested, GlobalInventorySO inventory)
+    public void Initialize(VisualElement root, Func<UnitSO, bool> onCraftRequested, GlobalInventorySO inventory)
     {
         requestCraftRobot = onCraftRequested;
         globalInventory = inventory;
@@ -52,27 +51,40 @@ public class RobotsCraftController : MonoBehaviour
             if (button == null)
                 continue;
 
-            button.clicked -= () => OnCraftClicked(data.Recipe);
-            button.clicked += () => OnCraftClicked(data.Recipe);
+            button.clicked -= () => OnCraftClicked(data.Recipe, button);
+            button.clicked += () => OnCraftClicked(data.Recipe, button);
         }
-
     }
 
     #region UI Logic
 
     public void ShowInfo(VisualElement infoPanel)
     {
-        if(infoPanel == null) return;
+        if (infoPanel == null)
+            return;
 
         bool isHidden = infoPanel.style.display == DisplayStyle.None;
         infoPanel.style.display = isHidden ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    private void AnimateButton(Button button)
+    {
+        Tween.StopAll(button);
+        Tween.Custom(
+            target: button,
+            startValue: 0f,
+            endValue: 360f,
+            duration: 0.4f,
+            onValueChange: (btn, val) => btn.style.rotate = new StyleRotate(new Rotate(new Angle(val, AngleUnit.Degree))),
+            ease: Ease.OutCubic
+        );
     }
 
     #endregion
 
     #region Crafting Logic
 
-    private void OnCraftClicked(CraftingRecipe recipe)
+    private void OnCraftClicked(CraftingRecipe recipe, Button button)
     {
         if (recipe == null)
             return;
@@ -80,9 +92,12 @@ public class RobotsCraftController : MonoBehaviour
         if (!CanAfford(recipe))
             return;
 
+        if (requestCraftRobot == null || !requestCraftRobot.Invoke(recipe.CraftedUnit))
+            return;
+
         ConsumeResources(recipe);
         AudioManager.PlayOneShot(craftSound);
-        requestCraftRobot?.Invoke(recipe.CraftedUnit);
+        AnimateButton(button);
     }
 
     private bool CanAfford(CraftingRecipe recipe)
@@ -117,5 +132,4 @@ public class RobotsCraftController : MonoBehaviour
     }
 
     #endregion
-
 }

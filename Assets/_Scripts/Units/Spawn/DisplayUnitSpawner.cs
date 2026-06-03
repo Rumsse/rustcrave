@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DisplayUnitSpawner : MonoBehaviour
 {
@@ -18,14 +19,22 @@ public class DisplayUnitSpawner : MonoBehaviour
 
     void OnEnable()
     {
-        if (swarmState != null)
-            swarmState.OnUnitAdded += HandleNewUnitCrafted;
+        if (swarmState == null)
+            return;
+
+        swarmState.OnSwarmChanged += HandleSwarmChanged;
+        swarmState.OnUnitAdded += HandleNewUnitCrafted;
+        swarmState.OnUnitRemoved += HandleUnitDied;
     }
 
     void OnDisable()
     {
-        if (swarmState != null)
-            swarmState.OnUnitAdded -= HandleNewUnitCrafted;
+        if (swarmState == null)
+            return;
+
+        swarmState.OnSwarmChanged -= HandleSwarmChanged;
+        swarmState.OnUnitAdded -= HandleNewUnitCrafted;
+        swarmState.OnUnitRemoved -= HandleUnitDied;
     }
 
     void Start() => SpawnDisplayModels();
@@ -48,12 +57,37 @@ public class DisplayUnitSpawner : MonoBehaviour
         }
     }
 
+    void HandleSwarmChanged()
+    {
+        ClearAllModels();
+        SpawnDisplayModels();
+    }
+
+    void ClearAllModels()
+    {
+        foreach (var modelTransform in spawnedModels.Values)
+            if (modelTransform != null)
+                Destroy(modelTransform.gameObject);
+
+        spawnedModels.Clear();
+        currentSpawnIndex = 0;
+    }
+
     void HandleNewUnitCrafted(SwarmUnitsData newUnit)
     {
         Transform spawnedUnit = SpawnSingleUnit(newUnit);
 
         if (spawnedUnit != null)
             OnNewUnitSpawned?.Invoke(spawnedUnit);
+    }
+
+    void HandleUnitDied(SwarmUnitsData deadUnit)
+    {
+        if (!spawnedModels.TryGetValue(deadUnit, out Transform unitTransform))
+            return;
+
+        Destroy(unitTransform.gameObject);
+        spawnedModels.Remove(deadUnit);
     }
 
     public Transform GetUnitTransform(SwarmUnitsData unitData)
@@ -81,7 +115,7 @@ public class DisplayUnitSpawner : MonoBehaviour
         foreach (var script in allScripts)
             DestroyImmediate(script);
 
-        var agent = go.GetComponent<UnityEngine.AI.NavMeshAgent>();
+        var agent = go.GetComponent<NavMeshAgent>();
 
         if (agent != null)
             DestroyImmediate(agent);

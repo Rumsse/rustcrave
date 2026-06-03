@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
-  m_Name: A pile of scrap
+  m_Name: A Pile Of Scrap
   m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
   eventTitle: A PILE OF SCRAP
   eventIcon: {fileID: 21300000, guid: eb92bcbf1e2ac1944a619599d16ea3de, type: 3}
@@ -20,7 +20,7 @@ MonoBehaviour:
 
     What do you do?'
   dialogOptions:
-  - optionText: I order ___ to approach and get it.
+  - optionText: '    I order ___ to approach and get it.'
     isIgnoreOption: 0
     baseSuccessChance: 50
     isMiningCheck: 0
@@ -37,7 +37,7 @@ MonoBehaviour:
     failureOutcome:
       resultText: 
       actions: []
-  - optionText: I order ___ to acquire scrap.
+  - optionText: '    I order ___ to acquire scrap.'
     isIgnoreOption: 0
     baseSuccessChance: 50
     isMiningCheck: 1
@@ -64,7 +64,7 @@ MonoBehaviour:
       actions:
       - {fileID: 11400000, guid: 1454c54381b0f924285e9d7433f73c3b, type: 2}
       - {fileID: 11400000, guid: 9aadc124edd3cce418aa655ef2690dde, type: 2}
-  - optionText: Ignore
+  - optionText: '    Ignore'
     isIgnoreOption: 1
     baseSuccessChance: 50
     isMiningCheck: 0

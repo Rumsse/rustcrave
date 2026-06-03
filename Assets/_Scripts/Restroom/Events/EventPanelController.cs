@@ -1,13 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class EventPanelController : MonoBehaviour
 {
-    public static event System.Action OnAnyEventResolved;
+    public static event Action OnAnyEventResolved;
 
     [SerializeField] SwarmState swarmState;
+    [SerializeField] EventState eventState;
     [SerializeField] EventDatabase eventDatabase;
     [SerializeField] float eventTriggerChance = 0.5f;
 
@@ -34,6 +37,18 @@ public class EventPanelController : MonoBehaviour
     const string PLACEHOLDER = "___";
 
     #region Initialization
+
+    void OnEnable()
+    {
+        if (eventState != null)
+            eventState.OnStateLoaded += TryTriggerRandomEvent;
+    }
+
+    void OnDisable()
+    {
+        if (eventState != null)
+            eventState.OnStateLoaded -= TryTriggerRandomEvent;
+    }
 
     public void Initialize(VisualElement root, VisualElement layer, VisualElement container, Button popUpBtn)
     {
@@ -93,10 +108,7 @@ public class EventPanelController : MonoBehaviour
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
 
-        if (Random.value > eventTriggerChance)
-            return;
-
-        if (eventDatabase == null || eventDatabase.availableEvents == null || eventDatabase.availableEvents.Count == 0)
+        if (eventState == null || eventState.isResolved)
             return;
 
         FetchActiveRobots();
@@ -104,8 +116,28 @@ public class EventPanelController : MonoBehaviour
         if (activeRobots.Count == 0)
             return;
 
-        int randomIndex = Random.Range(0, eventDatabase.availableEvents.Count);
-        currentEvent = eventDatabase.availableEvents[randomIndex];
+        if (string.IsNullOrEmpty(eventState.currentEventName))
+        {
+            if (Random.value > eventTriggerChance)
+            {
+                eventState.isResolved = true;
+                return;
+            }
+
+            if (eventDatabase == null || eventDatabase.availableEvents == null || eventDatabase.availableEvents.Count == 0)
+                return;
+
+            int randomIndex = Random.Range(0, eventDatabase.availableEvents.Count);
+            currentEvent = eventDatabase.availableEvents[randomIndex];
+            eventState.currentEventName = currentEvent.name;
+        }
+        else
+        {
+            currentEvent = eventDatabase.availableEvents.FirstOrDefault(e => e.name == eventState.currentEventName);
+
+            if (currentEvent == null)
+                return;
+        }
 
         SetupDropdown();
         SetupButtons();
@@ -241,7 +273,7 @@ public class EventPanelController : MonoBehaviour
 
         if (selectedOption.isIgnoreOption)
         {
-            ClosePanel();
+            CloseEventForNow();
             return;
         }
 
@@ -262,7 +294,7 @@ public class EventPanelController : MonoBehaviour
         {
             if (i == 0)
             {
-                optionButtons[i].text = "Continue.";
+                optionButtons[i].text = "    Continue.";
                 optionButtons[i].style.display = DisplayStyle.Flex;
             }
             else
@@ -281,13 +313,27 @@ public class EventPanelController : MonoBehaviour
     void ClosePanel()
     {
         if (isShowingResult)
+        {
+            if (eventState != null)
+                eventState.isResolved = true;
+
             OnAnyEventResolved?.Invoke();
+        }
 
         if (eventLayer != null)
             eventLayer.style.display = DisplayStyle.None;
 
+        // if (popUpContainer != null)
+        //   popUpContainer.style.display = DisplayStyle.None;
+    }
+
+    void CloseEventForNow()
+    {
+        if (eventLayer != null)
+            eventLayer.style.display = DisplayStyle.None;
+
         if (popUpContainer != null)
-            popUpContainer.style.display = DisplayStyle.None;
+            popUpContainer.style.display = DisplayStyle.Flex;
     }
 
     #endregion
@@ -296,7 +342,7 @@ public class EventPanelController : MonoBehaviour
 
     EventOutcome DetermineOutcome(DialogOption option, SwarmUnitsData robot)
     {
-        if (!option.isMiningCheck && !option.isAttackCheck)
+        if (!option.isMiningCheck && !option.isAttackCheck && !option.isLuckCheck)
             return option.successOutcome;
 
         int statValue = 0;

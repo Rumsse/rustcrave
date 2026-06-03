@@ -35,10 +35,10 @@ public class TutorialStep
 {
     public string stepName;
     public List<TutorialPage> pages;
-    
+
     [Tooltip("Task that must be completed after reading this step")]
     public TutorialTaskType requiredTask;
-    
+
     [Tooltip("Text shown on screen as a reminder while the task is active")]
     [TextArea] public string taskReminderText;
 }
@@ -46,6 +46,8 @@ public class TutorialStep
 public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager Instance { get; private set; }
+
+    public bool IsTutorialPaused => tutorialPanel != null && tutorialPanel.activeSelf;
 
     [Header("UI References")]
     [SerializeField] private GameObject tutorialPanel;
@@ -68,11 +70,11 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private PathModifierData calmModifierData;
 
     [SerializeField] private string mainMenuSceneName = "Main Menu";
-    /*[SerializeField]*/ private CameraZoom cameraZoom;
 
     private int currentStepIndex = 0;
     private int currentPageIndex = 0;
-    
+
+    #region Unity Lifecycle
 
     private void Awake()
     {
@@ -83,47 +85,35 @@ public class TutorialManager : MonoBehaviour
         }
 
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
 
         if (globalActiveModifier != null && calmModifierData != null)
             globalActiveModifier.Set(calmModifierData);
-
     }
-
-    /*private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        cameraZoom = FindAnyObjectByType<CameraZoom>();
-    }*/
 
     private void Start()
     {
-        cameraZoom = FindAnyObjectByType<CameraZoom>();
-
         if (previousBtn != null)
             previousBtn.onClick.AddListener(PrevPage);
+
         if (nextBtn != null)
             nextBtn.onClick.AddListener(NextPage);
+
         if (continueBtn != null)
             continueBtn.onClick.AddListener(OnContinueClick);
 
         if (tutorialPanel != null)
             tutorialPanel.SetActive(false);
+
         if (taskReminderPanel != null)
             taskReminderPanel.SetActive(false);
 
         if (FindAnyObjectByType<TunnelProgressUI>() == null)
             ShowStep(0);
     }
+
+    #endregion
+
+    #region UI & Flow Logic
 
     public void ShowStep(int index)
     {
@@ -135,82 +125,100 @@ public class TutorialManager : MonoBehaviour
 
         currentStepIndex = index;
         currentPageIndex = 0;
-        
+
         Time.timeScale = 0f;
-        if (tutorialPanel != null) tutorialPanel.SetActive(true);
+
+        if (tutorialPanel != null)
+            tutorialPanel.SetActive(true);
 
         UpdateUI();
     }
 
     private void UpdateUI()
     {
-        if (steps == null || steps.Count == 0) return;
+        if (steps == null || steps.Count == 0)
+            return;
 
         TutorialStep currentStep = steps[currentStepIndex];
-        if (currentStep.pages == null || currentStep.pages.Count == 0) return;
+
+        if (currentStep.pages == null || currentStep.pages.Count == 0)
+            return;
 
         TutorialPage currentPage = currentStep.pages[currentPageIndex];
 
-        if (titleText != null) titleText.text = currentPage.title;
-        if (explanationText != null) explanationText.text = currentPage.explanationText;
-        if (pageNumberText != null) pageNumberText.text = $"{currentPageIndex + 1} / {currentStep.pages.Count}";
+        if (titleText != null)
+            titleText.text = currentPage.title;
 
-        if (previousBtn != null) previousBtn.gameObject.SetActive(currentPageIndex > 0);
-        
+        if (explanationText != null)
+            explanationText.text = currentPage.explanationText;
+
+        if (pageNumberText != null)
+            pageNumberText.text = $"{currentPageIndex + 1} / {currentStep.pages.Count}";
+
+        if (previousBtn != null)
+            previousBtn.gameObject.SetActive(currentPageIndex > 0);
+
         if (currentPageIndex < currentStep.pages.Count - 1)
         {
-            if (nextBtn != null) nextBtn.gameObject.SetActive(true);
-            if (continueBtn != null) continueBtn.gameObject.SetActive(false);
+            if (nextBtn != null)
+                nextBtn.gameObject.SetActive(true);
+
+            if (continueBtn != null)
+                continueBtn.gameObject.SetActive(false);
         }
         else
         {
-            if (nextBtn != null) nextBtn.gameObject.SetActive(false);
-            if (continueBtn != null) continueBtn.gameObject.SetActive(true);
+            if (nextBtn != null)
+                nextBtn.gameObject.SetActive(false);
+
+            if (continueBtn != null)
+                continueBtn.gameObject.SetActive(true);
         }
     }
 
     private void PrevPage()
     {
-        if (currentPageIndex > 0)
-        {
-            currentPageIndex--;
-            UpdateUI();
-        }
+        if (currentPageIndex <= 0)
+            return;
+
+        currentPageIndex--;
+        UpdateUI();
     }
 
     private void NextPage()
     {
-        if (currentPageIndex < steps[currentStepIndex].pages.Count - 1)
-        {
-            currentPageIndex++;
-            UpdateUI();
-        }
+        if (currentPageIndex >= steps[currentStepIndex].pages.Count - 1)
+            return;
+
+        currentPageIndex++;
+        UpdateUI();
     }
 
     private void OnContinueClick()
     {
         if (tutorialPanel != null)
             tutorialPanel.SetActive(false);
-            
+
         Time.timeScale = 1f;
 
         TutorialStep currentStep = steps[currentStepIndex];
-
-        if (cameraZoom != null && currentStep.requiredTask != TutorialTaskType.None)
-            cameraZoom.IsPausedForTutorial = true;
 
         if (currentStep.requiredTask != TutorialTaskType.None && !string.IsNullOrEmpty(currentStep.taskReminderText))
         {
             if (taskReminderText != null)
                 taskReminderText.text = currentStep.taskReminderText;
+
             if (taskReminderPanel != null)
                 taskReminderPanel.SetActive(true);
         }
 
         if (TutorialTaskVerifier.Instance != null)
+        {
             TutorialTaskVerifier.Instance.StartTask(steps[currentStepIndex].requiredTask, CompleteCurrentTask);
-        else
-            CompleteCurrentTask();
+            return;
+        }
+
+        CompleteCurrentTask();
     }
 
     public void CompleteCurrentTask()
@@ -218,24 +226,41 @@ public class TutorialManager : MonoBehaviour
         if (taskReminderPanel != null)
             taskReminderPanel.SetActive(false);
 
-        if (cameraZoom != null)
-            cameraZoom.IsPausedForTutorial = false;
-        
         ShowStep(currentStepIndex + 1);
     }
 
-    private void EndTutorial()
+    private async void EndTutorial()
     {
-        if (tutorialPanel != null) tutorialPanel.SetActive(false);
-        Time.timeScale = 1f;
-        
-        if (cameraZoom != null)
-            cameraZoom.IsPausedForTutorial = false;
-        
-        Debug.Log("Tutorial Finished!");
+        if (tutorialPanel != null)
+            tutorialPanel.SetActive(false);
 
-        if (!string.IsNullOrEmpty(mainMenuSceneName))
-            SceneManager.LoadScene(mainMenuSceneName);
+        Time.timeScale = 1f;
+
+        bool isFinalTutorialStep = false;
+
+        if (steps != null && currentStepIndex >= 0 && currentStepIndex < steps.Count)
+        {
+            if (steps[currentStepIndex].requiredTask == TutorialTaskType.EndTutorial)
+                isFinalTutorialStep = true;
+        }
+
+        if (!isFinalTutorialStep)
+            return;
+
+        currentStepIndex = 0;
+        Debug.Log("Tutorial Finished! Loading Main Menu...");
+
+        if (string.IsNullOrEmpty(mainMenuSceneName))
+            return;
+
+        if (SceneTransitionManager.Instance != null)
+        {
+            await SceneTransitionManager.Instance.WipeToScene(mainMenuSceneName, true);
+            return;
+        }
+
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 
+    #endregion
 }

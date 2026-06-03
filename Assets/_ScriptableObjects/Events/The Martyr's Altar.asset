@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: The Martyr's Altar
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: THE MARTYR'S ALTAR
+  eventIcon: {fileID: 21300000, guid: 7f0cf4c8b42e811478479b35d8aedf4c, type: 3}
+  eventDescription: 'A dark, metallic altar covered in ancient oil stains sits in
+    the corner. It emanates a strange, magnetic aura, demanding a permanent sacrifice
+    to grant its mechanical boons.
+
+
+    What do you do?'
+  dialogOptions:
+  - optionText: '    I order ___ to step onto the altar.'
+    isIgnoreOption: 0
+    isLuckCheck: 0
+    baseSuccessChance: 0
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 0
+    bonusPerDamage: 0
+    successOutcome:
+      resultText: "The altar consumes ___ in a flash of blinding light, breaking
+        the machine down to its core components. In return, the ancient mechanisms
+        dispense a reward! \n\n___ is destroyed."
+      actions:
+      - {fileID: 11400000, guid: f44904e83ff0d404d9e34dbd253985a5, type: 2}
+      - {fileID: 11400000, guid: f51c9eeb5455c5c4a9c606a7f7b67c2c, type: 2}
+    failureOutcome:
+      resultText: 
+      actions: []
+  - optionText: '    Ignore.'
+    isIgnoreOption: 1
+    isLuckCheck: 0
+    baseSuccessChance: 0
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 0
+    bonusPerDamage: 0
+    successOutcome:
+      resultText: "The altar consumes ___ in a flash of blinding light, breaking
+        the machine down to its core components. In return, the ancient mechanisms
+        dispense a reward! \n\n___ is destroyed."
+      actions:
+      - {fileID: 11400000, guid: f44904e83ff0d404d9e34dbd253985a5, type: 2}
+      - {fileID: 11400000, guid: 80d9c91a11eb1be46ae38d02f21baaee, type: 2}
+    failureOutcome:
+      resultText: 
+      actions: []

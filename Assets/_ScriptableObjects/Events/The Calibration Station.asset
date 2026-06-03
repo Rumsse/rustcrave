@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: The Calibration Station
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: THE CALIBRATION STATION
+  eventIcon: {fileID: 276966819, guid: 132358e9bf26b60458b731bf001e31db, type: 3}
+  eventDescription: 'A pristine, pre-fall calibration pod stands open in the center
+    of the room. It was designed to permanently alter a robot''s core programming,
+    though its ancient algorithms are unpredictable.
+
+
+    What do you do?'
+  dialogOptions:
+  - optionText: '    I order ___ to enter the pod.'
+    isIgnoreOption: 0
+    baseSuccessChance: 0
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 0
+    bonusPerDamage: 0
+    successOutcome:
+      resultText: "The machine seals shut and whirs loudly, violently rewriting ___'s
+        code! \n\nEvery core stat (Max HP, Max Energy, DMG, DIG, Speed) is permanently
+        and individually modified by +1 or -1."
+      actions:
+      - {fileID: 11400000, guid: ef651e2586efb974fbb68b802f612101, type: 2}
+    failureOutcome:
+      resultText: 
+      actions: []
+  - optionText: '    Ignore'
+    isIgnoreOption: 1
+    baseSuccessChance: 0
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 0
+    bonusPerDamage: 0
+    successOutcome:
+      resultText: "The machine seals shut and whirs loudly, violently rewriting ___'s
+        code! \n\nEvery core stat (Max HP, Max Energy, DMG, DIG, Speed) is permanently
+        and individually modified by +1 or -1."
+      actions:
+      - {fileID: 11400000, guid: ef651e2586efb974fbb68b802f612101, type: 2}
+    failureOutcome:
+      resultText: 
+      actions: []

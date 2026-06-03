@@ -3,21 +3,14 @@ using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public abstract class UnitBase : MonoBehaviour
 {
-    #region Events
-
     public event Action onAttack;
     public event Action onSpecialStart;
     public event Action onSpecialStop;
     public event Action<UnitState> onStateChange;
-
-    #endregion
-
-    #region Properties
 
     public StatsManager Stats => stats;
     public Animator Animator => animator;
@@ -56,10 +49,6 @@ public abstract class UnitBase : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #region Inspector Fields
-
     [SerializeField] protected float rotateSpeed;
     [SerializeField] protected float stoppingDistance;
     [SerializeField] protected bool loopThroughAttacks;
@@ -70,10 +59,7 @@ public abstract class UnitBase : MonoBehaviour
     [SerializeField] protected HealthManager healthManager;
     [SerializeField] protected Transform projectileSpawnT;
     [SerializeField] protected Transform modelMidPoint;
-
-    #endregion
-
-    #region Private Fields
+    [SerializeField] protected GameObject selectedVisualObject;
 
     protected NavMeshAgent agent;
     private UnitBase attackTarget;
@@ -90,18 +76,22 @@ public abstract class UnitBase : MonoBehaviour
 
     private EventInstance attackSoundInstance;
 
-    #endregion
-
-    #region Unity Lifecycle
-
     protected virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = stats.MoveSpeed;
         agent.stoppingDistance = stoppingDistance;
+
+        if (healthManager)
+        {
+            healthManager.onDeath += StopAttacking;
+        }
     }
 
-    private void Start()
+    public virtual bool SpecialReactionForUnits() => false;
+    public virtual void PrepareUnit() { }
+
+    protected virtual void Start()
     {
         SetState(new IdleState(this));
     }
@@ -111,18 +101,20 @@ public abstract class UnitBase : MonoBehaviour
         state?.Tick();
     }
 
-    protected virtual void OnDestroy()
+    protected virtual void OnDisable()
     {
-        if (attackSoundInstance.isValid())
-        {
-            attackSoundInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-            attackSoundInstance.release();
-        }
+        ForceStopAttackSound();
     }
 
-    #endregion
+    protected virtual void OnDestroy()
+    {
+        if (healthManager)
+        {
+            healthManager.onDeath -= StopAttacking;
+        }
 
-    #region State Management
+        ForceStopAttackSound();
+    }
 
     public void SetState(UnitState newState)
     {
@@ -141,15 +133,15 @@ public abstract class UnitBase : MonoBehaviour
 
     public virtual void MoveToAttack(UnitBase enemy, Vector3 position)
     {
+        if (AttackTarget == enemy) return;
+
+        StopAttacking();
+
         AttackTarget = enemy;
         SetState(new FightState(this));
 
         enemy.HealthManager.onDeath += StopAttacking;
     }
-
-    #endregion
-
-    #region Attacking
 
     public virtual void TryAttack()
     {
@@ -172,9 +164,6 @@ public abstract class UnitBase : MonoBehaviour
             lastAttackTime = Time.time;
         }
     }
-    #endregion
-
-    #region Attack Chosing
 
     protected void RollAttack()
     {
@@ -204,7 +193,6 @@ public abstract class UnitBase : MonoBehaviour
         currentAttack = stats.PossibleAttacks[attackIndex];
     }
 
-
     protected virtual bool CanAttack()
     {
         if (Time.time - lastAttackTime < 1 / stats.AttacksPerSecond)
@@ -223,10 +211,6 @@ public abstract class UnitBase : MonoBehaviour
 
         StopAttackSound();
     }
-
-    #endregion
-
-    #region Audio Management
 
     protected void PlayAttackSound()
     {
@@ -247,18 +231,23 @@ public abstract class UnitBase : MonoBehaviour
     {
         if (attackSoundInstance.isValid())
         {
-            attackSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            attackSoundInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         }
     }
-    #endregion
 
-    #region Phase Handling
+    protected void ForceStopAttackSound()
+    {
+        if (attackSoundInstance.isValid())
+        {
+            attackSoundInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            attackSoundInstance.release();
+            attackSoundInstance.clearHandle();
+        }
+    }
 
     public void ChangeStats(UnitSO newStats)
     {
         stats.ChangeStats(newStats);
         RollAttackPhaseChange();
     }
-
-    #endregion
 }

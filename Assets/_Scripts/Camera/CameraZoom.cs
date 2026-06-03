@@ -7,6 +7,12 @@ public class CameraZoom : MonoBehaviour
     [SerializeField] private ActiveModifier activeModifier;
     [SerializeField] private float baseSpeed = 0.9f;
 
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private float minOrthographicSize = 5f;
+    [SerializeField] private float maxOrthographicSize = 12f;
+    [SerializeField] private float maxFogDensity = 0.015f;
+    [SerializeField] private float minFogDensity = 0.002f;
+
     public bool IsPausedForTutorial { get; set; } = false;
 
     private float currentSpeed;
@@ -15,25 +21,13 @@ public class CameraZoom : MonoBehaviour
 
     #region Unity Lifecycle
 
+    private void Awake()
+    {
+        if (mainCamera == null)
+            mainCamera = Camera.main;
+    }
+
     private void Start() => currentSpeed = baseSpeed;
-
-    private void OnEnable()
-    {
-        if (TutorialTaskVerifier.Instance == null)
-            return;
-
-        TutorialTaskVerifier.Instance.OnTaskStarted += HandleTutorialTaskStarted;
-        TutorialTaskVerifier.Instance.OnTaskEnded += HandleTutorialTaskEnded;
-    }
-
-    private void OnDisable()
-    {
-        if (TutorialTaskVerifier.Instance == null)
-            return;
-
-        TutorialTaskVerifier.Instance.OnTaskStarted -= HandleTutorialTaskStarted;
-        TutorialTaskVerifier.Instance.OnTaskEnded -= HandleTutorialTaskEnded;
-    }
 
     private void Update()
     {
@@ -41,6 +35,7 @@ public class CameraZoom : MonoBehaviour
             return;
 
         UpdateSpeedModifier();
+        UpdateFog();
 
         if (IsPausedForTutorial)
             return;
@@ -55,23 +50,6 @@ public class CameraZoom : MonoBehaviour
 
         if (other.CompareTag("ZoomInZone"))
             ZoomIn();
-    }
-
-    #endregion
-
-    #region Tutorial Handling
-
-    private void HandleTutorialTaskStarted(TutorialTaskType taskType)
-    {
-        if (taskType == TutorialTaskType.None)
-            return;
-
-        IsPausedForTutorial = false; 
-    }
-
-    private void HandleTutorialTaskEnded(TutorialTaskType taskType)
-    {
-        IsPausedForTutorial = true; 
     }
 
     #endregion
@@ -105,14 +83,23 @@ public class CameraZoom : MonoBehaviour
         }
         else if (roll < 0.65f)
         {
-            targetSpeed = baseSpeed * Random.Range(1f, 4.2f);
-            timer = Random.Range(0.4f, 2f);
+            targetSpeed = baseSpeed * Random.Range(1.2f, 1.5f);
+            timer = Random.Range(0.7f, 2f);
         }
         else
         {
-            targetSpeed = baseSpeed * Random.Range(0.7f, 0.9f);
+            targetSpeed = baseSpeed * Random.Range(0.5f, 0.7f);
             timer = Random.Range(0.5f, 3f);
         }
+    }
+
+    private void UpdateFog()
+    {
+        if (mainCamera == null)
+            return;
+
+        float t = Mathf.InverseLerp(minOrthographicSize, maxOrthographicSize, mainCamera.orthographicSize);
+        RenderSettings.fogDensity = Mathf.Lerp(maxFogDensity, minFogDensity, t);
     }
 
     public void ZoomOut() => wideCamera.Priority = 20;

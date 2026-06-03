@@ -21,7 +21,7 @@ MonoBehaviour:
     when other robots are nearby.
 
     Compared to other robots, it can carry more.'
-  robotSprite: {fileID: 21300000, guid: 228e10aeb8689ec4cab08d0a31b9bd44, type: 3}
+  robotSprite: {fileID: 21300000, guid: ac1f8adbbaf95464aa3f236a1f3f53fb, type: 3}
   abilityDescription: 'Better Together (passive)
 
     Gains +1 to DIG, ATTACK, and
@@ -46,13 +46,6 @@ MonoBehaviour:
         Data3: -36768895
         Data4: 1141863038
       Path: "event:/Mr\xF3wka/sx_Atak"
-    walkSound:
-      Guid:
-        Data1: 1059760223
-        Data2: 1161557645
-        Data3: -1712019048
-        Data4: -1235316500
-      Path: "event:/Mr\xF3wka/sx_Chodzenie"
     mineSound:
       Guid:
         Data1: 1823020906
@@ -60,6 +53,39 @@ MonoBehaviour:
         Data3: -184310614
         Data4: -1210485664
       Path: "event:/Mr\xF3wka/sx_Kopanie"
+    oreMiningSounds:
+    - ore: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+      sound:
+        Guid:
+          Data1: 1823020906
+          Data2: 1195635803
+          Data3: -184310614
+          Data4: -1210485664
+        Path: "event:/Mr\xF3wka/sx_Kopanie_v1"
+    - ore: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+      sound:
+        Guid:
+          Data1: 1077032223
+          Data2: 1298713992
+          Data3: -1664823621
+          Data4: 1669706057
+        Path: "event:/Mr\xF3wka/sx_Kopanie_v2"
+    - ore: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+      sound:
+        Guid:
+          Data1: 1462602520
+          Data2: 1269034583
+          Data3: -1030667103
+          Data4: 1091127370
+        Path: "event:/Mr\xF3wka/sx_Kopanie_v3"
+    - ore: {fileID: 11400000, guid: 6779d7aa0ebd29442a3eb702da68dbbc, type: 2}
+      sound:
+        Guid:
+          Data1: 1462602520
+          Data2: 1269034583
+          Data3: -1030667103
+          Data4: 1091127370
+        Path: "event:/Mr\xF3wka/sx_Kopanie_v3"
     selectSound:
       Guid:
         Data1: 590181986
@@ -88,3 +114,10 @@ MonoBehaviour:
         Data3: 1903425412
         Data4: -1149657137
       Path: "event:/Mr\xF3wka/sx_Nadanie_rozkazu"
+    orderSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 

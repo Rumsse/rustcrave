@@ -17,7 +17,7 @@ MonoBehaviour:
   robotName: Mantis
   robotDescription: Instead of a single hit, it deals 3 hits in a row, allowing it
     to scale very effectively with every attack bonus and applied effect.
-  robotSprite: {fileID: 21300000, guid: e52f1f22eb83166429bdedf4d9928da8, type: 3}
+  robotSprite: {fileID: 21300000, guid: ea733fce816407e47a76edcb68124ed8, type: 3}
   abilityDescription: 'Martial Arts (passive)
 
     Basic attacks perform 3 quick
@@ -41,13 +41,6 @@ MonoBehaviour:
         Data3: -2017273415
         Data4: 2137063850
       Path: event:/Modliszka/sx_Atak
-    walkSound:
-      Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
-      Path: 
     mineSound:
       Guid:
         Data1: 1913707430
@@ -55,6 +48,39 @@ MonoBehaviour:
         Data3: 1429516193
         Data4: 1511311355
       Path: event:/Modliszka/sx_Kopanie
+    oreMiningSounds:
+    - ore: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+      sound:
+        Guid:
+          Data1: 1913707430
+          Data2: 1081026164
+          Data3: 1429516193
+          Data4: 1511311355
+        Path: event:/Modliszka/sx_Kopanie_v1
+    - ore: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+      sound:
+        Guid:
+          Data1: -123905339
+          Data2: 1322407642
+          Data3: -1492667473
+          Data4: -633626788
+        Path: event:/Modliszka/sx_Kopanie_v2
+    - ore: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+      sound:
+        Guid:
+          Data1: 1879999634
+          Data2: 1180298887
+          Data3: -111475294
+          Data4: 296825826
+        Path: event:/Modliszka/sx_Kopanie_v3
+    - ore: {fileID: 11400000, guid: 6779d7aa0ebd29442a3eb702da68dbbc, type: 2}
+      sound:
+        Guid:
+          Data1: 1879999634
+          Data2: 1180298887
+          Data3: -111475294
+          Data4: 296825826
+        Path: event:/Modliszka/sx_Kopanie_v3
     selectSound:
       Guid:
         Data1: -1923601815
@@ -83,3 +109,10 @@ MonoBehaviour:
         Data3: 188676488
         Data4: 1163558269
       Path: event:/Modliszka/sx_Nadanie_rozkazu
+    orderSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 

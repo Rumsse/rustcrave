@@ -24,7 +24,18 @@ public class UnitActions : MonoBehaviour
     [Header("Sounds")]
     [SerializeField] private EventReference orderSound;
 
+    [Header("Sound Settings")]
+    [SerializeField] private float dragSoundCooldown = 0.3f;
+    [SerializeField] private float executionSoundCooldown = 0.5f;
+    [SerializeField] private float executionSoundDelay = 0.2f;
+
+    [Header("Animation Settings")]
+    [SerializeField] private float commandAnimationCooldown = 0.5f;
+
     private bool isDraggingCommand;
+    private float lastDragSoundTime;
+    private float lastExecutionSoundTime;
+    private float lastCommandAnimationTime;
 
     private void Update()
     {
@@ -81,7 +92,7 @@ public class UnitActions : MonoBehaviour
             if (commandVisualizer != null)
             {
                 commandVisualizer.UpdateVisuals(unit);
-                AudioManager.PlayOneShot(orderSound);
+                TryPlayDragSound();
             }
         }
 
@@ -95,11 +106,35 @@ public class UnitActions : MonoBehaviour
                 {
                     commandVisualizer.StopVisuals();
                 }
-                StartCoroutine(delayCommandSound());
 
+                TryPlayExecutionSound();
                 ExecuteCommand();
             }
         }
+    }
+
+    private void TryPlayDragSound()
+    {
+        if (Time.time - lastDragSoundTime >= dragSoundCooldown)
+        {
+            AudioManager.PlayOneShot(orderSound);
+            lastDragSoundTime = Time.time;
+        }
+    }
+
+    private void TryPlayExecutionSound()
+    {
+        if (Time.time - lastExecutionSoundTime >= executionSoundCooldown)
+        {
+            lastExecutionSoundTime = Time.time;
+            StartCoroutine(DelayCommandSoundRoutine());
+        }
+    }
+
+    private IEnumerator DelayCommandSoundRoutine()
+    {
+        yield return new WaitForSeconds(executionSoundDelay);
+        AudioManager.PlayOneShot(statsManager.Sounds.commandSound);
     }
 
     private void ExecuteCommand()
@@ -128,10 +163,13 @@ public class UnitActions : MonoBehaviour
 
     private void PlayMCCommandAnimation()
     {
+        if (Time.time - lastCommandAnimationTime < commandAnimationCooldown) return;
+
         Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
         if (unit != null && !unit.IsMainCharacter)
         {
             Unit.MainCharacter?.PlayCommandAnimation();
+            lastCommandAnimationTime = Time.time;
         }
     }
 
@@ -203,13 +241,6 @@ public class UnitActions : MonoBehaviour
             return true;
         }
         return false;
-    }
-
-    private IEnumerator delayCommandSound()
-    {
-        float delaySoundSeconds = 0.2f;
-        yield return new WaitForSeconds(delaySoundSeconds);
-        AudioManager.PlayOneShot(statsManager.Sounds.commandSound);
     }
 
     private void ShowMoveIndicator(Vector3 position)

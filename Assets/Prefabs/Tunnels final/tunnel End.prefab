@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4670430184693735147}
   - component: {fileID: 4218189007451166018}
-  - component: {fileID: 7862281580930907647}
-  m_Layer: 6
+  - component: {fileID: 5650595869018357682}
+  m_Layer: 0
   m_Name: trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 9.91207, y: 46.370655, z: 24.599838}
   m_Center: {x: -0.027750015, y: -22.68534, z: -0.39768597}
---- !u!114 &7862281580930907647
+--- !u!114 &5650595869018357682
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -63,9 +63,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5742071334554641173}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 868240e6a2978f645aec9db7a9ddad2b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c1441c4f63a4974abcae068f29b8f61, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TunnelEnd
+  m_EditorClassIdentifier: Assembly-CSharp::AllUnitsTriggerZone
   swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
   sceneToLoad: Restroom Rumsse
   triggerCollider: {fileID: 4218189007451166018}
@@ -239,7 +239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3995485683984469091, guid: b72bc169267189946a94b9a305d33171, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3995485683984469091, guid: b72bc169267189946a94b9a305d33171, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b

@@ -3,34 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyUnit : UnitBase
-{
-    
-    [SerializeField] private Transform guardPoint;
+{  
+    [SerializeField] protected Transform guardPoint;
+    [SerializeField] protected bool specialUnit;
 
-    public ItemSO StolenItem { get; private set; } // I need to reset that after we are hidden again + i think i need some time offset between attacks
+    public ItemSO StolenItem { get; private set; } // saves stolen item to drop later
 
-    private List<Unit> playerUnits = new();
+    protected List<Unit> playerUnits = new();
     
     private Dictionary<Unit, Action> deathCallbacks = new();
+    protected bool _available = true;
 
     #region Unity Lifecycle
 
 
     protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         foreach (var kvp in deathCallbacks)
         {
             if (kvp.Key)
                 kvp.Key.HealthManager.onDeath -= kvp.Value;
         }
+
         deathCallbacks.Clear();
     }
 
     protected override void Update()
     {
         base.Update();
-        
-        if(!isAttacking && Stats.PossibleAttacks.Count != 0 && agent.enabled)
+
+        if (!_available)
+            return;
+
+        if (isAttacking || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
+            return;
+
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            animator.SetBool("IsWalking", false);
+            HandleSpecialEffects();
+            return;
+        }
+
+        animator.SetBool("IsWalking", true);
+
+        if (Vector3.Distance(agent.destination, guardPoint.position) > 0.1f)
             agent.SetDestination(guardPoint.position);
     }
 
@@ -40,12 +59,15 @@ public class EnemyUnit : UnitBase
 
     public void UnitEnter(Unit unit)
     {
-        if (playerUnits.Contains(unit))
+        if (!_available || playerUnits.Contains(unit))
+        {
+            Debug.Log(_available);
             return;
-        
+        }
+
         playerUnits.Add(unit);
-        
-        if(!AttackTarget)
+
+        if (!AttackTarget)
             AttackTarget = unit;
 
         Action callback = () => RemoveOnDeath(unit);
@@ -64,7 +86,10 @@ public class EnemyUnit : UnitBase
     private void RemoveUnit(Unit unit)
     {
         if (!playerUnits.Remove(unit))
+        {
+            Debug.Log(_available);
             return;
+        }
 
         if (deathCallbacks.TryGetValue(unit, out Action callback))
         {
@@ -77,61 +102,60 @@ public class EnemyUnit : UnitBase
             Unit newTarget = GetClosestUnit();
 
             if (newTarget != null)
-            {
                 AttackTarget = newTarget;
-            }
             else
-            {
                 StopAttacking();
-            }
         }
     }
 
-    private void RemoveOnDeath(Unit unit)
-    {
-        RemoveUnit(unit);
-    }
+    private void RemoveOnDeath(Unit unit) => RemoveUnit(unit);
 
     #region Helper
 
     private Unit GetClosestUnit()
     {
-        if (playerUnits.Count == 0) return null;
-        
+        if (playerUnits.Count == 0)
+            return null;
+
         Unit closest = playerUnits[0];
         float closestDist = Vector3.Distance(transform.position, closest.transform.position);
-        
+
         for (int i = 1; i < playerUnits.Count; i++)
         {
-            if (playerUnits[i] == null) continue;
-            
+            if (playerUnits[i] == null)
+                continue;
+
             float dist = Vector3.Distance(transform.position, playerUnits[i].transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                closest = playerUnits[i];
-            }
+
+            if (dist >= closestDist)
+                continue;
+
+            closestDist = dist;
+            closest = playerUnits[i];
         }
-        
+
         return closest;
     }
-    
-    private void NullCleanup()
-    {
-        playerUnits.RemoveAll(unit => !unit);
-    }
 
+    private void NullCleanup() => playerUnits.RemoveAll(unit => !unit);
+
+    #endregion
+
+    #region Special Enemy Behavior
+    protected virtual void HandleSpecialReaction() {}
+    public virtual void HandleSpecialEffects() { }
+    public override bool SpecialReactionForUnits() => specialUnit;
     #endregion
 
     #region Stolen Item
 
     //managing stolen item 
-    public void StealItem(ItemSO item)
+    public virtual void StealItem(ItemSO item)
     {
         StolenItem = item;
     }
 
-    public void ClearStolenItem()
+    public virtual void ClearStolenItem()
     {
         StolenItem = null;
     }
