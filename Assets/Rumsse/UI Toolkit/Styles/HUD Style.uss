@@ -154,7 +154,7 @@ VisualElement {
 
 .button:hover {
     background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Guziczek%202B.png?fileID=2800000&guid=16277382a42740e49a2076c0f75b51e3&type=3#Guziczek 2B");
-    color: rgb(40, 40, 40);
+    color: rgb(30, 30, 30);
 }
 
 .button:active {
@@ -189,6 +189,10 @@ VisualElement {
     -unity-slice-right: 611;
     -unity-slice-bottom: 320;
     color: rgb(166, 150, 126);
+}
+
+.standard-event-popup-background:hover {
+    background-image: url("project://database/Assets/Graphics%202D/UI%20tunnel/Ramka_2%201.PNG?fileID=21300000&guid=47af5f5dfa8e8cc4b95eac004c741fdd&type=3#Ramka_2 1");
 }
 
 .standard-robot-craft-btn {
@@ -289,7 +293,19 @@ VisualElement {
     height: 20%;
     color: rgb(190, 172, 144);
     font-size: 27px;
-    background-image: url("project://database/Assets/Graphics%202D/Restroom/Okno_wybor%C3%B3w.PNG?fileID=2800000&guid=b3384c6617274914b9b5733c72795ef9&type=3#Okno_wyborów");
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Map%20&%20Events/Okno_wybor%C3%B3w.PNG?fileID=2800000&guid=b3384c6617274914b9b5733c72795ef9&type=3#Okno_wyborów");
+    -unity-slice-left: 235;
+    -unity-slice-top: 235;
+    -unity-slice-right: 235;
+    -unity-slice-bottom: 235;
+}
+
+.standard-btn-q-management:hover {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Map%20&%20Events/Okno_wybor%C3%B3w%201.PNG?fileID=21300000&guid=fd4bfefb319265d47afb026fb7c4042c&type=3#Okno_wyborów 1");
+}
+
+.standard-btn-q-management:active {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Map%20&%20Events/Okno_wybor%C3%B3w%202.PNG?fileID=21300000&guid=774c82f62787e87449cf05935924a498&type=3#Okno_wyborów 2");
 }
 
 .standard-gadget-slot-1 {
@@ -362,12 +378,12 @@ VisualElement {
 }
 
 .btn-back:hover {
-    background-image: url("project://database/Assets/Graphics 2D/Restroom/General/X 1.PNG");
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/X%201.PNG?fileID=21300000&guid=e7d64c12ab6462f46a46b47c1d93d5d2&type=3#X 1");
     color: rgb(40, 40, 40);
 }
 
 .btn-back:active {
-    background-image: url("project://database/Assets/Graphics 2D/Restroom/General/X 2.PNG");
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/X%202.PNG?fileID=21300000&guid=8667edbbe41b8bc48a293306267316ac&type=3#X 2");
     color: rgb(0, 0, 0);
 }
 
@@ -390,12 +406,12 @@ VisualElement {
 }
 
 .button-options:hover {
-    background-image: url("project://database/Assets/Graphics 2D/Restroom/General/Opcje 1.PNG");
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Opcje%201.PNG?fileID=21300000&guid=ee4cdd7dff4fc904a9bb73e7073514fa&type=3#Opcje 1");
     color: rgb(40, 40, 40);
 }
 
 .button-options:active {
-    background-image: url("project://database/Assets/Graphics 2D/Restroom/General/Opcje 2.PNG");
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Opcje%202.PNG?fileID=21300000&guid=baffe61fe73a8da499b1c2d9a897d0d7&type=3#Opcje 2");
     color: rgb(0, 0, 0);
 }
 
@@ -427,11 +443,38 @@ VisualElement {
 }
 
 .btn-close:hover {
-    background-image: url("project://database/Assets/Graphics 2D/Restroom/General/X 1.PNG");
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/X%201.PNG?fileID=21300000&guid=e7d64c12ab6462f46a46b47c1d93d5d2&type=3#X 1");
     color: rgb(40, 40, 40);
 }
 
 .btn-close:active {
-    background-image: url("project://database/Assets/Graphics 2D/Restroom/General/X 2.PNG");
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/X%202.PNG?fileID=21300000&guid=8667edbbe41b8bc48a293306267316ac&type=3#X 2");
     color: rgb(0, 0, 0);
+}
+
+.unit-image-swarm {
+    margin-top: 5px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    background-color: rgba(188, 188, 188, 0);
+    height: 95%;
+    width: 100%;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgba(149, 149, 149, 0);
+    border-right-color: rgba(149, 149, 149, 0);
+    border-top-color: rgba(149, 149, 149, 0);
+    border-bottom-color: rgba(149, 149, 149, 0);
+    transition: scale 0.1s ease-out;
+}
+
+.unit-image-swarm:hover {
+    scale: 1.1;
 }
