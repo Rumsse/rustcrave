@@ -9,12 +9,13 @@ public class EventPanelController : MonoBehaviour
 {
     public static event Action OnAnyEventResolved;
 
-    [SerializeField] UIManager uiManager;
     [SerializeField] SwarmState swarmState;
     [SerializeField] EventState eventState;
     [SerializeField] EventDatabase eventDatabase;
     [SerializeField] float eventTriggerChance = 0.5f;
 
+    VisualElement mainPanelInstance;
+    VisualElement eventLayer;
     VisualElement popUpContainer;
     Button popUpButton;
 
@@ -34,6 +35,7 @@ public class EventPanelController : MonoBehaviour
     List<Button> optionButtons = new();
 
     bool isShowingResult;
+    bool isAnimating;
     const string PLACEHOLDER = "___";
 
     #region Initialization
@@ -50,8 +52,10 @@ public class EventPanelController : MonoBehaviour
             eventState.OnStateLoaded -= TryTriggerRandomEvent;
     }
 
-    public void Initialize(VisualElement root, VisualElement container, Button popUpBtn)
+    public void Initialize(VisualElement root, VisualElement layer, VisualElement container, Button popUpBtn)
     {
+        mainPanelInstance = root;
+        eventLayer = layer;
         popUpContainer = container;
         popUpButton = popUpBtn;
 
@@ -65,6 +69,9 @@ public class EventPanelController : MonoBehaviour
 
         if (closeBtn != null)
             closeBtn.clicked += ClosePanel;
+
+        if (popUpButton != null)
+            popUpButton.clicked += OpenEventPanel;
 
         if (popUpContainer != null)
         {
@@ -301,20 +308,16 @@ public class EventPanelController : MonoBehaviour
             OnAnyEventResolved?.Invoke();
         }
 
-        if (uiManager != null)
-            uiManager.CloseEventPanel();
+        CloseEventPanel();
     }
 
     void CloseEventForNow()
     {
-        if (uiManager != null)
+        CloseEventPanel(() =>
         {
-            uiManager.CloseEventPanel(() =>
-            {
-                if (popUpContainer != null)
-                    popUpContainer.style.display = DisplayStyle.Flex;
-            });
-        }
+            if (popUpContainer != null)
+                popUpContainer.style.display = DisplayStyle.Flex;
+        });
     }
 
     #endregion
@@ -358,6 +361,55 @@ public class EventPanelController : MonoBehaviour
             if (action != null)
                 action.Execute(currentSelectedRobot, swarmState);
         }
+    }
+
+    #endregion
+
+    #region Event Panel Animations
+
+    void OpenEventPanel()
+    {
+        if (eventLayer == null || isAnimating || popUpButton == null)
+            return;
+
+        isAnimating = true;
+
+        if (popUpContainer != null)
+            popUpContainer.style.display = DisplayStyle.None;
+
+        Vector2 buttonCenterWorld = popUpButton.worldBound.center;
+        Vector2 originInLayer = eventLayer.WorldToLocal(buttonCenterWorld);
+        mainPanelInstance.style.transformOrigin = new TransformOrigin(new Length(originInLayer.x, LengthUnit.Pixel), new Length(originInLayer.y, LengthUnit.Pixel));
+
+        mainPanelInstance.AddToClassList("event-hidden-state");
+        eventLayer.style.display = DisplayStyle.Flex;
+
+        mainPanelInstance.schedule.Execute(() =>
+        {
+            mainPanelInstance.RemoveFromClassList("event-hidden-state");
+            mainPanelInstance.schedule.Execute(() => isAnimating = false).StartingIn(250);
+        }).StartingIn(50);
+    }
+
+    void CloseEventPanel(Action onComplete = null)
+    {
+        if (eventLayer == null || isAnimating)
+            return;
+
+        isAnimating = true;
+
+        Vector2 buttonCenterWorld = popUpButton.worldBound.center;
+        Vector2 originInLayer = eventLayer.WorldToLocal(buttonCenterWorld);
+        mainPanelInstance.style.transformOrigin = new TransformOrigin(new Length(originInLayer.x, LengthUnit.Pixel), new Length(originInLayer.y, LengthUnit.Pixel));
+
+        mainPanelInstance.AddToClassList("event-hidden-state");
+
+        mainPanelInstance.schedule.Execute(() =>
+        {
+            eventLayer.style.display = DisplayStyle.None;
+            isAnimating = false;
+            onComplete?.Invoke();
+        }).StartingIn(250);
     }
 
     #endregion

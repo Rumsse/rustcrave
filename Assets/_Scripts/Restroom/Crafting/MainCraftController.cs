@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using PrimeTween;
 
-public class MainCraftController : MonoBehaviour
+public class MainCraftController : MonoBehaviour, IPanelController
 {
     public event Action OnCraftPanelClosed;
     public event Action OnCraftPanelOpened;
@@ -39,19 +39,19 @@ public class MainCraftController : MonoBehaviour
 
     #region Initialization
 
-    public void Initialize(VisualElement root, VisualElement craftLayer)
+    public void Initialize(VisualElement panel, VisualElement contextLayer = null)
     {
-        this.rootElement = root;
-        this.craftLayer = craftLayer;
+        rootElement = panel;
+        craftLayer = contextLayer;
 
-        contentContainer = root.Q<VisualElement>("craft-content-container");
-        leftBar = root.Q<VisualElement>("left-bar");
+        contentContainer = rootElement.Q<VisualElement>("craft-content-container");
+        leftBar = rootElement.Q<VisualElement>("left-bar");
 
-        var btnRobots = root.Q<Button>("btn-tab-robots");
-        var btnGadgets = root.Q<Button>("btn-tab-gadgets");
+        var btnRobots = rootElement.Q<Button>("btn-tab-robots");
+        var btnGadgets = rootElement.Q<Button>("btn-tab-gadgets");
 
-        btnClose = root.Q<Button>("btn-close");
-        btnBack = root.Q<Button>("btn-back");
+        btnClose = rootElement.Q<Button>("btn-close");
+        btnBack = rootElement.Q<Button>("btn-back");
 
         if (btnRobots != null)
             btnRobots.clicked += () => OpenTab("robots", robotsCraftPanel);
@@ -67,7 +67,7 @@ public class MainCraftController : MonoBehaviour
 
         rootElement.RegisterCallback<DetachFromPanelEvent>(evt => CloseCurrentTab());
 
-        UpdateSwarmUI(root);
+        UpdateSwarmUI();
     }
 
     public void NotifyPanelOpened() => OnCraftPanelOpened?.Invoke();
@@ -243,7 +243,7 @@ public class MainCraftController : MonoBehaviour
         leftBar.Add(newUnitIcon);
     }
 
-    void UpdateSwarmUI(VisualElement root)
+    void UpdateSwarmUI()
     {
         if (swarmState == null || leftBar == null)
             return;

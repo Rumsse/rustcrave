@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] VisualTreeAsset mainCraftPanel;
     [SerializeField] VisualTreeAsset swarmPanel;
     [SerializeField] VisualTreeAsset eventPanel;
+
     [SerializeField] ChoosePathController choosePathController;
     [SerializeField] MainCraftController mainCraftController;
     [SerializeField] SwarmPanelController swarmPanelController;
@@ -29,10 +30,9 @@ public class UIManager : MonoBehaviour
     VisualElement eventPanelLayer;
     VisualElement actionButtonsContainer;
 
-    VisualElement popUpContainerReference;
-    Button popUpButtonReference;
-
     readonly Dictionary<string, VisualElement> panelCache = new();
+    readonly Dictionary<string, IPanelController> controllerMap = new();
+
     string activePanelKey;
     VisualElement activeSlot;
     SlideDirection activeDirection;
@@ -57,22 +57,28 @@ public class UIManager : MonoBehaviour
         rightPanelSlot.pickingMode = PickingMode.Ignore;
         eventPanelLayer.pickingMode = PickingMode.Ignore;
 
+        MapControllers();
+
         root.Q<Button>("btn-craft").clicked += () => HandlePanelToggle("main-craft-panel", mainCraftPanel, leftPanelSlot, SlideDirection.Left);
         root.Q<Button>("btn-swarm").clicked += () => HandlePanelToggle("swarm-panel", swarmPanel, leftPanelSlot, SlideDirection.Left);
         root.Q<Button>("btn-choose-path").clicked += () => HandlePanelToggle("choose-path", choosePathPanel, rightPanelSlot, SlideDirection.Right);
 
         root.RegisterCallback<PointerDownEvent>(OnScreenClicked, TrickleDown.TrickleDown);
 
-        popUpContainerReference = root.Q<VisualElement>("event-pop-up");
-        popUpButtonReference = root.Q<Button>("btn-event-pop-up");
+        var popUpContainerReference = root.Q<VisualElement>("event-pop-up");
+        var popUpButtonReference = root.Q<Button>("btn-event-pop-up");
 
-        InitializeEventPanel(popUpContainerReference, popUpButtonReference);
-
-        if (popUpButtonReference != null)
-            popUpButtonReference.clicked += OpenEventPanel;
+        InitializeEventSystem(popUpContainerReference, popUpButtonReference);
     }
 
-    void InitializeEventPanel(VisualElement popUpContainer, Button popUpButton)
+    void MapControllers()
+    {
+        controllerMap["main-craft-panel"] = mainCraftController;
+        controllerMap["swarm-panel"] = swarmPanelController;
+        controllerMap["choose-path"] = choosePathController;
+    }
+
+    void InitializeEventSystem(VisualElement popUpContainer, Button popUpButton)
     {
         var panelInstance = eventPanel.CloneTree();
         panelInstance.style.flexGrow = 1;
@@ -82,7 +88,7 @@ public class UIManager : MonoBehaviour
         eventPanelLayer.Add(panelInstance);
         eventPanelLayer.style.display = DisplayStyle.None;
 
-        eventPanelController.Initialize(panelInstance, popUpContainer, popUpButton);
+        eventPanelController.Initialize(panelInstance, eventPanelLayer, popUpContainer, popUpButton);
     }
 
     #endregion
@@ -118,7 +124,11 @@ public class UIManager : MonoBehaviour
             panel.AddToClassList("animated-panel");
             panelCache[key] = panel;
             BindCloseButton(panel);
-            InitializePanel(key, panel);
+
+            var contextLayer = key == "choose-path" ? tooltipLayer : leftPanelSlot;
+
+            if (controllerMap.TryGetValue(key, out var controller))
+                controller.Initialize(panel, contextLayer);
         }
 
         string hiddenClass = direction == SlideDirection.Left ? "hidden-left" : "hidden-right";
@@ -143,19 +153,8 @@ public class UIManager : MonoBehaviour
             panelLayer.schedule.Execute(() => isAnimating = false).StartingIn(300);
         }).StartingIn(20);
 
-        NotifyPanelState(key, true);
-    }
-
-    void InitializePanel(string key, VisualElement panel)
-    {
-        if (key == "main-craft-panel")
-            mainCraftController.Initialize(panel, leftPanelSlot);
-
-        if (key == "swarm-panel")
-            swarmPanelController.Initialize(panel, leftPanelSlot);
-
-        if (key == "choose-path")
-            choosePathController.Initialize(panel, tooltipLayer);
+        if (controllerMap.TryGetValue(activePanelKey, out var activeController))
+            activeController.NotifyPanelOpened();
     }
 
     void BindCloseButton(VisualElement panel)
@@ -168,14 +167,13 @@ public class UIManager : MonoBehaviour
 
     void CloseCurrentPanel()
     {
-        if (activePanelKey == null)
-            return;
-
-        if (isAnimating)
+        if (activePanelKey == null || isAnimating)
             return;
 
         isAnimating = true;
-        NotifyPanelState(activePanelKey, false);
+
+        if (controllerMap.TryGetValue(activePanelKey, out var activeController))
+            activeController.NotifyPanelClosed();
 
         if (!panelCache.TryGetValue(activePanelKey, out var panel))
             return;
@@ -203,31 +201,9 @@ public class UIManager : MonoBehaviour
         }).StartingIn(300);
     }
 
-    void NotifyPanelState(string key, bool isOpen)
-    {
-        if (key == "main-craft-panel")
-        {
-            if (isOpen)
-                mainCraftController.NotifyPanelOpened();
-            else
-                mainCraftController.NotifyPanelClosed();
-        }
-
-        if (key == "swarm-panel")
-        {
-            if (isOpen)
-                swarmPanelController.NotifyPanelOpened();
-            else
-                swarmPanelController.NotifyPanelClosed();
-        }
-    }
-
     void OnScreenClicked(PointerDownEvent evt)
     {
-        if (activeSlot == null)
-            return;
-
-        if (isAnimating)
+        if (activeSlot == null || isAnimating)
             return;
 
         var target = evt.target as VisualElement;
@@ -239,57 +215,6 @@ public class UIManager : MonoBehaviour
             return;
 
         CloseCurrentPanel();
-    }
-
-    #endregion
-
-    #region Event Panel Animations
-
-    public void OpenEventPanel()
-    {
-        if (eventPanelLayer.childCount == 0 || isAnimating || popUpButtonReference == null)
-            return;
-
-        isAnimating = true;
-        var panelInstance = eventPanelLayer[0];
-
-        if (popUpContainerReference != null)
-            popUpContainerReference.style.display = DisplayStyle.None;
-
-        Vector2 buttonCenterWorld = popUpButtonReference.worldBound.center;
-        Vector2 originInLayer = eventPanelLayer.WorldToLocal(buttonCenterWorld);
-        panelInstance.style.transformOrigin = new TransformOrigin(new Length(originInLayer.x, LengthUnit.Pixel), new Length(originInLayer.y, LengthUnit.Pixel));
-
-        panelInstance.AddToClassList("event-hidden-state");
-        eventPanelLayer.style.display = DisplayStyle.Flex;
-
-        panelInstance.schedule.Execute(() =>
-        {
-            panelInstance.RemoveFromClassList("event-hidden-state");
-            panelInstance.schedule.Execute(() => isAnimating = false).StartingIn(250);
-        }).StartingIn(50);
-    }
-
-    public void CloseEventPanel(Action onComplete = null)
-    {
-        if (eventPanelLayer.childCount == 0 || isAnimating)
-            return;
-
-        isAnimating = true;
-        var panelInstance = eventPanelLayer[0];
-
-        Vector2 buttonCenterWorld = popUpButtonReference.worldBound.center;
-        Vector2 originInLayer = eventPanelLayer.WorldToLocal(buttonCenterWorld);
-        panelInstance.style.transformOrigin = new TransformOrigin(new Length(originInLayer.x, LengthUnit.Pixel), new Length(originInLayer.y, LengthUnit.Pixel));
-
-        panelInstance.AddToClassList("event-hidden-state");
-
-        panelInstance.schedule.Execute(() =>
-        {
-            eventPanelLayer.style.display = DisplayStyle.None;
-            isAnimating = false;
-            onComplete?.Invoke();
-        }).StartingIn(250);
     }
 
     #endregion
