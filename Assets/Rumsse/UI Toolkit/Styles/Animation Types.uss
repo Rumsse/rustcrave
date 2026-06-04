@@ -24,3 +24,14 @@ VisualElement {}
     scale: 0.5;
     opacity: 0;
 }
+
+.animated-unit-slot {
+    transition: translate 0.4s ease-out-back, opacity 0.3s ease-out;
+    translate: 0 0;
+    opacity: 1;
+}
+
+.unit-slot-hidden {
+    translate: -60px 0;
+    opacity: 0;
+}

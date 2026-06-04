@@ -159,7 +159,7 @@ public class MainCraftController : MonoBehaviour, IPanelController
 
         swarmState.AddUnitToSwarm(unitType);
         var newUnitData = swarmState.SwarmUnits[^1];
-        AddSingleUnitToUI(newUnitData);
+        AddSingleUnitToUI(newUnitData, true);
 
         return true;
     }
@@ -229,7 +229,7 @@ public class MainCraftController : MonoBehaviour, IPanelController
             .OnComplete(() => popup?.RemoveFromHierarchy());
     }
 
-    void AddSingleUnitToUI(SwarmUnitsData unitData)
+    void AddSingleUnitToUI(SwarmUnitsData unitData, bool playAnimation = false)
     {
         if (leftBar == null || unitContainer == null)
             return;
@@ -241,6 +241,14 @@ public class MainCraftController : MonoBehaviour, IPanelController
             unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.robotSprite);
 
         leftBar.Add(newUnitIcon);
+
+        if (!playAnimation)
+            return;
+
+        newUnitIcon.AddToClassList("animated-unit-slot");
+        newUnitIcon.AddToClassList("unit-slot-hidden");
+
+        newUnitIcon.schedule.Execute(() => newUnitIcon.RemoveFromClassList("unit-slot-hidden")).StartingIn(20);
     }
 
     void UpdateSwarmUI()
