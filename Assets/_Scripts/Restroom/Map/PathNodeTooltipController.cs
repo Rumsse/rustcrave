@@ -18,7 +18,9 @@ public class PathNodeTooltipController
         container = asset.Instantiate();
         container.style.position = Position.Absolute;
         container.pickingMode = PickingMode.Ignore;
-        container.style.display = DisplayStyle.None;
+
+        container.AddToClassList("animated-tooltip");
+        container.AddToClassList("tooltip-hidden");
 
         SetAllChildrenNonPicking(container);
 
@@ -45,13 +47,13 @@ public class PathNodeTooltipController
         UpdateContent();
         UpdatePosition(position);
 
-        container.style.display = DisplayStyle.Flex;
+        container.RemoveFromClassList("tooltip-hidden");
         isVisible = true;
     }
 
     public void Hide()
     {
-        container.style.display = DisplayStyle.None;
+        container.AddToClassList("tooltip-hidden");
         currentNode = null;
         currentMapState = null;
         isVisible = false;
@@ -62,8 +64,8 @@ public class PathNodeTooltipController
         if (!isVisible)
             return;
 
-        container.style.left = position.x + 15;
-        container.style.top = position.y - container.resolvedStyle.height - 190;
+        container.style.left = position.x + 5;
+        container.style.top = position.y - container.resolvedStyle.height - 150;
     }
 
     public void RefreshContent()
@@ -87,19 +89,20 @@ public class PathNodeTooltipController
             titleLabel.text = "BOSS";
             actionLabel.text = "FINAL ENCOUNTER";
             costLabel.text = "";
+            return;
         }
-        else if (isIdentityKnown)
+
+        if (isIdentityKnown)
         {
             var modifier = currentMapState.GetModifier(currentNode);
             titleLabel.text = modifier.DisplayName.ToUpper();
             actionLabel.text = modifier.Description;
             costLabel.text = "";
+            return;
         }
-        else
-        {
-            titleLabel.text = "UNKNOWN";
-            actionLabel.text = "PRESS RMB TO SCAN";
-            costLabel.text = "COSTS 1 PULSITE";
-        }
+
+        titleLabel.text = "UNKNOWN";
+        actionLabel.text = "PRESS RMB TO SCAN";
+        costLabel.text = "COSTS 1 PULSITE";
     }
 }
