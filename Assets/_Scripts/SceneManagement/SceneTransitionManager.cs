@@ -10,24 +10,27 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private float fadeDuration = 1f;
     [SerializeField] private float wipeDuration = 0.4f;
 
+    private RectTransform transitionRect;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
-        {
             Destroy(gameObject);
+
+        if (Instance != null)
             return;
-        }
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        transitionRect = transitionImage.rectTransform;
     }
 
     #region Transitions
 
     public async Awaitable FadeToScene(string sceneName)
     {
+        transitionRect.anchoredPosition = Vector2.zero;
         transitionImage.raycastTarget = true;
-        transitionImage.fillAmount = 1f;
 
         await Fade(1f);
         await SceneManager.LoadSceneAsync(sceneName);
@@ -43,18 +46,18 @@ public class SceneTransitionManager : MonoBehaviour
     public async Awaitable WipeToScene(string sceneName, bool reverse = false)
     {
         transitionImage.raycastTarget = true;
-        transitionImage.color = new Color(0f, 0f, 0f, 0f);
-        transitionImage.fillAmount = 0f;
-        transitionImage.fillOrigin = reverse ? (int)Image.OriginHorizontal.Left : (int)Image.OriginHorizontal.Right;
 
-        await WipeAndFade(1f, 1f);
+        float slideDistance = transitionRect.rect.width;
+        float startX = reverse ? -slideDistance : slideDistance;
+
+        await WipeAndFade(startX, 0f, 1f);
         await SceneManager.LoadSceneAsync(sceneName);
 
         await Awaitable.NextFrameAsync();
         await Awaitable.NextFrameAsync();
 
-        transitionImage.fillOrigin = reverse ? (int)Image.OriginHorizontal.Right : (int)Image.OriginHorizontal.Left;
-        await WipeAndFade(0f, 0f);
+        float endX = reverse ? slideDistance : -slideDistance;
+        await WipeAndFade(0f, endX, 0f);
 
         transitionImage.raycastTarget = false;
     }
@@ -71,16 +74,21 @@ public class SceneTransitionManager : MonoBehaviour
         while (time < fadeDuration)
         {
             time += Time.unscaledDeltaTime;
-            transitionImage.color = new Color(0f, 0f, 0f, Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration));
+
+            Color color = transitionImage.color;
+            color.a = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
+            transitionImage.color = color;
+
             await Awaitable.NextFrameAsync();
         }
 
-        transitionImage.color = new Color(0f, 0f, 0f, targetAlpha);
+        Color finalColor = transitionImage.color;
+        finalColor.a = targetAlpha;
+        transitionImage.color = finalColor;
     }
 
-    private async Awaitable WipeAndFade(float targetFill, float targetAlpha)
+    private async Awaitable WipeAndFade(float startX, float targetX, float targetAlpha)
     {
-        float startFill = transitionImage.fillAmount;
         float startAlpha = transitionImage.color.a;
         float time = 0f;
 
@@ -91,14 +99,20 @@ public class SceneTransitionManager : MonoBehaviour
             float progress = Mathf.Clamp01(time / wipeDuration);
             float alphaProgress = 1f - Mathf.Pow(1f - progress, 3f);
 
-            transitionImage.fillAmount = Mathf.Lerp(startFill, targetFill, progress);
-            transitionImage.color = new Color(0f, 0f, 0f, Mathf.Lerp(startAlpha, targetAlpha, alphaProgress));
+            transitionRect.anchoredPosition = new Vector2(Mathf.Lerp(startX, targetX, progress), transitionRect.anchoredPosition.y);
+
+            Color color = transitionImage.color;
+            color.a = Mathf.Lerp(startAlpha, targetAlpha, alphaProgress);
+            transitionImage.color = color;
 
             await Awaitable.NextFrameAsync();
         }
 
-        transitionImage.fillAmount = targetFill;
-        transitionImage.color = new Color(0f, 0f, 0f, targetAlpha);
+        transitionRect.anchoredPosition = new Vector2(targetX, transitionRect.anchoredPosition.y);
+
+        Color finalColor = transitionImage.color;
+        finalColor.a = targetAlpha;
+        transitionImage.color = finalColor;
     }
 
     #endregion
