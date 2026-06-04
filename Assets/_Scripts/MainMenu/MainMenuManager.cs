@@ -20,6 +20,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GlobalInventorySO globalInventory;
     [SerializeField] private GadgetsGlobalInventory gadgetsInventory;
     [SerializeField] private EventState eventState;
+    [SerializeField] private AnimatedTextButton continueButton;
 
     [Header("Character Movement & Animations")]
     [SerializeField] private Animator characterAnimator;
@@ -44,6 +45,9 @@ public class MainMenuManager : MonoBehaviour
 
         if (creditsPanel)
             creditsPanel.SetActive(false);
+
+        if (continueButton != null)
+            continueButton.SetInteractable(SaveManager.Instance.HasAnySave());
     }
 
     #endregion
