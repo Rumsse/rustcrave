@@ -9,12 +9,12 @@ public class EventPanelController : MonoBehaviour
 {
     public static event Action OnAnyEventResolved;
 
+    [SerializeField] UIManager uiManager;
     [SerializeField] SwarmState swarmState;
     [SerializeField] EventState eventState;
     [SerializeField] EventDatabase eventDatabase;
     [SerializeField] float eventTriggerChance = 0.5f;
 
-    VisualElement eventLayer;
     VisualElement popUpContainer;
     Button popUpButton;
 
@@ -50,9 +50,8 @@ public class EventPanelController : MonoBehaviour
             eventState.OnStateLoaded -= TryTriggerRandomEvent;
     }
 
-    public void Initialize(VisualElement root, VisualElement layer, VisualElement container, Button popUpBtn)
+    public void Initialize(VisualElement root, VisualElement container, Button popUpBtn)
     {
-        eventLayer = layer;
         popUpContainer = container;
         popUpButton = popUpBtn;
 
@@ -60,7 +59,6 @@ public class EventPanelController : MonoBehaviour
         descriptionLabel = root.Q<Label>("event-description");
         robotDropdown = root.Q<DropdownField>("robot-dropdown");
         buttonsContainer = root.Q<VisualElement>("event-options");
-
         mainIcon = root.Q<VisualElement>("icon");
 
         var closeBtn = root.Q<Button>("btn-close");
@@ -68,14 +66,11 @@ public class EventPanelController : MonoBehaviour
         if (closeBtn != null)
             closeBtn.clicked += ClosePanel;
 
-        if (popUpButton != null)
-            popUpButton.clicked += OpenFullPanel;
-
         if (popUpContainer != null)
+        {
             popUpContainer.style.display = DisplayStyle.None;
-
-        if (popUpContainer != null)
             popUpIcon = popUpContainer.Q<VisualElement>("icon");
+        }
 
         if (robotDropdown != null)
             robotDropdown.RegisterValueChangedCallback(evt => OnRobotSelectionChanged(evt.newValue));
@@ -101,9 +96,6 @@ public class EventPanelController : MonoBehaviour
     public void TryTriggerRandomEvent()
     {
         isShowingResult = false;
-
-        if (eventLayer != null)
-            eventLayer.style.display = DisplayStyle.None;
 
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
@@ -149,15 +141,6 @@ public class EventPanelController : MonoBehaviour
 
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.Flex;
-    }
-
-    void OpenFullPanel()
-    {
-        if (popUpContainer != null)
-            popUpContainer.style.display = DisplayStyle.None;
-
-        if (eventLayer != null)
-            eventLayer.style.display = DisplayStyle.Flex;
     }
 
     void FetchActiveRobots()
@@ -212,11 +195,11 @@ public class EventPanelController : MonoBehaviour
 
     void OnRobotSelectionChanged(string newRobotName)
     {
-        if (robotDropdownMap.TryGetValue(newRobotName, out var robot))
-        {
-            currentSelectedRobot = robot;
-            UpdateDynamicTexts();
-        }
+        if (!robotDropdownMap.TryGetValue(newRobotName, out var robot))
+            return;
+
+        currentSelectedRobot = robot;
+        UpdateDynamicTexts();
     }
 
     void SetupButtons()
@@ -226,12 +209,10 @@ public class EventPanelController : MonoBehaviour
 
         for (int i = 0; i < optionButtons.Count; i++)
         {
-            var btn = optionButtons[i];
-
             if (i < currentEvent.dialogOptions.Count)
-                btn.style.display = DisplayStyle.Flex;
+                optionButtons[i].style.display = DisplayStyle.Flex;
             else
-                btn.style.display = DisplayStyle.None;
+                optionButtons[i].style.display = DisplayStyle.None;
         }
     }
 
@@ -250,11 +231,11 @@ public class EventPanelController : MonoBehaviour
 
         for (int i = 0; i < optionButtons.Count; i++)
         {
-            if (i < currentEvent.dialogOptions.Count)
-            {
-                var optionText = currentEvent.dialogOptions[i].optionText;
-                optionButtons[i].text = string.IsNullOrEmpty(optionText) ? "" : optionText.Replace(PLACEHOLDER, displayName);
-            }
+            if (i >= currentEvent.dialogOptions.Count)
+                continue;
+
+            var optionText = currentEvent.dialogOptions[i].optionText;
+            optionButtons[i].text = string.IsNullOrEmpty(optionText) ? "" : optionText.Replace(PLACEHOLDER, displayName);
         }
     }
 
@@ -294,7 +275,7 @@ public class EventPanelController : MonoBehaviour
         {
             if (i == 0)
             {
-                optionButtons[i].text = "    Continue.";
+                optionButtons[i].text = "   Continue.";
                 optionButtons[i].style.display = DisplayStyle.Flex;
             }
             else
@@ -320,20 +301,20 @@ public class EventPanelController : MonoBehaviour
             OnAnyEventResolved?.Invoke();
         }
 
-        if (eventLayer != null)
-            eventLayer.style.display = DisplayStyle.None;
-
-        // if (popUpContainer != null)
-        //   popUpContainer.style.display = DisplayStyle.None;
+        if (uiManager != null)
+            uiManager.CloseEventPanel();
     }
 
     void CloseEventForNow()
     {
-        if (eventLayer != null)
-            eventLayer.style.display = DisplayStyle.None;
-
-        if (popUpContainer != null)
-            popUpContainer.style.display = DisplayStyle.Flex;
+        if (uiManager != null)
+        {
+            uiManager.CloseEventPanel(() =>
+            {
+                if (popUpContainer != null)
+                    popUpContainer.style.display = DisplayStyle.Flex;
+            });
+        }
     }
 
     #endregion

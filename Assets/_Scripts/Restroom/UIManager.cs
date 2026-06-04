@@ -1,6 +1,13 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+public enum SlideDirection
+{
+    Left,
+    Right
+}
 
 public class UIManager : MonoBehaviour
 {
@@ -22,9 +29,14 @@ public class UIManager : MonoBehaviour
     VisualElement eventPanelLayer;
     VisualElement actionButtonsContainer;
 
+    VisualElement popUpContainerReference;
+    Button popUpButtonReference;
+
     readonly Dictionary<string, VisualElement> panelCache = new();
     string activePanelKey;
     VisualElement activeSlot;
+    SlideDirection activeDirection;
+    bool isAnimating;
 
     #region Initialization
 
@@ -45,53 +57,43 @@ public class UIManager : MonoBehaviour
         rightPanelSlot.pickingMode = PickingMode.Ignore;
         eventPanelLayer.pickingMode = PickingMode.Ignore;
 
-        root.Q<Button>("btn-craft").clicked += () =>
-        {
-            TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
-
-            if (activePanelKey == "main-craft-panel")
-                mainCraftController.NotifyPanelOpened();
-            else
-                mainCraftController.NotifyPanelClosed();
-        };
-
-        root.Q<Button>("btn-swarm").clicked += () =>
-        {
-            TogglePanel("swarm-panel", swarmPanel, leftPanelSlot);
-
-            if (activePanelKey == "swarm-panel")
-                swarmPanelController.NotifyPanelOpened();
-            else
-                swarmPanelController.NotifyPanelClosed();
-        };
-
-        root.Q<Button>("btn-choose-path").clicked += () => TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
+        root.Q<Button>("btn-craft").clicked += () => HandlePanelToggle("main-craft-panel", mainCraftPanel, leftPanelSlot, SlideDirection.Left);
+        root.Q<Button>("btn-swarm").clicked += () => HandlePanelToggle("swarm-panel", swarmPanel, leftPanelSlot, SlideDirection.Left);
+        root.Q<Button>("btn-choose-path").clicked += () => HandlePanelToggle("choose-path", choosePathPanel, rightPanelSlot, SlideDirection.Right);
 
         root.RegisterCallback<PointerDownEvent>(OnScreenClicked, TrickleDown.TrickleDown);
 
-        var popUpContainer = root.Q<VisualElement>("event-pop-up");
-        var popUpButton = root.Q<Button>("btn-event-pop-up");
+        popUpContainerReference = root.Q<VisualElement>("event-pop-up");
+        popUpButtonReference = root.Q<Button>("btn-event-pop-up");
 
-        InitializeEventPanel(popUpContainer, popUpButton);
+        InitializeEventPanel(popUpContainerReference, popUpButtonReference);
+
+        if (popUpButtonReference != null)
+            popUpButtonReference.clicked += OpenEventPanel;
     }
 
     void InitializeEventPanel(VisualElement popUpContainer, Button popUpButton)
     {
         var panelInstance = eventPanel.CloneTree();
         panelInstance.style.flexGrow = 1;
+        panelInstance.AddToClassList("animated-event-panel");
+        panelInstance.AddToClassList("event-hidden-state");
 
         eventPanelLayer.Add(panelInstance);
         eventPanelLayer.style.display = DisplayStyle.None;
 
-        eventPanelController.Initialize(panelInstance, eventPanelLayer, popUpContainer, popUpButton);
+        eventPanelController.Initialize(panelInstance, popUpContainer, popUpButton);
     }
 
     #endregion
 
     #region Tab Management
 
-    void TogglePanel(string key, VisualTreeAsset asset, VisualElement targetSlot)
+    void HandlePanelToggle(string key, VisualTreeAsset asset, VisualElement targetSlot, SlideDirection direction)
     {
+        if (isAnimating)
+            return;
+
         if (activePanelKey == key)
         {
             CloseCurrentPanel();
@@ -99,15 +101,31 @@ public class UIManager : MonoBehaviour
         }
 
         if (activePanelKey != null)
+        {
             CloseCurrentPanel();
+            panelLayer.schedule.Execute(() => TogglePanel(key, asset, targetSlot, direction)).StartingIn(350);
+            return;
+        }
 
+        TogglePanel(key, asset, targetSlot, direction);
+    }
+
+    void TogglePanel(string key, VisualTreeAsset asset, VisualElement targetSlot, SlideDirection direction)
+    {
         if (!panelCache.TryGetValue(key, out var panel))
         {
             panel = asset.CloneTree();
+            panel.AddToClassList("animated-panel");
             panelCache[key] = panel;
             BindCloseButton(panel);
             InitializePanel(key, panel);
         }
+
+        string hiddenClass = direction == SlideDirection.Left ? "hidden-left" : "hidden-right";
+
+        panel.RemoveFromClassList("hidden-left");
+        panel.RemoveFromClassList("hidden-right");
+        panel.AddToClassList(hiddenClass);
 
         targetSlot.Add(panel);
         panel.style.flexGrow = 1;
@@ -116,6 +134,16 @@ public class UIManager : MonoBehaviour
 
         activePanelKey = key;
         activeSlot = targetSlot;
+        activeDirection = direction;
+        isAnimating = true;
+
+        panelLayer.schedule.Execute(() =>
+        {
+            panel.RemoveFromClassList(hiddenClass);
+            panelLayer.schedule.Execute(() => isAnimating = false).StartingIn(300);
+        }).StartingIn(20);
+
+        NotifyPanelState(key, true);
     }
 
     void InitializePanel(string key, VisualElement panel)
@@ -143,26 +171,63 @@ public class UIManager : MonoBehaviour
         if (activePanelKey == null)
             return;
 
-        if (activePanelKey == "main-craft-panel")
-            mainCraftController.NotifyPanelClosed();
+        if (isAnimating)
+            return;
 
-        if (activePanelKey == "swarm-panel")
-            swarmPanelController.NotifyPanelClosed();
+        isAnimating = true;
+        NotifyPanelState(activePanelKey, false);
 
-        if (panelCache.TryGetValue(activePanelKey, out var panel))
+        if (!panelCache.TryGetValue(activePanelKey, out var panel))
+            return;
+
+        string hiddenClass = activeDirection == SlideDirection.Left ? "hidden-left" : "hidden-right";
+        panel.AddToClassList(hiddenClass);
+
+        var cachedSlot = activeSlot;
+
+        panelLayer.schedule.Execute(() =>
+        {
             panel.RemoveFromHierarchy();
 
-        if (activeSlot != null)
-            activeSlot.style.display = DisplayStyle.None;
+            if (cachedSlot != null)
+                cachedSlot.style.display = DisplayStyle.None;
 
-        panelLayer.style.display = DisplayStyle.None;
-        activePanelKey = null;
-        activeSlot = null;
+            if (activeSlot == cachedSlot)
+            {
+                panelLayer.style.display = DisplayStyle.None;
+                activePanelKey = null;
+                activeSlot = null;
+            }
+
+            isAnimating = false;
+        }).StartingIn(300);
+    }
+
+    void NotifyPanelState(string key, bool isOpen)
+    {
+        if (key == "main-craft-panel")
+        {
+            if (isOpen)
+                mainCraftController.NotifyPanelOpened();
+            else
+                mainCraftController.NotifyPanelClosed();
+        }
+
+        if (key == "swarm-panel")
+        {
+            if (isOpen)
+                swarmPanelController.NotifyPanelOpened();
+            else
+                swarmPanelController.NotifyPanelClosed();
+        }
     }
 
     void OnScreenClicked(PointerDownEvent evt)
     {
         if (activeSlot == null)
+            return;
+
+        if (isAnimating)
             return;
 
         var target = evt.target as VisualElement;
@@ -174,6 +239,57 @@ public class UIManager : MonoBehaviour
             return;
 
         CloseCurrentPanel();
+    }
+
+    #endregion
+
+    #region Event Panel Animations
+
+    public void OpenEventPanel()
+    {
+        if (eventPanelLayer.childCount == 0 || isAnimating || popUpButtonReference == null)
+            return;
+
+        isAnimating = true;
+        var panelInstance = eventPanelLayer[0];
+
+        if (popUpContainerReference != null)
+            popUpContainerReference.style.display = DisplayStyle.None;
+
+        Vector2 buttonCenterWorld = popUpButtonReference.worldBound.center;
+        Vector2 originInLayer = eventPanelLayer.WorldToLocal(buttonCenterWorld);
+        panelInstance.style.transformOrigin = new TransformOrigin(new Length(originInLayer.x, LengthUnit.Pixel), new Length(originInLayer.y, LengthUnit.Pixel));
+
+        panelInstance.AddToClassList("event-hidden-state");
+        eventPanelLayer.style.display = DisplayStyle.Flex;
+
+        panelInstance.schedule.Execute(() =>
+        {
+            panelInstance.RemoveFromClassList("event-hidden-state");
+            panelInstance.schedule.Execute(() => isAnimating = false).StartingIn(250);
+        }).StartingIn(50);
+    }
+
+    public void CloseEventPanel(Action onComplete = null)
+    {
+        if (eventPanelLayer.childCount == 0 || isAnimating)
+            return;
+
+        isAnimating = true;
+        var panelInstance = eventPanelLayer[0];
+
+        Vector2 buttonCenterWorld = popUpButtonReference.worldBound.center;
+        Vector2 originInLayer = eventPanelLayer.WorldToLocal(buttonCenterWorld);
+        panelInstance.style.transformOrigin = new TransformOrigin(new Length(originInLayer.x, LengthUnit.Pixel), new Length(originInLayer.y, LengthUnit.Pixel));
+
+        panelInstance.AddToClassList("event-hidden-state");
+
+        panelInstance.schedule.Execute(() =>
+        {
+            eventPanelLayer.style.display = DisplayStyle.None;
+            isAnimating = false;
+            onComplete?.Invoke();
+        }).StartingIn(250);
     }
 
     #endregion

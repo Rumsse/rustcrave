@@ -1,0 +1,26 @@
+VisualElement {}
+
+.animated-panel {
+    transition-property: translate;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+
+.hidden-left {
+    translate: -115% 0;
+}
+
+.hidden-right {
+    translate: 100% 0;
+}
+
+.animated-event-panel {
+    transition: scale 0.2s ease-out, opacity 0.17s ease-out;
+    scale: 1;
+    opacity: 1;
+}
+
+.event-hidden-state {
+    scale: 0.5;
+    opacity: 0;
+}
