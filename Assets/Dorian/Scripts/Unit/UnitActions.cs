@@ -28,9 +28,13 @@ public class UnitActions : MonoBehaviour
     [SerializeField] private float dragSoundCooldown = 0.3f;
     [SerializeField] private float executionSoundCooldown = 0.5f;
     [SerializeField] private float executionSoundDelay = 0.2f;
+    [SerializeField] private float unitSoundDelay = 0.3f;
 
     [Header("Animation Settings")]
     [SerializeField] private float commandAnimationCooldown = 0.5f;
+
+    private const int RIGHT_MOUSE_BUTTON = 1;
+    private const float PAUSED_TIME_SCALE = 0f;
 
     private bool isDraggingCommand;
     private float lastDragSoundTime;
@@ -39,7 +43,7 @@ public class UnitActions : MonoBehaviour
 
     private void Update()
     {
-        if (Time.timeScale == 0f) return;
+        if (Time.timeScale == PAUSED_TIME_SCALE) return;
 
         HandleAbilityInput();
         HandleCommandInput();
@@ -75,7 +79,7 @@ public class UnitActions : MonoBehaviour
             if (MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider) return;
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(RIGHT_MOUSE_BUTTON))
         {
             if (unit != null && unit.enabled)
             {
@@ -87,7 +91,7 @@ public class UnitActions : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButton(1) && isDraggingCommand && unit != null)
+        if (Input.GetMouseButton(RIGHT_MOUSE_BUTTON) && isDraggingCommand && unit != null)
         {
             if (commandVisualizer != null)
             {
@@ -96,7 +100,7 @@ public class UnitActions : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(RIGHT_MOUSE_BUTTON))
         {
             if (isDraggingCommand)
             {
@@ -107,7 +111,11 @@ public class UnitActions : MonoBehaviour
                     commandVisualizer.StopVisuals();
                 }
 
-                TryPlayExecutionSound();
+                if (unit != null)
+                {
+                    TryPlayExecutionSound(unit);
+                }
+
                 ExecuteCommand();
             }
         }
@@ -122,19 +130,29 @@ public class UnitActions : MonoBehaviour
         }
     }
 
-    private void TryPlayExecutionSound()
+    private void TryPlayExecutionSound(Unit unit)
     {
         if (Time.time - lastExecutionSoundTime >= executionSoundCooldown)
         {
             lastExecutionSoundTime = Time.time;
-            StartCoroutine(DelayCommandSoundRoutine());
+            StartCoroutine(DelayCommandSoundRoutine(unit));
         }
     }
 
-    private IEnumerator DelayCommandSoundRoutine()
+    private IEnumerator DelayCommandSoundRoutine(Unit unit)
     {
         yield return new WaitForSeconds(executionSoundDelay);
         AudioManager.PlayOneShot(statsManager.Sounds.commandSound);
+
+        if (unit != null && unit.enabled && !unit.IsMainCharacter)
+        {
+            yield return new WaitForSeconds(unitSoundDelay);
+
+            if (unit != null && unit.enabled)
+            {
+                unit.PlayCommandSound();
+            }
+        }
     }
 
     private void ExecuteCommand()

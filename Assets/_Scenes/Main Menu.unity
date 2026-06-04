@@ -32719,6 +32719,7 @@ GameObject:
   - component: {fileID: 1064248021}
   - component: {fileID: 1064248024}
   - component: {fileID: 1064248023}
+  - component: {fileID: 1064248026}
   - component: {fileID: 1064248025}
   m_Layer: 0
   m_Name: GameManager
@@ -32832,50 +32833,20 @@ MonoBehaviour:
   scrollSpeed: 50
   stopYPosition: 1500
   startYPosition: -1000
---- !u!1 &1072804524
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1072804525}
-  - component: {fileID: 1072804526}
-  m_Layer: 6
-  m_Name: Resource (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1072804525
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1072804524}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.66, y: 0.12, z: 30.38}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1992347630}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1072804526
+--- !u!114 &1064248026
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1072804524}
+  m_GameObject: {fileID: 1064248020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f22da7a74e97e40478e5f46780b65104, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a88db2cec47ef04fb7cdd760d016e7d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ResourceSpawnPoint
+  m_EditorClassIdentifier: Assembly-CSharp::AudioSettingsInitializer
+  musicVCAPath: vca:/Amb
+  sfxVCAPath: vca:/SFX
 --- !u!1 &1090084294
 GameObject:
   m_ObjectHideFlags: 0

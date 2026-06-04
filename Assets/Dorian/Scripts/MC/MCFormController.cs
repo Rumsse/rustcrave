@@ -42,10 +42,17 @@ public class MCFormController : MonoBehaviour
     [SerializeField] private float connectAnimationDuration;
     [SerializeField] private float disconnectAnimationDuration;
 
+    private const float TUTORIAL_DETACH_DELAY = 1f;
+
     private GameObject droppedBodyInstance;
     private Animator spiderAnimator;
     private bool isTransitioning = false;
     private StatsManager statsManager;
+
+    private Vector3 defaultSpiderLocalPos;
+    private Quaternion defaultSpiderLocalRot;
+    private Vector3 defaultConductorLocalPos;
+    private Quaternion defaultConductorLocalRot;
 
     private void Awake()
     {
@@ -59,6 +66,14 @@ public class MCFormController : MonoBehaviour
         if (spiderVisual != null)
         {
             spiderAnimator = spiderVisual.GetComponent<Animator>();
+            defaultSpiderLocalPos = spiderVisual.transform.localPosition;
+            defaultSpiderLocalRot = spiderVisual.transform.localRotation;
+        }
+
+        if (conductorVisual != null)
+        {
+            defaultConductorLocalPos = conductorVisual.transform.localPosition;
+            defaultConductorLocalRot = conductorVisual.transform.localRotation;
         }
 
         SetFormVisuals(currentForm);
@@ -84,7 +99,7 @@ public class MCFormController : MonoBehaviour
         {
             StartCoroutine(SwitchToSpiderRoutine());
             AudioManager.PlayOneShot(disconnectSound);
-            CheckTutorialSpiderDetachAsync(); 
+            CheckTutorialSpiderDetachAsync();
         }
         else if (currentForm == CharacterForm.Spider)
         {
@@ -130,8 +145,6 @@ public class MCFormController : MonoBehaviour
         Vector3 rootStart = transform.position;
         Vector3 rootTarget = transform.position + (transform.forward * spiderDropForwardOffset);
 
-        Vector3 defaultSpiderLocal = spiderVisual.transform.localPosition;
-
         float elapsed = 0f;
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
 
@@ -146,7 +159,7 @@ public class MCFormController : MonoBehaviour
             else
                 transform.position = newPos;
 
-            Vector3 targetGlobalSpiderPos = transform.TransformPoint(defaultSpiderLocal);
+            Vector3 targetGlobalSpiderPos = transform.TransformPoint(defaultSpiderLocalPos);
             Vector3 linearPos = Vector3.Lerp(startGlobalSpiderPos, targetGlobalSpiderPos, t);
 
             linearPos.y += Mathf.Sin(t * Mathf.PI) * jumpArcHeight;
@@ -162,7 +175,8 @@ public class MCFormController : MonoBehaviour
         else
             transform.position = rootTarget;
 
-        spiderVisual.transform.localPosition = defaultSpiderLocal;
+        spiderVisual.transform.localPosition = defaultSpiderLocalPos;
+        spiderVisual.transform.localRotation = defaultSpiderLocalRot;
         isTransitioning = false;
     }
 
@@ -215,16 +229,16 @@ public class MCFormController : MonoBehaviour
             spiderAnimator.SetTrigger(connectTriggerName);
         }
 
-        if (droppedBodyInstance.TryGetComponent<DroppedBody>(out var droppedBody))
+        if (droppedBodyInstance.TryGetComponent<DroppedBody>(out var droppedBodyComponent))
         {
-            if (droppedBody.bodyAnimator != null)
+            if (droppedBodyComponent.bodyAnimator != null)
             {
-                droppedBody.bodyAnimator.SetTrigger(bodyRiseTriggerName);
+                droppedBodyComponent.bodyAnimator.SetTrigger(bodyRiseTriggerName);
             }
 
-            if (droppedBody.hatObject != null)
+            if (droppedBodyComponent.hatObject != null)
             {
-                droppedBody.hatObject.SetActive(true);
+                droppedBodyComponent.hatObject.SetActive(true);
             }
         }
         else if (droppedBodyInstance.TryGetComponent<Animator>(out var fallbackAnimator))
@@ -240,6 +254,9 @@ public class MCFormController : MonoBehaviour
 
         SetFormVisuals(CharacterForm.Conductor);
         ApplyStats(conductorStats);
+
+        conductorVisual.transform.localPosition = defaultConductorLocalPos;
+        conductorVisual.transform.localRotation = defaultConductorLocalRot;
 
         isTransitioning = false;
     }
@@ -293,7 +310,7 @@ public class MCFormController : MonoBehaviour
 
         if (TutorialTaskVerifier.Instance.CurrentTask != TutorialTaskType.DetachSpider) return;
 
-        await Awaitable.WaitForSecondsAsync(1f);
+        await Awaitable.WaitForSecondsAsync(TUTORIAL_DETACH_DELAY);
 
         if (TutorialTaskVerifier.Instance != null && TutorialTaskVerifier.Instance.CurrentTask == TutorialTaskType.DetachSpider)
         {
