@@ -209298,26 +209298,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[0].taskReminderText
-      value: 'Select your units [LMB] and order them to move to the designated area
-        [RMB]'
+      value: Select your units [LMB] and order them to move to the designated area
+        [RMB].
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[1].taskReminderText
-      value: 'Order one of your swarm units to mine any mineral and pick it up [RMB
-        on mineral]'
+      value: Order one of your swarm units to mine any mineral and pick it up [RMB
+        on mineral].
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[2].taskReminderText
-      value: 'Order one of your swarm units to attack and kill enemy! [RMB on enemy]'
+      value: 'Order one of your swarm units to attack the enemy! [RMB on enemy]'
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[3].pages.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[3].taskReminderText
-      value: Press 'E' to detach the Conductor and start digging and attacking if
-        neccesary!
+      value: Press 'E' to detach the Conductor.
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[4].pages.Array.size
@@ -209338,11 +209337,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[0].pages.Array.data[0].title
-      value: WELCOME TO CHITINIUM!
+      value: WELCOME TO RUSTCRAVE!
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[3].pages.Array.data[0].title
       value: UNIT VITALS
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[3].pages.Array.data[2].title
+      value: THE HOLLOW CONDUCTOR
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[3].pages.Array.data[3].title
+      value: ADVANCED MOVEMENT
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[3].pages.Array.data[4].title
+      value: ABILITIES
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[4].pages.Array.data[0].title
@@ -209370,23 +209381,104 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[0].pages.Array.data[1].explanationText
-      value: "Movement and control are the foundation of your survival. \n\nTo select
-        a unit, click the Left Mouse Button [LMB] on them in the world, click their
-        portrait in the UI, or use the 1-9 shortcuts on your keyboard."
+      value: 'Movement and control are essential for survival.
+
+        
+
+        To
+        do this, you must first select a unit by left-clicking on it:
+
+        -
+        In the game world.
+
+        - On its portrait in the user interface.
+
+        -
+        Using the hotkeys 1 through 9.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[0].pages.Array.data[2].explanationText
+      value: 'After selecting a unit, right-click on an empty spot to order it to
+        move there.
+
+        
+
+        Don''t stop, or the collapsing tunnel will
+        consume you!'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[1].pages.Array.data[0].explanationText
+      value: 'The tunnels hide valuable minerals and dangerous threats! To interact
+        with them, simply select your unit and right-click on the target.
+
+
+        Your
+        units will automatically perform the appropriate action: they will attack
+        or start mining.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[1].pages.Array.data[1].explanationText
+      value: "Breaking a rock or defeating an enemy is only half of the job.\r\n\r\nYou
+        still need to collect the dropped resources! \r\n\r\nTo do that, select a
+        unit and right-click on an item on the ground to pick it up."
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[2].pages.Array.data[0].explanationText
+      value: 'Mining for resources isn''t going to be a walk in the park. Sinister
+        robots will be guarding them during your journey, so you''ll need to take
+        them out before you can get to work!
+
+        
+
+        To order a robot
+        to attack, select it and right-click on the enemy!'
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[3].pages.Array.data[0].explanationText
-      value: "Every robot is driven by specific internal systems. \nKeep a close
-        eye on them: \n\nEnergy: Drains passively over time and drops faster when
-        acting. If it hits 0, the robot shuts down permanently! \n\nHP (Health):
-        Lost in combat or from hazards. If it reaches 0, the robot is destroyed.
-        \n\nInventory: Defines how many items a unit can carry before becoming overloaded."
+      value: "Each robot has its own specifications and limitations. \nBe sure to
+        pay close attention to them: \n\nEnergy: It depletes passively over time
+        and decreases even faster during operation. If it drops to 0, the robot will
+        shut down permanently! \n\nHP (Health): It is lost in combat or as a result
+        of hazards. If it drops to 0, the robot will be destroyed. \n\nInventory:
+        Determines how many resources a unit can carry before becoming overloaded."
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[3].pages.Array.data[1].explanationText
+      value: "Your robotic companions are designed for specific tasks to optimize
+        energy usage:\n\nDiggers: Masters of excavation. They consume less energy
+        while mining. \n\nDefenders: Built for combat. They burn less energy during
+        battles. \n\nSpecialists: Equipped with unique abilities, which they cast
+        at a reduced energy cost."
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[3].pages.Array.data[2].explanationText
+      value: "Your main character, the Conductor, cannot fight or mine directly.
+        However, its special ability allows the Spider-Constructor to detach from
+        the puppet body! \n\nWhile detached, the Spider can perform basic actions,
+        but you lose the ability to command the rest of the Swarm. \n\nUse this tool
+        wisely!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[3].pages.Array.data[3].explanationText
+      value: "To improve your multitasking, you can move the Conductor independently
+        using \u201DWSAD\u201D, and quickly activate its Detachment ability by pressing
+        \u201CE\u201D. \n\nTo go back to your puppet's body just press \"E\" again.\n\nRemember
+        that when spider moves out of the screen boundaries (either when on the puppet
+        body or on its own) the game instantly ends!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: steps.Array.data[3].pages.Array.data[4].explanationText
+      value: "Some robots have powerful active abilities!\r\nSelect a unit and right-click
+        on it to start aiming the ability! \r\n\r\nTo aim, right-click again on the
+        target location to activate its unique ability!\r\n\r\nYou can also activate
+        the ability using the \u201CSPACE\u201D shortcut."
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[4].pages.Array.data[0].explanationText
-      value: "Occasionally, you will encounter massive hazards that you cannot simply
-        bypass. \n\nWhen faced with a collapsed wall, you must commit your entire
-        Swarm's workforce to break through before the tunnel catches up!"
+      value: "Sometimes you\u2019ll come across massive obstacles that you simply
+        can\u2019t get around.\n\nWhen faced with a collapsed wall, you\u2019ll need
+        to mobilize your entire swarm to break through before the tunnel catches
+        up with you!"
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[4].pages.Array.data[1].explanationText
@@ -209420,9 +209512,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.data[5].pages.Array.data[0].explanationText
-      value: "Excellent! \n\nYou have grasped the core mechanics of survival. I won't
-        reveal all the secrets of Aion just yet... \n\nFor now, let's catch our breath
-        before the real hunt begins. See you in the Asylum!"
+      value: "Excellent! \r\n\r\nYou\u2019ve grasped the basics of survival. I won\u2019t
+        reveal all of Aion\u2019s secrets just yet, but for now, let\u2019s take
+        a breather before the real hunt begins. \n\nSee you in the Asylum!"
       objectReference: {fileID: 0}
     - target: {fileID: 8415639917389934182, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: m_Type
