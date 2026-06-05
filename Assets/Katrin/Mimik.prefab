@@ -1,5 +1,74 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &412408702788580770
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3007905705647025}
+  - component: {fileID: 5995345286927925799}
+  - component: {fileID: 8895551351073544700}
+  m_Layer: 0
+  m_Name: SpecificGuardArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3007905705647025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412408702788580770}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2564587902155745564}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &5995345286927925799
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412408702788580770}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8895551351073544700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412408702788580770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8f499862d0062d4ab121e7b3c985755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MimicryUnitDetection
+  unit: {fileID: 594160417190877149}
+  pushForce: 0.7
+  extraDamage: 1
 --- !u!1 &3215094073417232085
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +80,7 @@ GameObject:
   - component: {fileID: 8560540031305533798}
   - component: {fileID: 6756173981024589019}
   - component: {fileID: 4380223622731129259}
-  - component: {fileID: 4787530802923081933}
+  - component: {fileID: 594160417190877149}
   - component: {fileID: 6661612963204746029}
   - component: {fileID: 3155833242318412233}
   - component: {fileID: 5698830170423056329}
@@ -88,7 +157,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &4787530802923081933
+--- !u!114 &594160417190877149
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,9 +166,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3215094073417232085}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85f57a59910fc8c419f9674accd43de9, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b8a39681c0096f47ac8c758f8b39932, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DiggingEnemyUnit
+  m_EditorClassIdentifier: Assembly-CSharp::MimicryEnemy
   rotateSpeed: 10
   stoppingDistance: 0.2
   loopThroughAttacks: 0
@@ -112,7 +181,6 @@ MonoBehaviour:
   guardPoint: {fileID: 8730813952283317411}
   specialUnit: 1
   specialAnimationName: Mimik_Up
-  diggingEffect: {fileID: 5320617027888536597}
 --- !u!114 &6661612963204746029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +264,7 @@ MonoBehaviour:
   _possibleDrops:
   - ore: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
     pickUpPrefab: {fileID: 567936930993025482, guid: e8fee2afd57368f48b8b4d66e48a71cf, type: 3}
+  _dropAmount: 3
 --- !u!114 &1575755916201164036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +328,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8560540031305533798}
+  - {fileID: 3007905705647025}
   - {fileID: 8730813952283317411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -377,7 +447,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 3.5
+  m_Radius: 2.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1893942293613496221
 MonoBehaviour:
@@ -391,7 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60b22bf91f69f594ebc61bea730f4dc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerUnitDetector
-  unit: {fileID: 4787530802923081933}
+  unit: {fileID: 594160417190877149}
 --- !u!54 &8446205252468188834
 Rigidbody:
   m_ObjectHideFlags: 0
