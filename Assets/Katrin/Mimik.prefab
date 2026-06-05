@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3007905705647025}
   - component: {fileID: 5995345286927925799}
   - component: {fileID: 8895551351073544700}
-  - component: {fileID: 4829317282852367302}
   m_Layer: 0
   m_Name: SpecificGuardArea
   m_TagString: Untagged
@@ -32,7 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8560540031305533798}
+  m_Father: {fileID: 2564587902155745564}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &5995345286927925799
 SphereCollider:
@@ -53,7 +52,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8895551351073544700
 MonoBehaviour:
@@ -68,33 +67,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MimicryUnitDetection
   unit: {fileID: 594160417190877149}
---- !u!54 &4829317282852367302
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 412408702788580770}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  pushForce: 0.7
+  extraDamage: 1
 --- !u!1 &3215094073417232085
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +112,6 @@ Transform:
   - {fileID: 1667740643248975216}
   - {fileID: 1887024913893125654}
   - {fileID: 5803494211623994103}
-  - {fileID: 3007905705647025}
   m_Father: {fileID: 2564587902155745564}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6756173981024589019
@@ -291,6 +264,7 @@ MonoBehaviour:
   _possibleDrops:
   - ore: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
     pickUpPrefab: {fileID: 567936930993025482, guid: e8fee2afd57368f48b8b4d66e48a71cf, type: 3}
+  _dropAmount: 3
 --- !u!114 &1575755916201164036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,6 +328,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8560540031305533798}
+  - {fileID: 3007905705647025}
   - {fileID: 8730813952283317411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
