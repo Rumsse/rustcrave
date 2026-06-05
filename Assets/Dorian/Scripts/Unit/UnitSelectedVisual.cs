@@ -1,15 +1,10 @@
+using System;
 using UnityEngine;
 
 public class UnitSelectedVisual : MonoBehaviour
 {
-    [SerializeField] private Unit unit;
-
-    private MeshRenderer meshRenderer;
-    
-    private void Awake()
-    {
-        meshRenderer = GetComponent<MeshRenderer>();
-    }
+    [SerializeField] private Unit _unit;
+    [SerializeField] private GameObject _visualGameObject;
 
     private void Start()
     {
@@ -23,11 +18,20 @@ public class UnitSelectedVisual : MonoBehaviour
             UnitSelectionSystem.Instance.OnSelectedUnitChanged -= UnitSelectionSystem_OnSelectedUnitChanged;
     }
 
-    private void UnitSelectionSystem_OnSelectedUnitChanged(object sender, System.EventArgs e)
+    private void UnitSelectionSystem_OnSelectedUnitChanged(object sender, EventArgs e) => UpdateVisual();
+
+    private void UpdateVisual()
     {
-        UpdateVisual();
+        if (_visualGameObject == null)
+            return;
+
+        bool isSelected = UnitSelectionSystem.Instance.GetSelectedUnit() == _unit;
+        _visualGameObject.SetActive(isSelected);
+
+        if (isSelected && _unit != null)
+        {
+            if (_unit.TryGetComponent(out HealthManager healthManager))
+                healthManager.UpdateHealthVisuals();
+        }
     }
-
-    private void UpdateVisual() => meshRenderer.enabled = UnitSelectionSystem.Instance.GetSelectedUnit() == unit;
-
 }
