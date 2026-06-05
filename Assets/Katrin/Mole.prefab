@@ -41,6 +41,7 @@ Transform:
   - {fileID: 3604489503068015799}
   - {fileID: 2440311371732634644}
   - {fileID: 1812642767258063603}
+  - {fileID: 8664520114126905283}
   - {fileID: 1667740643248975216}
   - {fileID: 1887024913893125654}
   - {fileID: 5803494211623994103}
@@ -127,7 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthManager
   _hitEffect: {fileID: 5320617027888536597}
-  _deathEffectPrefab: {fileID: 0}
+  _deathEffectPrefab: {fileID: 7294212735409329075}
   _healthBarRend: {fileID: 4111269178738068048}
 --- !u!114 &3155833242318412233
 MonoBehaviour:
@@ -826,6 +827,87 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1001 &4856381598498248375
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8560540031305533798}
+    m_Modifications:
+    - target: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.2902999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.27791
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099119473769718130, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099119473769718130, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.291
+      objectReference: {fileID: 0}
+    - target: {fileID: 7901435882673459035, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+      propertyPath: m_Name
+      value: Dying effect new
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+--- !u!114 &7294212735409329075 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2765045808344548612, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+  m_PrefabInstance: {fileID: 4856381598498248375}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 645e9bce4fcc90f438f0319b0a6900ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathEffect
+--- !u!4 &8664520114126905283 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4277252473472256372, guid: ec70dcaae7f71b746b990bf734eff614, type: 3}
+  m_PrefabInstance: {fileID: 4856381598498248375}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7676126622754802521
 PrefabInstance:
   m_ObjectHideFlags: 0
