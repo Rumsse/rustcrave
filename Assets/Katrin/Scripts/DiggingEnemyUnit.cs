@@ -3,7 +3,6 @@ using UnityEngine;
 public class DiggingEnemyUnit : EnemyUnit
 {
     [Header("Digging Enemy Details")]
-    [SerializeField] private string specialAnimationName;
     [SerializeField] private ParticleSystem diggingEffect;
 
     protected override void Start()
