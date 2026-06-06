@@ -72,6 +72,8 @@ public class OrePickUp : MonoBehaviour, IInteractable
 
     #region Interaction
 
+    public float InteractionTime => 0f;
+
     public void Interact()
     {
         onInteract?.Invoke();

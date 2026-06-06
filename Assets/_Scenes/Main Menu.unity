@@ -6462,6 +6462,13 @@ MonoBehaviour:
     saveNameText: {fileID: 470523705}
     dateText: {fileID: 1335798768}
     emptyText: {fileID: 2114265376}
+  interactionSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   confirmationPanel: {fileID: 4963561442076682613}
   confirmationMessage: {fileID: 1232847429}
   yesButton: {fileID: 655546146}
@@ -37900,7 +37907,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1.3.3
+  m_text: 1.3.5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c93934f10e14ce4fb09284c41ece7be, type: 2}
   m_sharedMaterial: {fileID: 3619699375948507219, guid: 6c93934f10e14ce4fb09284c41ece7be, type: 2}
@@ -46081,9 +46088,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HydraulicPressMovement
   pressTransform: {fileID: 1723319396}
+  pressVisualRenderer: {fileID: 0}
   bottomPosition: {fileID: 839168315}
   smashSpeed: 6
   impactParticles: {fileID: 372703823}
+  debrisParticles: {fileID: 0}
+  shadowDecalProjector: {fileID: 0}
+  initialShadowFade: 0.3
+  maxShadowFade: 1
+  shadowFadeOutDuration: 0.5
 --- !u!1 &1725227838
 GameObject:
   m_ObjectHideFlags: 0

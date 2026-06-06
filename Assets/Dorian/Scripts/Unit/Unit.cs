@@ -43,6 +43,7 @@ public class Unit : UnitBase, ITrackableUnit
     private float baseMoveSpeed;
     private float miningTimer;
     private float miningInterval;
+    private float interactionTimer;
 
     private SwarmUnitsData swarmUnitsData;
     private SwarmState swarmState;
@@ -175,6 +176,7 @@ public class Unit : UnitBase, ITrackableUnit
         currentInteractable = null;
         AttackTarget = null;
         miningTimer = 0f;
+        interactionTimer = 0f;
     }
 
     public void CancelActionAndPath()
@@ -244,6 +246,12 @@ public class Unit : UnitBase, ITrackableUnit
         if (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
         {
             animator.SetBool("IsWalking", true);
+            return;
+        }
+
+        if (interactionTimer > 0f)
+        {
+            interactionTimer -= Time.deltaTime;
             return;
         }
 
@@ -354,6 +362,7 @@ public class Unit : UnitBase, ITrackableUnit
     {
         HandleInterruptCurrentAction();
         currentInteractable = interactable;
+        interactionTimer = currentInteractable.InteractionTime;
 
         agent.stoppingDistance = interactionStoppingDistance;
         agent.SetDestination(position);
@@ -380,6 +389,9 @@ public class Unit : UnitBase, ITrackableUnit
 
     public override void HandleMovement(Vector3 position)
     {
+        if (MCFormController.Instance != null)
+            MCFormController.Instance.CancelReturn();
+
         HandleInterruptCurrentAction();
 
         agent.stoppingDistance = defaultStoppingDistance;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using FMODUnity;
 
 public enum PanelMode { Save, Load }
 
@@ -21,6 +22,7 @@ public class SaveSlotSelectionUI : MonoBehaviour
     [SerializeField] GameObject savePanel;
     [SerializeField] TMP_Text titleText;
     [SerializeField] List<SlotUI> slots;
+    [SerializeField] private EventReference interactionSound;
 
     [Header("Confirmation Panel")]
     [SerializeField] GameObject confirmationPanel;
@@ -49,9 +51,17 @@ public class SaveSlotSelectionUI : MonoBehaviour
 
     #region UI Triggers
 
-    public void OpenForSave() => SetupPanel("Save Game", PanelMode.Save);
+    public void OpenForSave()
+    {
+        AudioManager.PlayOneShot(interactionSound);
+        SetupPanel("Save Game", PanelMode.Save);
+    }
 
-    public void OpenForLoad() => SetupPanel("Load Game", PanelMode.Load);
+    public void OpenForLoad()
+    {
+        AudioManager.PlayOneShot(interactionSound);
+        SetupPanel("Load Game", PanelMode.Load);
+    }
 
     public void ClosePanel() => savePanel.SetActive(false);
 

@@ -54,7 +54,7 @@ public class HealthManager : MonoBehaviour, IDamageable
         _propertyBlock = new MaterialPropertyBlock();
 
         if (!_healthBarRoot)
-            Debug.LogError("Health Bar Root is completely missing on: " + gameObject.name, gameObject);
+            Debug.LogWarning("Health Bar Root is completely missing on: " + gameObject.name, gameObject);
         else
             _healthRenderers = _healthBarRoot.GetComponentsInChildren<Renderer>(true);
     }
