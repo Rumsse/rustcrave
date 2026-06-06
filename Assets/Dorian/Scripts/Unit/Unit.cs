@@ -389,6 +389,9 @@ public class Unit : UnitBase, ITrackableUnit
 
     public override void HandleMovement(Vector3 position)
     {
+        if (MCFormController.Instance != null)
+            MCFormController.Instance.CancelReturn();
+
         HandleInterruptCurrentAction();
 
         agent.stoppingDistance = defaultStoppingDistance;

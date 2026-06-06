@@ -49,6 +49,8 @@ public class MCFormController : MonoBehaviour
     private GameObject droppedBodyInstance;
     private Animator spiderAnimator;
     private bool isTransitioning = false;
+    private bool isWalkingToBody = false;
+    private Coroutine transitionCoroutine;
     private StatsManager statsManager;
 
     private Vector3 defaultSpiderLocalPos;
@@ -100,7 +102,7 @@ public class MCFormController : MonoBehaviour
 
         if (currentForm == CharacterForm.Conductor)
         {
-            StartCoroutine(SwitchToSpiderRoutine());
+            transitionCoroutine = StartCoroutine(SwitchToSpiderRoutine());
             AudioManager.PlayOneShot(disconnectSound);
             CheckTutorialSpiderDetachAsync();
             return;
@@ -108,8 +110,29 @@ public class MCFormController : MonoBehaviour
 
         if (currentForm == CharacterForm.Spider)
         {
-            StartCoroutine(SwitchToConductorRoutine());
+            transitionCoroutine = StartCoroutine(SwitchToConductorRoutine());
             AudioManager.PlayOneShot(connectSound);
+        }
+    }
+
+    public void CancelReturn()
+    {
+        if (!isWalkingToBody || transitionCoroutine == null)
+            return;
+
+        StopCoroutine(transitionCoroutine);
+        transitionCoroutine = null;
+
+        isWalkingToBody = false;
+        isTransitioning = false;
+
+        if (spiderAnimator != null)
+            spiderAnimator.SetBool(walkingBoolName, false);
+
+        if (TryGetComponent<NavMeshAgent>(out var agent))
+        {
+            agent.ResetPath();
+            agent.speed = statsManager != null ? statsManager.MoveSpeed : spiderStats.moveSpeed;
         }
     }
 
@@ -181,6 +204,7 @@ public class MCFormController : MonoBehaviour
             yield break;
 
         isTransitioning = true;
+        isWalkingToBody = true;
 
         if (TryGetComponent<NavMeshAgent>(out var agent) && agent.enabled)
         {
@@ -207,6 +231,8 @@ public class MCFormController : MonoBehaviour
                 yield return null;
             }
 
+            isWalkingToBody = false;
+
             if (spiderAnimator != null)
                 spiderAnimator.SetBool(walkingBoolName, false);
 
@@ -215,7 +241,10 @@ public class MCFormController : MonoBehaviour
             agent.Warp(droppedBodyInstance.transform.position);
         }
         else
+        {
+            isWalkingToBody = false;
             transform.position = droppedBodyInstance.transform.position;
+        }
 
         transform.rotation = droppedBodyInstance.transform.rotation;
 
