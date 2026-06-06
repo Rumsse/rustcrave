@@ -12,11 +12,27 @@ public class PushableNavMeshEntity : MonoBehaviour, IPushable
     private NavMeshAgent agent;
     private Rigidbody rb;
     private bool isFalling;
+    private MCFormController formController;
+
+    public bool CanBePushed
+    {
+        get
+        {
+            if (isFalling)
+                return false;
+
+            if (formController != null && formController.IsTransitioning)
+                return false;
+
+            return true;
+        }
+    }
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
+        formController = GetComponent<MCFormController>();
 
         rb.isKinematic = true;
         rb.useGravity = false;
@@ -24,13 +40,13 @@ public class PushableNavMeshEntity : MonoBehaviour, IPushable
 
     public void ApplyPush(Vector3 pushDirection, float force)
     {
-        if (isFalling) return;
+        if (!CanBePushed)
+            return;
 
         Vector3 moveDelta = pushDirection * force;
         Vector3 targetPosition = transform.position + moveDelta;
 
-        NavMeshHit hit;
-        if (agent.Raycast(targetPosition, out hit))
+        if (agent.Raycast(targetPosition, out NavMeshHit hit))
         {
             Vector3 checkPosition = hit.position + (pushDirection * edgeCheckDistance);
             Vector3 rayStart = checkPosition + Vector3.up;
@@ -48,15 +64,11 @@ public class PushableNavMeshEntity : MonoBehaviour, IPushable
     private void TriggerFall(Vector3 pushDirection)
     {
         isFalling = true;
-
         agent.enabled = false;
-
         rb.isKinematic = false;
         rb.useGravity = true;
 
         transform.position += pushDirection * edgeCheckDistance;
-
         rb.AddForce(pushDirection * fallPushForce, ForceMode.VelocityChange);
     }
-
 }
