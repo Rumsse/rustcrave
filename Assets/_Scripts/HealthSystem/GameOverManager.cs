@@ -121,11 +121,11 @@ public class GameOverManager : MonoBehaviour
 
     private void ResetGameState()
     {
-        if (mapState)
-            mapState.Initialize();
+/*        if (mapState)
+            mapState.Initialize();*/
 
-        if (swarmState)
-            swarmState.Initialize();
+       /* if (swarmState)
+            swarmState.Initialize();*/
     }
 
     #endregion

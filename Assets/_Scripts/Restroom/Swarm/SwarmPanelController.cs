@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class SwarmPanelController : MonoBehaviour
+public class SwarmPanelController : MonoBehaviour, IPanelController
 {
     public event Action OnSwarmPanelOpened;
     public event Action OnSwarmPanelClosed;
@@ -31,19 +31,18 @@ public class SwarmPanelController : MonoBehaviour
     bool isQuickManagementActive;
 
     const string DefaultSubtitle = "Click on the unit image to get more information about it";
-    //const string QuickSubtitle = "LMB to repair | RMB to charge";
     const string QuickSubtitle = "Click on the unit image to get more information about it";
 
     #region Initialization
 
-    public void Initialize(VisualElement root, VisualElement layer)
+    public void Initialize(VisualElement panel, VisualElement contextLayer = null)
     {
-        rootElement = root;
-        slotsContainer = root.Q<VisualElement>("swarm-slots-container");
-        unitInfoContainer = root.Q<VisualElement>("unit-info-container");
-        btnCloseMain = root.Q<Button>("btn-close");
-        btnQuickManagement = root.Q<Button>("btn-quick-management");
-        subtitleLabel = root.Q<Label>("subtitle-label");
+        rootElement = panel;
+        slotsContainer = rootElement.Q<VisualElement>("swarm-slots-container");
+        unitInfoContainer = rootElement.Q<VisualElement>("unit-info-container");
+        btnCloseMain = rootElement.Q<Button>("btn-close");
+        btnQuickManagement = rootElement.Q<Button>("btn-quick-management");
+        subtitleLabel = rootElement.Q<Label>("subtitle-label");
 
         if (swarmState == null || slotsContainer == null || unitSlotTemplate == null)
             return;
@@ -78,10 +77,11 @@ public class SwarmPanelController : MonoBehaviour
 
         RebuildSwarmUI();
 
-        root.schedule.Execute(UpdateStats).Every(100);
+        rootElement.schedule.Execute(UpdateStats).Every(100);
     }
 
     public void NotifyPanelOpened() => OnSwarmPanelOpened?.Invoke();
+
     public void NotifyPanelClosed() => OnSwarmPanelClosed?.Invoke();
 
     void OnDisable()

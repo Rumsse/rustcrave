@@ -7,6 +7,7 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance { get; private set; }
+    public static event Action OnGameSaved;
 
     [SerializeField] bool useEncryption = true;
     [SerializeField] GameDatabase database;
@@ -86,6 +87,7 @@ public class SaveManager : MonoBehaviour
         PlayerPrefs.Save();
 
         Debug.Log($"[SaveManager] Game saved successfully to Slot {CurrentSlot}.");
+        OnGameSaved?.Invoke();
     }
 
     public void LoadGame(int slot)

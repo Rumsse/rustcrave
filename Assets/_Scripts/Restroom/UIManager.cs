@@ -1,6 +1,13 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+public enum SlideDirection
+{
+    Left,
+    Right
+}
 
 public class UIManager : MonoBehaviour
 {
@@ -10,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] VisualTreeAsset mainCraftPanel;
     [SerializeField] VisualTreeAsset swarmPanel;
     [SerializeField] VisualTreeAsset eventPanel;
+
     [SerializeField] ChoosePathController choosePathController;
     [SerializeField] MainCraftController mainCraftController;
     [SerializeField] SwarmPanelController swarmPanelController;
@@ -23,8 +31,12 @@ public class UIManager : MonoBehaviour
     VisualElement actionButtonsContainer;
 
     readonly Dictionary<string, VisualElement> panelCache = new();
+    readonly Dictionary<string, IPanelController> controllerMap = new();
+
     string activePanelKey;
     VisualElement activeSlot;
+    SlideDirection activeDirection;
+    bool isAnimating;
 
     #region Initialization
 
@@ -45,40 +57,33 @@ public class UIManager : MonoBehaviour
         rightPanelSlot.pickingMode = PickingMode.Ignore;
         eventPanelLayer.pickingMode = PickingMode.Ignore;
 
-        root.Q<Button>("btn-craft").clicked += () =>
-        {
-            TogglePanel("main-craft-panel", mainCraftPanel, leftPanelSlot);
+        MapControllers();
 
-            if (activePanelKey == "main-craft-panel")
-                mainCraftController.NotifyPanelOpened();
-            else
-                mainCraftController.NotifyPanelClosed();
-        };
-
-        root.Q<Button>("btn-swarm").clicked += () =>
-        {
-            TogglePanel("swarm-panel", swarmPanel, leftPanelSlot);
-
-            if (activePanelKey == "swarm-panel")
-                swarmPanelController.NotifyPanelOpened();
-            else
-                swarmPanelController.NotifyPanelClosed();
-        };
-
-        root.Q<Button>("btn-choose-path").clicked += () => TogglePanel("choose-path", choosePathPanel, rightPanelSlot);
+        root.Q<Button>("btn-craft").clicked += () => HandlePanelToggle("main-craft-panel", mainCraftPanel, leftPanelSlot, SlideDirection.Left);
+        root.Q<Button>("btn-swarm").clicked += () => HandlePanelToggle("swarm-panel", swarmPanel, leftPanelSlot, SlideDirection.Left);
+        root.Q<Button>("btn-choose-path").clicked += () => HandlePanelToggle("choose-path", choosePathPanel, rightPanelSlot, SlideDirection.Right);
 
         root.RegisterCallback<PointerDownEvent>(OnScreenClicked, TrickleDown.TrickleDown);
 
-        var popUpContainer = root.Q<VisualElement>("event-pop-up");
-        var popUpButton = root.Q<Button>("btn-event-pop-up");
+        var popUpContainerReference = root.Q<VisualElement>("event-pop-up");
+        var popUpButtonReference = root.Q<Button>("btn-event-pop-up");
 
-        InitializeEventPanel(popUpContainer, popUpButton);
+        InitializeEventSystem(popUpContainerReference, popUpButtonReference);
     }
 
-    void InitializeEventPanel(VisualElement popUpContainer, Button popUpButton)
+    void MapControllers()
+    {
+        controllerMap["main-craft-panel"] = mainCraftController;
+        controllerMap["swarm-panel"] = swarmPanelController;
+        controllerMap["choose-path"] = choosePathController;
+    }
+
+    void InitializeEventSystem(VisualElement popUpContainer, Button popUpButton)
     {
         var panelInstance = eventPanel.CloneTree();
         panelInstance.style.flexGrow = 1;
+        panelInstance.AddToClassList("animated-event-panel");
+        panelInstance.AddToClassList("event-hidden-state");
 
         eventPanelLayer.Add(panelInstance);
         eventPanelLayer.style.display = DisplayStyle.None;
@@ -90,8 +95,11 @@ public class UIManager : MonoBehaviour
 
     #region Tab Management
 
-    void TogglePanel(string key, VisualTreeAsset asset, VisualElement targetSlot)
+    void HandlePanelToggle(string key, VisualTreeAsset asset, VisualElement targetSlot, SlideDirection direction)
     {
+        if (isAnimating)
+            return;
+
         if (activePanelKey == key)
         {
             CloseCurrentPanel();
@@ -99,15 +107,35 @@ public class UIManager : MonoBehaviour
         }
 
         if (activePanelKey != null)
+        {
             CloseCurrentPanel();
+            panelLayer.schedule.Execute(() => TogglePanel(key, asset, targetSlot, direction)).StartingIn(350);
+            return;
+        }
 
+        TogglePanel(key, asset, targetSlot, direction);
+    }
+
+    void TogglePanel(string key, VisualTreeAsset asset, VisualElement targetSlot, SlideDirection direction)
+    {
         if (!panelCache.TryGetValue(key, out var panel))
         {
             panel = asset.CloneTree();
+            panel.AddToClassList("animated-panel");
             panelCache[key] = panel;
             BindCloseButton(panel);
-            InitializePanel(key, panel);
+
+            var contextLayer = key == "choose-path" ? tooltipLayer : leftPanelSlot;
+
+            if (controllerMap.TryGetValue(key, out var controller))
+                controller.Initialize(panel, contextLayer);
         }
+
+        string hiddenClass = direction == SlideDirection.Left ? "hidden-left" : "hidden-right";
+
+        panel.RemoveFromClassList("hidden-left");
+        panel.RemoveFromClassList("hidden-right");
+        panel.AddToClassList(hiddenClass);
 
         targetSlot.Add(panel);
         panel.style.flexGrow = 1;
@@ -116,18 +144,17 @@ public class UIManager : MonoBehaviour
 
         activePanelKey = key;
         activeSlot = targetSlot;
-    }
+        activeDirection = direction;
+        isAnimating = true;
 
-    void InitializePanel(string key, VisualElement panel)
-    {
-        if (key == "main-craft-panel")
-            mainCraftController.Initialize(panel, leftPanelSlot);
+        panelLayer.schedule.Execute(() =>
+        {
+            panel.RemoveFromClassList(hiddenClass);
+            panelLayer.schedule.Execute(() => isAnimating = false).StartingIn(300);
+        }).StartingIn(20);
 
-        if (key == "swarm-panel")
-            swarmPanelController.Initialize(panel, leftPanelSlot);
-
-        if (key == "choose-path")
-            choosePathController.Initialize(panel, tooltipLayer);
+        if (controllerMap.TryGetValue(activePanelKey, out var activeController))
+            activeController.NotifyPanelOpened();
     }
 
     void BindCloseButton(VisualElement panel)
@@ -140,29 +167,43 @@ public class UIManager : MonoBehaviour
 
     void CloseCurrentPanel()
     {
-        if (activePanelKey == null)
+        if (activePanelKey == null || isAnimating)
             return;
 
-        if (activePanelKey == "main-craft-panel")
-            mainCraftController.NotifyPanelClosed();
+        isAnimating = true;
 
-        if (activePanelKey == "swarm-panel")
-            swarmPanelController.NotifyPanelClosed();
+        if (controllerMap.TryGetValue(activePanelKey, out var activeController))
+            activeController.NotifyPanelClosed();
 
-        if (panelCache.TryGetValue(activePanelKey, out var panel))
+        if (!panelCache.TryGetValue(activePanelKey, out var panel))
+            return;
+
+        string hiddenClass = activeDirection == SlideDirection.Left ? "hidden-left" : "hidden-right";
+        panel.AddToClassList(hiddenClass);
+
+        var cachedSlot = activeSlot;
+
+        panelLayer.schedule.Execute(() =>
+        {
             panel.RemoveFromHierarchy();
 
-        if (activeSlot != null)
-            activeSlot.style.display = DisplayStyle.None;
+            if (cachedSlot != null)
+                cachedSlot.style.display = DisplayStyle.None;
 
-        panelLayer.style.display = DisplayStyle.None;
-        activePanelKey = null;
-        activeSlot = null;
+            if (activeSlot == cachedSlot)
+            {
+                panelLayer.style.display = DisplayStyle.None;
+                activePanelKey = null;
+                activeSlot = null;
+            }
+
+            isAnimating = false;
+        }).StartingIn(300);
     }
 
     void OnScreenClicked(PointerDownEvent evt)
     {
-        if (activeSlot == null)
+        if (activeSlot == null || isAnimating)
             return;
 
         var target = evt.target as VisualElement;
