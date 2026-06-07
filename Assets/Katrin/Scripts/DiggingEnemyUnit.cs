@@ -38,7 +38,7 @@ public class DiggingEnemyUnit : EnemyUnit
     public override void StealItem(ItemSO item)
     {
         Debug.Log("Stealing item...");
-        _available = false; //? problem might be here with no drops for the mole
+        _available = false; 
         base.StealItem(item);
         HandleSpecialReaction();
     }
