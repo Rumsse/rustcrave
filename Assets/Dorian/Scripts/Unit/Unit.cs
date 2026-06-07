@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
-using UnityEngine.AI;
 
 public enum UnitActivity
 {

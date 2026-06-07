@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 [RequireComponent(typeof(SphereCollider))]
 public class MimicryUnitDetection : PlayerUnitDetector
@@ -28,7 +27,7 @@ public class MimicryUnitDetection : PlayerUnitDetector
         unit.UnitEnter(unitObj);
 
         targetUnit = unitObj;
-        PushUnit(); 
+        PushUnit();
     }
 
     private void PushUnit()
@@ -36,15 +35,13 @@ public class MimicryUnitDetection : PlayerUnitDetector
         if(Vector3.Distance(transform.position, targetUnit.transform.position) > radius)
             return;
 
-        Vector3 pushDir = -unit.transform.forward;
-        Vector3 moveDelta = pushDir.normalized * pushForce;
+        Vector3 pushDir = -unit.transform.forward.normalized;
 
         targetUnit.TryGetComponent(out HealthManager targetHealth);
-        targetUnit.TryGetComponent(out NavMeshAgent targetAgent);
+        targetUnit.TryGetComponent(out IPushable targetAgent);
 
-        targetAgent?.Move(moveDelta);
+        targetAgent?.ApplyPush(pushDir, pushForce);
         targetHealth?.Damage(new DamageInfo(extraDamage, AttackType.Physical, DeliveryMethod.Melee));
-
     }
 
     protected override void OnTriggerExit(Collider other)
