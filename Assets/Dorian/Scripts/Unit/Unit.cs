@@ -172,6 +172,9 @@ public class Unit : UnitBase, ITrackableUnit
     {
         StopMiningEffect();
 
+        if (currentInteractable != null)
+            currentInteractable.StopEffect();
+
         currentMineable = null;
         currentInteractable = null;
         AttackTarget = null;
@@ -249,11 +252,16 @@ public class Unit : UnitBase, ITrackableUnit
             return;
         }
 
+        if (interactionTimer >= currentInteractable.InteractionTime)
+            currentInteractable.PlayEffect();
+
         if (interactionTimer > 0f)
         {
             interactionTimer -= Time.deltaTime;
             return;
         }
+
+        currentInteractable.StopEffect();
 
         if (currentInteractable is OrePickUp pickup)
         {

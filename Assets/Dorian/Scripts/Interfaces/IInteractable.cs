@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 public interface IInteractable
 {
@@ -8,4 +7,6 @@ public interface IInteractable
     float InteractionTime { get; }
 
     public void Interact();
+    void PlayEffect();
+    void StopEffect();
 }

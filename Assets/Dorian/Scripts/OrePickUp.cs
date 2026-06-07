@@ -80,5 +80,9 @@ public class OrePickUp : MonoBehaviour, IInteractable
         OnAnyOrePickedUp?.Invoke();
     }
 
+    public void PlayEffect() { }
+
+    public void StopEffect() { }
+
     #endregion
 }
