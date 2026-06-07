@@ -12,6 +12,7 @@ public enum TutorialTaskType
     KillEnemy,
     BreakWall,
     DetachSpider,
+    ClickOnUI,
     EnterRestroom,
     InteractWithEvent,
     CraftRobot,

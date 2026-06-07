@@ -164,6 +164,12 @@ public class RobotHUD : MonoBehaviour
 
         if (UnitSelectionSystem.Instance != null)
             UnitSelectionSystem.Instance.SetSelectedUnit(selectedUnit);
+
+        if (UnitSelectionSystem.Instance != null)
+            UnitSelectionSystem.Instance.SetSelectedUnit(selectedUnit);
+
+        if (TutorialTaskVerifier.Instance != null)
+            TutorialTaskVerifier.Instance.NotifyUIClicked();
     }
 
     #endregion

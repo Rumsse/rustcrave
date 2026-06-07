@@ -94,6 +94,8 @@ public class TutorialTaskVerifier : MonoBehaviour
 
     public void NotifyKillEnemyTaskMet() => NotifyTaskConditionMet(TutorialTaskType.KillEnemy);
 
+    public void NotifyUIClicked() => NotifyTaskConditionMet(TutorialTaskType.ClickOnUI);
+
     #endregion
 
     #region Event Handlers
