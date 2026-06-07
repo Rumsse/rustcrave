@@ -1,9 +1,12 @@
+using FMODUnity;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using FMODUnity;
 
 public class PauseMenuManager : MonoBehaviour
 {
+    public static event Action<bool> OnPauseStateChanged;
+
     [SerializeField] private string mainMenuSceneName = "Main Menu";
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private KeyCode pauseKey = KeyCode.Escape;
@@ -35,6 +38,7 @@ public class PauseMenuManager : MonoBehaviour
     {
         isPaused = true;
         Time.timeScale = 0f;
+        OnPauseStateChanged?.Invoke(true);
 
         if (pausePanel == null) 
             return;
@@ -50,6 +54,8 @@ public class PauseMenuManager : MonoBehaviour
             Time.timeScale = 0f;
         else
             Time.timeScale = 1f;
+
+        OnPauseStateChanged?.Invoke(false);
 
         if (pausePanel == null) 
             return;

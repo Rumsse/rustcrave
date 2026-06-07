@@ -72,4 +72,12 @@ public class SoundtrackPlayer : MonoBehaviour
         instance.getPlaybackState(out PLAYBACK_STATE state);
         return state != PLAYBACK_STATE.STOPPED;
     }
+
+    public void SetAmbientVolume(float volume)
+    {
+        if (!_currentAmbientTrack.isValid()) return;
+        _currentAmbientTrack.setVolume(volume);
+    }
+
+
 }
