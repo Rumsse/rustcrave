@@ -56,6 +56,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartNewMission()
     {
+        SceneLoadContext.IsNewGame = true;
         InitializeGameStates();
         StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(gameSceneName)));
     }
@@ -248,6 +249,7 @@ public class MainMenuManager : MonoBehaviour
         else
         {
             SaveManager.Instance.SetCurrentSlot(slotIndex);
+            SceneLoadContext.IsNewGame = true;
             InitializeGameStates();
             StartGame();
         }
