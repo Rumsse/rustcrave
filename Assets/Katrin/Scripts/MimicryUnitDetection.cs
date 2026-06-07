@@ -24,7 +24,7 @@ public class MimicryUnitDetection : PlayerUnitDetector
         if (!other.TryGetComponent(out Unit unitObj))
             return;
 
-
+        Debug.Log("Unit entered mimicry detection");
         unit.UnitEnter(unitObj);
 
         targetUnit = unitObj;
@@ -33,10 +33,10 @@ public class MimicryUnitDetection : PlayerUnitDetector
 
     private void PushUnit()
     {
-        if(Vector3.Distance(transform.position, targetUnit.transform.position) > radius) //?
+        if(Vector2.Distance(transform.position, targetUnit.transform.position) > radius) //?
             return;
 
-        Vector3 pushDir = -unit.transform.forward;
+        Vector2 pushDir = -unit.transform.forward;
 
         targetUnit.TryGetComponent(out Rigidbody targetRb);
         targetUnit.TryGetComponent(out HealthManager targetHealth);
@@ -48,6 +48,7 @@ public class MimicryUnitDetection : PlayerUnitDetector
 
     protected override void OnTriggerExit(Collider other)
     {
+        Debug.Log("Unit exited mimicry detection");
         targetUnit = null;
     }
 }
