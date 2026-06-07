@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class DropItem : MonoBehaviour //?
+public class DropItem : MonoBehaviour
 {
     [SerializeField] [Range(0f, 1f)] private float _dropChance;
     [SerializeField] private List<DropInstance> _possibleDrops = new();
@@ -12,7 +12,7 @@ public class DropItem : MonoBehaviour //?
     public void Drop()
     {
         if (_possibleDrops.Count == 0) return;
-        if (Random.Range(0f, 1f) <= _dropChance) return;
+        if (_dropChance != 1f && Random.Range(0f, 1f) <= _dropChance) return;
 
         DropRandomItem();
         DropStolenItem();
