@@ -11,13 +11,23 @@ public class PlayAmbientTrack : MonoBehaviour
     {
         if (_playOnStart)
         {
-            while (!RuntimeManager.IsInitialized || !RuntimeManager.HaveAllBanksLoaded)
-            {
-                yield return null;
-            }
-
-            PlayAmbient();
+            yield return StartCoroutine(WaitAndPlay());
         }
+    }
+
+    public void PlayWhenReady()
+    {
+        StartCoroutine(WaitAndPlay());
+    }
+
+    private IEnumerator WaitAndPlay()
+    {
+        while (!RuntimeManager.IsInitialized || !RuntimeManager.HaveAllBanksLoaded)
+        {
+            yield return null;
+        }
+
+        PlayAmbient();
     }
 
     public void PlayAmbient() => SoundtrackPlayer.Instance.PlayAmbientTrack(_eventReference);
