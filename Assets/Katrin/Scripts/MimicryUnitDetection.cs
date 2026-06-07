@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(SphereCollider))]
 public class MimicryUnitDetection : PlayerUnitDetector
@@ -24,24 +25,24 @@ public class MimicryUnitDetection : PlayerUnitDetector
         if (!other.TryGetComponent(out Unit unitObj))
             return;
 
-
         unit.UnitEnter(unitObj);
 
         targetUnit = unitObj;
-        PushUnit(); //?
+        PushUnit(); 
     }
 
     private void PushUnit()
     {
-        if(Vector3.Distance(transform.position, targetUnit.transform.position) > radius) //?
+        if(Vector3.Distance(transform.position, targetUnit.transform.position) > radius)
             return;
 
         Vector3 pushDir = -unit.transform.forward;
+        Vector3 moveDelta = pushDir.normalized * pushForce;
 
-        targetUnit.TryGetComponent(out Rigidbody targetRb);
         targetUnit.TryGetComponent(out HealthManager targetHealth);
+        targetUnit.TryGetComponent(out NavMeshAgent targetAgent);
 
-        targetRb?.AddForce(pushDir * pushForce, ForceMode.Impulse);
+        targetAgent?.Move(moveDelta);
         targetHealth?.Damage(new DamageInfo(extraDamage, AttackType.Physical, DeliveryMethod.Melee));
 
     }
