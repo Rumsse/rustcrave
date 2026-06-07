@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UIElements;
+using UnityEngine.Events;
 
 public class RestroomSceneController : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class RestroomSceneController : MonoBehaviour
     [SerializeField] private UIDocument gameplayUI;
     [SerializeField] private float skipHoldDuration = 1.5f;
     [SerializeField] private UnityEngine.UI.Image skipProgressBar;
+    [SerializeField] private UnityEvent onGameplayStarted;
 
     #endregion
 
@@ -84,13 +86,9 @@ public class RestroomSceneController : MonoBehaviour
 
         if (!introVideoPlayer)
         {
-            Debug.LogError("[RestroomSceneController] IntroVideoPlayer is missing.");
             EnableGameplay();
             return;
         }
-
-        if (SoundtrackPlayer.Instance)
-            SoundtrackPlayer.Instance.SetAmbientVolume(0f);
 
         isCutscenePlaying = true;
         introVideoPlayer.loopPointReached += OnCutsceneFinished;
@@ -113,7 +111,6 @@ public class RestroomSceneController : MonoBehaviour
         if (introVideoPlayer)
             introVideoPlayer.Stop();
 
-        Debug.Log("[RestroomSceneController] Cutscene skipped by user.");
         EnableGameplay();
     }
 
@@ -148,10 +145,7 @@ public class RestroomSceneController : MonoBehaviour
             root.style.opacity = 1f;
         }
 
-        if (SoundtrackPlayer.Instance)
-            SoundtrackPlayer.Instance.SetAmbientVolume(1f);
-
-        Debug.Log("[RestroomSceneController] Gameplay initialized.");
+        onGameplayStarted?.Invoke();
     }
 
     #endregion
