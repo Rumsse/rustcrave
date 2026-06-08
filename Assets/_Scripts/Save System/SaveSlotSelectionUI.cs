@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using FMODUnity;
 
 public enum PanelMode { Save, Load }
 
@@ -21,8 +20,10 @@ public class SaveSlotSelectionUI : MonoBehaviour
     [SerializeField] MainMenuManager mainMenuManager;
     [SerializeField] GameObject savePanel;
     [SerializeField] TMP_Text titleText;
-    [SerializeField] List<SlotUI> slots;
-    [SerializeField] private EventReference interactionSound;
+
+    [Header("Slots")]
+    [SerializeField] SlotUI autosaveSlot;
+    [SerializeField] List<SlotUI> manualSlots;
 
     [Header("Confirmation Panel")]
     [SerializeField] GameObject confirmationPanel;
@@ -51,17 +52,9 @@ public class SaveSlotSelectionUI : MonoBehaviour
 
     #region UI Triggers
 
-    public void OpenForSave()
-    {
-        AudioManager.PlayOneShot(interactionSound);
-        SetupPanel("Save Game", PanelMode.Save);
-    }
+    public void OpenForSave() => SetupPanel("Save Game", PanelMode.Save);
 
-    public void OpenForLoad()
-    {
-        AudioManager.PlayOneShot(interactionSound);
-        SetupPanel("Load Game", PanelMode.Load);
-    }
+    public void OpenForLoad() => SetupPanel("Load Game", PanelMode.Load);
 
     public void ClosePanel() => savePanel.SetActive(false);
 
@@ -84,11 +77,26 @@ public class SaveSlotSelectionUI : MonoBehaviour
 
     void RefreshSlots()
     {
-        for (int i = 0; i < slots.Count; i++)
+        bool hasAutosave = SaveManager.Instance.HasSaveFile(0);
+        autosaveSlot.emptyText.gameObject.SetActive(!hasAutosave);
+        autosaveSlot.saveNameText.gameObject.SetActive(hasAutosave);
+        autosaveSlot.dateText.gameObject.SetActive(hasAutosave);
+
+        if (hasAutosave)
+        {
+            autosaveSlot.saveNameText.text = "Autosave";
+            autosaveSlot.dateText.text = SaveManager.Instance.GetSlotDate(0);
+        }
+
+        autosaveSlot.slotButton.interactable = currentMode == PanelMode.Load && hasAutosave;
+        autosaveSlot.slotButton.onClick.RemoveAllListeners();
+        autosaveSlot.slotButton.onClick.AddListener(() => OnSlotClicked(0));
+
+        for (int i = 0; i < manualSlots.Count; i++)
         {
             int slotIndex = i + 1;
             bool hasSave = SaveManager.Instance.HasSaveFile(slotIndex);
-            var slot = slots[i];
+            var slot = manualSlots[i];
 
             slot.emptyText.gameObject.SetActive(!hasSave);
             slot.saveNameText.gameObject.SetActive(hasSave);
@@ -113,7 +121,6 @@ public class SaveSlotSelectionUI : MonoBehaviour
 
         if (currentMode == PanelMode.Load)
         {
-            SaveManager.Instance.LoadGame(slotIndex);
             mainMenuManager.LoadMissionFromSlot(slotIndex);
             return;
         }

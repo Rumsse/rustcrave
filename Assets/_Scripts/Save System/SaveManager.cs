@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class SaveManager : MonoBehaviour
 {
-    public static SaveManager Instance { get; private set; }
     public static event Action OnGameSaved;
+    public static SaveManager Instance { get; private set; }
 
     [SerializeField] bool useEncryption = true;
     [SerializeField] GameDatabase database;
@@ -44,7 +44,7 @@ public class SaveManager : MonoBehaviour
 
     public bool HasSaveFile(int slot) => File.Exists(GetSavePath(slot));
 
-    public bool HasAnySave() => HasSaveFile(1) || HasSaveFile(2) || HasSaveFile(3);
+    public bool HasAnySave() => HasSaveFile(0) || HasSaveFile(1) || HasSaveFile(2) || HasSaveFile(3);
 
     public string GetSlotDate(int slot)
     {
@@ -65,7 +65,20 @@ public class SaveManager : MonoBehaviour
 
     #region Main Save / Load API
 
+    public void AutoSaveGame() => PerformSave(0);
+
     public void SaveGame()
+    {
+        if (CurrentSlot == 0)
+        {
+            Debug.LogWarning("[SaveManager] Cannot manually save to Autosave slot. Choose a manual slot.");
+            return;
+        }
+
+        PerformSave(CurrentSlot);
+    }
+
+    void PerformSave(int slot)
     {
         var data = new GameSaveData();
 
@@ -81,12 +94,13 @@ public class SaveManager : MonoBehaviour
         string json = JsonUtility.ToJson(data, true);
         string finalData = useEncryption ? Encrypt(json) : json;
 
-        File.WriteAllText(GetSavePath(CurrentSlot), finalData);
+        File.WriteAllText(GetSavePath(slot), finalData);
 
-        PlayerPrefs.SetString($"Slot_{CurrentSlot}_Date", DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+        PlayerPrefs.SetString($"Slot_{slot}_Date", DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+        PlayerPrefs.SetInt("LastPlayedSlot", slot);
         PlayerPrefs.Save();
 
-        Debug.Log($"[SaveManager] Game saved successfully to Slot {CurrentSlot}.");
+        Debug.Log($"[SaveManager] Game saved successfully to Slot {slot}.");
         OnGameSaved?.Invoke();
     }
 
@@ -127,7 +141,7 @@ public class SaveManager : MonoBehaviour
 
     public void ContinueGame()
     {
-        int lastSlot = PlayerPrefs.GetInt("LastPlayedSlot", 1);
+        int lastSlot = PlayerPrefs.GetInt("LastPlayedSlot", 0);
         LoadGame(lastSlot);
     }
 

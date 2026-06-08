@@ -107,7 +107,7 @@ public class EventPanelController : MonoBehaviour
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
 
-        if (eventState == null || eventState.isResolved)
+        if (eventState == null)
             return;
 
         FetchActiveRobots();
@@ -120,6 +120,8 @@ public class EventPanelController : MonoBehaviour
             if (Random.value > eventTriggerChance)
             {
                 eventState.isResolved = true;
+                eventState.currentEventName = "None";
+                SaveManager.Instance.AutoSaveGame();
                 return;
             }
 
@@ -129,9 +131,14 @@ public class EventPanelController : MonoBehaviour
             int randomIndex = Random.Range(0, eventDatabase.availableEvents.Count);
             currentEvent = eventDatabase.availableEvents[randomIndex];
             eventState.currentEventName = currentEvent.name;
+            eventState.isResolved = false;
+            SaveManager.Instance.AutoSaveGame();
         }
         else
         {
+            if (eventState.isResolved || eventState.currentEventName == "None")
+                return;
+
             currentEvent = eventDatabase.availableEvents.FirstOrDefault(e => e.name == eventState.currentEventName);
 
             if (currentEvent == null)
@@ -303,7 +310,10 @@ public class EventPanelController : MonoBehaviour
         if (isShowingResult)
         {
             if (eventState != null)
+            {
                 eventState.isResolved = true;
+                SaveManager.Instance.AutoSaveGame();
+            }
 
             OnAnyEventResolved?.Invoke();
         }
