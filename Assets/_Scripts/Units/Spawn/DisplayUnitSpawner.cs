@@ -111,19 +111,20 @@ public class DisplayUnitSpawner : MonoBehaviour
         var go = Instantiate(swarmUnit.unitType.Prefab, spawnPoint.position, spawnPoint.rotation, inactiveHolder.transform);
 
         var allScripts = go.GetComponentsInChildren<MonoBehaviour>(true);
-
         foreach (var script in allScripts)
             DestroyImmediate(script);
 
         var agent = go.GetComponent<NavMeshAgent>();
-
         if (agent != null)
             DestroyImmediate(agent);
 
         var colliders = go.GetComponentsInChildren<Collider>(true);
-
         foreach (var col in colliders)
             DestroyImmediate(col);
+
+        var lights = go.GetComponentsInChildren<Light>(true);
+        foreach (var light in lights)
+            DestroyImmediate(light);
 
         go.transform.SetParent(unitsParent != null ? unitsParent : spawnPoint);
         go.SetActive(true);
