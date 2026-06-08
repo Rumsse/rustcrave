@@ -26,6 +26,7 @@ public class MCFormController : MonoBehaviour
     [Header("Visuals")]
     [SerializeField] private GameObject conductorVisual;
     [SerializeField] private GameObject spiderVisual;
+    [SerializeField] private GameObject activeHat;
 
     [Header("Stats")]
     [SerializeField] private UnitSO conductorStats;
@@ -144,17 +145,17 @@ public class MCFormController : MonoBehaviour
         Vector3 startGlobalSpiderPos = hatSlot != null ? hatSlot.position : transform.position;
 
         droppedBodyInstance = Instantiate(conductorBodyPrefab, transform.position, transform.rotation);
+        DisableHatOnClone(droppedBodyInstance);
 
         if (droppedBodyInstance.TryGetComponent<DroppedBody>(out var droppedBody))
         {
-            if (droppedBody.hatObject != null)
-                droppedBody.hatObject.SetActive(false);
-
             if (droppedBody.bodyAnimator != null)
                 droppedBody.bodyAnimator.SetTrigger(bodyDropTriggerName);
         }
         else if (droppedBodyInstance.TryGetComponent<Animator>(out var fallbackAnimator))
+        {
             fallbackAnimator.SetTrigger(bodyDropTriggerName);
+        }
 
         SetFormVisuals(CharacterForm.Spider);
         ApplyStats(spiderStats);
@@ -223,10 +224,7 @@ public class MCFormController : MonoBehaviour
                     if (agent.remainingDistance <= arrivalThreshold)
                         break;
                     if (agent.pathStatus == NavMeshPathStatus.PathInvalid)
-                    {
-                        Debug.LogWarning("NavMesh path invalid during Conductor return.");
                         break;
-                    }
                 }
                 yield return null;
             }
@@ -251,16 +249,17 @@ public class MCFormController : MonoBehaviour
         if (spiderAnimator != null)
             spiderAnimator.SetTrigger(connectTriggerName);
 
+        EnableHatOnClone(droppedBodyInstance);
+
         if (droppedBodyInstance.TryGetComponent<DroppedBody>(out var droppedBodyComponent))
         {
             if (droppedBodyComponent.bodyAnimator != null)
                 droppedBodyComponent.bodyAnimator.SetTrigger(bodyRiseTriggerName);
-
-            if (droppedBodyComponent.hatObject != null)
-                droppedBodyComponent.hatObject.SetActive(true);
         }
         else if (droppedBodyInstance.TryGetComponent<Animator>(out var fallbackAnimator))
+        {
             fallbackAnimator.SetTrigger(bodyRiseTriggerName);
+        }
 
         yield return new WaitForSeconds(connectAnimationDuration);
 
@@ -287,8 +286,44 @@ public class MCFormController : MonoBehaviour
 
         if (conductorVisual != null)
             conductorVisual.SetActive(isConductor);
+
         if (spiderVisual != null)
             spiderVisual.SetActive(!isConductor);
+
+        if (activeHat != null)
+            activeHat.SetActive(isConductor);
+    }
+
+    private void DisableHatOnClone(GameObject clone)
+    {
+        if (activeHat == null)
+            return;
+
+        Transform[] allTransforms = clone.GetComponentsInChildren<Transform>(true);
+        foreach (Transform childTransform in allTransforms)
+        {
+            if (childTransform.name == activeHat.name)
+            {
+                childTransform.gameObject.SetActive(false);
+                break;
+            }
+        }
+    }
+
+    private void EnableHatOnClone(GameObject clone)
+    {
+        if (activeHat == null)
+            return;
+
+        Transform[] allTransforms = clone.GetComponentsInChildren<Transform>(true);
+        foreach (Transform childTransform in allTransforms)
+        {
+            if (childTransform.name == activeHat.name)
+            {
+                childTransform.gameObject.SetActive(true);
+                break;
+            }
+        }
     }
 
     private void ApplyStats(UnitSO newStats)
