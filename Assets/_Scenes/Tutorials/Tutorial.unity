@@ -90537,7 +90537,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraZoom
   wideCamera: {fileID: 1572376364}
   activeModifier: {fileID: 11400000, guid: d373c29c877b50b43b30a9a517ecce77, type: 2}
-  baseSpeed: 0.4
+  baseSpeed: 0.5
   mainCamera: {fileID: 1938636560}
   minOrthographicSize: 5
   maxOrthographicSize: 12
@@ -148101,8 +148101,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1207068274}
   - component: {fileID: 1207068276}
-  - component: {fileID: 1207068277}
   - component: {fileID: 1207068278}
+  - component: {fileID: 1207068279}
   m_Layer: 0
   m_Name: trigger
   m_TagString: Untagged
@@ -148147,23 +148147,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 13.142212, y: 10.564129, z: 24.599838}
   m_Center: {x: -0.019999187, y: -16.964762, z: -0.39768592}
---- !u!114 &1207068277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1207068273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a5eb8e05eec2324bb12bda12655027e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TutorialTriggerZone
-  unitTag: Unit
-  completeTaskOnEnter: 1
-  targetTaskType: 7
-  visualEffect: {fileID: 501157492}
-  swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
 --- !u!114 &1207068278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148178,6 +148161,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TutorialSceneLoader
   taskToTriggerLoad: 7
   sceneName: Restroom Tutorial
+--- !u!114 &1207068279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207068273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1441c4f63a4974abcae068f29b8f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AllUnitsTriggerZone
+  swarmState: {fileID: 11400000, guid: 1c8c4ee88dc70e248b82328c05251d97, type: 2}
+  eventState: {fileID: 11400000, guid: 4e27fb4b292f4114189da164c0e9d0f0, type: 2}
+  sceneToLoad: Restroom Tutorial
+  triggerCollider: {fileID: 1207068276}
+  energyRestorePercentage: 0.33
 --- !u!1 &1209388040
 GameObject:
   m_ObjectHideFlags: 0
@@ -294451,6 +294451,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 636295434452929669, guid: 517bd9ce329ef074a81b611bdfe98b1c, type: 3}
+    - {fileID: 2711365177384477548, guid: 517bd9ce329ef074a81b611bdfe98b1c, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 226831282601931103, guid: 517bd9ce329ef074a81b611bdfe98b1c, type: 3}
       insertIndex: -1
