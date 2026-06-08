@@ -121,7 +121,10 @@ public class EventPanelController : MonoBehaviour
             {
                 eventState.isResolved = true;
                 eventState.currentEventName = "None";
-                SaveManager.Instance.AutoSaveGame();
+
+                if (TutorialManager.Instance == null)
+                    SaveManager.Instance.AutoSaveGame();
+
                 return;
             }
 
@@ -132,7 +135,9 @@ public class EventPanelController : MonoBehaviour
             currentEvent = eventDatabase.availableEvents[randomIndex];
             eventState.currentEventName = currentEvent.name;
             eventState.isResolved = false;
-            SaveManager.Instance.AutoSaveGame();
+
+            if (TutorialManager.Instance == null)
+                SaveManager.Instance.AutoSaveGame();
         }
         else
         {
@@ -312,7 +317,9 @@ public class EventPanelController : MonoBehaviour
             if (eventState != null)
             {
                 eventState.isResolved = true;
-                SaveManager.Instance.AutoSaveGame();
+
+                if (TutorialManager.Instance == null)
+                    SaveManager.Instance.AutoSaveGame();
             }
 
             OnAnyEventResolved?.Invoke();
