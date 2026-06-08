@@ -6,36 +6,40 @@ public class ChaseLaserController : MonoBehaviour
 {
     [SerializeField] private Laser _laser;
     [SerializeField] private DamageOnTriggerEnter _damageOnTriggerEnter;
-    private MeshRenderer _laserMesh;
 
+    private MeshRenderer _laserMesh;
     private ChaseLaserAttack _attackData;
     private DamageInfo _damageInfo;
     private UnitBase _attacker;
     private List<EffectBase> _effects;
+
+    private MaterialPropertyBlock _propertyBlock;
+    private static readonly int ColorProp = Shader.PropertyToID("_Color");
 
     #region Unity Lifecycle & Init
 
     private void Awake()
     {
         _laserMesh = GetComponentInChildren<MeshRenderer>();
+        _propertyBlock = new MaterialPropertyBlock();
     }
-    
+
     public void Init(DamageInfo damageInfo, ChaseLaserAttack attackData, UnitBase attacker, List<EffectBase> effects)
     {
         _damageInfo = damageInfo;
         _attackData = attackData;
         _attacker = attacker;
         _effects = effects;
-        
+
         _damageOnTriggerEnter.Init(_damageInfo, _attacker.gameObject);
-        
-        SetColors();
+
+        SetColors(_attackData.startColor);
         ScaleLasersInstant(0);
         ScaleIndicatorInstant(0);
-        
+
         PlaySequence();
     }
-    
+
     #endregion
 
     #region Sequencing
@@ -45,7 +49,7 @@ public class ChaseLaserController : MonoBehaviour
         Sequence.Create()
             .ChainCallback(() => ScaleIndicators(1f))
             .ChainDelay(_attackData.indicatorScaleSettings.duration + _attackData.timeToFire)
-            .ChainCallback(() => ScaleLasers(1f))
+            .ChainCallback(FireLaser)
             .ChainDelay(_attackData.laserScaleSettings.duration + .1f)
             .Chain(Tween.LocalRotation(
                 transform,
@@ -60,36 +64,40 @@ public class ChaseLaserController : MonoBehaviour
             .ChainCallback(() => PoolManager.Instance.Release(this, _attackData.controllerPrefab));
     }
 
+    private void FireLaser()
+    {
+        ChangeColors(false);
+        ScaleLasers(1f);
+    }
+
     #endregion
-    
+
     #region Helpers
 
-    private void SetColors()
+    private void SetColors(Color color)
     {
-        _laserMesh.material.color = _attackData.laserColor;
+        _laserMesh.GetPropertyBlock(_propertyBlock);
+        _propertyBlock.SetColor(ColorProp, color);
+        _laserMesh.SetPropertyBlock(_propertyBlock);
+    }
+
+    private void ChangeColors(bool toEndValue)
+    {
+        Color startColor = toEndValue ? _attackData.startColor : _attackData.endColor;
+        Color endColor = toEndValue ? _attackData.endColor : _attackData.startColor;
+
+        Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, SetColors);
     }
 
     #region Scale
 
-    private void ScaleLasers(float value)
-    {
-        _laser.SetVisualsScale(value, _attackData.laserScaleSettings);
-    }
+    private void ScaleLasers(float value) => _laser.SetVisualsScale(value, _attackData.laserScaleSettings);
 
-    private void ScaleLasersInstant(float value)
-    {
-        _laser.SetVisualsScaleInstant(value);
-    }
-    
-    private void ScaleIndicators(float value)
-    {
-        _laser.SetIndicatorWidth(value, _attackData.indicatorScaleSettings);
-    }
+    private void ScaleLasersInstant(float value) => _laser.SetVisualsScaleInstant(value);
 
-    private void ScaleIndicatorInstant(float value)
-    {
-        _laser.SetIndicatorWidthInstant(value);
-    }
+    private void ScaleIndicators(float value) => _laser.SetIndicatorWidth(value, _attackData.indicatorScaleSettings);
+
+    private void ScaleIndicatorInstant(float value) => _laser.SetIndicatorWidthInstant(value);
 
     #endregion
 

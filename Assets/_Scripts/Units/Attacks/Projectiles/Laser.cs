@@ -24,28 +24,38 @@ public class Laser : MonoBehaviour
 
     private Vector3 _initialIndicatorScale;
     private Vector3 _initialLaserScale;
+    private MeshRenderer _meshRenderer;
 
     private void Awake()
     {
         _initialIndicatorScale = _indicator.size;
         _initialLaserScale = _visuals.localScale;
+        _meshRenderer = _visuals.GetComponent<MeshRenderer>();
     }
-    
+
     /// <param name="literal">If false it sets value based on initial Scale</param>
     public void SetVisualsScale(float scale, TweenSettings? settings = null, bool literal = false)
     {
+        _meshRenderer.enabled = true;
+
         scale = literal ? scale : _initialLaserScale.x * scale;
         var endValue = GetVisualsScale(scale);
-        
-        Tween.Scale(_visuals, new TweenSettings<Vector3>(endValue, settings ?? _scaleSettings));
+
+        Tween.Scale(_visuals, new TweenSettings<Vector3>(endValue, settings ?? _scaleSettings))
+            .OnComplete(() =>
+            {
+                if (Vector3.Distance(_visuals.localScale, GetVisualsScale(0f)) < 0.01f)
+                    _meshRenderer.enabled = false;
+            });
     }
 
     /// <param name="literal">If false it sets value based on initial Scale</param>
     public void SetVisualsScaleInstant(float scale, bool literal = false)
     {
         scale = literal ? scale : _initialLaserScale.x * scale;
-        
         _visuals.localScale = GetVisualsScale(scale);
+
+        _meshRenderer.enabled = Vector3.Distance(_visuals.localScale, GetVisualsScale(0f)) > 0.01f;
     }
 
     private Vector3 GetVisualsScale(float scale)

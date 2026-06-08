@@ -5,23 +5,26 @@ using UnityEngine;
 public class TargetLaserAttack : AttackBase
 {
     [Header("Target Laser")]
-    [Tooltip("Time it takes to fire after indicator shows up")]
     public float timeToFire = 1.5f;
     public LayerMask mask;
-    
+
     [Header("Tween Settings")]
     public TweenSettings indicatorScaleSettings;
     public TweenSettings laserScaleSettings;
-    public TweenSettings<Color> colorSettings;
-    
+
+    [Header("Color Settings")]
+    [ColorUsage(true, true)] public Color startColor;
+    [ColorUsage(true, true)] public Color endColor;
+    public TweenSettings colorTweenSettings;
+
     [Header("References")]
     public TargetLaserController controllerPrefab;
-    
+
     public override void Execute(UnitBase target, UnitBase attacker)
     {
         if (!attacker)
             return;
-        
+
         attacker.Animator?.Play(animationStateName);
         attacker.IsPerformingSpecial = true;
 
