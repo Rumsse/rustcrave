@@ -225,6 +225,9 @@ public class ChoosePathController : MonoBehaviour, IPanelController
 
     void OnNodeRightClicked(PathNodeData node)
     {
+        if (node.Row <= mapState.CurrentRow)
+            return;
+
         if (mapState.IsNodeScanned(node))
             return;
 
