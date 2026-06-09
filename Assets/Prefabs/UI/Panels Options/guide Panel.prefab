@@ -2226,10 +2226,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The player tries to flee from the left side of the screen, which simulates
-    a collapsing tunnel. To escape, they must reach the end of the tunnel. Along
-    the way, they encounter enemies trying to stop them and ores that require digging
-    to obtain the necessary resources to survive.
+  m_text: "In this dying mechanical world, you must lead your Swarm through collapsing
+    tunnels. \nDig for resources, avoid deadly hazards, and gather enough power \nto
+    face the ultimate challenge!\nRemember that when the screen catches up with the
+    unit and it moves out of the screen boundaries, the unit dies!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
   m_sharedMaterial: {fileID: -4099103005339705998, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
@@ -3017,7 +3017,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.0499501, y: 30}
+  m_AnchoredPosition: {x: -3.0499501, y: 44}
   m_SizeDelta: {x: 1045.5, y: 665.1018}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &501105699683063367
@@ -3048,15 +3048,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "LMB - Select a unit.\n(click on the unit image on the HUD (bottom section)
-    to open more detailed information panel about that particular unit. Click again
-    to hide it. Hoover mouse over the gadget slot in the detailed panel to show details
-    about equipped gadget)\n\nRMB - Command the selected unit to move/action \n(empty
-    space = walk, object = action).\n\nWASD - Move the main character (can also be
-    done with the mouse)\n\nE - Active ability of the main character. (Change between
-    human and spider form)\n\nButtons 1 - 8 - Shortcut to select a unit (according
-    to their order on the HUD)\n\nMoving the cursor over an object - Information
-    (displayed in the upper right corner)"
+  m_text: "Movement and control are essential for survival.\n\nTo do this, you must
+    first select a unit by left-clicking on it:\n- In the game world.\n- On its portrait
+    in the user interface.\n- Using the hotkeys ONE through NINE.\nAfter selecting
+    a unit, right-click on an empty spot to order it to move there. Don't stop, or
+    the collapsing tunnel will consume you!\n\nThe tunnels hide valuable minerals
+    and dangerous threats! To interact with them, simply select your unit and right-click
+    \non the target. Your units will automatically perform the appropriate action:
+    They will attack or start mining.\n\nBreaking a rock or defeating an enemy is
+    only half of the job.\r\nYou still need to collect the dropped resources! \r\nTo
+    do that, select a unit and right-click on an item on the ground \nto pick it
+    up.\n\nMining for resources isn't going to be a walk in the park. Sinister robots
+    will be guarding them during your journey, so you'll need \nto take them out
+    before you can get to work!\nTo order a robot to attack, select it and right-click
+    on the enemy!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
   m_sharedMaterial: {fileID: -4099103005339705998, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}

@@ -6,27 +6,64 @@ using Utils;
 public class UnitSpawnOnTransformList : MonoBehaviour
 {
     [SerializeField] private List<Transform> _spawnPoints;
-    [SerializeField] private Transform _unit;
+    [SerializeField] private Transform _unitPrefab;
+    [SerializeField] private float _spawnRadius = 2f;
 
     public void ZZ_SpawnUnitAtRandomPoint()
     {
-        var unitInstance = PoolManager.Instance.Get(_unit);
-        var pos = NavMeshUtils.GetNearestNavMeshPoint(_spawnPoints[Random.Range(0, _spawnPoints.Count)].position);
-        unitInstance.transform.position = pos;
-        unitInstance.GetComponentInChildren<NavMeshAgent>().Warp(pos);
-    }
-    
-    public void ZZ_SpawnUnitAtIndex(int index)
-    {
-        var unitInstance = PoolManager.Instance.Get(_unit);
-        var  pos = NavMeshUtils.GetNearestNavMeshPoint(_spawnPoints[index].position);
-        unitInstance.transform.position = pos;
-        unitInstance.GetComponentInChildren<NavMeshAgent>().Warp(pos);
+        if (_spawnPoints.Count == 0)
+            return;
+
+        SpawnUnit(_spawnPoints[Random.Range(0, _spawnPoints.Count)].position);
     }
 
-    // todo: Finish this when player is done
-    // public void ZZ_SpawnUnitClosestToPlayer()
-    // {
-        // var unitInstance = PoolManager.Instance.Get(_unit);
-    // }
+    public void ZZ_SpawnUnitAtIndex(int index)
+    {
+        if (index < 0 || index >= _spawnPoints.Count)
+            return;
+
+        SpawnUnit(_spawnPoints[index].position);
+    }
+
+    private void SpawnUnit(Vector3 center)
+    {
+        var unitInstance = PoolManager.Instance.Get(_unitPrefab);
+        if (unitInstance == null)
+        {
+            Debug.LogError("Failed to get unit instance from pool.");
+            return;
+        }
+
+        Vector3 randomOffset = Random.insideUnitSphere * _spawnRadius;
+        randomOffset.y = 0f;
+
+        Vector3 targetPosition = center + randomOffset;
+        Vector3 finalPosition = NavMeshUtils.GetNearestNavMeshPoint(targetPosition);
+
+        unitInstance.position = finalPosition;
+
+        var agent = unitInstance.GetComponentInChildren<NavMeshAgent>();
+        if (agent == null)
+        {
+            Debug.LogError("NavMeshAgent missing on spawned unit.");
+            return;
+        }
+
+        agent.Warp(finalPosition);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (_spawnPoints == null)
+            return;
+
+        Gizmos.color = Color.green;
+        foreach (var point in _spawnPoints)
+        {
+            if (point == null)
+                continue;
+
+            Gizmos.DrawWireSphere(point.position, _spawnRadius);
+        }
+    }
 }
