@@ -11,7 +11,7 @@ public class UnitSpawnOnTransformList : MonoBehaviour
 
     public void ZZ_SpawnUnitAtRandomPoint()
     {
-        if (_spawnPoints.Count == 0)
+        if (!isActiveAndEnabled || _spawnPoints.Count == 0)
             return;
 
         SpawnUnit(_spawnPoints[Random.Range(0, _spawnPoints.Count)].position);
@@ -19,10 +19,18 @@ public class UnitSpawnOnTransformList : MonoBehaviour
 
     public void ZZ_SpawnUnitAtIndex(int index)
     {
-        if (index < 0 || index >= _spawnPoints.Count)
+        if (!isActiveAndEnabled || index < 0 || index >= _spawnPoints.Count)
             return;
 
         SpawnUnit(_spawnPoints[index].position);
+    }
+
+    public void ZZ_SpawnUnitAtSpecificPoint(Transform spawnPoint)
+    {
+        if (!isActiveAndEnabled || !spawnPoint)
+            return;
+
+        SpawnUnit(spawnPoint.position);
     }
 
     private void SpawnUnit(Vector3 center)

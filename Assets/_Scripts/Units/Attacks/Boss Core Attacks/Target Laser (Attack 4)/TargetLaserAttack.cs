@@ -33,6 +33,10 @@ public class TargetLaserAttack : AttackBase
         if (!string.IsNullOrEmpty(animationStateName) && attacker.Animator != null && attacker.Animator.runtimeAnimatorController != null)
             attacker.Animator.Play(animationStateName);
 
+        var spawner = attacker.GetComponent<UnitSpawnOnTransformList>();
+        if (spawner)
+            spawner.enabled = false;
+
         var unitController = attacker.GetComponent<UnitController>();
         if (!unitController) unitController = attacker.GetComponentInChildren<UnitController>(true);
         if (!unitController) unitController = attacker.transform.root.GetComponentInChildren<UnitController>(true);
@@ -67,7 +71,13 @@ public class TargetLaserAttack : AttackBase
         Debug.Log($"[TargetLaserAttack] Attack sequence complete for {attacker?.name}. Restoring movement.");
 
         if (attacker)
+        {
             attacker.IsPerformingSpecial = false;
+
+            var spawner = attacker.GetComponent<UnitSpawnOnTransformList>();
+            if (spawner)
+                spawner.enabled = true;
+        }
 
         if (unitController)
         {
