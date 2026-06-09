@@ -1,3 +1,4 @@
+using System;
 using PrimeTween;
 using UnityEngine;
 
@@ -25,14 +26,56 @@ public class TargetLaserAttack : AttackBase
         if (!attacker)
             return;
 
-        attacker.Animator?.Play(animationStateName);
+        Debug.Log($"[TargetLaserAttack] Executing attack for {attacker.name}. Attempting to pause movement.");
+
         attacker.IsPerformingSpecial = true;
+
+        if (!string.IsNullOrEmpty(animationStateName) && attacker.Animator != null && attacker.Animator.runtimeAnimatorController != null)
+            attacker.Animator.Play(animationStateName);
+
+        var unitController = attacker.GetComponent<UnitController>();
+        if (!unitController) unitController = attacker.GetComponentInChildren<UnitController>(true);
+        if (!unitController) unitController = attacker.transform.root.GetComponentInChildren<UnitController>(true);
+
+        if (unitController)
+        {
+            unitController.PauseForSpecialAttack();
+        }
+        else
+        {
+            Debug.LogWarning($"[TargetLaserAttack] UnitController still not found on {attacker.name}! Using raw Agent fallback stop.");
+
+            if (attacker.Agent && attacker.Agent.isActiveAndEnabled)
+            {
+                attacker.Agent.ResetPath();
+                attacker.Agent.velocity = Vector3.zero;
+                attacker.Agent.isStopped = true;
+            }
+        }
 
         int finalDamage = GetFinalDamage(attacker.Stats.Damage);
 
         TargetLaserController controller = PoolManager.Instance.Get(controllerPrefab);
         controller.transform.position = attacker.transform.position;
         controller.transform.rotation = Quaternion.identity;
-        controller.Init(new DamageInfo(finalDamage, type), this, attacker, effects);
+
+        controller.Init(new DamageInfo(finalDamage, type), this, attacker, effects, () => RestoreUnitMovement(attacker, unitController));
+    }
+
+    private void RestoreUnitMovement(UnitBase attacker, UnitController unitController)
+    {
+        Debug.Log($"[TargetLaserAttack] Attack sequence complete for {attacker?.name}. Restoring movement.");
+
+        if (attacker)
+            attacker.IsPerformingSpecial = false;
+
+        if (unitController)
+        {
+            unitController.ResumeFromSpecialAttack();
+        }
+        else if (attacker && attacker.Agent && attacker.Agent.isActiveAndEnabled)
+        {
+            attacker.Agent.isStopped = false;
+        }
     }
 }

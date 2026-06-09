@@ -10,44 +10,31 @@ public class UnitController : MonoBehaviour
     [SerializeField] private List<Transform> waypoints;
     [SerializeField] private float stopDistanceTolerance;
     [SerializeField] private float safeDistance;
+    [SerializeField] private UnitBase _unit;
 
     private Transform targetTransform;
     private int currentPointIndex;
-    private bool isActive;
+    private bool isActive = true; 
     private bool isFleeing;
+    private bool _isPausedForAttack;
+
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
 
-    public void ActivateUnit()
-    {
-        if (waypoints.Count == 0) return;
-
-        isActive = true;
-        currentPointIndex = 0;
-        animator.SetBool(IsWalkingHash, true);
-        MoveToCurrentWaypoint();
-    }
-
-    public void DeactivateUnit()
-    {
-        isActive = false;
-        navMeshAgent.ResetPath();
-        animator.SetBool(IsWalkingHash, false);
-        targetTransform = null;
-    }
+    #region Unity Lifecycle
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isActive || isFleeing) return;
+        if (!isActive || isFleeing)
+            return;
 
         if (CheckForTargetTag(other.gameObject))
-        {
             targetTransform = other.transform;
-        }
     }
 
     private void Update()
     {
-        //if (!isActive) return;
+        if (_isPausedForAttack || _unit == null || !navMeshAgent.isActiveAndEnabled)
+            return;
 
         if (targetTransform != null)
         {
@@ -67,6 +54,61 @@ public class UnitController : MonoBehaviour
         {
             HandlePatrolling();
         }
+    }
+
+    #endregion
+
+    #region Attack Interruption
+
+    public void PauseForSpecialAttack()
+    {
+        _isPausedForAttack = true;
+        animator.SetBool(IsWalkingHash, false);
+
+        if (!navMeshAgent.isActiveAndEnabled)
+            return;
+
+        navMeshAgent.ResetPath();
+        navMeshAgent.velocity = Vector3.zero;
+        navMeshAgent.isStopped = true;
+
+        Debug.Log("[UnitController] Movement perfectly frozen for attack.");
+    }
+
+    public void ResumeFromSpecialAttack()
+    {
+        _isPausedForAttack = false;
+
+        if (!navMeshAgent.isActiveAndEnabled)
+            return;
+
+        navMeshAgent.isStopped = false;
+        MoveToCurrentWaypoint();
+
+        Debug.Log("[UnitController] Movement resumed. Recalculating path to doors.");
+    }
+
+    #endregion
+
+    #region Logic
+
+    public void ActivateUnit()
+    {
+        if (waypoints.Count == 0)
+            return;
+
+        isActive = true;
+        currentPointIndex = 0;
+        animator.SetBool(IsWalkingHash, true);
+        MoveToCurrentWaypoint();
+    }
+
+    public void DeactivateUnit()
+    {
+        isActive = false;
+        navMeshAgent.ResetPath();
+        animator.SetBool(IsWalkingHash, false);
+        targetTransform = null;
     }
 
     private void HandleFleeing()
@@ -94,8 +136,13 @@ public class UnitController : MonoBehaviour
 
     private void MoveToCurrentWaypoint()
     {
-        navMeshAgent.SetDestination(waypoints[currentPointIndex].position);
+        if (navMeshAgent.isActiveAndEnabled)
+            navMeshAgent.SetDestination(waypoints[currentPointIndex].position);
     }
+
+    #endregion
+
+    #region Helpers
 
     private Transform GetFurthestWaypointFromTarget()
     {
@@ -105,11 +152,12 @@ public class UnitController : MonoBehaviour
         foreach (var point in waypoints)
         {
             float distance = Vector3.Distance(targetTransform.position, point.position);
-            if (distance > maxDistance)
-            {
-                maxDistance = distance;
-                bestPoint = point;
-            }
+
+            if (distance <= maxDistance)
+                continue;
+
+            maxDistance = distance;
+            bestPoint = point;
         }
 
         return bestPoint;
@@ -117,13 +165,17 @@ public class UnitController : MonoBehaviour
 
     private bool CheckForTargetTag(GameObject obj)
     {
-        if (obj.CompareTag(targetTag)) return true;
+        if (obj.CompareTag(targetTag))
+            return true;
 
         foreach (Transform child in obj.GetComponentsInChildren<Transform>(true))
         {
-            if (child.CompareTag(targetTag)) return true;
+            if (child.CompareTag(targetTag))
+                return true;
         }
 
         return false;
     }
+
+    #endregion
 }

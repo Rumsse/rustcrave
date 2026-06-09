@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class TargetLaserController : MonoBehaviour
 
     private MaterialPropertyBlock _propertyBlock;
     private static readonly int ColorProp = Shader.PropertyToID("_Color");
+    private Action _onComplete;
 
     #region Unity Lifecycle & Init
 
@@ -24,12 +26,13 @@ public class TargetLaserController : MonoBehaviour
         _propertyBlock = new MaterialPropertyBlock();
     }
 
-    public void Init(DamageInfo damageInfo, TargetLaserAttack attackData, UnitBase attacker, List<EffectBase> effects)
+    public void Init(DamageInfo damageInfo, TargetLaserAttack attackData, UnitBase attacker, List<EffectBase> effects, Action onComplete = null)
     {
         _damageInfo = damageInfo;
         _attackData = attackData;
         _attacker = attacker;
         _effects = effects;
+        _onComplete = onComplete;
 
         _targetUnit = Unit.GetRandomUnit();
 
@@ -53,7 +56,7 @@ public class TargetLaserController : MonoBehaviour
             .ChainDelay(_attackData.indicatorScaleSettings.duration + _attackData.timeToFire)
             .ChainCallback(FireLasers)
             .ChainDelay(_attackData.laserScaleSettings.duration * 2f + .1f)
-            .ChainCallback(() => _attacker.IsPerformingSpecial = false)
+            .ChainCallback(() => _onComplete?.Invoke())
             .ChainCallback(() => PoolManager.Instance.Release(this, _attackData.controllerPrefab));
     }
 
@@ -100,9 +103,11 @@ public class TargetLaserController : MonoBehaviour
             if (result.attachedRigidbody.TryGetComponent(out IDamageable damageable))
                 damageable.Hit(_damageInfo);
 
-            if (_effects.Count > 0 && result.attachedRigidbody.TryGetComponent(out IAffectable affectable))
-                foreach (var effect in _effects)
-                    affectable.ApplyEffect(effect);
+            if (_effects.Count == 0 || !result.attachedRigidbody.TryGetComponent(out IAffectable affectable))
+                continue;
+
+            foreach (var effect in _effects)
+                affectable.ApplyEffect(effect);
         }
     }
 

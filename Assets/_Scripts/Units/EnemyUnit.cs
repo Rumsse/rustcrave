@@ -38,7 +38,7 @@ public class EnemyUnit : UnitBase
         if (!_available)
             return;
 
-        if (isAttacking || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
+        if (isAttacking || IsPerformingSpecial || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
             return;
 
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)

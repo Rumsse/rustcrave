@@ -8663,6 +8663,10 @@ PrefabInstance:
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: EndScreen, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 5900543165381971191, guid: 6a5c28b97c18d754080f2e01438028d4, type: 3}
+      propertyPath: guardPoint
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6113252258873983750, guid: 6a5c28b97c18d754080f2e01438028d4, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.4
@@ -79593,7 +79597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitController
   animator: {fileID: 196363937}
   navMeshAgent: {fileID: 666805386}
-  targetTag: Unit
+  targetTag: Player
   waypoints:
   - {fileID: 337107618}
   - {fileID: 1411028406}
@@ -79601,6 +79605,7 @@ MonoBehaviour:
   - {fileID: 1722956264}
   stopDistanceTolerance: 2
   safeDistance: 8
+  _unit: {fileID: 324762438}
 --- !u!1001 &1756333788
 PrefabInstance:
   m_ObjectHideFlags: 0
