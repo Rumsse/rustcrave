@@ -3,7 +3,6 @@ using UnityEngine;
 public class DiggingEnemyUnit : EnemyUnit
 {
     [Header("Digging Enemy Details")]
-    [SerializeField] private string specialAnimationName;
     [SerializeField] private ParticleSystem diggingEffect;
 
     protected override void Start()
@@ -39,7 +38,7 @@ public class DiggingEnemyUnit : EnemyUnit
     public override void StealItem(ItemSO item)
     {
         Debug.Log("Stealing item...");
-        _available = false;
+        _available = false; 
         base.StealItem(item);
         HandleSpecialReaction();
     }

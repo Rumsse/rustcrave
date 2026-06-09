@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
-using UnityEngine.AI;
 
 public enum UnitActivity
 {
@@ -27,7 +26,6 @@ public class Unit : UnitBase, ITrackableUnit
     public UnitInventory Inventory => inventory;
     public Vector3 Position => transform.position;
 
-
     [SerializeField] private bool isMainCharacter;
     [SerializeField] private string commandTriggerName;
     [SerializeField] private UnitInventory inventory;
@@ -44,6 +42,7 @@ public class Unit : UnitBase, ITrackableUnit
     private float baseMoveSpeed;
     private float miningTimer;
     private float miningInterval;
+    private float interactionTimer;
 
     private SwarmUnitsData swarmUnitsData;
     private SwarmState swarmState;
@@ -86,7 +85,6 @@ public class Unit : UnitBase, ITrackableUnit
 
     private void OnEnable()
     {
-        //AllUnitsTriggerZone.OnTunnelEndReached -= SyncDataToState;
         energyManager.onEnergyPercentChange += HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted += HandleEnergyDepleted;
         healthManager.onHit += HandleDamageTaken;
@@ -100,7 +98,6 @@ public class Unit : UnitBase, ITrackableUnit
 
     private void OnDisable()
     {
-        //AllUnitsTriggerZone.OnTunnelEndReached -= SyncDataToState;
         energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted -= HandleEnergyDepleted;
         healthManager.onHit -= HandleDamageTaken;
@@ -174,10 +171,14 @@ public class Unit : UnitBase, ITrackableUnit
     {
         StopMiningEffect();
 
+        if (currentInteractable != null)
+            currentInteractable.StopEffect();
+
         currentMineable = null;
         currentInteractable = null;
         AttackTarget = null;
         miningTimer = 0f;
+        interactionTimer = 0f;
     }
 
     public void CancelActionAndPath()
@@ -237,7 +238,7 @@ public class Unit : UnitBase, ITrackableUnit
 
     private void HandleInteraction()
     {
-        if (currentInteractable as Object == null)
+        if (currentInteractable == null || currentInteractable.Equals(null))
         {
             currentInteractable = null;
             animator.SetBool("IsWalking", false);
@@ -250,6 +251,17 @@ public class Unit : UnitBase, ITrackableUnit
             return;
         }
 
+        if (interactionTimer >= currentInteractable.InteractionTime)
+            currentInteractable.PlayEffect();
+
+        if (interactionTimer > 0f)
+        {
+            interactionTimer -= Time.deltaTime;
+            return;
+        }
+
+        currentInteractable.StopEffect();
+
         if (currentInteractable is OrePickUp pickup)
         {
             if (inventory.InventorySO.AddItem(pickup.item, pickup.oreValueAmount))
@@ -259,7 +271,9 @@ public class Unit : UnitBase, ITrackableUnit
             }
         }
         else
+        {
             currentInteractable.Interact();
+        }
 
         currentInteractable = null;
         animator.SetBool("IsWalking", false);
@@ -298,7 +312,7 @@ public class Unit : UnitBase, ITrackableUnit
 
     private void StopMiningEffect()
     {
-        if (currentMineable != null)
+        if (currentMineable != null && !currentMineable.Equals(null))
         {
             currentMineable.StopEffect();
         }
@@ -313,7 +327,7 @@ public class Unit : UnitBase, ITrackableUnit
 
     private void HandleMining()
     {
-        if (currentMineable as Object == null)
+        if (currentMineable == null || currentMineable.Equals(null) || currentMineable.IsDepleted())
         {
             StopMiningEffect();
             currentMineable = null;
@@ -341,7 +355,7 @@ public class Unit : UnitBase, ITrackableUnit
 
         ItemSO item = currentMineable.Mine();
 
-        if (item != null && !currentMineable.IsDepleted())
+        if (item != null && !currentMineable.Equals(null) && !currentMineable.IsDepleted())
         {
             miningTimer = miningInterval;
             return;
@@ -355,6 +369,7 @@ public class Unit : UnitBase, ITrackableUnit
     {
         HandleInterruptCurrentAction();
         currentInteractable = interactable;
+        interactionTimer = currentInteractable.InteractionTime;
 
         agent.stoppingDistance = interactionStoppingDistance;
         agent.SetDestination(position);
@@ -381,6 +396,9 @@ public class Unit : UnitBase, ITrackableUnit
 
     public override void HandleMovement(Vector3 position)
     {
+        if (MCFormController.Instance != null)
+            MCFormController.Instance.CancelReturn();
+
         HandleInterruptCurrentAction();
 
         agent.stoppingDistance = defaultStoppingDistance;
@@ -394,7 +412,7 @@ public class Unit : UnitBase, ITrackableUnit
 
     public float GetMiningProgress()
     {
-        if (currentMineable == null || miningInterval <= 0f)
+        if (currentMineable == null || currentMineable.Equals(null) || miningInterval <= 0f)
             return 0f;
 
         return 1f - (miningTimer / miningInterval);
@@ -405,7 +423,7 @@ public class Unit : UnitBase, ITrackableUnit
         if (isAttacking)
             return UnitActivity.Fighting;
 
-        if (currentMineable != null)
+        if (currentMineable != null && !currentMineable.Equals(null))
         {
             if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
                 return UnitActivity.Mining;

@@ -12,29 +12,25 @@ public class SteamArea : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out IPushable pushable))
-        {
             entitiesInZone.Add(pushable);
-        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent(out IPushable pushable))
-        {
             entitiesInZone.Remove(pushable);
-        }
     }
 
     private void Update()
     {
         foreach (var entity in entitiesInZone)
         {
+            if (!entity.CanBePushed)
+                continue;
+
             entity.ApplyPush(pushDirection.normalized, pushForce * Time.deltaTime);
         }
     }
 
-    private void OnDisable()
-    {
-        entitiesInZone.Clear();
-    }
+    private void OnDisable() => entitiesInZone.Clear();
 }

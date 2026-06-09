@@ -20,6 +20,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GlobalInventorySO globalInventory;
     [SerializeField] private GadgetsGlobalInventory gadgetsInventory;
     [SerializeField] private EventState eventState;
+    [SerializeField] private AnimatedTextButton continueButton;
 
     [Header("Character Movement & Animations")]
     [SerializeField] private Animator characterAnimator;
@@ -44,6 +45,9 @@ public class MainMenuManager : MonoBehaviour
 
         if (creditsPanel)
             creditsPanel.SetActive(false);
+
+        if (continueButton != null)
+            continueButton.SetInteractable(SaveManager.Instance.HasAnySave());
     }
 
     #endregion
@@ -52,6 +56,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartNewMission()
     {
+        SceneLoadContext.IsNewGame = true;
         InitializeGameStates();
         StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(gameSceneName)));
     }
@@ -244,6 +249,7 @@ public class MainMenuManager : MonoBehaviour
         else
         {
             SaveManager.Instance.SetCurrentSlot(slotIndex);
+            SceneLoadContext.IsNewGame = true;
             InitializeGameStates();
             StartGame();
         }

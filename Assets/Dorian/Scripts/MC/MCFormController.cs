@@ -6,6 +6,8 @@ using FMODUnity;
 
 public class MCFormController : MonoBehaviour
 {
+    #region Properties & Fields
+
     public static MCFormController Instance { get; private set; }
 
     public event Action<UnitSO> OnFormChanged;
@@ -24,6 +26,7 @@ public class MCFormController : MonoBehaviour
     [Header("Visuals")]
     [SerializeField] private GameObject conductorVisual;
     [SerializeField] private GameObject spiderVisual;
+    [SerializeField] private GameObject activeHat;
 
     [Header("Stats")]
     [SerializeField] private UnitSO conductorStats;
@@ -42,15 +45,25 @@ public class MCFormController : MonoBehaviour
     [SerializeField] private float connectAnimationDuration;
     [SerializeField] private float disconnectAnimationDuration;
 
+    private const float TUTORIAL_DETACH_DELAY = 1f;
+
     private GameObject droppedBodyInstance;
     private Animator spiderAnimator;
     private bool isTransitioning = false;
+    private bool isWalkingToBody = false;
+    private Coroutine transitionCoroutine;
     private StatsManager statsManager;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
+    private Vector3 defaultSpiderLocalPos;
+    private Quaternion defaultSpiderLocalRot;
+    private Vector3 defaultConductorLocalPos;
+    private Quaternion defaultConductorLocalRot;
+
+    #endregion
+
+    #region Unity Methods
+
+    private void Awake() => Instance = this;
 
     private void Start()
     {
@@ -59,6 +72,14 @@ public class MCFormController : MonoBehaviour
         if (spiderVisual != null)
         {
             spiderAnimator = spiderVisual.GetComponent<Animator>();
+            defaultSpiderLocalPos = spiderVisual.transform.localPosition;
+            defaultSpiderLocalRot = spiderVisual.transform.localRotation;
+        }
+
+        if (conductorVisual != null)
+        {
+            defaultConductorLocalPos = conductorVisual.transform.localPosition;
+            defaultConductorLocalRot = conductorVisual.transform.localRotation;
         }
 
         SetFormVisuals(currentForm);
@@ -68,28 +89,51 @@ public class MCFormController : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(switchKey) && !isTransitioning)
-        {
             TryToggleForm();
-        }
     }
+
+    #endregion
+
+    #region Form Switching Logic
 
     private void TryToggleForm()
     {
         if (TryGetComponent<Unit>(out var unit))
-        {
             unit.CancelActionAndPath();
-        }
 
         if (currentForm == CharacterForm.Conductor)
         {
-            StartCoroutine(SwitchToSpiderRoutine());
+            transitionCoroutine = StartCoroutine(SwitchToSpiderRoutine());
             AudioManager.PlayOneShot(disconnectSound);
-            CheckTutorialSpiderDetachAsync(); 
+            CheckTutorialSpiderDetachAsync();
+            return;
         }
-        else if (currentForm == CharacterForm.Spider)
+
+        if (currentForm == CharacterForm.Spider)
         {
-            StartCoroutine(SwitchToConductorRoutine());
+            transitionCoroutine = StartCoroutine(SwitchToConductorRoutine());
             AudioManager.PlayOneShot(connectSound);
+        }
+    }
+
+    public void CancelReturn()
+    {
+        if (!isWalkingToBody || transitionCoroutine == null)
+            return;
+
+        StopCoroutine(transitionCoroutine);
+        transitionCoroutine = null;
+
+        isWalkingToBody = false;
+        isTransitioning = false;
+
+        if (spiderAnimator != null)
+            spiderAnimator.SetBool(walkingBoolName, false);
+
+        if (TryGetComponent<NavMeshAgent>(out var agent))
+        {
+            agent.ResetPath();
+            agent.speed = statsManager != null ? statsManager.MoveSpeed : spiderStats.moveSpeed;
         }
     }
 
@@ -101,18 +145,12 @@ public class MCFormController : MonoBehaviour
         Vector3 startGlobalSpiderPos = hatSlot != null ? hatSlot.position : transform.position;
 
         droppedBodyInstance = Instantiate(conductorBodyPrefab, transform.position, transform.rotation);
+        DisableHatOnClone(droppedBodyInstance);
 
         if (droppedBodyInstance.TryGetComponent<DroppedBody>(out var droppedBody))
         {
-            if (droppedBody.hatObject != null)
-            {
-                droppedBody.hatObject.SetActive(false);
-            }
-
             if (droppedBody.bodyAnimator != null)
-            {
                 droppedBody.bodyAnimator.SetTrigger(bodyDropTriggerName);
-            }
         }
         else if (droppedBodyInstance.TryGetComponent<Animator>(out var fallbackAnimator))
         {
@@ -123,54 +161,51 @@ public class MCFormController : MonoBehaviour
         ApplyStats(spiderStats);
 
         if (spiderAnimator != null)
-        {
             spiderAnimator.SetTrigger(disconnectTriggerName);
-        }
 
         Vector3 rootStart = transform.position;
         Vector3 rootTarget = transform.position + (transform.forward * spiderDropForwardOffset);
-
-        Vector3 defaultSpiderLocal = spiderVisual.transform.localPosition;
-
         float elapsed = 0f;
-        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+
+        if (TryGetComponent<NavMeshAgent>(out var agent))
+            agent.enabled = false;
 
         while (elapsed < disconnectAnimationDuration)
         {
             float t = elapsed / disconnectAnimationDuration;
 
-            Vector3 newPos = Vector3.Lerp(rootStart, rootTarget, t);
+            transform.position = Vector3.Lerp(rootStart, rootTarget, t);
 
-            if (agent != null && agent.enabled)
-                agent.Warp(newPos);
-            else
-                transform.position = newPos;
-
-            Vector3 targetGlobalSpiderPos = transform.TransformPoint(defaultSpiderLocal);
+            Vector3 targetGlobalSpiderPos = transform.TransformPoint(defaultSpiderLocalPos);
             Vector3 linearPos = Vector3.Lerp(startGlobalSpiderPos, targetGlobalSpiderPos, t);
 
             linearPos.y += Mathf.Sin(t * Mathf.PI) * jumpArcHeight;
-
             spiderVisual.transform.position = linearPos;
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        if (agent != null && agent.enabled)
-            agent.Warp(rootTarget);
-        else
-            transform.position = rootTarget;
+        transform.position = rootTarget;
 
-        spiderVisual.transform.localPosition = defaultSpiderLocal;
+        if (agent != null)
+        {
+            agent.enabled = true;
+            agent.Warp(rootTarget);
+        }
+
+        spiderVisual.transform.localPosition = defaultSpiderLocalPos;
+        spiderVisual.transform.localRotation = defaultSpiderLocalRot;
         isTransitioning = false;
     }
 
     private IEnumerator SwitchToConductorRoutine()
     {
-        if (droppedBodyInstance == null) yield break;
+        if (droppedBodyInstance == null)
+            yield break;
 
         isTransitioning = true;
+        isWalkingToBody = true;
 
         if (TryGetComponent<NavMeshAgent>(out var agent) && agent.enabled)
         {
@@ -180,24 +215,24 @@ public class MCFormController : MonoBehaviour
             agent.SetDestination(droppedBodyInstance.transform.position);
 
             if (spiderAnimator != null)
-            {
                 spiderAnimator.SetBool(walkingBoolName, true);
-            }
 
             while (true)
             {
                 if (!agent.pathPending)
                 {
-                    if (agent.remainingDistance <= arrivalThreshold) break;
-                    if (agent.pathStatus == NavMeshPathStatus.PathInvalid) break;
+                    if (agent.remainingDistance <= arrivalThreshold)
+                        break;
+                    if (agent.pathStatus == NavMeshPathStatus.PathInvalid)
+                        break;
                 }
                 yield return null;
             }
 
+            isWalkingToBody = false;
+
             if (spiderAnimator != null)
-            {
                 spiderAnimator.SetBool(walkingBoolName, false);
-            }
 
             agent.ResetPath();
             agent.speed = originalSpeed;
@@ -205,27 +240,21 @@ public class MCFormController : MonoBehaviour
         }
         else
         {
+            isWalkingToBody = false;
             transform.position = droppedBodyInstance.transform.position;
         }
 
         transform.rotation = droppedBodyInstance.transform.rotation;
 
         if (spiderAnimator != null)
-        {
             spiderAnimator.SetTrigger(connectTriggerName);
-        }
 
-        if (droppedBodyInstance.TryGetComponent<DroppedBody>(out var droppedBody))
+        EnableHatOnClone(droppedBodyInstance);
+
+        if (droppedBodyInstance.TryGetComponent<DroppedBody>(out var droppedBodyComponent))
         {
-            if (droppedBody.bodyAnimator != null)
-            {
-                droppedBody.bodyAnimator.SetTrigger(bodyRiseTriggerName);
-            }
-
-            if (droppedBody.hatObject != null)
-            {
-                droppedBody.hatObject.SetActive(true);
-            }
+            if (droppedBodyComponent.bodyAnimator != null)
+                droppedBodyComponent.bodyAnimator.SetTrigger(bodyRiseTriggerName);
         }
         else if (droppedBodyInstance.TryGetComponent<Animator>(out var fallbackAnimator))
         {
@@ -241,32 +270,73 @@ public class MCFormController : MonoBehaviour
         SetFormVisuals(CharacterForm.Conductor);
         ApplyStats(conductorStats);
 
+        conductorVisual.transform.localPosition = defaultConductorLocalPos;
+        conductorVisual.transform.localRotation = defaultConductorLocalRot;
+
         isTransitioning = false;
     }
 
+    #endregion
+
+    #region Utility Methods
+
     private void SetFormVisuals(CharacterForm form)
     {
-        bool isConductor = (form == CharacterForm.Conductor);
-        if (conductorVisual != null) conductorVisual.SetActive(isConductor);
-        if (spiderVisual != null) spiderVisual.SetActive(!isConductor);
+        bool isConductor = form == CharacterForm.Conductor;
+
+        if (conductorVisual != null)
+            conductorVisual.SetActive(isConductor);
+
+        if (spiderVisual != null)
+            spiderVisual.SetActive(!isConductor);
+
+        if (activeHat != null)
+            activeHat.SetActive(isConductor);
+    }
+
+    private void DisableHatOnClone(GameObject clone)
+    {
+        if (activeHat == null)
+            return;
+
+        Transform[] allTransforms = clone.GetComponentsInChildren<Transform>(true);
+        foreach (Transform childTransform in allTransforms)
+        {
+            if (childTransform.name == activeHat.name)
+            {
+                childTransform.gameObject.SetActive(false);
+                break;
+            }
+        }
+    }
+
+    private void EnableHatOnClone(GameObject clone)
+    {
+        if (activeHat == null)
+            return;
+
+        Transform[] allTransforms = clone.GetComponentsInChildren<Transform>(true);
+        foreach (Transform childTransform in allTransforms)
+        {
+            if (childTransform.name == activeHat.name)
+            {
+                childTransform.gameObject.SetActive(true);
+                break;
+            }
+        }
     }
 
     private void ApplyStats(UnitSO newStats)
     {
         if (statsManager != null)
-        {
             statsManager.ChangeStats(newStats);
-        }
 
         Animator activeAnimator = null;
+
         if (currentForm == CharacterForm.Conductor && conductorVisual != null)
-        {
             activeAnimator = conductorVisual.GetComponent<Animator>();
-        }
         else if (currentForm == CharacterForm.Spider && spiderVisual != null)
-        {
             activeAnimator = spiderAnimator;
-        }
 
         if (TryGetComponent<MCMovement>(out var movementController))
         {
@@ -275,31 +345,25 @@ public class MCFormController : MonoBehaviour
         }
 
         if (TryGetComponent<Unit>(out var unit))
-        {
             unit.SetAnimator(activeAnimator);
-        }
 
         OnFormChanged?.Invoke(newStats);
     }
 
-    public CharacterForm GetCurrentForm()
-    {
-        return currentForm;
-    }
+    public CharacterForm GetCurrentForm() => currentForm;
 
     private async void CheckTutorialSpiderDetachAsync()
     {
-        if (TutorialTaskVerifier.Instance == null) return;
+        if (TutorialTaskVerifier.Instance == null || TutorialTaskVerifier.Instance.CurrentTask != TutorialTaskType.DetachSpider)
+            return;
 
-        if (TutorialTaskVerifier.Instance.CurrentTask != TutorialTaskType.DetachSpider) return;
-
-        await Awaitable.WaitForSecondsAsync(1f);
+        await Awaitable.WaitForSecondsAsync(TUTORIAL_DETACH_DELAY);
 
         if (TutorialTaskVerifier.Instance != null && TutorialTaskVerifier.Instance.CurrentTask == TutorialTaskType.DetachSpider)
-        {
             TutorialTaskVerifier.Instance.CompleteTask();
-        }
     }
+
+    #endregion
 }
 
 public enum CharacterForm

@@ -27,7 +27,7 @@ public class HealthManager : MonoBehaviour, IDamageable
 
     [SerializeField] private ParticleSystem _hitEffect;
     [SerializeField] private DeathEffect _deathEffectPrefab;
-    [SerializeField] private MeshRenderer _healthBarRend;
+    [SerializeField] private GameObject _healthBarRoot;
 
     #endregion
 
@@ -35,8 +35,12 @@ public class HealthManager : MonoBehaviour, IDamageable
 
     private int _baseMaxHP;
     private int _currentHP;
-    private Material _healthMaterial;
+    private MaterialPropertyBlock _propertyBlock;
     private StatsManager _baseStats;
+    private Renderer[] _healthRenderers;
+
+    private static readonly int FillAmountProp = Shader.PropertyToID("_FillAmount");
+    private static readonly int CenterPosProp = Shader.PropertyToID("_CenterPos");
 
     #endregion
 
@@ -47,7 +51,12 @@ public class HealthManager : MonoBehaviour, IDamageable
         _baseStats = GetComponent<StatsManager>();
         _baseMaxHP = _baseStats.MaxHP;
         _currentHP = MaxHp;
-        _healthMaterial = _healthBarRend.material;
+        _propertyBlock = new MaterialPropertyBlock();
+
+        if (!_healthBarRoot)
+            Debug.LogWarning("Health Bar Root is completely missing on: " + gameObject.name, gameObject);
+        else
+            _healthRenderers = _healthBarRoot.GetComponentsInChildren<Renderer>(true);
     }
 
     private void OnEnable()
@@ -115,7 +124,25 @@ public class HealthManager : MonoBehaviour, IDamageable
 
     #endregion
 
-    private void UpdateHealthVisuals() => _healthMaterial.SetFloat("_FillAmount", (float)CurrentHP / MaxHp);
+    public void UpdateHealthVisuals()
+    {
+        if (_healthRenderers == null || _healthRenderers.Length == 0)
+            return;
+
+        float fillAmount = (float)CurrentHP / MaxHp;
+        Vector4 centerPos = transform.position;
+
+        foreach (var rend in _healthRenderers)
+        {
+            if (!rend)
+                continue;
+
+            rend.GetPropertyBlock(_propertyBlock);
+            _propertyBlock.SetFloat(FillAmountProp, fillAmount);
+            _propertyBlock.SetVector(CenterPosProp, centerPos);
+            rend.SetPropertyBlock(_propertyBlock);
+        }
+    }
 
     private void SpawnDeathEffect()
     {

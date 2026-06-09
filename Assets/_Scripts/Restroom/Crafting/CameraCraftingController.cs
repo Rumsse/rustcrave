@@ -7,6 +7,7 @@ public class CameraCraftingController : MonoBehaviour
     public static event Action OnCameraReachedCraftedRobot;
 
     [SerializeField] Camera mainCamera;
+    [SerializeField] Transform defaultCameraTransform;
     [SerializeField] DisplayUnitSpawner unitSpawner;
     [SerializeField] MainCraftController craftController;
     [SerializeField] SwarmPanelController swarmController;
@@ -31,8 +32,6 @@ public class CameraCraftingController : MonoBehaviour
     [Space(10)]
     [SerializeField] float transitionSpeed = 5f;
 
-    Vector3 originalPosition;
-    Quaternion originalRotation;
     Coroutine transitionCoroutine;
 
     bool isCraftPanelOpen = false;
@@ -40,11 +39,7 @@ public class CameraCraftingController : MonoBehaviour
 
     #region Initialization
 
-    void Awake()
-    {
-        if (mainCamera == null)
-            mainCamera = Camera.main;
-    }
+    void Awake() => mainCamera = mainCamera ? mainCamera : Camera.main;
 
     void OnEnable()
     {
@@ -92,7 +87,6 @@ public class CameraCraftingController : MonoBehaviour
 
     void HandleCraftOpened()
     {
-        SaveOriginalPosition();
         isCraftPanelOpen = true;
         ZoomToPlayer();
     }
@@ -105,7 +99,6 @@ public class CameraCraftingController : MonoBehaviour
 
     void HandleSwarmOpened()
     {
-        SaveOriginalPosition();
         isSwarmPanelOpen = true;
         ZoomToSwarmOverview();
     }
@@ -118,14 +111,16 @@ public class CameraCraftingController : MonoBehaviour
 
     void HandleUnitInfoOpened(SwarmUnitsData unit)
     {
-        if (!isSwarmPanelOpen) return;
+        if (!isSwarmPanelOpen)
+            return;
 
         ZoomToSpecificUnit(unit);
     }
 
     void HandleUnitInfoClosed()
     {
-        if (!isSwarmPanelOpen) return;
+        if (!isSwarmPanelOpen)
+            return;
 
         ZoomToSwarmOverview();
     }
@@ -179,19 +174,10 @@ public class CameraCraftingController : MonoBehaviour
         StartTransition(targetPos, targetRot, onComplete);
     }
 
-    void SaveOriginalPosition()
-    {
-        if (!isCraftPanelOpen && !isSwarmPanelOpen)
-        {
-            originalPosition = mainCamera.transform.position;
-            originalRotation = mainCamera.transform.rotation;
-        }
-    }
-
     void TryResetCamera()
     {
-        if (!isCraftPanelOpen && !isSwarmPanelOpen)
-            StartTransition(originalPosition, originalRotation);
+        if (!isCraftPanelOpen && !isSwarmPanelOpen && defaultCameraTransform != null)
+            StartTransition(defaultCameraTransform.position, defaultCameraTransform.rotation);
     }
 
     void StartTransition(Vector3 targetPos, Quaternion targetRot, Action onComplete = null)
