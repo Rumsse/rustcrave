@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitSO
   unitType: 2
   prefab: {fileID: 3240033704538847185, guid: 5d6d82e7a5b17334c94757bdcc04765d, type: 3}
+  isMainCharacter: 0
   robotName: Firefly
   robotDescription: 'When it flies and moves, it emits a glow. All allied robots
     within the glow''s range receive bonus stats.
@@ -25,17 +26,16 @@ MonoBehaviour:
 
 
     Emits light around itself, granting
-    all allied robots within range +DIG +ATK based on the stats of the Firefly. (e.g.
-    If it has 2 attack points, it grants +2 attack.'
+    all allied robots within range +DIG +ATK based on the stats of the Firefly.'
   moveSpeed: 3
   maxEnergy: 150
   maxHP: 5
   typeImmunities: 0
   deliveryMethodImmunities: 0
-  damage: 2
+  damage: 1
   attacksPerSecond: 1
-  miningPower: 2
-  carryCapacity: 4
+  miningPower: 1
+  carryCapacity: 6
   possibleAttacks:
   - {fileID: 11400000, guid: 07ac743c94da40e45a1aa21d8b05eb3d, type: 2}
   sounds:
