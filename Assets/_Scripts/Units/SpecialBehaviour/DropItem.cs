@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class DropItem : MonoBehaviour
@@ -8,6 +9,10 @@ public class DropItem : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float _dropChance;
     [SerializeField] private List<DropInstance> _possibleDrops = new();
     [SerializeField] private int _dropAmount = 1;
+
+    [SerializeField] private float minDropRadius = 1.0f;
+    [SerializeField] private float maxDropRadius = 2.0f;
+    [SerializeField] private float navMeshSampleDistance = 2.0f;
 
     public void Drop()
     {
@@ -30,6 +35,8 @@ public class DropItem : MonoBehaviour
         {
             pickUp.oreValueAmount = _dropAmount;
         }
+
+        pickUp.SpawnDrop(transform.position, GetTargetPosition());
     }
 
     //here extra for dropping what was stolen 
@@ -44,7 +51,21 @@ public class DropItem : MonoBehaviour
         var pickUp = Instantiate(gameObject.AddComponent<OrePickUp>(), transform.position, Quaternion.identity);
         pickUp.item = enemyUnit.StolenItem;
 
+        pickUp.SpawnDrop(transform.position, GetTargetPosition());
+
         enemyUnit.ClearStolenItem();
+    }
+
+    private Vector3 GetTargetPosition()
+    {
+        Vector2 randomCircle = Random.insideUnitCircle.normalized * Random.Range(minDropRadius, maxDropRadius);
+        Vector3 rawDropPosition = transform.position + new Vector3(randomCircle.x, 0f, randomCircle.y);
+        Vector3 targetPosition = transform.position;
+
+        if (NavMesh.SamplePosition(rawDropPosition, out NavMeshHit hit, navMeshSampleDistance, NavMesh.AllAreas))
+            targetPosition = hit.position;
+
+        return targetPosition;
     }
 }
 
