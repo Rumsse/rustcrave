@@ -19,6 +19,7 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to touch it.'
     isIgnoreOption: 0
+    isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 0
     bonusPerMiningPower: 10
@@ -33,12 +34,13 @@ MonoBehaviour:
 
         The rock discharges itself.'
       actions:
-      - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
+      - {fileID: 11400000, guid: 744d7bd7966d2f742babd29f2cb80932, type: 2}
     failureOutcome:
       resultText: 
       actions: []
   - optionText: '    I order ___ to mine it.'
     isIgnoreOption: 0
+    isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 1
     bonusPerMiningPower: 10
@@ -66,6 +68,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
   - optionText: '    Ignore'
     isIgnoreOption: 1
+    isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 0
     bonusPerMiningPower: 10
