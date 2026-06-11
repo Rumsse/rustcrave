@@ -2,10 +2,20 @@ using System;
 using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
+using FMODUnity;
 
 public class TargetLaserController : MonoBehaviour
 {
     [SerializeField] private Laser _laser;
+
+    [SerializeField] private EventReference _chargeSound;
+    [SerializeField] private EventReference _fireSound;
+
+    [SerializeField] private float _laserRange = 50f;
+    [SerializeField] private float _shakeIntensity = 1f;
+    [SerializeField] private float _shakeDuration = 0.2f;
+    [SerializeField] private float _sequenceBuffer = 0.1f;
+    [SerializeField] private float _scaleMultiplier = 2f;
 
     private MeshRenderer _laserMesh;
     private TargetLaserAttack _attackData;
@@ -52,10 +62,11 @@ public class TargetLaserController : MonoBehaviour
         transform.localRotation = Quaternion.LookRotation(_targetUnit.transform.position - _attacker.transform.position);
 
         Sequence.Create()
+            .ChainCallback(() => AudioManager.PlayOneShot(_chargeSound))
             .ChainCallback(() => ScaleIndicators(1))
             .ChainDelay(_attackData.indicatorScaleSettings.duration + _attackData.timeToFire)
             .ChainCallback(FireLasers)
-            .ChainDelay(_attackData.laserScaleSettings.duration * 2f + .1f)
+            .ChainDelay(_attackData.laserScaleSettings.duration * _scaleMultiplier + _sequenceBuffer)
             .ChainCallback(() => _onComplete?.Invoke())
             .ChainCallback(() => PoolManager.Instance.Release(this, _attackData.controllerPrefab));
     }
@@ -66,8 +77,9 @@ public class TargetLaserController : MonoBehaviour
 
     private void FireLasers()
     {
+        AudioManager.PlayOneShot(_fireSound);
         ChangeColors(false);
-        Tween.ShakeCamera(Camera.main, 1f, duration: .2f);
+        Tween.ShakeCamera(Camera.main, _shakeIntensity, duration: _shakeDuration);
         ScaleLasers(1);
 
         FireLaserInDirection(_laser);
@@ -76,15 +88,14 @@ public class TargetLaserController : MonoBehaviour
     private void FireLaserInDirection(Laser laser)
     {
         var startPos = laser.transform.position;
-        float range = 50f;
 
         Vector3 halfExtents = new Vector3(
-            laser.InitialLaserScale.x / 2f,
-            laser.InitialLaserScale.z / 2f,
-            range
+            laser.InitialLaserScale.x / _scaleMultiplier,
+            laser.InitialLaserScale.z / _scaleMultiplier,
+            _laserRange
         );
 
-        Vector3 center = startPos + laser.transform.forward * range;
+        Vector3 center = startPos + laser.transform.forward * _laserRange;
         Quaternion orientation = laser.transform.rotation;
 
         var overlapResult = Physics.OverlapBox(center, halfExtents, orientation, _attackData.mask);
