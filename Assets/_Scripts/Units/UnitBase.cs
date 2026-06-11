@@ -148,20 +148,23 @@ public abstract class UnitBase : MonoBehaviour
         if (CanAttack())
         {
             onAttack?.Invoke();
-
-            if (TryGetComponent<MantisPassiveAbility>(out var mantisPassive))
-            {
-                mantisPassive.ExecuteComboAttack(AttackTarget, currentAttack);
-                PlayAttackSound();
-            }
-            else
-            {
-                PlayAttackSound();
-                currentAttack.Execute(AttackTarget, this);
-            }
-
+            ExecuteAttackAction();
             RollAttack();
             lastAttackTime = Time.time;
+        }
+    }
+
+    protected virtual void ExecuteAttackAction()
+    {
+        if (TryGetComponent<MantisPassiveAbility>(out var mantisPassive))
+        {
+            mantisPassive.ExecuteComboAttack(AttackTarget, currentAttack);
+            PlayAttackSound();
+        }
+        else
+        {
+            PlayAttackSound();
+            currentAttack.Execute(AttackTarget, this);
         }
     }
 
