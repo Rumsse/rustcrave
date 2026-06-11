@@ -2,17 +2,21 @@ using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.AI;
+using FMODUnity;
 
 public class BossCoreP2Spawner : MonoBehaviour
 {
-
     #region Serialized Fields
+
+    [Header("Audio")]
+    [SerializeField] private EventReference _deathSound;
 
     [Header("Phase 2 Spawner")]
     [SerializeField] private Transform _unitTransform;
     [SerializeField] private Collider _col;
     [SerializeField] private Transform _startPos;
     [SerializeField] private float _jumpHeight = 1f;
+    [SerializeField] private float _jumpDurationMultiplier = 0.5f;
     [SerializeField] private List<Transform> _possibleEndPositions = new();
     [SerializeField] private TweenSettings _positionSettings;
     [SerializeField] private int _phaseIndex;
@@ -41,6 +45,7 @@ public class BossCoreP2Spawner : MonoBehaviour
     #region Private Fields
 
     private bool _isExecuted;
+    private const int MinPositionIndex = 0;
 
     #endregion
 
@@ -48,37 +53,28 @@ public class BossCoreP2Spawner : MonoBehaviour
 
     public void Execute(int phaseIndex)
     {
-        Debug.Log($"BossCoreP2Spawner received Execute call for phase index: {phaseIndex}. Current execution state: {_isExecuted}");
-
         if (phaseIndex != _phaseIndex || _isExecuted)
             return;
 
         _isExecuted = true;
 
         if (_bossRenderer == null || _dissolveMaterial == null)
-        {
-            Debug.LogError("Missing references for boss dissolve transition.");
             return;
-        }
 
         Transform bossTransform = _bossPrefab.transform;
 
         Sequence.Create()
             .ChainDelay(_deathDelay)
-            .ChainCallback(() => PrepareDeathEffects())
+            .ChainCallback(PrepareDeathEffects)
             .Group(Tween.Custom(_bossRenderer, _dissolveStartValue, _dissolveEndValue, _deathDuration, (r, val) => r.material.SetFloat(_dissolvePropertyName, val)))
             .Group(Tween.ScaleY(bossTransform, _scaleYTarget, _deathDuration))
             .Group(Tween.PositionY(bossTransform, bossTransform.position.y + _positionYOffset, _deathDuration))
-            .OnComplete(() =>
-            {
-                //_bossPrefab.SetActive(false);
-                //_bossPrefabFallen.SetActive(true);
-                SpawnPhaseTwoUnit();
-            });
+            .OnComplete(SpawnPhaseTwoUnit);
     }
 
     private void PrepareDeathEffects()
     {
+        AudioManager.PlayOneShot(_deathSound);
         _explosionEffect.Play();
         _flamesEffect.Play();
 
@@ -93,7 +89,7 @@ public class BossCoreP2Spawner : MonoBehaviour
 
     private void SpawnPhaseTwoUnit()
     {
-        Vector3 targetPos = _possibleEndPositions[Random.Range(0, _possibleEndPositions.Count)].position;
+        Vector3 targetPos = _possibleEndPositions[Random.Range(MinPositionIndex, _possibleEndPositions.Count)].position;
 
         var unit = _unitTransform;
         _col.enabled = false;
@@ -108,7 +104,8 @@ public class BossCoreP2Spawner : MonoBehaviour
         Tween.PositionZ(unit, new TweenSettings<float>(targetPos.z, _positionSettings));
 
         TweenSettings yPosSettings = _positionSettings;
-        yPosSettings.duration *= .5f;
+        yPosSettings.duration *= _jumpDurationMultiplier;
+
         Tween.PositionY(unit, new TweenSettings<float>(_jumpHeight, yPosSettings))
             .Chain(Tween.PositionY(unit, new TweenSettings<float>(targetPos.y, yPosSettings)))
             .OnComplete(() =>
@@ -119,5 +116,4 @@ public class BossCoreP2Spawner : MonoBehaviour
     }
 
     #endregion
-
 }
