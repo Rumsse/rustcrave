@@ -14,11 +14,12 @@ public class UnitController : MonoBehaviour
 
     private Transform targetTransform;
     private int currentPointIndex;
-    private bool isActive = true; 
+    private bool isActive = true;
     private bool isFleeing;
     private bool _isPausedForAttack;
 
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
+    private const float MovementThreshold = 0.01f;
 
     #region Unity Lifecycle
 
@@ -33,6 +34,8 @@ public class UnitController : MonoBehaviour
 
     private void Update()
     {
+        UpdateAnimationState();
+
         if (_isPausedForAttack || _unit == null || !navMeshAgent.isActiveAndEnabled)
             return;
 
@@ -63,7 +66,6 @@ public class UnitController : MonoBehaviour
     public void PauseForSpecialAttack()
     {
         _isPausedForAttack = true;
-        animator.SetBool(IsWalkingHash, false);
 
         if (!navMeshAgent.isActiveAndEnabled)
             return;
@@ -71,8 +73,6 @@ public class UnitController : MonoBehaviour
         navMeshAgent.ResetPath();
         navMeshAgent.velocity = Vector3.zero;
         navMeshAgent.isStopped = true;
-
-        Debug.Log("[UnitController] Movement perfectly frozen for attack.");
     }
 
     public void ResumeFromSpecialAttack()
@@ -84,8 +84,6 @@ public class UnitController : MonoBehaviour
 
         navMeshAgent.isStopped = false;
         MoveToCurrentWaypoint();
-
-        Debug.Log("[UnitController] Movement resumed. Recalculating path to doors.");
     }
 
     #endregion
@@ -99,7 +97,6 @@ public class UnitController : MonoBehaviour
 
         isActive = true;
         currentPointIndex = 0;
-        animator.SetBool(IsWalkingHash, true);
         MoveToCurrentWaypoint();
     }
 
@@ -107,8 +104,16 @@ public class UnitController : MonoBehaviour
     {
         isActive = false;
         navMeshAgent.ResetPath();
-        animator.SetBool(IsWalkingHash, false);
         targetTransform = null;
+    }
+
+    private void UpdateAnimationState()
+    {
+        if (!navMeshAgent.isActiveAndEnabled)
+            return;
+
+        bool isMoving = navMeshAgent.velocity.sqrMagnitude > MovementThreshold;
+        animator.SetBool(IsWalkingHash, isMoving);
     }
 
     private void HandleFleeing()
@@ -116,7 +121,6 @@ public class UnitController : MonoBehaviour
         isFleeing = true;
         Transform bestPoint = GetFurthestWaypointFromTarget();
         navMeshAgent.SetDestination(bestPoint.position);
-        animator.SetBool(IsWalkingHash, true);
     }
 
     private void ResumePatrolling()
