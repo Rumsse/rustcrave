@@ -5,7 +5,7 @@
 			<value>sx_Wskok</value>
 		</property>
 		<property name="outputFormat">
-			<value>0</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{2336a28b-52c1-4b8c-b26a-85f9cce42539}</destination>
@@ -59,11 +59,18 @@
 	<object class="EventAutomatableProperties" id="{c941fc7c-c21c-4a70-b49f-c0de1c506e3c}" />
 	<object class="MarkerTrack" id="{40a09963-bdec-495d-81ed-d16834412e91}" />
 	<object class="GroupTrack" id="{880f12e6-8556-4574-a1b2-79c4f87fb5aa}">
+		<relationship name="modules">
+			<destination>{7dd370ac-aeb9-4d1b-8a4c-377d65e3a309}</destination>
+		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{c655eee8-fd26-4b1f-a8fa-b70d647eaac1}</destination>
 		</relationship>
 	</object>
-	<object class="Timeline" id="{6e428d22-b73b-4725-9b29-3c6ad21b93bc}" />
+	<object class="Timeline" id="{6e428d22-b73b-4725-9b29-3c6ad21b93bc}">
+		<relationship name="modules">
+			<destination>{7dd370ac-aeb9-4d1b-8a4c-377d65e3a309}</destination>
+		</relationship>
+	</object>
 	<object class="EventMixerMaster" id="{3f068cfb-9704-429c-8886-54f54883afb6}">
 		<relationship name="effectChain">
 			<destination>{db9acdb3-9860-4ebd-acbf-9267a6f16311}</destination>
@@ -81,6 +88,14 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{ad1b3bf8-4054-4720-92d6-65b210bf9a1b}" />
+	<object class="SingleSound" id="{7dd370ac-aeb9-4d1b-8a4c-377d65e3a309}">
+		<property name="length">
+			<value>1.4000000000000001</value>
+		</property>
+		<relationship name="audioFile">
+			<destination>{7c937a57-541a-421e-ae2c-40a445e9f6c3}</destination>
+		</relationship>
+	</object>
 	<object class="EventMixerGroup" id="{c655eee8-fd26-4b1f-a8fa-b70d647eaac1}">
 		<property name="name">
 			<value>Audio 1</value>
