@@ -16,6 +16,7 @@ public class MimicryEnemy : EnemyUnit
     {
         base.Start();
 
+        _isMimicking = true;
         _startLocalPos = mimicryObject.transform.localPosition;
         _waitOffset = new WaitForSeconds(offset);
         StartCoroutine(ShakeCoroutine());
