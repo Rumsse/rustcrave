@@ -245,11 +245,15 @@ public class Unit : UnitBase, ITrackableUnit
             return;
         }
 
-        if (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
+        bool isCloseEnough = !agent.pathPending && (agent.remainingDistance <= agent.stoppingDistance + 0.1f || agent.velocity.sqrMagnitude < 0.01f);
+
+        if (!isCloseEnough)
         {
             animator.SetBool("IsWalking", true);
             return;
         }
+
+        animator.SetBool("IsWalking", false);
 
         if (interactionTimer >= currentInteractable.InteractionTime)
             currentInteractable.PlayEffect();
@@ -276,9 +280,49 @@ public class Unit : UnitBase, ITrackableUnit
         }
 
         currentInteractable = null;
-        animator.SetBool("IsWalking", false);
     }
 
+    private void HandleMining()
+    {
+        if (currentMineable == null || currentMineable.Equals(null) || currentMineable.IsDepleted())
+        {
+            StopMiningEffect();
+            currentMineable = null;
+            animator.SetBool("IsWalking", false);
+            return;
+        }
+
+        bool isCloseEnough = !agent.pathPending && (agent.remainingDistance <= agent.stoppingDistance + 0.1f || agent.velocity.sqrMagnitude < 0.01f);
+
+        if (!isCloseEnough)
+        {
+            animator.SetBool("IsWalking", true);
+            return;
+        }
+
+        animator.SetBool("IsWalking", false);
+
+        if (miningTimer >= miningInterval)
+        {
+            StartMiningEffect();
+        }
+
+        miningTimer -= Time.deltaTime;
+
+        if (miningTimer > 0f)
+            return;
+
+        ItemSO item = currentMineable.Mine();
+
+        if (item != null && !currentMineable.Equals(null) && !currentMineable.IsDepleted())
+        {
+            miningTimer = miningInterval;
+            return;
+        }
+
+        StopMiningEffect();
+        currentMineable = null;
+    }
     private void StartMiningEffect()
     {
         currentMineable.PlayEffect();
@@ -325,45 +369,7 @@ public class Unit : UnitBase, ITrackableUnit
         }
     }
 
-    private void HandleMining()
-    {
-        if (currentMineable == null || currentMineable.Equals(null) || currentMineable.IsDepleted())
-        {
-            StopMiningEffect();
-            currentMineable = null;
-            animator.SetBool("IsWalking", false);
-            return;
-        }
-
-        if (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
-        {
-            animator.SetBool("IsWalking", true);
-            return;
-        }
-
-        animator.SetBool("IsWalking", false);
-
-        if (miningTimer >= miningInterval)
-        {
-            StartMiningEffect();
-        }
-
-        miningTimer -= Time.deltaTime;
-
-        if (miningTimer > 0f)
-            return;
-
-        ItemSO item = currentMineable.Mine();
-
-        if (item != null && !currentMineable.Equals(null) && !currentMineable.IsDepleted())
-        {
-            miningTimer = miningInterval;
-            return;
-        }
-
-        StopMiningEffect();
-        currentMineable = null;
-    }
+    
 
     public void MoveToInteract(IInteractable interactable, Vector3 position)
     {
@@ -372,7 +378,18 @@ public class Unit : UnitBase, ITrackableUnit
         interactionTimer = currentInteractable.InteractionTime;
 
         agent.stoppingDistance = interactionStoppingDistance;
-        agent.SetDestination(position);
+
+        Collider col = (interactable as MonoBehaviour)?.GetComponentInChildren<Collider>();
+        if (col != null)
+        {
+            Vector3 dest = col.ClosestPoint(transform.position);
+            dest.y = transform.position.y;
+            agent.SetDestination(dest);
+        }
+        else
+        {
+            agent.SetDestination(position);
+        }
     }
 
     public void MoveToMine(IMineable mineable, Vector3 position)
@@ -385,11 +402,25 @@ public class Unit : UnitBase, ITrackableUnit
         miningTimer = miningInterval;
 
         agent.stoppingDistance = interactionStoppingDistance;
-        agent.SetDestination(position);
+
+        Collider col = (mineable as MonoBehaviour)?.GetComponentInChildren<Collider>();
+        if (col != null)
+        {
+            Vector3 dest = col.ClosestPoint(transform.position);
+            dest.y = transform.position.y;
+            agent.SetDestination(dest);
+        }
+        else
+        {
+            agent.SetDestination(position);
+        }
     }
 
     public override void MoveToAttack(UnitBase enemy, Vector3 position)
     {
+        if (AttackTarget == enemy)
+            return;
+
         HandleInterruptCurrentAction();
         base.MoveToAttack(enemy, position);
     }
