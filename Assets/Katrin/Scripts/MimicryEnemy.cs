@@ -32,6 +32,8 @@ public class MimicryEnemy : EnemyUnit
         animator.Play(specialAnimationName);
     }
 
+    public override bool FarDetectEnabled() => !_isMimicking;
+
     #region Coroutines
 
     private IEnumerator ShakeCoroutine()
