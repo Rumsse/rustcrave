@@ -126,7 +126,7 @@ public class EndScreen : MonoBehaviour
     {
         float currentHoldTime = 0f;
 
-        while (endingVideoPlayer.isPlaying)
+        while (true)
         {
             if (Input.GetKey(KeyCode.Space))
             {
