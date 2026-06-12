@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 829275997c2ba9448aed1ee9f0a6735a, type: 3}
+  m_Name: ModliszkaKungFu TRAILER
+  m_EditorClassIdentifier: Assembly-CSharp::UnitSO
+  unitType: 0
+  prefab: {fileID: 5536585068807582925, guid: 1ab5610112a1f344b9a8a3bba977899b, type: 3}
+  isMainCharacter: 0
+  robotName: Mantis
+  robotDescription: Instead of a single hit, it deals 3 hits in a row, allowing it
+    to scale very effectively with every attack bonus and applied effect.
+  robotSprite: {fileID: 21300000, guid: ea733fce816407e47a76edcb68124ed8, type: 3}
+  abilityDescription: 'Martial Arts (passive)
+
+    Basic attacks perform 3 quick
+    strikes instead of 1.'
+  moveSpeed: 3
+  maxEnergy: 100
+  maxHP: 8
+  typeImmunities: 0
+  deliveryMethodImmunities: 0
+  damage: 2
+  attacksPerSecond: 1
+  miningPower: 1
+  carryCapacity: 3
+  possibleAttacks:
+  - {fileID: 11400000, guid: 07ac743c94da40e45a1aa21d8b05eb3d, type: 2}
+  sounds:
+    attackSound:
+      Guid:
+        Data1: 1731477733
+        Data2: 1184677963
+        Data3: -2017273415
+        Data4: 2137063850
+      Path: event:/Modliszka/sx_Atak
+    mineSound:
+      Guid:
+        Data1: 1913707430
+        Data2: 1081026164
+        Data3: 1429516193
+        Data4: 1511311355
+      Path: event:/Modliszka/sx_Kopanie
+    oreMiningSounds:
+    - ore: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+      sound:
+        Guid:
+          Data1: 1913707430
+          Data2: 1081026164
+          Data3: 1429516193
+          Data4: 1511311355
+        Path: event:/Modliszka/sx_Kopanie_v1
+    - ore: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+      sound:
+        Guid:
+          Data1: -123905339
+          Data2: 1322407642
+          Data3: -1492667473
+          Data4: -633626788
+        Path: event:/Modliszka/sx_Kopanie_v2
+    - ore: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+      sound:
+        Guid:
+          Data1: 1879999634
+          Data2: 1180298887
+          Data3: -111475294
+          Data4: 296825826
+        Path: event:/Modliszka/sx_Kopanie_v3
+    - ore: {fileID: 11400000, guid: 6779d7aa0ebd29442a3eb702da68dbbc, type: 2}
+      sound:
+        Guid:
+          Data1: 1879999634
+          Data2: 1180298887
+          Data3: -111475294
+          Data4: 296825826
+        Path: event:/Modliszka/sx_Kopanie_v3
+    selectSound:
+      Guid:
+        Data1: -1923601815
+        Data2: 1187947099
+        Data3: 1463221641
+        Data4: -243479633
+      Path: "event:/Modliszka/sx_Wyb\xF3r_jednostki"
+    takeDamageSound:
+      Guid:
+        Data1: 827057985
+        Data2: 1231459809
+        Data3: -313558888
+        Data4: 411369377
+      Path: event:/Modliszka/sx_Dostawanie_DMG
+    deathSound:
+      Guid:
+        Data1: -999124695
+        Data2: 1273702247
+        Data3: -1224625019
+        Data4: 1351227582
+      Path: "event:/Modliszka/sx_\u015Amier\u0107"
+    commandSound:
+      Guid:
+        Data1: -232910080
+        Data2: 1090710824
+        Data3: 188676488
+        Data4: 1163558269
+      Path: event:/Modliszka/sx_Nadanie_rozkazu
+    orderSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
