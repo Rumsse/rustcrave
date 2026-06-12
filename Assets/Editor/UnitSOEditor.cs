@@ -133,7 +133,7 @@ public class UnitSOEditor : Editor
 
     void DrawWarrior()
     {
-        SetColor(UnitType.Warrior);
+        SetColor(UnitType.Hunter);
         EditorGUILayout.LabelField("Warrior Stats", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(damage);
         EditorGUILayout.PropertyField(attacksPerSecond);
@@ -150,7 +150,7 @@ public class UnitSOEditor : Editor
 
     void DrawToter()
     {
-        SetColor(UnitType.Toter);
+        SetColor(UnitType.Specialist);
         EditorGUILayout.LabelField("Toter Stats", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(carryCapacity);
         ResetColor();
@@ -158,7 +158,7 @@ public class UnitSOEditor : Editor
 
     void DrawAttacks()
     {
-        SetColor(UnitType.Warrior);
+        SetColor(UnitType.Hunter);
         EditorGUILayout.LabelField("Attacks", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(possibleAttacks);
         ResetColor();
