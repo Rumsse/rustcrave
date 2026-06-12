@@ -1,3 +1,4 @@
+using FMODUnity;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -15,6 +16,7 @@ public class HydraulicPressMovement : MonoBehaviour
     [SerializeField] private float smashSpeed = 20f;
     [SerializeField] private ParticleSystem impactParticles;
     [SerializeField] private ParticleSystem debrisParticles;
+    [SerializeField] private string targetTag = "Unit";
 
     [Header("Warning Shadow Setup")]
     [SerializeField] private DecalProjector shadowDecalProjector;
@@ -22,12 +24,17 @@ public class HydraulicPressMovement : MonoBehaviour
     [SerializeField] private float maxShadowFade = 1f;
     [SerializeField] private float shadowFadeOutDuration = 0.5f;
 
+    [Header("Audio Setup")]
+    [SerializeField] private EventReference fallingSound;
+    [SerializeField] private EventReference impactSound;
+
     #endregion
 
     #region Private Fields
 
     private Vector3 _targetBottomLocal;
     private bool _hasTriggered;
+    private const float TargetFadeOutValue = 0f;
 
     #endregion
 
@@ -47,12 +54,14 @@ public class HydraulicPressMovement : MonoBehaviour
         if (_hasTriggered)
             return;
 
-        if (!other.CompareTag("Unit"))
+        if (!other.CompareTag(targetTag))
             return;
 
         _hasTriggered = true;
-        Debug.Log("Unit entered trigger. Executing smash with dynamic shadow.");
-        debrisParticles.Play();
+
+        if (debrisParticles)
+            debrisParticles.Play();
+
         ExecuteSmash();
     }
 
@@ -74,6 +83,8 @@ public class HydraulicPressMovement : MonoBehaviour
         float distance = Vector3.Distance(pressTransform.localPosition, _targetBottomLocal);
         float smashDuration = distance / smashSpeed;
 
+        AudioManager.PlayOneShot(fallingSound);
+
         if (shadowDecalProjector)
             Tween.Custom(shadowDecalProjector, initialShadowFade, maxShadowFade, smashDuration, SetDecalFade, Ease.InCubic);
 
@@ -83,6 +94,8 @@ public class HydraulicPressMovement : MonoBehaviour
 
     private void HandleImpact()
     {
+        AudioManager.PlayOneShot(impactSound);
+
         if (impactParticles)
             impactParticles.Play();
 
@@ -90,7 +103,7 @@ public class HydraulicPressMovement : MonoBehaviour
             pressVisualRenderer.shadowCastingMode = ShadowCastingMode.On;
 
         if (shadowDecalProjector)
-            Tween.Custom(shadowDecalProjector, maxShadowFade, 0f, shadowFadeOutDuration, SetDecalFade, Ease.InQuad)
+            Tween.Custom(shadowDecalProjector, maxShadowFade, TargetFadeOutValue, shadowFadeOutDuration, SetDecalFade, Ease.InQuad)
                 .OnComplete(HideDecal);
     }
 

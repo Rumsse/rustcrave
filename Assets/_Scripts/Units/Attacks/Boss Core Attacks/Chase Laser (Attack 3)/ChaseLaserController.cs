@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
 using FMODUnity;
+using FMOD.Studio;
 
 public class ChaseLaserController : MonoBehaviour
 {
@@ -22,12 +23,19 @@ public class ChaseLaserController : MonoBehaviour
     private MaterialPropertyBlock _propertyBlock;
     private static readonly int ColorProp = Shader.PropertyToID("_Color");
 
+    private EventInstance _fireSoundInstance;
+
     #region Unity Lifecycle & Init
 
     private void Awake()
     {
         _laserMesh = GetComponentInChildren<MeshRenderer>();
         _propertyBlock = new MaterialPropertyBlock();
+    }
+
+    private void OnDisable()
+    {
+        StopLoopingSound();
     }
 
     public void Init(DamageInfo damageInfo, ChaseLaserAttack attackData, UnitBase attacker, List<EffectBase> effects)
@@ -64,6 +72,7 @@ public class ChaseLaserController : MonoBehaviour
                     Quaternion.Euler(transform.rotation.x, transform.rotation.y + _attackData.rotateAmount, transform.rotation.z),
                     _attackData.rotationSettings)))
             .ChainDelay(_sequenceBuffer)
+            .ChainCallback(StopLoopingSound)
             .ChainCallback(() => ScaleLasers(0))
             .ChainCallback(() => ScaleIndicators(0))
             .ChainDelay(_attackData.laserScaleSettings.duration + _sequenceBuffer)
@@ -73,7 +82,9 @@ public class ChaseLaserController : MonoBehaviour
 
     private void FireLaser()
     {
-        AudioManager.PlayOneShot(_fireSound);
+        _fireSoundInstance = AudioManager.CreateInstance(_fireSound);
+        _fireSoundInstance.start();
+
         ChangeColors(false);
         ScaleLasers(1f);
     }
@@ -81,6 +92,12 @@ public class ChaseLaserController : MonoBehaviour
     #endregion
 
     #region Helpers
+
+    private void StopLoopingSound()
+    {
+        _fireSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _fireSoundInstance.release();
+    }
 
     private void SetColors(Color color)
     {
