@@ -4,7 +4,6 @@ using UnityEngine;
 public class MimicryEnemy : EnemyUnit
 {
     [SerializeField] private GameObject mimicryObject;
-    [SerializeField] private GameObject mimicryVisualObject;
     [SerializeField] private float offset = 1.5f;
     [SerializeField] private float duration = 0.3f;
     [SerializeField] private float magnitude = 0.001f;
@@ -27,12 +26,10 @@ public class MimicryEnemy : EnemyUnit
         if (!_isMimicking) return;
 
         StopAllCoroutines();
-        mimicryObject.SetActive(false);
-        mimicryVisualObject.SetActive(true);
         _isMimicking = false;
 
         selectedVisualObject.SetActive(true);
-        animator.Play(specialAnimationName);//?
+        animator.Play(specialAnimationName);
     }
 
     #region Coroutines
