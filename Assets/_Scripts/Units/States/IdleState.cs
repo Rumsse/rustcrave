@@ -20,4 +20,5 @@ public class IdleState : UnitState
             _unit.SetState(new FightState(_unit));
         }
     }
+
 }

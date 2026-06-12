@@ -16,7 +16,7 @@ public class MimicryUnitDetection : PlayerUnitDetector
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if (!unit) return;
+        if (!unit || unit.FarDetectEnabled()) return;
 
         if (!other.CompareTag("Unit"))
             return;

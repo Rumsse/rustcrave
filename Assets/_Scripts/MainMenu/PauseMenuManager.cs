@@ -22,6 +22,9 @@ public class PauseMenuManager : MonoBehaviour
 
     private void Update()
     {
+        if (MainMenuManager.IsAnimating)
+            return;
+
         if (Input.GetKeyDown(pauseKey))
             TogglePause();
     }
@@ -40,7 +43,7 @@ public class PauseMenuManager : MonoBehaviour
         Time.timeScale = 0f;
         OnPauseStateChanged?.Invoke(true);
 
-        if (pausePanel == null) 
+        if (pausePanel == null)
             return;
 
         pausePanel.SetActive(true);
@@ -57,7 +60,7 @@ public class PauseMenuManager : MonoBehaviour
 
         OnPauseStateChanged?.Invoke(false);
 
-        if (pausePanel == null) 
+        if (pausePanel == null)
             return;
 
         AudioManager.PlayOneShot(interactionSound);

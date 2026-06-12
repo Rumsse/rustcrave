@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyUnit : UnitBase
-{  
+{
     [SerializeField] protected Transform guardPoint;
     [SerializeField] protected bool specialUnit;
     [SerializeField] protected string specialAnimationName;
@@ -146,6 +146,7 @@ public class EnemyUnit : UnitBase
     protected virtual void HandleSpecialReaction() {}
     public virtual void HandleSpecialEffects() { }
     public override bool SpecialReactionForUnits() => specialUnit;
+    public virtual bool FarDetectEnabled() => true;
     #endregion
 
     #region Stolen Item
