@@ -12,6 +12,7 @@ public class FallingRocksInteraction : InteractableBase
     [SerializeReference] private List<EffectBase> _effects;
     [SerializeField] private bool _isSingleUse;
     [SerializeField] private int _damage;
+    [SerializeField] private SpotLightFlicker _light;
     [SerializeField] private UnityEvent _onTriggered;
     [SerializeField] private EventReference _breakSound;
 
@@ -44,6 +45,13 @@ public class FallingRocksInteraction : InteractableBase
         var proj = PoolManager.Instance.Get(_projectile);
         proj.transform.position = _hitPoint.position;
         proj.Init(new DamageInfo(_damage, AttackType.Environmental), _projectile, _effects);
+
+
+        if (_light != null)
+            _light.TurnOff();
+
+        _used = true;
+
     }
 
     private void PlayBreakSound()

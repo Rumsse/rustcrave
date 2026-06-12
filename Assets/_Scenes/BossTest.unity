@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 3
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 202905940cd85a1428dca2354e104538, type: 2}
   m_HaloStrength: 0.5
@@ -211,6 +211,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 65186aec2a358b145a3366b72a439dbf, type: 3}
   m_PrefabInstance: {fileID: 8472431}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &9666788 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7220926581156070157, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+  m_PrefabInstance: {fileID: 4899833722157507657}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &11063861
 GameObject:
@@ -706,9 +711,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+      propertyPath: _light
+      value: 
+      objectReference: {fileID: 1493846476}
+    - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _hitPoint
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 737896101}
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _lightFlicker
       value: 
@@ -720,6 +729,10 @@ PrefabInstance:
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _interactionEffect
       value: 
+      objectReference: {fileID: 710614517}
+    - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+      propertyPath: _onTriggered.m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _onTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -767,6 +780,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7602481580823248134, guid: b72bc169267189946a94b9a305d33171, type: 3}
   m_PrefabInstance: {fileID: 527827182}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &60902579 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4818983267495314064, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+  m_PrefabInstance: {fileID: 4899833722157507657}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &63903568
 PrefabInstance:
@@ -1750,12 +1768,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+      propertyPath: _light
+      value: 
+      objectReference: {fileID: 1402082018}
+    - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _hitPoint
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1260301369}
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _interactionEffect
       value: 
+      objectReference: {fileID: 269733950}
+    - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+      propertyPath: _onTriggered.m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7340587106051845909, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: m_IsActive
@@ -6965,6 +6991,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 18ba482f71726814ea68133f47df6398, type: 3}
   m_PrefabInstance: {fileID: 259110644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &269733950 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7220926581156070157, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+  m_PrefabInstance: {fileID: 224933454}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &290223284
 GameObject:
@@ -25227,6 +25258,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1126272772056782275, guid: 41e5beccc848211489725e0100d1f74f, type: 3}
   m_PrefabInstance: {fileID: 1940921211}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &710614517 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7220926581156070157, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+  m_PrefabInstance: {fileID: 41921647}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &713351772
 GameObject:
   m_ObjectHideFlags: 0
@@ -25340,6 +25376,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 713351772}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &737896101 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4818983267495314064, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+  m_PrefabInstance: {fileID: 41921647}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &749743792 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 22a1052b16a83334aadc7dca9470b7f7, type: 3}
@@ -38165,6 +38206,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7662925922052656418, guid: 8c6c10a8b629b0c44b3e452f57bf1a2d, type: 3}
   m_PrefabInstance: {fileID: 1110173562}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &1110513567 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7220926581156070157, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+  m_PrefabInstance: {fileID: 1404040758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1131459159
 GameObject:
   m_ObjectHideFlags: 0
@@ -38729,6 +38775,11 @@ RectTransform:
   m_AnchoredPosition: {x: 883.1, y: -469.4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!4 &1260301369 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4818983267495314064, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+  m_PrefabInstance: {fileID: 224933454}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1271535925
 GameObject:
   m_ObjectHideFlags: 0
@@ -54414,6 +54465,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8520260764961628912, guid: 951035ce64425a9409a92057114cf7d3, type: 3}
   m_PrefabInstance: {fileID: 1396370734}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1402082018 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8215490534792320589, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+  m_PrefabInstance: {fileID: 224933454}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd770b95ada8d647a17ff1517fc832a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpotLightFlicker
 --- !u!1001 &1404040758
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54487,12 +54549,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+      propertyPath: _light
+      value: 
+      objectReference: {fileID: 1818546769}
+    - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _hitPoint
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1661339517}
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _interactionEffect
       value: 
+      objectReference: {fileID: 1110513567}
+    - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+      propertyPath: _onTriggered.m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _onTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -71037,6 +71107,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1646636630}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1661339517 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4818983267495314064, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+  m_PrefabInstance: {fileID: 1404040758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1670830274
 GameObject:
   m_ObjectHideFlags: 0
@@ -79336,6 +79411,17 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &1909486813 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8215490534792320589, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+  m_PrefabInstance: {fileID: 4899833722157507657}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd770b95ada8d647a17ff1517fc832a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpotLightFlicker
 --- !u!1001 &1914402352
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -92729,6 +92815,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4686373852462199366, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6201676971794213839, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: m_Name
       value: Rock Fall Interaction (2)
@@ -92742,12 +92832,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+      propertyPath: _light
+      value: 
+      objectReference: {fileID: 1909486813}
+    - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _hitPoint
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 60902579}
     - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: _interactionEffect
       value: 
+      objectReference: {fileID: 9666788}
+    - target: {fileID: 7315383294833347245, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
+      propertyPath: _onTriggered.m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7340587106051845909, guid: 80c5e0432879efe4181157ff26690d0c, type: 3}
       propertyPath: m_IsActive
