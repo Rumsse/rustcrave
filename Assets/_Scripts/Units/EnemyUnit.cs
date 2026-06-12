@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyUnit : UnitBase
-{  
+{
+    [SerializeField] protected GameObject animatedObj;
     [SerializeField] protected Transform guardPoint;
     [SerializeField] protected bool specialUnit;
     [SerializeField] protected string specialAnimationName;
@@ -43,6 +44,8 @@ public class EnemyUnit : UnitBase
 
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
+            if (animatedObj && !animatedObj.activeSelf) return;
+
             animator.SetBool("IsWalking", false);
             HandleSpecialEffects();
             return;
