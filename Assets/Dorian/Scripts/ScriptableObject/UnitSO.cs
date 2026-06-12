@@ -46,10 +46,10 @@ public class UnitSO : ScriptableObject
 
 public enum UnitType
 {
-    Warrior,
+    Hunter,
     Miner,
-    Toter,
-    MC
+    Specialist,
+    Conductor,
 }
 
 [Serializable]
