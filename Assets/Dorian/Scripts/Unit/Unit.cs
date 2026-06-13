@@ -78,9 +78,7 @@ public class Unit : UnitBase, ITrackableUnit
         miningTimer = 0f;
 
         if (isMainCharacter)
-        {
             MainCharacter = this;
-        }
     }
 
     private void OnEnable()
@@ -113,11 +111,11 @@ public class Unit : UnitBase, ITrackableUnit
     {
         UnitRegistry.Unregister(this);
 
-        if (miningSoundInstance.isValid())
-        {
-            miningSoundInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-            miningSoundInstance.release();
-        }
+        if (!miningSoundInstance.isValid())
+            return;
+
+        miningSoundInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        miningSoundInstance.release();
     }
 
     protected override void Update()
@@ -138,33 +136,30 @@ public class Unit : UnitBase, ITrackableUnit
 
     public void RefreshStats()
     {
-        if (stats != null)
-        {
-            baseMoveSpeed = stats.MoveSpeed;
-            float currentPercent = stats.MaxEnergy > 0 ? (float)energyManager.CurrentEnergy / stats.MaxEnergy : 1f;
-            HandleMoveSpeedBasedOnEnergy(currentPercent);
-        }
+        if (stats == null)
+            return;
+
+        baseMoveSpeed = stats.MoveSpeed;
+        float currentPercent = stats.MaxEnergy > 0 ? (float)energyManager.CurrentEnergy / stats.MaxEnergy : 1f;
+        HandleMoveSpeedBasedOnEnergy(currentPercent);
     }
 
     private void HandleDamageTaken(int newCurrentHP)
     {
         if (swarmUnitsData != null)
-        {
             swarmUnitsData.currentHP = newCurrentHP;
-        }
     }
 
     private void HandleMoveSpeedBasedOnEnergy(float energyPercent)
     {
-        if (energyPercent < lowEnergyThreshold)
-        {
-            float t = energyPercent / lowEnergyThreshold;
-            agent.speed = Mathf.Lerp(minMoveSpeedMultiplier * baseMoveSpeed, baseMoveSpeed, t);
-        }
-        else
+        if (energyPercent >= lowEnergyThreshold)
         {
             agent.speed = baseMoveSpeed;
+            return;
         }
+
+        float t = energyPercent / lowEnergyThreshold;
+        agent.speed = Mathf.Lerp(minMoveSpeedMultiplier * baseMoveSpeed, baseMoveSpeed, t);
     }
 
     private void HandleInterruptCurrentAction()
@@ -184,15 +179,13 @@ public class Unit : UnitBase, ITrackableUnit
     public void CancelActionAndPath()
     {
         if (currentMineable != null || currentInteractable != null || AttackTarget != null)
-        {
             HandleInterruptCurrentAction();
-        }
 
-        if (agent.hasPath)
-        {
-            agent.ResetPath();
-            animator.SetBool("IsWalking", false);
-        }
+        if (!agent.hasPath)
+            return;
+
+        agent.ResetPath();
+        animator.SetBool("IsWalking", false);
     }
 
     private void HandleEnergyDepleted()
@@ -210,30 +203,18 @@ public class Unit : UnitBase, ITrackableUnit
     private void HandleEnergyDrain()
     {
         if (isAttacking)
-        {
             energyManager.SetActionDrain();
-        }
         else if (currentMineable != null || currentInteractable != null)
-        {
             energyManager.SetActionDrain();
-        }
         else if (agent.velocity.magnitude > MIN_VELOCITY_MAGNITUDE)
         {
-            energyManager.SetMoveDrain();
-
             if (IsEnergyDrainDoubled)
-            {
                 energyManager.SetActionDrain();
-            }
             else
-            {
                 energyManager.SetMoveDrain();
-            }
         }
         else
-        {
             energyManager.SetIdleDrain();
-        }
     }
 
     private void HandleInteraction()
@@ -245,7 +226,7 @@ public class Unit : UnitBase, ITrackableUnit
             return;
         }
 
-        bool isCloseEnough = !agent.pathPending && (agent.remainingDistance <= agent.stoppingDistance + 0.1f || agent.velocity.sqrMagnitude < 0.01f);
+        bool isCloseEnough = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + 0.1f;
 
         if (!isCloseEnough)
         {
@@ -275,9 +256,7 @@ public class Unit : UnitBase, ITrackableUnit
             }
         }
         else
-        {
             currentInteractable.Interact();
-        }
 
         currentInteractable = null;
     }
@@ -292,7 +271,7 @@ public class Unit : UnitBase, ITrackableUnit
             return;
         }
 
-        bool isCloseEnough = !agent.pathPending && (agent.remainingDistance <= agent.stoppingDistance + 0.1f || agent.velocity.sqrMagnitude < 0.01f);
+        bool isCloseEnough = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + 0.1f;
 
         if (!isCloseEnough)
         {
@@ -303,9 +282,7 @@ public class Unit : UnitBase, ITrackableUnit
         animator.SetBool("IsWalking", false);
 
         if (miningTimer >= miningInterval)
-        {
             StartMiningEffect();
-        }
 
         miningTimer -= Time.deltaTime;
 
@@ -323,6 +300,7 @@ public class Unit : UnitBase, ITrackableUnit
         StopMiningEffect();
         currentMineable = null;
     }
+
     private void StartMiningEffect()
     {
         currentMineable.PlayEffect();
@@ -336,11 +314,11 @@ public class Unit : UnitBase, ITrackableUnit
             {
                 foreach (OreMiningSound oreSound in stats.Sounds.oreMiningSounds)
                 {
-                    if (oreSound.ore == targetOre)
-                    {
-                        soundToPlay = oreSound.sound;
-                        break;
-                    }
+                    if (oreSound.ore != targetOre)
+                        continue;
+
+                    soundToPlay = oreSound.sound;
+                    break;
                 }
             }
 
@@ -349,27 +327,21 @@ public class Unit : UnitBase, ITrackableUnit
 
         miningSoundInstance.getPlaybackState(out PLAYBACK_STATE playbackState);
         if (playbackState == PLAYBACK_STATE.STOPPED)
-        {
             miningSoundInstance.start();
-        }
     }
 
     private void StopMiningEffect()
     {
         if (currentMineable != null && !currentMineable.Equals(null))
-        {
             currentMineable.StopEffect();
-        }
 
-        if (miningSoundInstance.isValid())
-        {
-            miningSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            miningSoundInstance.release();
-            miningSoundInstance.clearHandle();
-        }
+        if (!miningSoundInstance.isValid())
+            return;
+
+        miningSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        miningSoundInstance.release();
+        miningSoundInstance.clearHandle();
     }
-
-    
 
     public void MoveToInteract(IInteractable interactable, Vector3 position)
     {
@@ -387,9 +359,7 @@ public class Unit : UnitBase, ITrackableUnit
             agent.SetDestination(dest);
         }
         else
-        {
             agent.SetDestination(position);
-        }
     }
 
     public void MoveToMine(IMineable mineable, Vector3 position)
@@ -411,9 +381,7 @@ public class Unit : UnitBase, ITrackableUnit
             agent.SetDestination(dest);
         }
         else
-        {
             agent.SetDestination(position);
-        }
     }
 
     public override void MoveToAttack(UnitBase enemy, Vector3 position)
@@ -472,39 +440,28 @@ public class Unit : UnitBase, ITrackableUnit
 
     public void SyncDataToState()
     {
-        if (swarmUnitsData != null && swarmUnitsData.isAlive)
-        {
-            swarmUnitsData.currentHP = healthManager.CurrentHP;
-            swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
+        if (swarmUnitsData == null || !swarmUnitsData.isAlive)
+            return;
 
-            inventory.InventorySO.TransferTo(swarmState.GlobalInventory);
-        }
+        swarmUnitsData.currentHP = healthManager.CurrentHP;
+        swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
+
+        inventory.InventorySO.TransferTo(swarmState.GlobalInventory);
     }
 
-    public void SetAnimator(Animator newAnimator)
-    {
-        animator = newAnimator;
-    }
+    public void SetAnimator(Animator newAnimator) => animator = newAnimator;
 
     public void PlayCommandAnimation()
     {
         if (animator != null && !string.IsNullOrEmpty(commandTriggerName))
-        {
             animator.SetTrigger(commandTriggerName);
-        }
     }
 
     #region Audio
 
-    public void PlaySelectSound()
-    {
-        AudioManager.PlayOneShot(stats.Sounds.selectSound);
-    }
+    public void PlaySelectSound() => AudioManager.PlayOneShot(stats.Sounds.selectSound);
 
-    public void PlayCommandSound()
-    {
-        AudioManager.PlayOneShot(stats.Sounds.commandSound);
-    }
+    public void PlayCommandSound() => AudioManager.PlayOneShot(stats.Sounds.commandSound);
 
     #endregion
 }
