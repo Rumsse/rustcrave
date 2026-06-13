@@ -24,6 +24,8 @@ public class ChaseLaserController : MonoBehaviour
     private static readonly int ColorProp = Shader.PropertyToID("_Color");
 
     private EventInstance _fireSoundInstance;
+    private Sequence _sequence;
+    private Tween _colorTween;
 
     #region Unity Lifecycle & Init
 
@@ -36,6 +38,15 @@ public class ChaseLaserController : MonoBehaviour
     private void OnDisable()
     {
         StopLoopingSound();
+
+        if (_sequence.isAlive)
+            _sequence.Stop();
+
+        if (_colorTween.isAlive)
+            _colorTween.Stop();
+
+        if (_attacker != null)
+            _attacker.IsPerformingSpecial = false;
     }
 
     public void Init(DamageInfo damageInfo, ChaseLaserAttack attackData, UnitBase attacker, List<EffectBase> effects)
@@ -48,8 +59,8 @@ public class ChaseLaserController : MonoBehaviour
         _damageOnTriggerEnter.Init(_damageInfo, _attacker.gameObject);
 
         SetColors(_attackData.startColor);
-        ScaleLasersInstant(0);
-        ScaleIndicatorInstant(0);
+        ScaleLasersInstant(0f);
+        ScaleIndicatorInstant(0f);
 
         PlaySequence();
     }
@@ -60,7 +71,7 @@ public class ChaseLaserController : MonoBehaviour
 
     private void PlaySequence()
     {
-        Sequence.Create()
+        _sequence = Sequence.Create()
             .ChainCallback(() => AudioManager.PlayOneShot(_chargeSound))
             .ChainCallback(() => ScaleIndicators(1f))
             .ChainDelay(_attackData.indicatorScaleSettings.duration + _attackData.timeToFire)
@@ -73,10 +84,14 @@ public class ChaseLaserController : MonoBehaviour
                     _attackData.rotationSettings)))
             .ChainDelay(_sequenceBuffer)
             .ChainCallback(StopLoopingSound)
-            .ChainCallback(() => ScaleLasers(0))
-            .ChainCallback(() => ScaleIndicators(0))
+            .ChainCallback(() => ScaleLasers(0f))
+            .ChainCallback(() => ScaleIndicators(0f))
             .ChainDelay(_attackData.laserScaleSettings.duration + _sequenceBuffer)
-            .ChainCallback(() => _attacker.IsPerformingSpecial = false)
+            .ChainCallback(() =>
+            {
+                if (_attacker != null)
+                    _attacker.IsPerformingSpecial = false;
+            })
             .ChainCallback(() => PoolManager.Instance.Release(this, _attackData.controllerPrefab));
     }
 
@@ -111,7 +126,7 @@ public class ChaseLaserController : MonoBehaviour
         Color startColor = toEndValue ? _attackData.startColor : _attackData.endColor;
         Color endColor = toEndValue ? _attackData.endColor : _attackData.startColor;
 
-        Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, SetColors);
+        _colorTween = Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, SetColors);
     }
 
     #region Scale
