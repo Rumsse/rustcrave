@@ -5,6 +5,7 @@ using UnityEngine;
 public class DamageSwarmAction : EventAction
 {
     public int damageAmount = 2;
+    public bool excludeMC = false;
 
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)
     {
@@ -13,6 +14,9 @@ public class DamageSwarmAction : EventAction
         foreach (var unit in units)
         {
             if (!unit.isAlive)
+                continue;
+
+            if (excludeMC && unit.unitType != null && unit.unitType.unitType == UnitType.Conductor)
                 continue;
 
             unit.currentHP -= damageAmount;
