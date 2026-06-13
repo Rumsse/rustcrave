@@ -10,6 +10,12 @@ public class RainLaserController : MonoBehaviour
     [SerializeField] private EventReference _chargeSound;
     [SerializeField] private EventReference _fireSound;
 
+    [SerializeField] private float _chargeSoundDelay = 0f;
+    [SerializeField] private float _indicatorDelay = 0f;
+    [SerializeField] private float _fireSoundDelay = 0f;
+    [SerializeField] private float _laserVisualDelay = 0f;
+    [SerializeField] private float _hitTimeOffset = -0.5f;
+
     [SerializeField] private float _shakeIntensity = 1f;
     [SerializeField] private float _shakeDuration = 0.2f;
     [SerializeField] private float _sphereRadiusDivider = 2f;
@@ -26,7 +32,10 @@ public class RainLaserController : MonoBehaviour
     private static readonly int ColorProp = Shader.PropertyToID("_Color");
 
     private Sequence _sequence;
+    private Sequence _audioSequence;
     private Tween _colorTween;
+    private Tween _fireAudioTween;
+    private Tween _laserVisualTween;
 
     #region Init
 
@@ -37,8 +46,17 @@ public class RainLaserController : MonoBehaviour
         if (_sequence.isAlive)
             _sequence.Stop();
 
+        if (_audioSequence.isAlive)
+            _audioSequence.Stop();
+
         if (_colorTween.isAlive)
             _colorTween.Stop();
+
+        if (_fireAudioTween.isAlive)
+            _fireAudioTween.Stop();
+
+        if (_laserVisualTween.isAlive)
+            _laserVisualTween.Stop();
 
         StopAllCoroutines();
 
@@ -72,9 +90,19 @@ public class RainLaserController : MonoBehaviour
 
         ResetLaser(laser);
 
-        Sequence seq = Sequence.Create()
-            .ChainCallback(() => AudioManager.PlayOneShot(_chargeSound))
-            .ChainCallback(() => ScaleIndividualIndicator(1, laser))
+        _audioSequence = Sequence.Create();
+
+        if (_chargeSoundDelay > 0f)
+            _audioSequence.ChainDelay(_chargeSoundDelay);
+
+        _audioSequence.ChainCallback(() => AudioManager.PlayOneShot(_chargeSound));
+
+        Sequence seq = Sequence.Create();
+
+        if (_indicatorDelay > 0f)
+            seq.ChainDelay(_indicatorDelay);
+
+        seq.ChainCallback(() => ScaleIndividualIndicator(1f, laser))
             .ChainDelay(_attackData.indicatorScaleSettings.duration + _attackData.timeToFire)
             .ChainCallback(() => FireLaser(laser))
             .ChainDelay(_attackData.laserScaleSettings.duration * _scaleMultiplier + _attackData.attackDelay)
@@ -103,18 +131,41 @@ public class RainLaserController : MonoBehaviour
 
     private void FireLaser(Laser laser)
     {
-        AudioManager.PlayOneShot(_fireSound);
-        ChangeColor(laser, false);
+        if (_fireSoundDelay > 0f)
+        {
+            _fireAudioTween = Tween.Delay(_fireSoundDelay, () => AudioManager.PlayOneShot(_fireSound));
+        }
+        else
+        {
+            AudioManager.PlayOneShot(_fireSound);
+        }
+
         Tween.ShakeCamera(Camera.main, _shakeIntensity, duration: _shakeDuration);
-        ScaleIndividualLasers(1, laser);
-        ScaleIndividualIndicator(0, laser);
+        ScaleIndividualIndicator(0f, laser);
+
+        if (_laserVisualDelay > 0f)
+        {
+            _laserVisualTween = Tween.Delay(_laserVisualDelay, () =>
+            {
+                ChangeColor(laser, false);
+                ScaleIndividualLasers(1f, laser);
+            });
+        }
+        else
+        {
+            ChangeColor(laser, false);
+            ScaleIndividualLasers(1f, laser);
+        }
 
         StartCoroutine(TryHit(laser));
     }
 
     private IEnumerator TryHit(Laser laser)
     {
-        yield return new WaitForSeconds(_attackData.laserScaleSettings.duration);
+        float waitTime = Mathf.Max(0f, _attackData.laserScaleSettings.duration + _hitTimeOffset);
+
+        if (waitTime > 0f)
+            yield return new WaitForSeconds(waitTime);
 
         var overlapResult = Physics.OverlapSphere(
             laser.transform.position,
@@ -200,8 +251,8 @@ public class RainLaserController : MonoBehaviour
     private void ResetLaser(Laser laser)
     {
         SetColor(laser, _attackData.startColor);
-        ScaleIndividualIndicatorInstant(0, laser);
-        ScaleIndividualLasersInstant(0, laser);
+        ScaleIndividualIndicatorInstant(0f, laser);
+        ScaleIndividualLasersInstant(0f, laser);
     }
 
     #endregion
