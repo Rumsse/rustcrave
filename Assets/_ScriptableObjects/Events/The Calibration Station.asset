@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: The Calibration Station
   m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
   eventTitle: THE CALIBRATION STATION
-  eventIcon: {fileID: 276966819, guid: 132358e9bf26b60458b731bf001e31db, type: 3}
+  eventIcon: {fileID: 21300000, guid: 632ee6bcf16ab2c418dc23cf8c9436b0, type: 3}
   eventDescription: 'A pristine, pre-fall calibration pod stands open in the center
     of the room. It was designed to permanently alter a robot''s core programming,
     though its ancient algorithms are unpredictable.
@@ -23,6 +23,7 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to enter the pod.'
     isIgnoreOption: 0
+    isLuckCheck: 0
     baseSuccessChance: 0
     isMiningCheck: 0
     bonusPerMiningPower: 0
@@ -39,6 +40,7 @@ MonoBehaviour:
       actions: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
+    isLuckCheck: 0
     baseSuccessChance: 0
     isMiningCheck: 0
     bonusPerMiningPower: 0

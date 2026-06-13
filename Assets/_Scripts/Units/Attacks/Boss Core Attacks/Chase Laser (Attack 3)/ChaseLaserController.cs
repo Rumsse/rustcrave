@@ -1,11 +1,18 @@
 using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
+using FMODUnity;
+using FMOD.Studio;
 
 public class ChaseLaserController : MonoBehaviour
 {
     [SerializeField] private Laser _laser;
     [SerializeField] private DamageOnTriggerEnter _damageOnTriggerEnter;
+
+    [SerializeField] private EventReference _chargeSound;
+    [SerializeField] private EventReference _fireSound;
+
+    [SerializeField] private float _sequenceBuffer = 0.1f;
 
     private MeshRenderer _laserMesh;
     private ChaseLaserAttack _attackData;
@@ -16,12 +23,19 @@ public class ChaseLaserController : MonoBehaviour
     private MaterialPropertyBlock _propertyBlock;
     private static readonly int ColorProp = Shader.PropertyToID("_Color");
 
+    private EventInstance _fireSoundInstance;
+
     #region Unity Lifecycle & Init
 
     private void Awake()
     {
         _laserMesh = GetComponentInChildren<MeshRenderer>();
         _propertyBlock = new MaterialPropertyBlock();
+    }
+
+    private void OnDisable()
+    {
+        StopLoopingSound();
     }
 
     public void Init(DamageInfo damageInfo, ChaseLaserAttack attackData, UnitBase attacker, List<EffectBase> effects)
@@ -47,25 +61,30 @@ public class ChaseLaserController : MonoBehaviour
     private void PlaySequence()
     {
         Sequence.Create()
+            .ChainCallback(() => AudioManager.PlayOneShot(_chargeSound))
             .ChainCallback(() => ScaleIndicators(1f))
             .ChainDelay(_attackData.indicatorScaleSettings.duration + _attackData.timeToFire)
             .ChainCallback(FireLaser)
-            .ChainDelay(_attackData.laserScaleSettings.duration + .1f)
+            .ChainDelay(_attackData.laserScaleSettings.duration + _sequenceBuffer)
             .Chain(Tween.LocalRotation(
                 transform,
                 new TweenSettings<Quaternion>(
                     Quaternion.Euler(transform.rotation.x, transform.rotation.y + _attackData.rotateAmount, transform.rotation.z),
                     _attackData.rotationSettings)))
-            .ChainDelay(.1f)
+            .ChainDelay(_sequenceBuffer)
+            .ChainCallback(StopLoopingSound)
             .ChainCallback(() => ScaleLasers(0))
             .ChainCallback(() => ScaleIndicators(0))
-            .ChainDelay(_attackData.laserScaleSettings.duration + .1f)
+            .ChainDelay(_attackData.laserScaleSettings.duration + _sequenceBuffer)
             .ChainCallback(() => _attacker.IsPerformingSpecial = false)
             .ChainCallback(() => PoolManager.Instance.Release(this, _attackData.controllerPrefab));
     }
 
     private void FireLaser()
     {
+        _fireSoundInstance = AudioManager.CreateInstance(_fireSound);
+        _fireSoundInstance.start();
+
         ChangeColors(false);
         ScaleLasers(1f);
     }
@@ -73,6 +92,12 @@ public class ChaseLaserController : MonoBehaviour
     #endregion
 
     #region Helpers
+
+    private void StopLoopingSound()
+    {
+        _fireSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _fireSoundInstance.release();
+    }
 
     private void SetColors(Color color)
     {

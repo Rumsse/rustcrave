@@ -82,7 +82,11 @@ public static class MapGenerator
             }
         }
 
-        for (int rowIndex = 1; rowIndex < rows - 1; rowIndex++)
+
+
+        // OPTIONAL: it is for adding some horizontal connections for variety
+
+        /*for (int rowIndex = 1; rowIndex < rows - 1; rowIndex++)
         {
             var rowNodes = nodesByRow[rowIndex].OrderBy(n => n.ColumnPosition).ToList();
 
@@ -94,7 +98,7 @@ public static class MapGenerator
                     rowNodes[i + 1].AddConnection(rowNodes[i].Id);
                 }
             }
-        }
+        }*/
 
         return nodes;
     }

@@ -14,7 +14,9 @@ public static class SpawnHelper
         {
             int index = Random.Range(0, available.Count);
             selected.Add(available[index]);
-            available.RemoveAt(index);
+
+            available[index] = available[^1];
+            available.RemoveAt(available.Count - 1);
         }
 
         return selected;

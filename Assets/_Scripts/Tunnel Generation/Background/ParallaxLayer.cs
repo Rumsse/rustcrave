@@ -12,6 +12,7 @@ public class ParallaxLayer : MonoBehaviour, IParallaxLayer
     [SerializeField] private Vector3 parallaxMultiplier;
     [SerializeField] private Transform[] segments;
     [SerializeField] private float segmentLengthZ;
+    [SerializeField] private float viewOffsetZ;
 
     private float totalLength;
     private float halfLength;
@@ -36,13 +37,15 @@ public class ParallaxLayer : MonoBehaviour, IParallaxLayer
         totalLength = segmentLengthZ * segments.Length;
         halfLength = totalLength / 2f;
 
+        float startZ = segments[0].localPosition.z;
+
         for (int i = 0; i < segments.Length; i++)
         {
             if (segments[i] == null)
                 continue;
 
             Vector3 localPos = segments[i].localPosition;
-            localPos.z = i * segmentLengthZ;
+            localPos.z = startZ + (i * segmentLengthZ);
             segments[i].localPosition = localPos;
         }
     }
@@ -62,7 +65,7 @@ public class ParallaxLayer : MonoBehaviour, IParallaxLayer
         if (segmentLengthZ <= 0f)
             return;
 
-        if (parallaxMultiplier != Vector3.zero)
+        if (parallaxMultiplier != Vector3.zero && cameraDelta != Vector3.zero)
             transform.position += Vector3.Scale(cameraDelta, parallaxMultiplier);
 
         LoopSegments(cameraPosition.z);
@@ -70,9 +73,14 @@ public class ParallaxLayer : MonoBehaviour, IParallaxLayer
 
     private void LoopSegments(float cameraZ)
     {
+        float targetZ = cameraZ + viewOffsetZ;
+
         foreach (var segment in segments)
         {
-            float distanceBehindCamera = cameraZ - segment.position.z;
+            if (segment == null)
+                continue;
+
+            float distanceBehindCamera = targetZ - segment.position.z;
 
             if (distanceBehindCamera > halfLength)
                 segment.localPosition += new Vector3(0f, 0f, totalLength);

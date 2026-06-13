@@ -15,8 +15,9 @@ public enum UnitActivity
 
 public class Unit : UnitBase, ITrackableUnit
 {
-    public static Unit MainCharacter { get; private set; }
+    #region Properties & Fields
 
+    public static Unit MainCharacter { get; private set; }
     public static List<Unit> units = new();
 
     public string Id => swarmUnitsData.id;
@@ -52,6 +53,10 @@ public class Unit : UnitBase, ITrackableUnit
 
     private EventInstance miningSoundInstance;
 
+    #endregion
+
+    #region Initialization & Lifecycle
+
     public void Initialize(SwarmUnitsData data, SwarmState state)
     {
         swarmUnitsData = data;
@@ -78,9 +83,7 @@ public class Unit : UnitBase, ITrackableUnit
         miningTimer = 0f;
 
         if (isMainCharacter)
-        {
             MainCharacter = this;
-        }
     }
 
     private void OnEnable()
@@ -113,11 +116,11 @@ public class Unit : UnitBase, ITrackableUnit
     {
         UnitRegistry.Unregister(this);
 
-        if (miningSoundInstance.isValid())
-        {
-            miningSoundInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-            miningSoundInstance.release();
-        }
+        if (!miningSoundInstance.isValid())
+            return;
+
+        miningSoundInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        miningSoundInstance.release();
     }
 
     protected override void Update()
@@ -136,35 +139,36 @@ public class Unit : UnitBase, ITrackableUnit
             HandleInteraction();
     }
 
+    #endregion
+
+    #region Core Logic
+
     public void RefreshStats()
     {
-        if (stats != null)
-        {
-            baseMoveSpeed = stats.MoveSpeed;
-            float currentPercent = stats.MaxEnergy > 0 ? (float)energyManager.CurrentEnergy / stats.MaxEnergy : 1f;
-            HandleMoveSpeedBasedOnEnergy(currentPercent);
-        }
+        if (stats == null)
+            return;
+
+        baseMoveSpeed = stats.MoveSpeed;
+        float currentPercent = stats.MaxEnergy > 0 ? (float)energyManager.CurrentEnergy / stats.MaxEnergy : 1f;
+        HandleMoveSpeedBasedOnEnergy(currentPercent);
     }
 
     private void HandleDamageTaken(int newCurrentHP)
     {
         if (swarmUnitsData != null)
-        {
             swarmUnitsData.currentHP = newCurrentHP;
-        }
     }
 
     private void HandleMoveSpeedBasedOnEnergy(float energyPercent)
     {
-        if (energyPercent < lowEnergyThreshold)
-        {
-            float t = energyPercent / lowEnergyThreshold;
-            agent.speed = Mathf.Lerp(minMoveSpeedMultiplier * baseMoveSpeed, baseMoveSpeed, t);
-        }
-        else
+        if (energyPercent >= lowEnergyThreshold)
         {
             agent.speed = baseMoveSpeed;
+            return;
         }
+
+        float t = energyPercent / lowEnergyThreshold;
+        agent.speed = Mathf.Lerp(minMoveSpeedMultiplier * baseMoveSpeed, baseMoveSpeed, t);
     }
 
     private void HandleInterruptCurrentAction()
@@ -184,15 +188,13 @@ public class Unit : UnitBase, ITrackableUnit
     public void CancelActionAndPath()
     {
         if (currentMineable != null || currentInteractable != null || AttackTarget != null)
-        {
             HandleInterruptCurrentAction();
-        }
 
-        if (agent.hasPath)
-        {
-            agent.ResetPath();
-            animator.SetBool("IsWalking", false);
-        }
+        if (!agent.hasPath)
+            return;
+
+        agent.ResetPath();
+        animator.SetBool("IsWalking", false);
     }
 
     private void HandleEnergyDepleted()
@@ -210,30 +212,18 @@ public class Unit : UnitBase, ITrackableUnit
     private void HandleEnergyDrain()
     {
         if (isAttacking)
-        {
             energyManager.SetActionDrain();
-        }
         else if (currentMineable != null || currentInteractable != null)
-        {
             energyManager.SetActionDrain();
-        }
         else if (agent.velocity.magnitude > MIN_VELOCITY_MAGNITUDE)
         {
-            energyManager.SetMoveDrain();
-
             if (IsEnergyDrainDoubled)
-            {
                 energyManager.SetActionDrain();
-            }
             else
-            {
                 energyManager.SetMoveDrain();
-            }
         }
         else
-        {
             energyManager.SetIdleDrain();
-        }
     }
 
     private void HandleInteraction()
@@ -245,11 +235,15 @@ public class Unit : UnitBase, ITrackableUnit
             return;
         }
 
-        if (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
+        bool isCloseEnough = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + 0.1f;
+
+        if (!isCloseEnough)
         {
             animator.SetBool("IsWalking", true);
             return;
         }
+
+        animator.SetBool("IsWalking", false);
 
         if (interactionTimer >= currentInteractable.InteractionTime)
             currentInteractable.PlayEffect();
@@ -269,60 +263,13 @@ public class Unit : UnitBase, ITrackableUnit
                 pickup.Interact();
                 Destroy(pickup.gameObject);
             }
+            else
+                inventory.TriggerInventoryFullAttempt();
         }
         else
-        {
             currentInteractable.Interact();
-        }
 
         currentInteractable = null;
-        animator.SetBool("IsWalking", false);
-    }
-
-    private void StartMiningEffect()
-    {
-        currentMineable.PlayEffect();
-
-        if (!miningSoundInstance.isValid())
-        {
-            EventReference soundToPlay = stats.Sounds.mineSound;
-            OreSO targetOre = currentMineable.GetOreData();
-
-            if (targetOre != null && stats.Sounds.oreMiningSounds != null)
-            {
-                foreach (OreMiningSound oreSound in stats.Sounds.oreMiningSounds)
-                {
-                    if (oreSound.ore == targetOre)
-                    {
-                        soundToPlay = oreSound.sound;
-                        break;
-                    }
-                }
-            }
-
-            miningSoundInstance = RuntimeManager.CreateInstance(soundToPlay);
-        }
-
-        miningSoundInstance.getPlaybackState(out PLAYBACK_STATE playbackState);
-        if (playbackState == PLAYBACK_STATE.STOPPED)
-        {
-            miningSoundInstance.start();
-        }
-    }
-
-    private void StopMiningEffect()
-    {
-        if (currentMineable != null && !currentMineable.Equals(null))
-        {
-            currentMineable.StopEffect();
-        }
-
-        if (miningSoundInstance.isValid())
-        {
-            miningSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            miningSoundInstance.release();
-            miningSoundInstance.clearHandle();
-        }
     }
 
     private void HandleMining()
@@ -335,7 +282,9 @@ public class Unit : UnitBase, ITrackableUnit
             return;
         }
 
-        if (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
+        bool isCloseEnough = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + 0.1f;
+
+        if (!isCloseEnough)
         {
             animator.SetBool("IsWalking", true);
             return;
@@ -344,9 +293,7 @@ public class Unit : UnitBase, ITrackableUnit
         animator.SetBool("IsWalking", false);
 
         if (miningTimer >= miningInterval)
-        {
             StartMiningEffect();
-        }
 
         miningTimer -= Time.deltaTime;
 
@@ -365,6 +312,10 @@ public class Unit : UnitBase, ITrackableUnit
         currentMineable = null;
     }
 
+    #endregion
+
+    #region Actions & Movement
+
     public void MoveToInteract(IInteractable interactable, Vector3 position)
     {
         HandleInterruptCurrentAction();
@@ -372,7 +323,16 @@ public class Unit : UnitBase, ITrackableUnit
         interactionTimer = currentInteractable.InteractionTime;
 
         agent.stoppingDistance = interactionStoppingDistance;
-        agent.SetDestination(position);
+
+        Collider col = (interactable as MonoBehaviour)?.GetComponentInChildren<Collider>();
+        if (col != null)
+        {
+            Vector3 dest = col.ClosestPoint(transform.position);
+            dest.y = transform.position.y;
+            agent.SetDestination(dest);
+        }
+        else
+            agent.SetDestination(position);
     }
 
     public void MoveToMine(IMineable mineable, Vector3 position)
@@ -385,11 +345,23 @@ public class Unit : UnitBase, ITrackableUnit
         miningTimer = miningInterval;
 
         agent.stoppingDistance = interactionStoppingDistance;
-        agent.SetDestination(position);
+
+        Collider col = (mineable as MonoBehaviour)?.GetComponentInChildren<Collider>();
+        if (col != null)
+        {
+            Vector3 dest = col.ClosestPoint(transform.position);
+            dest.y = transform.position.y;
+            agent.SetDestination(dest);
+        }
+        else
+            agent.SetDestination(position);
     }
 
     public override void MoveToAttack(UnitBase enemy, Vector3 position)
     {
+        if (AttackTarget == enemy)
+            return;
+
         HandleInterruptCurrentAction();
         base.MoveToAttack(enemy, position);
     }
@@ -404,6 +376,10 @@ public class Unit : UnitBase, ITrackableUnit
         agent.stoppingDistance = defaultStoppingDistance;
         base.HandleMovement(position);
     }
+
+    #endregion
+
+    #region Utility
 
     public bool IsMining()
     {
@@ -441,39 +417,72 @@ public class Unit : UnitBase, ITrackableUnit
 
     public void SyncDataToState()
     {
-        if (swarmUnitsData != null && swarmUnitsData.isAlive)
-        {
-            swarmUnitsData.currentHP = healthManager.CurrentHP;
-            swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
+        if (swarmUnitsData == null || !swarmUnitsData.isAlive)
+            return;
 
-            inventory.InventorySO.TransferTo(swarmState.GlobalInventory);
-        }
+        swarmUnitsData.currentHP = healthManager.CurrentHP;
+        swarmUnitsData.currentEnergy = energyManager.CurrentEnergy;
+
+        inventory.InventorySO.TransferTo(swarmState.GlobalInventory);
     }
 
-    public void SetAnimator(Animator newAnimator)
-    {
-        animator = newAnimator;
-    }
+    public void SetAnimator(Animator newAnimator) => animator = newAnimator;
 
     public void PlayCommandAnimation()
     {
         if (animator != null && !string.IsNullOrEmpty(commandTriggerName))
-        {
             animator.SetTrigger(commandTriggerName);
+    }
+
+    #endregion
+
+    #region Audio & Effects
+
+    private void StartMiningEffect()
+    {
+        currentMineable.PlayEffect();
+
+        if (!miningSoundInstance.isValid())
+        {
+            EventReference soundToPlay = stats.Sounds.mineSound;
+            OreSO targetOre = currentMineable.GetOreData();
+
+            if (targetOre != null && stats.Sounds.oreMiningSounds != null)
+            {
+                foreach (OreMiningSound oreSound in stats.Sounds.oreMiningSounds)
+                {
+                    if (oreSound.ore != targetOre)
+                        continue;
+
+                    soundToPlay = oreSound.sound;
+                    break;
+                }
+            }
+
+            miningSoundInstance = RuntimeManager.CreateInstance(soundToPlay);
         }
+
+        miningSoundInstance.getPlaybackState(out PLAYBACK_STATE playbackState);
+        if (playbackState == PLAYBACK_STATE.STOPPED)
+            miningSoundInstance.start();
     }
 
-    #region Audio
-
-    public void PlaySelectSound()
+    private void StopMiningEffect()
     {
-        AudioManager.PlayOneShot(stats.Sounds.selectSound);
+        if (currentMineable != null && !currentMineable.Equals(null))
+            currentMineable.StopEffect();
+
+        if (!miningSoundInstance.isValid())
+            return;
+
+        miningSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        miningSoundInstance.release();
+        miningSoundInstance.clearHandle();
     }
 
-    public void PlayCommandSound()
-    {
-        AudioManager.PlayOneShot(stats.Sounds.commandSound);
-    }
+    public void PlaySelectSound() => AudioManager.PlayOneShot(stats.Sounds.selectSound);
+
+    public void PlayCommandSound() => AudioManager.PlayOneShot(stats.Sounds.commandSound);
 
     #endregion
 }

@@ -36,6 +36,8 @@ public class MainMenuManager : MonoBehaviour
 
     #endregion
 
+    public static bool IsAnimating { get; private set; }
+
     #region Unity Methods
 
     private void Start()
@@ -50,12 +52,17 @@ public class MainMenuManager : MonoBehaviour
             continueButton.SetInteractable(SaveManager.Instance.HasAnySave());
     }
 
+    private void OnDisable() => IsAnimating = false;
+
     #endregion
 
     #region Menu Actions
 
     public void StartNewMission()
     {
+        if (IsAnimating)
+            return;
+
         SceneLoadContext.IsNewGame = true;
         InitializeGameStates();
         StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(gameSceneName)));
@@ -63,9 +70,12 @@ public class MainMenuManager : MonoBehaviour
 
     public void ContinueMission()
     {
+        if (IsAnimating)
+            return;
+
         if (!SaveManager.Instance.HasAnySave())
         {
-            Debug.Log("[MainMenuManager] No saves found to continue.");
+            Debug.Log("No saves found to continue.");
             return;
         }
 
@@ -75,6 +85,9 @@ public class MainMenuManager : MonoBehaviour
 
     public void LoadMissionFromSlot(int slotIndex)
     {
+        if (IsAnimating)
+            return;
+
         SaveManager.Instance.LoadGame(slotIndex);
         StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(gameSceneName)));
     }
@@ -85,17 +98,32 @@ public class MainMenuManager : MonoBehaviour
 
     public void QuitGame()
     {
+        if (IsAnimating)
+            return;
+
         if (quittingPanel)
             quittingPanel.SetActive(false);
 
         StartCoroutine(MoveCharacterAndExecute(quitGameTarget, QuitApplication));
     }
 
-    public void OpenOptions() => StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", () => ActivatePanel(optionsPanelMainMenuOnly)));
+    public void OpenOptions()
+    {
+        if (IsAnimating)
+            return;
+
+        StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", () => ActivatePanel(optionsPanelMainMenuOnly)));
+    }
 
     public void CloseOptions() => SetPanelState(optionsPanelMainMenuOnly, false);
 
-    public void OpenCredits() => StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", StartCreditsSequence));
+    public void OpenCredits()
+    {
+        if (IsAnimating)
+            return;
+
+        StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", StartCreditsSequence));
+    }
 
     public void CloseCredits()
     {
@@ -119,11 +147,13 @@ public class MainMenuManager : MonoBehaviour
 
     #endregion
 
-
     #region Logic And Coroutines
 
     private void StartPlaySequence(string sceneName)
     {
+        if (IsAnimating)
+            return;
+
         InitializeGameStates();
         StartCoroutine(MoveCharacterAndExecute(startGameTarget, () => _ = SceneTransitionManager.Instance.WipeToScene(sceneName)));
     }
@@ -152,11 +182,13 @@ public class MainMenuManager : MonoBehaviour
 
     private IEnumerator PlayAnimationAndExecute(string animationStateName, Action onComplete)
     {
+        IsAnimating = true;
         AudioManager.PlayOneShot(interactionButtonSound);
 
         if (!characterAnimator)
         {
             Debug.LogError("Missing Animator reference.");
+            IsAnimating = false;
             onComplete?.Invoke();
             yield break;
         }
@@ -165,16 +197,19 @@ public class MainMenuManager : MonoBehaviour
 
         yield return new WaitForSeconds(panelAnimationDuration);
 
+        IsAnimating = false;
         onComplete?.Invoke();
     }
 
     private IEnumerator MoveCharacterAndExecute(Transform target, Action onComplete)
     {
+        IsAnimating = true;
         AudioManager.PlayOneShot(interactionButtonSound);
 
         if (!characterAnimator || !characterTransform || !target)
         {
             Debug.LogError("Missing references for character movement.");
+            IsAnimating = false;
             onComplete?.Invoke();
             yield break;
         }
@@ -192,6 +227,7 @@ public class MainMenuManager : MonoBehaviour
             yield return null;
         }
 
+        IsAnimating = false;
         onComplete?.Invoke();
     }
 
@@ -227,12 +263,11 @@ public class MainMenuManager : MonoBehaviour
 
     #endregion
 
-
     #region Save System UI
 
     public void OnContinueClicked()
     {
-        if (!SaveManager.Instance.HasAnySave())
+        if (!SaveManager.Instance.HasAnySave() || IsAnimating)
             return;
 
         SaveManager.Instance.ContinueGame();
@@ -241,6 +276,9 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnSlotClicked(int slotIndex)
     {
+        if (IsAnimating)
+            return;
+
         if (SaveManager.Instance.HasSaveFile(slotIndex))
         {
             SaveManager.Instance.SetCurrentSlot(slotIndex);

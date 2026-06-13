@@ -90,7 +90,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.70710677, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 2, z: -0.000000059604645}
-  m_LocalScale: {x: 2.5, y: 50, z: 2.5}
+  m_LocalScale: {x: 2.8, y: 50, z: 2.8}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5431492361072878039}
@@ -173,8 +173,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 2, z: 1.5}
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Size: {x: 1.5, y: 2, z: 2.27587}
+  m_Center: {x: 0.000000085149495, y: 0, z: 0.3879349}
 --- !u!114 &4969229670468227643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,6 +242,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChaseLaserController
   _laser: {fileID: 5000012556106030226}
   _damageOnTriggerEnter: {fileID: 4969229670468227643}
+  _chargeSound:
+    Guid:
+      Data1: 1237979041
+      Data2: 1244166717
+      Data3: -230460014
+      Data4: 974576596
+    Path: "event:/Boss/sx_Laser_ d\u0142ugi_\u0142adowanie"
+  _fireSound:
+    Guid:
+      Data1: -185190334
+      Data2: 1145296716
+      Data3: 1807332283
+      Data4: 440175449
+    Path: "event:/Boss/sx_Laser_ d\u0142ugi_trwanie"
+  _sequenceBuffer: 0.1
 --- !u!114 &5000012556106030226
 MonoBehaviour:
   m_ObjectHideFlags: 0

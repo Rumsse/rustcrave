@@ -206,10 +206,14 @@ public class EventPanelController : MonoBehaviour
         }
 
         var robotNames = robotDropdownMap.Keys.ToList();
-
         robotDropdown.choices = robotNames;
-        robotDropdown.SetValueWithoutNotify(robotNames[0]);
-        currentSelectedRobot = robotDropdownMap[robotNames[0]];
+
+        if (currentSelectedRobot != null && robotDropdownMap.ContainsValue(currentSelectedRobot))
+            robotDropdown.SetValueWithoutNotify(robotDropdownMap.FirstOrDefault(x => x.Value == currentSelectedRobot).Key);
+        else
+            robotDropdown.SetValueWithoutNotify(robotNames[0]);
+
+        currentSelectedRobot = robotDropdownMap[robotDropdown.value];
     }
 
     void OnRobotSelectionChanged(string newRobotName)
@@ -328,14 +332,11 @@ public class EventPanelController : MonoBehaviour
         CloseEventPanel();
     }
 
-    void CloseEventForNow()
+    void CloseEventForNow() => CloseEventPanel(() =>
     {
-        CloseEventPanel(() =>
-        {
-            if (popUpContainer != null)
-                popUpContainer.style.display = DisplayStyle.Flex;
-        });
-    }
+        if (popUpContainer != null)
+            popUpContainer.style.display = DisplayStyle.Flex;
+    });
 
     #endregion
 
@@ -388,6 +389,10 @@ public class EventPanelController : MonoBehaviour
     {
         if (eventLayer == null || isAnimating || popUpButton == null)
             return;
+
+        FetchActiveRobots();
+        SetupDropdown();
+        UpdateDynamicTexts();
 
         isAnimating = true;
 

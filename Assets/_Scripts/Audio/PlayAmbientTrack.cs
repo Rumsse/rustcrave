@@ -31,4 +31,6 @@ public class PlayAmbientTrack : MonoBehaviour
     }
 
     public void PlayAmbient() => SoundtrackPlayer.Instance.PlayAmbientTrack(_eventReference);
+
+    public void StopAmbient() => SoundtrackPlayer.Instance.StopAmbientTrack();
 }

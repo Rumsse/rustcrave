@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 public class UnitInventory : MonoBehaviour
 {
+    public event Action OnInventoryFullAttempt;
     public InventorySO InventorySO => inventorySO;
 
     [SerializeField] protected InventorySO inventorySO;
@@ -15,10 +17,7 @@ public class UnitInventory : MonoBehaviour
         statsManager = GetComponent<StatsManager>();
     }
 
-    private void Start()
-    {
-        UpdateCapacity();
-    }
+    private void Start() => UpdateCapacity();
 
     public void UpdateCapacity()
     {
@@ -36,6 +35,8 @@ public class UnitInventory : MonoBehaviour
         inventorySO.maxCapacity = newCapacity;
         inventorySO.ForceRefresh();
     }
+
+    public void TriggerInventoryFullAttempt() => OnInventoryFullAttempt?.Invoke();
 
     private void OnApplicationQuit()
     {

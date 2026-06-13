@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitSO
   unitType: 1
   prefab: {fileID: 5536585068807582925, guid: 7f09f2f2edf8f9c42a679aa420cfd655, type: 3}
+  isMainCharacter: 0
   robotName: Ant
   robotDescription: 'Fast, agile, but fragile with low health.
 
@@ -25,8 +26,7 @@ MonoBehaviour:
   abilityDescription: 'Better Together (passive)
 
     Gains +1 to DIG, ATTACK, and
-    SPEED if next to another robot. If it is another ant, gains an additional +1
-    to that stats.'
+    SPEED if next to another robot.'
   moveSpeed: 3
   maxEnergy: 100
   maxHP: 6
@@ -35,7 +35,7 @@ MonoBehaviour:
   damage: 2
   attacksPerSecond: 1
   miningPower: 4
-  carryCapacity: 5
+  carryCapacity: 4
   possibleAttacks:
   - {fileID: 11400000, guid: 07ac743c94da40e45a1aa21d8b05eb3d, type: 2}
   sounds:

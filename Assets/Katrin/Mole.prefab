@@ -9754,7 +9754,7 @@ NavMeshAgent:
   m_Radius: 0.5
   m_Speed: 3.5
   m_Acceleration: 8
-  avoidancePriority: 50
+  avoidancePriority: 48
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
@@ -9788,7 +9788,28 @@ MonoBehaviour:
   guardPoint: {fileID: 8730813952283317411}
   specialUnit: 1
   specialAnimationName: Mole_Up
-  diggingEffect: {fileID: 4351219827280395888}
+  _diggingEffect: {fileID: 4351219827280395888}
+  _digSound:
+    Guid:
+      Data1: 40521222
+      Data2: 1334580126
+      Data3: -1633927258
+      Data4: -127704680
+    Path: event:/Kret/sx_Wskok
+  _emergeSound:
+    Guid:
+      Data1: -597013384
+      Data2: 1160804031
+      Data3: 1886853044
+      Data4: -36791957
+    Path: event:/Kret/sx_Wyskok
+  _moleAttackSound:
+    Guid:
+      Data1: 1950237969
+      Data2: 1151773289
+      Data3: -1731596656
+      Data4: 209011347
+    Path: event:/Kret/sx_Atak
 --- !u!114 &6661612963204746029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9852,7 +9873,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -9870,9 +9891,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DropItem
   _dropChance: 1
   _possibleDrops:
-  - ore: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+  - ore: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
     pickUpPrefab: {fileID: 567936930993025482, guid: e8fee2afd57368f48b8b4d66e48a71cf, type: 3}
   _dropAmount: 1
+  minDropRadius: 1
+  maxDropRadius: 2
+  navMeshSampleDistance: 2
 --- !u!114 &1575755916201164036
 MonoBehaviour:
   m_ObjectHideFlags: 0

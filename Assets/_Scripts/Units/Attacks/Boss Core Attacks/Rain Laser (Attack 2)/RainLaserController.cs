@@ -3,9 +3,19 @@ using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
 using Utils;
+using FMODUnity;
 
 public class RainLaserController : MonoBehaviour
 {
+    [SerializeField] private EventReference _chargeSound;
+    [SerializeField] private EventReference _fireSound;
+
+    [SerializeField] private float _shakeIntensity = 1f;
+    [SerializeField] private float _shakeDuration = 0.2f;
+    [SerializeField] private float _sphereRadiusDivider = 2f;
+    [SerializeField] private float _sequenceBuffer = 0.1f;
+    [SerializeField] private float _scaleMultiplier = 2f;
+
     private RainLaserAttack _attackData;
     private DamageInfo _damageInfo;
     private UnitBase _attacker;
@@ -46,10 +56,11 @@ public class RainLaserController : MonoBehaviour
         ResetLaser(laser);
 
         Sequence seq = Sequence.Create()
+            .ChainCallback(() => AudioManager.PlayOneShot(_chargeSound))
             .ChainCallback(() => ScaleIndividualIndicator(1, laser))
             .ChainDelay(_attackData.indicatorScaleSettings.duration + _attackData.timeToFire)
             .ChainCallback(() => FireLaser(laser))
-            .ChainDelay(_attackData.laserScaleSettings.duration * 2f + _attackData.attackDelay)
+            .ChainDelay(_attackData.laserScaleSettings.duration * _scaleMultiplier + _attackData.attackDelay)
             .ChainCallback(() => PoolManager.Instance.Release(laser, _attackData.laserPrefab));
 
         if (index < _attackData.hitAmount - 1)
@@ -67,8 +78,9 @@ public class RainLaserController : MonoBehaviour
 
     private void FireLaser(Laser laser)
     {
+        AudioManager.PlayOneShot(_fireSound);
         ChangeColor(laser, false);
-        Tween.ShakeCamera(Camera.main, 1f, duration: .2f);
+        Tween.ShakeCamera(Camera.main, _shakeIntensity, duration: _shakeDuration);
         ScaleIndividualLasers(1, laser);
         ScaleIndividualIndicator(0, laser);
 
@@ -81,7 +93,7 @@ public class RainLaserController : MonoBehaviour
 
         var overlapResult = Physics.OverlapSphere(
             laser.transform.position,
-            laser.Visuals.localScale.x / 2f,
+            laser.Visuals.localScale.x / _sphereRadiusDivider,
             _attackData.mask);
 
         if (overlapResult.Length == 0)

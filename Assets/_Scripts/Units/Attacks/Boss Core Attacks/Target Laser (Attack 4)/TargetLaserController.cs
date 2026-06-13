@@ -1,10 +1,21 @@
+using System;
 using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
+using FMODUnity;
 
 public class TargetLaserController : MonoBehaviour
 {
     [SerializeField] private Laser _laser;
+
+    [SerializeField] private EventReference _chargeSound;
+    [SerializeField] private EventReference _fireSound;
+
+    [SerializeField] private float _laserRange = 50f;
+    [SerializeField] private float _shakeIntensity = 1f;
+    [SerializeField] private float _shakeDuration = 0.2f;
+    [SerializeField] private float _sequenceBuffer = 0.1f;
+    [SerializeField] private float _scaleMultiplier = 2f;
 
     private MeshRenderer _laserMesh;
     private TargetLaserAttack _attackData;
@@ -15,6 +26,7 @@ public class TargetLaserController : MonoBehaviour
 
     private MaterialPropertyBlock _propertyBlock;
     private static readonly int ColorProp = Shader.PropertyToID("_Color");
+    private Action _onComplete;
 
     #region Unity Lifecycle & Init
 
@@ -24,12 +36,13 @@ public class TargetLaserController : MonoBehaviour
         _propertyBlock = new MaterialPropertyBlock();
     }
 
-    public void Init(DamageInfo damageInfo, TargetLaserAttack attackData, UnitBase attacker, List<EffectBase> effects)
+    public void Init(DamageInfo damageInfo, TargetLaserAttack attackData, UnitBase attacker, List<EffectBase> effects, Action onComplete = null)
     {
         _damageInfo = damageInfo;
         _attackData = attackData;
         _attacker = attacker;
         _effects = effects;
+        _onComplete = onComplete;
 
         _targetUnit = Unit.GetRandomUnit();
 
@@ -49,11 +62,12 @@ public class TargetLaserController : MonoBehaviour
         transform.localRotation = Quaternion.LookRotation(_targetUnit.transform.position - _attacker.transform.position);
 
         Sequence.Create()
+            .ChainCallback(() => AudioManager.PlayOneShot(_chargeSound))
             .ChainCallback(() => ScaleIndicators(1))
             .ChainDelay(_attackData.indicatorScaleSettings.duration + _attackData.timeToFire)
             .ChainCallback(FireLasers)
-            .ChainDelay(_attackData.laserScaleSettings.duration * 2f + .1f)
-            .ChainCallback(() => _attacker.IsPerformingSpecial = false)
+            .ChainDelay(_attackData.laserScaleSettings.duration * _scaleMultiplier + _sequenceBuffer)
+            .ChainCallback(() => _onComplete?.Invoke())
             .ChainCallback(() => PoolManager.Instance.Release(this, _attackData.controllerPrefab));
     }
 
@@ -63,8 +77,9 @@ public class TargetLaserController : MonoBehaviour
 
     private void FireLasers()
     {
+        AudioManager.PlayOneShot(_fireSound);
         ChangeColors(false);
-        Tween.ShakeCamera(Camera.main, 1f, duration: .2f);
+        Tween.ShakeCamera(Camera.main, _shakeIntensity, duration: _shakeDuration);
         ScaleLasers(1);
 
         FireLaserInDirection(_laser);
@@ -73,15 +88,14 @@ public class TargetLaserController : MonoBehaviour
     private void FireLaserInDirection(Laser laser)
     {
         var startPos = laser.transform.position;
-        float range = 50f;
 
         Vector3 halfExtents = new Vector3(
-            laser.InitialLaserScale.x / 2f,
-            laser.InitialLaserScale.z / 2f,
-            range
+            laser.InitialLaserScale.x / _scaleMultiplier,
+            laser.InitialLaserScale.z / _scaleMultiplier,
+            _laserRange
         );
 
-        Vector3 center = startPos + laser.transform.forward * range;
+        Vector3 center = startPos + laser.transform.forward * _laserRange;
         Quaternion orientation = laser.transform.rotation;
 
         var overlapResult = Physics.OverlapBox(center, halfExtents, orientation, _attackData.mask);
@@ -100,9 +114,11 @@ public class TargetLaserController : MonoBehaviour
             if (result.attachedRigidbody.TryGetComponent(out IDamageable damageable))
                 damageable.Hit(_damageInfo);
 
-            if (_effects.Count > 0 && result.attachedRigidbody.TryGetComponent(out IAffectable affectable))
-                foreach (var effect in _effects)
-                    affectable.ApplyEffect(effect);
+            if (_effects.Count == 0 || !result.attachedRigidbody.TryGetComponent(out IAffectable affectable))
+                continue;
+
+            foreach (var effect in _effects)
+                affectable.ApplyEffect(effect);
         }
     }
 
