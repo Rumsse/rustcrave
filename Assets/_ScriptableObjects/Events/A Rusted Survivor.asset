@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: A Rusted Survivor
   m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
   eventTitle: A RUSTED SURVIVOR
-  eventIcon: {fileID: 21300000, guid: ba9192bae9c0d5a489bcb4141a7a645b, type: 3}
+  eventIcon: {fileID: 21300000, guid: a8f1cd40abafe4b4ca84e8e798d871a8, type: 3}
   eventDescription: 'You find a severely damaged automaton leaning against the Asylum
     wall. Its core is flickering erratically, on the verge of critical failure.
 
@@ -39,9 +39,10 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 5e5eb3fafdadbf043a7ee96ddff33958, type: 2}
     failureOutcome:
       resultText: " ___ crosses the wrong wires! The core destabilizes completely
-        and detonates with a blinding flash! \n\nAll robots in the Swarm take 2 DMG. "
+        and detonates with a blinding flash! \n\nAll robots in the Swarm take 2 DMG,
+        but Hollow Conductor avoided it. "
       actions:
-      - {fileID: 0}
+      - {fileID: 11400000, guid: cd15431a8544b88408126be7466b6ca2, type: 2}
   - optionText: '    I order ___ to brutally dismantle it for parts. '
     isIgnoreOption: 0
     isLuckCheck: 0

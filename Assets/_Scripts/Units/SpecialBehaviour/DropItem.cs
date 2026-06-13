@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 
 public class DropItem : MonoBehaviour
 {
+    [SerializeField] private ActiveModifier activeModifier;
     [SerializeField][Range(0f, 1f)] private float _dropChance;
     [SerializeField] private List<DropInstance> _possibleDrops = new();
     [SerializeField] private int _dropAmount = 1;
@@ -17,7 +18,17 @@ public class DropItem : MonoBehaviour
     public void Drop()
     {
         if (_possibleDrops.Count == 0) return;
-        if (_dropChance != 1f && Random.Range(0f, 1f) <= _dropChance) return;
+
+        float finalChance = _dropChance;
+        int finalAmount = _dropAmount;
+
+        if (activeModifier != null && activeModifier.IsVoidChase)
+        {
+            finalChance = 1f;
+            finalAmount *= 2;
+        }
+
+        if (finalChance < 1f && Random.value > finalChance) return;
 
         DropRandomItems();
         DropStolenItem();
