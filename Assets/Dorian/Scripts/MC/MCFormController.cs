@@ -59,6 +59,9 @@ public class MCFormController : MonoBehaviour
     private Vector3 defaultConductorLocalPos;
     private Quaternion defaultConductorLocalRot;
 
+    private bool isOverridingVisualPos = false;
+    private Vector3 currentSpiderVisualPos;
+
     #endregion
 
     #region Unity Methods
@@ -90,6 +93,12 @@ public class MCFormController : MonoBehaviour
     {
         if (Input.GetKeyDown(switchKey) && !isTransitioning)
             TryToggleForm();
+    }
+
+    private void LateUpdate()
+    {
+        if (isOverridingVisualPos && spiderVisual != null)
+            spiderVisual.transform.position = currentSpiderVisualPos;
     }
 
     #endregion
@@ -130,11 +139,11 @@ public class MCFormController : MonoBehaviour
         if (spiderAnimator != null)
             spiderAnimator.SetBool(walkingBoolName, false);
 
-        if (TryGetComponent<NavMeshAgent>(out var agent))
-        {
-            agent.ResetPath();
-            agent.speed = statsManager != null ? statsManager.MoveSpeed : spiderStats.moveSpeed;
-        }
+        if (!TryGetComponent<NavMeshAgent>(out var agent))
+            return;
+
+        agent.ResetPath();
+        agent.speed = statsManager != null ? statsManager.MoveSpeed : spiderStats.moveSpeed;
     }
 
     private IEnumerator SwitchToSpiderRoutine()
@@ -142,20 +151,15 @@ public class MCFormController : MonoBehaviour
         isTransitioning = true;
         currentForm = CharacterForm.Spider;
 
-        Vector3 startGlobalSpiderPos = hatSlot != null ? hatSlot.position : transform.position;
+        Vector3 visualStartGlobalPos = hatSlot != null ? hatSlot.position : transform.position + Vector3.up * 1.8f;
 
         droppedBodyInstance = Instantiate(conductorBodyPrefab, transform.position, transform.rotation);
         DisableHatOnClone(droppedBodyInstance);
 
         if (droppedBodyInstance.TryGetComponent<DroppedBody>(out var droppedBody))
-        {
-            if (droppedBody.bodyAnimator != null)
-                droppedBody.bodyAnimator.SetTrigger(bodyDropTriggerName);
-        }
+            droppedBody.bodyAnimator?.SetTrigger(bodyDropTriggerName);
         else if (droppedBodyInstance.TryGetComponent<Animator>(out var fallbackAnimator))
-        {
             fallbackAnimator.SetTrigger(bodyDropTriggerName);
-        }
 
         SetFormVisuals(CharacterForm.Spider);
         ApplyStats(spiderStats);
@@ -163,35 +167,40 @@ public class MCFormController : MonoBehaviour
         if (spiderAnimator != null)
             spiderAnimator.SetTrigger(disconnectTriggerName);
 
-        Vector3 rootStart = transform.position;
-        Vector3 rootTarget = transform.position + (transform.forward * spiderDropForwardOffset);
+        Vector3 rootStartPos = transform.position;
+        Vector3 rootTargetPos = transform.position + (transform.forward * spiderDropForwardOffset);
         float elapsed = 0f;
 
         if (TryGetComponent<NavMeshAgent>(out var agent))
             agent.enabled = false;
 
+        isOverridingVisualPos = true;
+
         while (elapsed < disconnectAnimationDuration)
         {
             float t = elapsed / disconnectAnimationDuration;
 
-            transform.position = Vector3.Lerp(rootStart, rootTarget, t);
+            transform.position = Vector3.Lerp(rootStartPos, rootTargetPos, t);
 
-            Vector3 targetGlobalSpiderPos = transform.TransformPoint(defaultSpiderLocalPos);
-            Vector3 linearPos = Vector3.Lerp(startGlobalSpiderPos, targetGlobalSpiderPos, t);
+            Vector3 visualTargetGlobalPos = transform.TransformPoint(defaultSpiderLocalPos);
+            Vector3 currentVisualPos = Vector3.Lerp(visualStartGlobalPos, visualTargetGlobalPos, t);
 
-            linearPos.y += Mathf.Sin(t * Mathf.PI) * jumpArcHeight;
-            spiderVisual.transform.position = linearPos;
+            float lerpedHeight = Mathf.Lerp(visualStartGlobalPos.y, visualTargetGlobalPos.y, t);
+            currentVisualPos.y = lerpedHeight + (Mathf.Sin(t * Mathf.PI) * jumpArcHeight);
+
+            currentSpiderVisualPos = currentVisualPos;
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        transform.position = rootTarget;
+        isOverridingVisualPos = false;
+        transform.position = rootTargetPos;
 
         if (agent != null)
         {
             agent.enabled = true;
-            agent.Warp(rootTarget);
+            agent.Warp(rootTargetPos);
         }
 
         spiderVisual.transform.localPosition = defaultSpiderLocalPos;
@@ -252,14 +261,9 @@ public class MCFormController : MonoBehaviour
         EnableHatOnClone(droppedBodyInstance);
 
         if (droppedBodyInstance.TryGetComponent<DroppedBody>(out var droppedBodyComponent))
-        {
-            if (droppedBodyComponent.bodyAnimator != null)
-                droppedBodyComponent.bodyAnimator.SetTrigger(bodyRiseTriggerName);
-        }
+            droppedBodyComponent.bodyAnimator?.SetTrigger(bodyRiseTriggerName);
         else if (droppedBodyInstance.TryGetComponent<Animator>(out var fallbackAnimator))
-        {
             fallbackAnimator.SetTrigger(bodyRiseTriggerName);
-        }
 
         yield return new WaitForSeconds(connectAnimationDuration);
 
@@ -302,11 +306,11 @@ public class MCFormController : MonoBehaviour
         Transform[] allTransforms = clone.GetComponentsInChildren<Transform>(true);
         foreach (Transform childTransform in allTransforms)
         {
-            if (childTransform.name == activeHat.name)
-            {
-                childTransform.gameObject.SetActive(false);
-                break;
-            }
+            if (childTransform.name != activeHat.name)
+                continue;
+
+            childTransform.gameObject.SetActive(false);
+            break;
         }
     }
 
@@ -318,11 +322,11 @@ public class MCFormController : MonoBehaviour
         Transform[] allTransforms = clone.GetComponentsInChildren<Transform>(true);
         foreach (Transform childTransform in allTransforms)
         {
-            if (childTransform.name == activeHat.name)
-            {
-                childTransform.gameObject.SetActive(true);
-                break;
-            }
+            if (childTransform.name != activeHat.name)
+                continue;
+
+            childTransform.gameObject.SetActive(true);
+            break;
         }
     }
 
