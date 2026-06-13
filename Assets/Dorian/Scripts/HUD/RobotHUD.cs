@@ -53,7 +53,6 @@ public class RobotHUD : MonoBehaviour
 
     private int lastDisplayedHP = -1;
     private int lastDisplayedEnergy = -1;
-    private bool wasInventoryFull;
 
     private List<InventorySlotUI> uiSlots = new List<InventorySlotUI>();
     private List<CircularInventorySlot> circularSlots = new List<CircularInventorySlot>();
@@ -120,10 +119,15 @@ public class RobotHUD : MonoBehaviour
             inventoryUI.SetUnit(unit);
 
         currentInventory = unit.GetComponent<UnitInventory>();
-        if (currentInventory != null && currentInventory.InventorySO != null)
+        if (currentInventory != null)
         {
-            currentInventory.InventorySO.OnInventoryChanged += HandleInventoryChanged;
-            RefreshInventoryVisuals();
+            currentInventory.OnInventoryFullAttempt += ShowFullInventoryPopup;
+
+            if (currentInventory.InventorySO != null)
+            {
+                currentInventory.InventorySO.OnInventoryChanged += HandleInventoryChanged;
+                RefreshInventoryVisuals();
+            }
         }
 
         healthManager = unit.GetComponent<HealthManager>();
@@ -161,9 +165,6 @@ public class RobotHUD : MonoBehaviour
             return;
 
         UnitPanel.Instance.TogglePanel(selectedUnit);
-
-        if (UnitSelectionSystem.Instance != null)
-            UnitSelectionSystem.Instance.SetSelectedUnit(selectedUnit);
 
         if (UnitSelectionSystem.Instance != null)
             UnitSelectionSystem.Instance.SetSelectedUnit(selectedUnit);
@@ -322,20 +323,9 @@ public class RobotHUD : MonoBehaviour
 
         for (int i = currentVisualSlotIndex; i < circularSlots.Count; i++)
             circularSlots[i].SetEmpty();
-
-        bool isFull = currentVisualSlotIndex >= circularSlots.Count && circularSlots.Count > 0;
-
-        if (isFull && !wasInventoryFull)
-            ShowFullInventoryPopup();
-
-        wasInventoryFull = isFull;
     }
 
     #endregion
-
-    #region Animations
-
-    #region Animations
 
     #region Animations
 
@@ -362,10 +352,6 @@ public class RobotHUD : MonoBehaviour
 
     #endregion
 
-    #endregion
-
-    #endregion
-
     #region Unity Callbacks
 
     private void OnDestroy()
@@ -375,8 +361,13 @@ public class RobotHUD : MonoBehaviour
         if (UnitSelectionSystem.Instance != null)
             UnitSelectionSystem.Instance.OnSelectedUnitChanged -= HandleSelectionChanged;
 
-        if (currentInventory != null && currentInventory.InventorySO != null)
-            currentInventory.InventorySO.OnInventoryChanged -= HandleInventoryChanged;
+        if (currentInventory != null)
+        {
+            currentInventory.OnInventoryFullAttempt -= ShowFullInventoryPopup;
+
+            if (currentInventory.InventorySO != null)
+                currentInventory.InventorySO.OnInventoryChanged -= HandleInventoryChanged;
+        }
 
         if (healthManager != null)
             healthManager.onHealthPercentChange -= HandleHealthChanged;
