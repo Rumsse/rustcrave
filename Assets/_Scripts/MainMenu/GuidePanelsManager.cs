@@ -7,12 +7,12 @@ using UnityEngine.UI;
 
 public enum GuideCategory
 {
-    Movement,
-    Interactions,
-    Combat,
-    RobotsInfo,
-    Environment,
-    Restroom
+    Controls,
+    Restroom,
+    Boss,
+    Items,
+    Enemies,
+    Mechanics
 }
 
 [System.Serializable]
@@ -54,6 +54,8 @@ public class GuidePanelsManager : MonoBehaviour
 
     #region Unity Lifecycle
 
+    private void OnEnable() => OpenMainMenu();
+
     private void Start()
     {
         if (previousBtn != null)
@@ -63,20 +65,17 @@ public class GuidePanelsManager : MonoBehaviour
             nextBtn.onClick.AddListener(NextPage);
 
         if (backToCategoriesBtn != null)
-            backToCategoriesBtn.onClick.AddListener(OpenMainPanel);
+            backToCategoriesBtn.onClick.AddListener(OpenMainMenu);
 
         if (closeEntireGuideBtn != null)
             closeEntireGuideBtn.onClick.AddListener(CloseAll);
-
-        CloseAll();
-        OpenMainPanel();
     }
 
     #endregion
 
     #region Flow Logic
 
-    public void OpenMainPanel()
+    public void OpenMainMenu()
     {
         if (pagedGuidePanel != null)
             pagedGuidePanel.SetActive(false);
@@ -120,6 +119,7 @@ public class GuidePanelsManager : MonoBehaviour
 
         currentGuide = null;
         AudioManager.PlayOneShot(interactionSound);
+        gameObject.SetActive(false);
     }
 
     #endregion
