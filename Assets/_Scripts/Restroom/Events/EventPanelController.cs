@@ -259,7 +259,18 @@ public class EventPanelController : MonoBehaviour
             if (i >= currentEvent.dialogOptions.Count)
                 continue;
 
-            var optionText = currentEvent.dialogOptions[i].optionText;
+            var option = currentEvent.dialogOptions[i];
+            var optionText = option.optionText;
+
+            bool canAfford = true;
+
+            if (option.requiredItem != null && option.requiredItemAmount > 0)
+            {
+                var slot = swarmState.GlobalInventory.inventoryItemList.FirstOrDefault(s => s.item == option.requiredItem);
+                canAfford = slot != null && slot.amount >= option.requiredItemAmount;
+            }
+
+            optionButtons[i].SetEnabled(canAfford);
             optionButtons[i].text = string.IsNullOrEmpty(optionText) ? "" : optionText.Replace(PLACEHOLDER, displayName);
         }
     }
@@ -303,6 +314,7 @@ public class EventPanelController : MonoBehaviour
             if (i == 0)
             {
                 optionButtons[i].text = "   Continue.";
+                optionButtons[i].SetEnabled(true);
                 optionButtons[i].style.display = DisplayStyle.Flex;
             }
             else

@@ -19,6 +19,9 @@ public class DialogOptionDrawer : PropertyDrawer
         var optionTextProp = property.FindPropertyRelative("optionText");
         var isIgnoreProp = property.FindPropertyRelative("isIgnoreOption");
 
+        var reqItemProp = property.FindPropertyRelative("requiredItem");
+        var reqAmountProp = property.FindPropertyRelative("requiredItemAmount");
+
         var isLuckProp = property.FindPropertyRelative("isLuckCheck");
         var isMiningProp = property.FindPropertyRelative("isMiningCheck");
         var bonusMiningProp = property.FindPropertyRelative("bonusPerMiningPower");
@@ -34,6 +37,8 @@ public class DialogOptionDrawer : PropertyDrawer
 
         var optionTextField = new PropertyField(optionTextProp);
         var isIgnoreField = new PropertyField(isIgnoreProp);
+        var reqItemField = new PropertyField(reqItemProp, "Required Item");
+        var reqAmountField = new PropertyField(reqAmountProp, "Required Amount");
         var isLuckField = new PropertyField(isLuckProp);
         var isMiningField = new PropertyField(isMiningProp);
         var bonusMiningField = new PropertyField(bonusMiningProp);
@@ -45,6 +50,8 @@ public class DialogOptionDrawer : PropertyDrawer
 
         foldout.Add(optionTextField);
         foldout.Add(isIgnoreField);
+        foldout.Add(reqItemField);
+        foldout.Add(reqAmountField);
         foldout.Add(isLuckField);
         foldout.Add(isMiningField);
         foldout.Add(bonusMiningField);
@@ -86,6 +93,9 @@ public class DialogOptionDrawer : PropertyDrawer
                 isMining = false;
             }
 
+            reqItemField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
+            reqAmountField.style.display = (isIgnore || reqItemProp.objectReferenceValue == null) ? DisplayStyle.None : DisplayStyle.Flex;
+
             isLuckField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
             isMiningField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
             isAttackField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
@@ -103,6 +113,7 @@ public class DialogOptionDrawer : PropertyDrawer
         }
 
         foldout.TrackPropertyValue(isIgnoreProp, _ => UpdateVisibility());
+        foldout.TrackPropertyValue(reqItemProp, _ => UpdateVisibility());
         foldout.TrackPropertyValue(isLuckProp, _ => UpdateVisibility());
         foldout.TrackPropertyValue(isMiningProp, _ => UpdateVisibility());
         foldout.TrackPropertyValue(isAttackProp, _ => UpdateVisibility());

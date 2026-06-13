@@ -23,6 +23,8 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    Insert 1 Pulsite and pull the rusty lever.'
     isIgnoreOption: 0
+    requiredItem: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+    requiredItemAmount: 1
     isLuckCheck: 1
     baseSuccessChance: 70
     isMiningCheck: 0
@@ -36,6 +38,7 @@ MonoBehaviour:
       actions:
       - {fileID: 11400000, guid: f30bea91743c9d14e8146d92ff6a9375, type: 2}
       - {fileID: 11400000, guid: 9aadc124edd3cce418aa655ef2690dde, type: 2}
+      - {fileID: 11400000, guid: 96cd1ecdd5346de4ab41d76527e3174b, type: 2}
     failureOutcome:
       resultText: 'The machine jams.
 
@@ -45,6 +48,8 @@ MonoBehaviour:
       actions: []
   - optionText: '    I order ___ to smash the vault open!'
     isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 0
@@ -65,6 +70,8 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 2b190937f5cd4ac42992e6ced1baa234, type: 2}
   - optionText: '    Ignore'
     isIgnoreOption: 1
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 30
     isMiningCheck: 0
