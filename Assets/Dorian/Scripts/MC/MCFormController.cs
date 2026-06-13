@@ -17,6 +17,7 @@ public class MCFormController : MonoBehaviour
     [SerializeField] private CharacterForm currentForm = CharacterForm.Conductor;
     [SerializeField] private KeyCode switchKey;
     [SerializeField] private GameObject conductorBodyPrefab;
+    [SerializeField] private string returnTargetBoneName = "CAP_on_head_pose (1)";
     [SerializeField] private float spiderDropForwardOffset;
     [SerializeField] private float jumpArcHeight;
     [SerializeField] private Transform hatSlot;
@@ -135,9 +136,16 @@ public class MCFormController : MonoBehaviour
 
         isWalkingToBody = false;
         isTransitioning = false;
+        isOverridingVisualPos = false;
 
         if (spiderAnimator != null)
             spiderAnimator.SetBool(walkingBoolName, false);
+
+        if (spiderVisual != null)
+        {
+            spiderVisual.transform.localPosition = defaultSpiderLocalPos;
+            spiderVisual.transform.localRotation = defaultSpiderLocalRot;
+        }
 
         if (!TryGetComponent<NavMeshAgent>(out var agent))
             return;
@@ -148,6 +156,9 @@ public class MCFormController : MonoBehaviour
 
     private IEnumerator SwitchToSpiderRoutine()
     {
+        if (disconnectAnimationDuration <= 0f)
+            Debug.LogWarning("DisconnectAnimationDuration is 0 or less. Arc will be skipped!");
+
         isTransitioning = true;
         currentForm = CharacterForm.Spider;
 
@@ -213,15 +224,20 @@ public class MCFormController : MonoBehaviour
         if (droppedBodyInstance == null)
             yield break;
 
+        if (connectAnimationDuration <= 0f)
+            Debug.LogWarning("ConnectAnimationDuration is 0 or less. Arc will be skipped!");
+
         isTransitioning = true;
         isWalkingToBody = true;
+
+        Transform cloneTargetSlot = GetCloneTargetSlot(droppedBodyInstance);
 
         if (TryGetComponent<NavMeshAgent>(out var agent) && agent.enabled)
         {
             float originalSpeed = agent.speed;
             agent.speed = originalSpeed * returnSpeedMultiplier;
 
-            agent.SetDestination(droppedBodyInstance.transform.position);
+            agent.SetDestination(cloneTargetSlot.position);
 
             if (spiderAnimator != null)
                 spiderAnimator.SetBool(walkingBoolName, true);
@@ -245,15 +261,13 @@ public class MCFormController : MonoBehaviour
 
             agent.ResetPath();
             agent.speed = originalSpeed;
-            agent.Warp(droppedBodyInstance.transform.position);
+            agent.enabled = false; 
         }
         else
         {
             isWalkingToBody = false;
-            transform.position = droppedBodyInstance.transform.position;
+            transform.position = cloneTargetSlot.position;
         }
-
-        transform.rotation = droppedBodyInstance.transform.rotation;
 
         if (spiderAnimator != null)
             spiderAnimator.SetTrigger(connectTriggerName);
@@ -265,9 +279,43 @@ public class MCFormController : MonoBehaviour
         else if (droppedBodyInstance.TryGetComponent<Animator>(out var fallbackAnimator))
             fallbackAnimator.SetTrigger(bodyRiseTriggerName);
 
-        yield return new WaitForSeconds(connectAnimationDuration);
+        Vector3 visualStartGlobalPos = transform.TransformPoint(defaultSpiderLocalPos);
+        Vector3 rootStartPos = transform.position;
+        Quaternion rootStartRot = transform.rotation;
+        float elapsed = 0f;
+        
+        isOverridingVisualPos = true;
 
+        while (elapsed < connectAnimationDuration)
+        {
+            float t = elapsed / connectAnimationDuration;
+
+            transform.position = Vector3.Lerp(rootStartPos, droppedBodyInstance.transform.position, t);
+            transform.rotation = Quaternion.Slerp(rootStartRot, droppedBodyInstance.transform.rotation, t);
+
+            Vector3 visualTargetGlobalPos = cloneTargetSlot.position;
+            Vector3 currentVisualPos = Vector3.Lerp(visualStartGlobalPos, visualTargetGlobalPos, t);
+
+            float lerpedHeight = Mathf.Lerp(visualStartGlobalPos.y, visualTargetGlobalPos.y, t);
+            currentVisualPos.y = lerpedHeight + (Mathf.Sin(t * Mathf.PI) * jumpArcHeight);
+
+            currentSpiderVisualPos = currentVisualPos;
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        isOverridingVisualPos = false;
         currentForm = CharacterForm.Conductor;
+
+        transform.position = droppedBodyInstance.transform.position;
+        transform.rotation = droppedBodyInstance.transform.rotation;
+
+        if (agent != null)
+        {
+            agent.Warp(droppedBodyInstance.transform.position);
+            agent.enabled = true;
+        }
 
         Destroy(droppedBodyInstance);
 
@@ -276,6 +324,9 @@ public class MCFormController : MonoBehaviour
 
         conductorVisual.transform.localPosition = defaultConductorLocalPos;
         conductorVisual.transform.localRotation = defaultConductorLocalRot;
+        
+        spiderVisual.transform.localPosition = defaultSpiderLocalPos;
+        spiderVisual.transform.localRotation = defaultSpiderLocalRot;
 
         isTransitioning = false;
     }
@@ -283,6 +334,31 @@ public class MCFormController : MonoBehaviour
     #endregion
 
     #region Utility Methods
+
+    private Transform GetCloneTargetSlot(GameObject clone)
+    {
+        if (!string.IsNullOrEmpty(returnTargetBoneName))
+        {
+            Transform[] allTransforms = clone.GetComponentsInChildren<Transform>(true);
+            foreach (Transform childTransform in allTransforms)
+            {
+                if (childTransform.name == returnTargetBoneName)
+                    return childTransform;
+            }
+        }
+
+        if (hatSlot != null)
+        {
+            Transform[] allTransforms = clone.GetComponentsInChildren<Transform>(true);
+            foreach (Transform childTransform in allTransforms)
+            {
+                if (childTransform.name == hatSlot.name)
+                    return childTransform;
+            }
+        }
+
+        return clone.transform;
+    }
 
     private void SetFormVisuals(CharacterForm form)
     {
