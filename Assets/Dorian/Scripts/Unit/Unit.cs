@@ -15,8 +15,9 @@ public enum UnitActivity
 
 public class Unit : UnitBase, ITrackableUnit
 {
-    public static Unit MainCharacter { get; private set; }
+    #region Properties & Fields
 
+    public static Unit MainCharacter { get; private set; }
     public static List<Unit> units = new();
 
     public string Id => swarmUnitsData.id;
@@ -51,6 +52,10 @@ public class Unit : UnitBase, ITrackableUnit
     private IMineable currentMineable;
 
     private EventInstance miningSoundInstance;
+
+    #endregion
+
+    #region Initialization & Lifecycle
 
     public void Initialize(SwarmUnitsData data, SwarmState state)
     {
@@ -133,6 +138,10 @@ public class Unit : UnitBase, ITrackableUnit
         if (currentInteractable != null)
             HandleInteraction();
     }
+
+    #endregion
+
+    #region Core Logic
 
     public void RefreshStats()
     {
@@ -254,6 +263,8 @@ public class Unit : UnitBase, ITrackableUnit
                 pickup.Interact();
                 Destroy(pickup.gameObject);
             }
+            else
+                inventory.TriggerInventoryFullAttempt();
         }
         else
             currentInteractable.Interact();
@@ -301,47 +312,9 @@ public class Unit : UnitBase, ITrackableUnit
         currentMineable = null;
     }
 
-    private void StartMiningEffect()
-    {
-        currentMineable.PlayEffect();
+    #endregion
 
-        if (!miningSoundInstance.isValid())
-        {
-            EventReference soundToPlay = stats.Sounds.mineSound;
-            OreSO targetOre = currentMineable.GetOreData();
-
-            if (targetOre != null && stats.Sounds.oreMiningSounds != null)
-            {
-                foreach (OreMiningSound oreSound in stats.Sounds.oreMiningSounds)
-                {
-                    if (oreSound.ore != targetOre)
-                        continue;
-
-                    soundToPlay = oreSound.sound;
-                    break;
-                }
-            }
-
-            miningSoundInstance = RuntimeManager.CreateInstance(soundToPlay);
-        }
-
-        miningSoundInstance.getPlaybackState(out PLAYBACK_STATE playbackState);
-        if (playbackState == PLAYBACK_STATE.STOPPED)
-            miningSoundInstance.start();
-    }
-
-    private void StopMiningEffect()
-    {
-        if (currentMineable != null && !currentMineable.Equals(null))
-            currentMineable.StopEffect();
-
-        if (!miningSoundInstance.isValid())
-            return;
-
-        miningSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        miningSoundInstance.release();
-        miningSoundInstance.clearHandle();
-    }
+    #region Actions & Movement
 
     public void MoveToInteract(IInteractable interactable, Vector3 position)
     {
@@ -404,6 +377,10 @@ public class Unit : UnitBase, ITrackableUnit
         base.HandleMovement(position);
     }
 
+    #endregion
+
+    #region Utility
+
     public bool IsMining()
     {
         return currentMineable != null && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance;
@@ -457,7 +434,51 @@ public class Unit : UnitBase, ITrackableUnit
             animator.SetTrigger(commandTriggerName);
     }
 
-    #region Audio
+    #endregion
+
+    #region Audio & Effects
+
+    private void StartMiningEffect()
+    {
+        currentMineable.PlayEffect();
+
+        if (!miningSoundInstance.isValid())
+        {
+            EventReference soundToPlay = stats.Sounds.mineSound;
+            OreSO targetOre = currentMineable.GetOreData();
+
+            if (targetOre != null && stats.Sounds.oreMiningSounds != null)
+            {
+                foreach (OreMiningSound oreSound in stats.Sounds.oreMiningSounds)
+                {
+                    if (oreSound.ore != targetOre)
+                        continue;
+
+                    soundToPlay = oreSound.sound;
+                    break;
+                }
+            }
+
+            miningSoundInstance = RuntimeManager.CreateInstance(soundToPlay);
+        }
+
+        miningSoundInstance.getPlaybackState(out PLAYBACK_STATE playbackState);
+        if (playbackState == PLAYBACK_STATE.STOPPED)
+            miningSoundInstance.start();
+    }
+
+    private void StopMiningEffect()
+    {
+        if (currentMineable != null && !currentMineable.Equals(null))
+            currentMineable.StopEffect();
+
+        if (!miningSoundInstance.isValid())
+            return;
+
+        miningSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        miningSoundInstance.release();
+        miningSoundInstance.clearHandle();
+    }
 
     public void PlaySelectSound() => AudioManager.PlayOneShot(stats.Sounds.selectSound);
 
