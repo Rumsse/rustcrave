@@ -8,7 +8,9 @@ public class ActiveModifier : ScriptableObject
     public float EnemySpawnMultiplier => current != null ? current.EnemySpawnMultiplier : 1f;
     public float ResourceSpawnMultiplier => current != null ? current.ResourceSpawnMultiplier : 1f;
     public float PulsiteSpawnMultiplier => current != null ? current.PulsiteSpawnMultiplier : 1f;
+    public float SparkliteSpawnMultiplier => current != null ? current.SparkliteSpawnMultiplier : 1f;
     public bool IsCameraUnstable => current != null && current.IsCameraUnstable;
+    public bool IsVoidChase => current != null && current.IsVoidChase;
 
     public void Set(PathModifierData modifier) => current = modifier;
 

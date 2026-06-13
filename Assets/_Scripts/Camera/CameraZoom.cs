@@ -5,7 +5,8 @@ public class CameraZoom : MonoBehaviour
 {
     [SerializeField] private CinemachineCamera wideCamera;
     [SerializeField] private ActiveModifier activeModifier;
-    [SerializeField] private float baseSpeed = 0.9f;
+    [SerializeField] private float baseSpeed = 0.7f;
+    [SerializeField] private float voidChaseSpeed = 1.1f;
 
     [SerializeField] private Camera mainCamera;
     [SerializeField] private float minOrthographicSize = 5f;
@@ -58,6 +59,12 @@ public class CameraZoom : MonoBehaviour
 
     private void UpdateSpeedModifier()
     {
+        if (activeModifier != null && activeModifier.IsVoidChase)
+        {
+            currentSpeed = Mathf.Lerp(currentSpeed, voidChaseSpeed, Time.deltaTime * 5f);
+            return;
+        }
+
         if (activeModifier == null || !activeModifier.IsCameraUnstable)
         {
             currentSpeed = Mathf.Lerp(currentSpeed, baseSpeed, Time.deltaTime * 5f);

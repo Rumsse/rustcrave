@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: Lubrication Pool
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: THE LUBRICATION POOL
+  eventIcon: {fileID: 21300000, guid: 560762bb26dee084c8084ed538dd41e8, type: 3}
+  eventDescription: 'You stumble upon a basin filled with thick, luminescent mechanical
+    oil. It looks perfectly preserved and could do wonders for rusted joints, but
+    it might be contaminated with acid.
+
+
+    What do you do?'
+  dialogOptions:
+  - optionText: '    I order ___ to submerge in the pool.'
+    isIgnoreOption: 0
+    isLuckCheck: 1
+    baseSuccessChance: 33
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: "The high-grade oil clears out the rust and seals the micro-fractures
+        in the armour. \n\n___ is fully repaired!"
+      actions:
+      - {fileID: 11400000, guid: 1ffd7838b3fc3b140a0bae00071e71f7, type: 2}
+    failureOutcome:
+      resultText: "The liquid is highly corrosive industrial runoff! The armor begins
+        to melt. \n\n___ Health has been set to 1!"
+      actions:
+      - {fileID: 11400000, guid: d6e7b9249a516c44cbf72f30ebc8a80b, type: 2}
+  - optionText: '    Safely extract a small sample from the edge.'
+    isIgnoreOption: 0
+    isLuckCheck: 0
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: "You carefully bottle a tiny amount of the usable fluid without
+        risking the machines. \n\nYou gain 1 Scraponite."
+      actions:
+      - {fileID: 11400000, guid: 9aadc124edd3cce418aa655ef2690dde, type: 2}
+    failureOutcome:
+      resultText: '___ strikes the rock, and it repels him with unimaginable force,
+        emitting sparks!
+
+        ___ He takes 3 DMG!
+
+
+        The rock discharges
+        itself.'
+      actions:
+      - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
+  - optionText: '    Ignore'
+    isIgnoreOption: 1
+    isLuckCheck: 0
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: 
+      actions: []
+    failureOutcome:
+      resultText: 
+      actions: []

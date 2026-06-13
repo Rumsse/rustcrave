@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: The Rusted Tank
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: THE RUSTED TANK
+  eventIcon: {fileID: 21300000, guid: 36e234d32e877ab4b9f05ce8ebc644c2, type: 3}
+  eventDescription: 'An old, industrial storage tank sits half-buried in the dirt.
+    The pressure gauge is broken, and it''s impossible to tell if it holds valuable
+    fuel or toxic sludge.
+
+
+    What do you do?'
+  dialogOptions:
+  - optionText: '    I order ___ to puncture the tank.'
+    isIgnoreOption: 0
+    isLuckCheck: 1
+    baseSuccessChance: 70
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: 'A stream of usable raw materials pours out of the hole! ___ quickly
+        gathers them up, but most of them fall and crumble.
+
+
+        You gain 1
+        Scraponite, 1Sparklite, 1 Pulsite.'
+      actions:
+      - {fileID: 11400000, guid: 9aadc124edd3cce418aa655ef2690dde, type: 2}
+      - {fileID: 11400000, guid: 86c2463a4b3b6b64086987ac864813fd, type: 2}
+      - {fileID: 11400000, guid: f30bea91743c9d14e8146d92ff6a9375, type: 2}
+    failureOutcome:
+      resultText: 'The vibrations destabilize the ceiling! A heavy chunk of rock
+        falls directly onto ___''s chassis.
+
+
+        ___ takes 2 DMG.'
+      actions:
+      - {fileID: 11400000, guid: f4836e2eae1361143a86f8a97addf0be, type: 2}
+  - optionText: '    I order ___ to slowly dismantle the outer casing.'
+    isIgnoreOption: 0
+    isLuckCheck: 0
+    baseSuccessChance: 50
+    isMiningCheck: 1
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: '___ strips the high-quality metal from the outside without breaching
+        the dangerous container.
+
+
+        You get 1-3 Scraponite, 1-3 Sparklite,
+        1-3 Pulsite.'
+      actions:
+      - {fileID: 11400000, guid: 447e47a564046804d8638889aa9b72f2, type: 2}
+      - {fileID: 11400000, guid: 8039d4c55db3d3d43bc90b82c3680661, type: 2}
+      - {fileID: 11400000, guid: f5f71e98984faaf498ea5657027a824c, type: 2}
+    failureOutcome:
+      resultText: "The rusted casing collapses inward, triggering a small implosion
+        that destroys the metal. \n\n___ takes 3 DMG!"
+      actions:
+      - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
+  - optionText: '    Ignore'
+    isIgnoreOption: 1
+    isLuckCheck: 0
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 10
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: 
+      actions: []
+    failureOutcome:
+      resultText: 
+      actions: []

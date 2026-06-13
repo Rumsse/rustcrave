@@ -5,7 +5,8 @@ public class OreNode : MonoBehaviour, IMineable
 {
     #region Configuration
 
-    [SerializeField] private OreSO ore;
+    [SerializeField] private ActiveModifier activeModifier;
+    [SerializeField] private OreSO ore;
     [SerializeField] private OreTooltip oreTooltip;
     [SerializeField] private int amount;
     [SerializeField] private OrePickUp dropPrefab;
@@ -42,7 +43,11 @@ public class OreNode : MonoBehaviour, IMineable
         amount--;
 
         if (dropPrefab != null)
+        {
             SpawnDropItem();
+            if (activeModifier != null && activeModifier.IsVoidChase)
+                SpawnDropItem();
+        }
 
         if (amount <= 0)
             Destroy(gameObject);
