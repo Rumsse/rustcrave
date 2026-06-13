@@ -36,6 +36,7 @@ public class EventPanelController : MonoBehaviour
 
     bool isShowingResult;
     bool isAnimating;
+    bool currentOutcomeResolvesEvent = true;
     const string PLACEHOLDER = "___";
 
     #region Initialization
@@ -103,6 +104,7 @@ public class EventPanelController : MonoBehaviour
     public void TryTriggerRandomEvent()
     {
         isShowingResult = false;
+        currentOutcomeResolvesEvent = true;
 
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
@@ -283,6 +285,8 @@ public class EventPanelController : MonoBehaviour
 
         var outcome = DetermineOutcome(selectedOption, currentSelectedRobot);
 
+        currentOutcomeResolvesEvent = !outcome.keepEventActive;
+
         ApplyOutcome(outcome);
         ShowResultScreen(outcome.resultText);
     }
@@ -318,7 +322,7 @@ public class EventPanelController : MonoBehaviour
     {
         if (isShowingResult)
         {
-            if (eventState != null)
+            if (eventState != null && currentOutcomeResolvesEvent)
             {
                 eventState.isResolved = true;
 

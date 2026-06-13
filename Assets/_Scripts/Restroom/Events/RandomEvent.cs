@@ -6,6 +6,7 @@ using UnityEngine;
 public class EventOutcome
 {
     [TextArea(3, 5)] public string resultText;
+    public bool keepEventActive;
     public List<EventAction> actions = new();
 }
 
