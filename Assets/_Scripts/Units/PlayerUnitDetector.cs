@@ -6,7 +6,7 @@ public class PlayerUnitDetector : MonoBehaviour
     
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (!unit || unit is MimicryEnemy) return;
+        if (!unit || !unit.FarDetectEnabled()) return;
         
         if (!other.CompareTag("Unit"))
             return;

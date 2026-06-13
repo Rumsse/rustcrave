@@ -146,6 +146,7 @@ public class EnemyUnit : UnitBase
     protected virtual void HandleSpecialReaction() {}
     public virtual void HandleSpecialEffects() { }
     public override bool SpecialReactionForUnits() => specialUnit;
+    public virtual bool FarDetectEnabled() => true;
     #endregion
 
     #region Stolen Item

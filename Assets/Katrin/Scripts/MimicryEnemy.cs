@@ -16,6 +16,7 @@ public class MimicryEnemy : EnemyUnit
     {
         base.Start();
 
+        _isMimicking = true;
         _startLocalPos = mimicryObject.transform.localPosition;
         _waitOffset = new WaitForSeconds(offset);
         StartCoroutine(ShakeCoroutine());
@@ -31,6 +32,8 @@ public class MimicryEnemy : EnemyUnit
         selectedVisualObject.SetActive(true);
         animator.Play(specialAnimationName);
     }
+
+    public override bool FarDetectEnabled() => !_isMimicking;
 
     #region Coroutines
 
