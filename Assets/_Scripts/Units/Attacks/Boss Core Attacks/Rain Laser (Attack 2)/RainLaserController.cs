@@ -25,9 +25,26 @@ public class RainLaserController : MonoBehaviour
     private MaterialPropertyBlock _propertyBlock;
     private static readonly int ColorProp = Shader.PropertyToID("_Color");
 
+    private Sequence _sequence;
+    private Tween _colorTween;
+
     #region Init
 
     private void Awake() => _propertyBlock = new MaterialPropertyBlock();
+
+    private void OnDisable()
+    {
+        if (_sequence.isAlive)
+            _sequence.Stop();
+
+        if (_colorTween.isAlive)
+            _colorTween.Stop();
+
+        StopAllCoroutines();
+
+        if (_attacker != null)
+            _attacker.IsPerformingSpecial = false;
+    }
 
     public void Init(DamageInfo damageInfo, RainLaserAttack attackData, UnitBase attacker, List<EffectBase> effects)
     {
@@ -64,12 +81,20 @@ public class RainLaserController : MonoBehaviour
             .ChainCallback(() => PoolManager.Instance.Release(laser, _attackData.laserPrefab));
 
         if (index < _attackData.hitAmount - 1)
-            seq.ChainCallback(() => FireLaserRecursion(++index));
+        {
+            seq.ChainCallback(() => FireLaserRecursion(index + 1));
+        }
         else
         {
-            seq.ChainCallback(() => _attacker.IsPerformingSpecial = false)
-                .ChainCallback(() => PoolManager.Instance.Release(this, _attackData.controllerPrefab));
+            seq.ChainCallback(() =>
+            {
+                if (_attacker != null)
+                    _attacker.IsPerformingSpecial = false;
+            })
+               .ChainCallback(() => PoolManager.Instance.Release(this, _attackData.controllerPrefab));
         }
+
+        _sequence = seq;
     }
 
     #endregion
@@ -133,7 +158,7 @@ public class RainLaserController : MonoBehaviour
         Color startColor = toEndValue ? _attackData.startColor : _attackData.endColor;
         Color endColor = toEndValue ? _attackData.endColor : _attackData.startColor;
 
-        Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, color => SetColor(laser, color));
+        _colorTween = Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, color => SetColor(laser, color));
     }
 
     #region Scale

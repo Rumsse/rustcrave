@@ -26,12 +26,31 @@ public class SliceLaserController : MonoBehaviour
     private MaterialPropertyBlock _propertyBlock;
     private static readonly int ColorProp = Shader.PropertyToID("_Color");
 
+    private Sequence _initSequence;
+    private Sequence _rotationSequence;
+    private Tween _colorTween;
+
     #region Unity Lifecycle & Init
 
     private void Awake()
     {
         _propertyBlock = new MaterialPropertyBlock();
         GetRenderers();
+    }
+
+    private void OnDisable()
+    {
+        if (_initSequence.isAlive)
+            _initSequence.Stop();
+
+        if (_rotationSequence.isAlive)
+            _rotationSequence.Stop();
+
+        if (_colorTween.isAlive)
+            _colorTween.Stop();
+
+        if (_attacker != null)
+            _attacker.IsPerformingSpecial = false;
     }
 
     public void Init(DamageInfo damageInfo, SliceLaserAttack attackData, UnitBase attacker, List<EffectBase> effects)
@@ -43,8 +62,8 @@ public class SliceLaserController : MonoBehaviour
         _sliceCount = attackData.sliceAmount;
 
         SetColors(_attackData.startColor);
-        ScaleLasersInstant(0);
-        ScaleIndicatorInstant(0);
+        ScaleLasersInstant(0f);
+        ScaleIndicatorInstant(0f);
 
         PlaySequence();
     }
@@ -55,7 +74,7 @@ public class SliceLaserController : MonoBehaviour
 
     private void PlaySequence()
     {
-        Sequence.Create()
+        _initSequence = Sequence.Create()
             .ChainCallback(() => AudioManager.PlayOneShot(_chargeSound))
             .ChainCallback(() => ScaleIndicators(1f))
             .ChainDelay(_attackData.indicatorScaleSettings.duration + _sequenceBuffer)
@@ -79,13 +98,18 @@ public class SliceLaserController : MonoBehaviour
         }
         else
         {
-            seq.ChainCallback(() => ScaleIndicators(0))
+            seq.ChainCallback(() => ScaleIndicators(0f))
                 .ChainDelay(_attackData.indicatorScaleSettings.duration)
-                .ChainCallback(() => _attacker.IsPerformingSpecial = false)
+                .ChainCallback(() =>
+                {
+                    if (_attacker != null)
+                        _attacker.IsPerformingSpecial = false;
+                })
                 .ChainCallback(() => PoolManager.Instance.Release(this, _attackData.controllerPrefab));
         }
 
         _sliceCount--;
+        _rotationSequence = seq;
     }
 
     #endregion
@@ -97,7 +121,7 @@ public class SliceLaserController : MonoBehaviour
         AudioManager.PlayOneShot(_fireSound);
         ChangeColors(false);
         Tween.ShakeCamera(Camera.main, _shakeIntensity, duration: _shakeDuration);
-        ScaleLasers(1);
+        ScaleLasers(1f);
 
         foreach (var laser in _lasers)
             FireLaserInDirection(laser);
@@ -148,7 +172,7 @@ public class SliceLaserController : MonoBehaviour
             _laserMeshes.Add(_lasers[index].Visuals.GetComponent<MeshRenderer>());
     }
 
-    private Quaternion GetRandomRotation() => Quaternion.Euler(0, Random.Range(_attackData.rotationMin, _attackData.rotationMax), 0);
+    private Quaternion GetRandomRotation() => Quaternion.Euler(0f, Random.Range(_attackData.rotationMin, _attackData.rotationMax), 0f);
 
     #region Scale
 
@@ -193,7 +217,7 @@ public class SliceLaserController : MonoBehaviour
         Color startColor = toEndValue ? _attackData.startColor : _attackData.endColor;
         Color endColor = toEndValue ? _attackData.endColor : _attackData.startColor;
 
-        Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, SetColors);
+        _colorTween = Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, SetColors);
     }
 
     #endregion

@@ -28,12 +28,24 @@ public class TargetLaserController : MonoBehaviour
     private static readonly int ColorProp = Shader.PropertyToID("_Color");
     private Action _onComplete;
 
+    private Sequence _sequence;
+    private Tween _colorTween;
+
     #region Unity Lifecycle & Init
 
     private void Awake()
     {
         _laserMesh = _laser.Visuals.GetComponent<MeshRenderer>();
         _propertyBlock = new MaterialPropertyBlock();
+    }
+
+    private void OnDisable()
+    {
+        if (_sequence.isAlive)
+            _sequence.Stop();
+
+        if (_colorTween.isAlive)
+            _colorTween.Stop();
     }
 
     public void Init(DamageInfo damageInfo, TargetLaserAttack attackData, UnitBase attacker, List<EffectBase> effects, Action onComplete = null)
@@ -47,8 +59,8 @@ public class TargetLaserController : MonoBehaviour
         _targetUnit = Unit.GetRandomUnit();
 
         SetColors(_attackData.startColor);
-        ScaleLasersInstant(0);
-        ScaleIndicatorInstant(0);
+        ScaleLasersInstant(0f);
+        ScaleIndicatorInstant(0f);
 
         PlaySequence();
     }
@@ -59,11 +71,12 @@ public class TargetLaserController : MonoBehaviour
 
     private void PlaySequence()
     {
-        transform.localRotation = Quaternion.LookRotation(_targetUnit.transform.position - _attacker.transform.position);
+        if (_targetUnit != null && _attacker != null)
+            transform.localRotation = Quaternion.LookRotation(_targetUnit.transform.position - _attacker.transform.position);
 
-        Sequence.Create()
+        _sequence = Sequence.Create()
             .ChainCallback(() => AudioManager.PlayOneShot(_chargeSound))
-            .ChainCallback(() => ScaleIndicators(1))
+            .ChainCallback(() => ScaleIndicators(1f))
             .ChainDelay(_attackData.indicatorScaleSettings.duration + _attackData.timeToFire)
             .ChainCallback(FireLasers)
             .ChainDelay(_attackData.laserScaleSettings.duration * _scaleMultiplier + _sequenceBuffer)
@@ -80,7 +93,7 @@ public class TargetLaserController : MonoBehaviour
         AudioManager.PlayOneShot(_fireSound);
         ChangeColors(false);
         Tween.ShakeCamera(Camera.main, _shakeIntensity, duration: _shakeDuration);
-        ScaleLasers(1);
+        ScaleLasers(1f);
 
         FireLaserInDirection(_laser);
     }
@@ -138,7 +151,7 @@ public class TargetLaserController : MonoBehaviour
         Color startColor = toEndValue ? _attackData.startColor : _attackData.endColor;
         Color endColor = toEndValue ? _attackData.endColor : _attackData.startColor;
 
-        Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, SetColors);
+        _colorTween = Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, SetColors);
     }
 
     #region Scale
