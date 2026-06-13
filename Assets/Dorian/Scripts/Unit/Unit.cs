@@ -39,6 +39,14 @@ public class Unit : UnitBase, ITrackableUnit
     [SerializeField, Range(0f, 1f)] private float lowEnergyThreshold;
 
     private const float MIN_VELOCITY_MAGNITUDE = 0.1f;
+    private const float DISTANCE_TOLERANCE = 0.1f;
+    private const float MAX_ENERGY_PERCENT = 1f;
+    private const float EMPTY_PROGRESS = 0f;
+
+    private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
+    private static readonly int IsMiningHash = Animator.StringToHash("IsMining");
+    private static readonly int ShutdownHash = Animator.StringToHash("Shutdown");
+    private int commandTriggerHash;
 
     private float baseMoveSpeed;
     private float miningTimer;
@@ -80,7 +88,8 @@ public class Unit : UnitBase, ITrackableUnit
     {
         base.Awake();
         baseMoveSpeed = agent.speed;
-        miningTimer = 0f;
+        miningTimer = EMPTY_PROGRESS;
+        commandTriggerHash = Animator.StringToHash(commandTriggerName);
 
         if (isMainCharacter)
             MainCharacter = this;
@@ -149,7 +158,7 @@ public class Unit : UnitBase, ITrackableUnit
             return;
 
         baseMoveSpeed = stats.MoveSpeed;
-        float currentPercent = stats.MaxEnergy > 0 ? (float)energyManager.CurrentEnergy / stats.MaxEnergy : 1f;
+        float currentPercent = stats.MaxEnergy > EMPTY_PROGRESS ? (float)energyManager.CurrentEnergy / stats.MaxEnergy : MAX_ENERGY_PERCENT;
         HandleMoveSpeedBasedOnEnergy(currentPercent);
     }
 
@@ -181,8 +190,8 @@ public class Unit : UnitBase, ITrackableUnit
         currentMineable = null;
         currentInteractable = null;
         AttackTarget = null;
-        miningTimer = 0f;
-        interactionTimer = 0f;
+        miningTimer = EMPTY_PROGRESS;
+        interactionTimer = EMPTY_PROGRESS;
     }
 
     public void CancelActionAndPath()
@@ -194,7 +203,7 @@ public class Unit : UnitBase, ITrackableUnit
             return;
 
         agent.ResetPath();
-        animator.SetBool("IsWalking", false);
+        animator.SetBool(IsWalkingHash, false);
     }
 
     private void HandleEnergyDepleted()
@@ -203,8 +212,8 @@ public class Unit : UnitBase, ITrackableUnit
 
         HandleInterruptCurrentAction();
 
-        animator.SetBool("IsWalking", false);
-        animator.SetTrigger("Shutdown");
+        animator.SetBool(IsWalkingHash, false);
+        animator.SetTrigger(ShutdownHash);
 
         this.enabled = false;
     }
@@ -231,24 +240,24 @@ public class Unit : UnitBase, ITrackableUnit
         if (currentInteractable == null || currentInteractable.Equals(null))
         {
             currentInteractable = null;
-            animator.SetBool("IsWalking", false);
+            animator.SetBool(IsWalkingHash, false);
             return;
         }
 
-        bool isCloseEnough = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + 0.1f;
+        bool isCloseEnough = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + DISTANCE_TOLERANCE;
 
         if (!isCloseEnough)
         {
-            animator.SetBool("IsWalking", true);
+            animator.SetBool(IsWalkingHash, true);
             return;
         }
 
-        animator.SetBool("IsWalking", false);
+        animator.SetBool(IsWalkingHash, false);
 
         if (interactionTimer >= currentInteractable.InteractionTime)
             currentInteractable.PlayEffect();
 
-        if (interactionTimer > 0f)
+        if (interactionTimer > EMPTY_PROGRESS)
         {
             interactionTimer -= Time.deltaTime;
             return;
@@ -278,26 +287,27 @@ public class Unit : UnitBase, ITrackableUnit
         {
             StopMiningEffect();
             currentMineable = null;
-            animator.SetBool("IsWalking", false);
+            animator.SetBool(IsWalkingHash, false);
             return;
         }
 
-        bool isCloseEnough = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + 0.1f;
+        bool isCloseEnough = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + DISTANCE_TOLERANCE;
 
         if (!isCloseEnough)
         {
-            animator.SetBool("IsWalking", true);
+            animator.SetBool(IsWalkingHash, true);
+            StopMiningEffect();
             return;
         }
 
-        animator.SetBool("IsWalking", false);
+        animator.SetBool(IsWalkingHash, false);
 
         if (miningTimer >= miningInterval)
             StartMiningEffect();
 
         miningTimer -= Time.deltaTime;
 
-        if (miningTimer > 0f)
+        if (miningTimer > EMPTY_PROGRESS)
             return;
 
         ItemSO item = currentMineable.Mine();
@@ -388,10 +398,10 @@ public class Unit : UnitBase, ITrackableUnit
 
     public float GetMiningProgress()
     {
-        if (currentMineable == null || currentMineable.Equals(null) || miningInterval <= 0f)
-            return 0f;
+        if (currentMineable == null || currentMineable.Equals(null) || miningInterval <= EMPTY_PROGRESS)
+            return EMPTY_PROGRESS;
 
-        return 1f - (miningTimer / miningInterval);
+        return MAX_ENERGY_PERCENT - (miningTimer / miningInterval);
     }
 
     public UnitActivity GetCurrentState()
@@ -430,8 +440,8 @@ public class Unit : UnitBase, ITrackableUnit
 
     public void PlayCommandAnimation()
     {
-        if (animator != null && !string.IsNullOrEmpty(commandTriggerName))
-            animator.SetTrigger(commandTriggerName);
+        if (animator != null && commandTriggerHash != 0)
+            animator.SetTrigger(commandTriggerHash);
     }
 
     #endregion
@@ -441,6 +451,9 @@ public class Unit : UnitBase, ITrackableUnit
     private void StartMiningEffect()
     {
         currentMineable.PlayEffect();
+
+        if (animator != null)
+            animator.SetBool(IsMiningHash, true);
 
         if (!miningSoundInstance.isValid())
         {
@@ -469,6 +482,9 @@ public class Unit : UnitBase, ITrackableUnit
 
     private void StopMiningEffect()
     {
+        if (animator != null)
+            animator.SetBool(IsMiningHash, false);
+
         if (currentMineable != null && !currentMineable.Equals(null))
             currentMineable.StopEffect();
 
