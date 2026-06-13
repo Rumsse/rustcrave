@@ -2,6 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum UnitVillainState
+{
+    Patrolling,
+    Fleeing
+}
+
 public class UnitController : MonoBehaviour
 {
     [SerializeField] private Animator animator;
@@ -13,10 +19,11 @@ public class UnitController : MonoBehaviour
     [SerializeField] private UnitBase _unit;
 
     private Transform targetTransform;
+    private Transform currentFleeTarget;
     private int currentPointIndex;
     private bool isActive = true;
-    private bool isFleeing;
     private bool _isPausedForAttack;
+    private UnitVillainState currentState = UnitVillainState.Patrolling;
 
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
     private const float MovementThreshold = 0.01f;
@@ -25,7 +32,7 @@ public class UnitController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isActive || isFleeing)
+        if (!isActive || currentState == UnitVillainState.Fleeing)
             return;
 
         if (CheckForTargetTag(other.gameObject))
@@ -44,16 +51,11 @@ public class UnitController : MonoBehaviour
             float distanceToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
             if (distanceToTarget >= safeDistance)
-            {
-                targetTransform = null;
                 ResumePatrolling();
-            }
             else
-            {
                 HandleFleeing();
-            }
         }
-        else if (!isFleeing)
+        else if (currentState == UnitVillainState.Patrolling)
         {
             HandlePatrolling();
         }
@@ -97,6 +99,7 @@ public class UnitController : MonoBehaviour
 
         isActive = true;
         currentPointIndex = 0;
+        currentState = UnitVillainState.Patrolling;
         MoveToCurrentWaypoint();
     }
 
@@ -118,14 +121,35 @@ public class UnitController : MonoBehaviour
 
     private void HandleFleeing()
     {
-        isFleeing = true;
-        Transform bestPoint = GetFurthestWaypointFromTarget();
-        navMeshAgent.SetDestination(bestPoint.position);
+        if (currentState != UnitVillainState.Fleeing)
+        {
+            currentState = UnitVillainState.Fleeing;
+            SetNewFleeTarget();
+            return;
+        }
+
+        if (currentFleeTarget == null)
+            return;
+
+        float distancePlayerToFleeTarget = Vector3.Distance(targetTransform.position, currentFleeTarget.position);
+
+        if (distancePlayerToFleeTarget < safeDistance)
+            SetNewFleeTarget();
+    }
+
+    private void SetNewFleeTarget()
+    {
+        currentFleeTarget = GetFurthestWaypointFromTarget();
+
+        if (navMeshAgent.isActiveAndEnabled)
+            navMeshAgent.SetDestination(currentFleeTarget.position);
     }
 
     private void ResumePatrolling()
     {
-        isFleeing = false;
+        targetTransform = null;
+        currentState = UnitVillainState.Patrolling;
+        UpdatePatrolIndexToClosestWaypoint();
         MoveToCurrentWaypoint();
     }
 
@@ -147,6 +171,22 @@ public class UnitController : MonoBehaviour
     #endregion
 
     #region Helpers
+
+    private void UpdatePatrolIndexToClosestWaypoint()
+    {
+        float minDistance = float.MaxValue;
+
+        for (int i = 0; i < waypoints.Count; i++)
+        {
+            float distance = Vector3.Distance(transform.position, waypoints[i].position);
+
+            if (distance >= minDistance)
+                continue;
+
+            minDistance = distance;
+            currentPointIndex = i;
+        }
+    }
 
     private Transform GetFurthestWaypointFromTarget()
     {
