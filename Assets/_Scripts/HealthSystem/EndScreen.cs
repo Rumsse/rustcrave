@@ -185,7 +185,7 @@ public class EndScreen : MonoBehaviour
             if (GameTimerManager.Instance == null)
                 timeResultText.text = "Time: --:--";
             else
-                timeResultText.text = $"You managed to survive and bring The Core back to your lovely Mother. She was thrilled to finally have it in her grasp. All it took for her was to wait for:  <color=#FFD700>{GameTimerManager.Instance.GetFormattedTime()}</color>";
+                timeResultText.text = $"You managed to survive and bring The Core back to your lovely Mother. She was thrilled to finally have it in her grasp. All it took for her was to wait for:  <color=#875011>{GameTimerManager.Instance.GetFormattedTime()}</color>";
         }
 
         if (winScreenPanel)
