@@ -2597,11 +2597,11 @@ MonoBehaviour:
     Recipe: {fileID: 11400000, guid: 1043cc94c2c35054d9516c79ba459d13, type: 2}
   craftSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 378511850
+      Data2: 1255245289
+      Data3: -1116032095
+      Data4: 877990809
+    Path: event:/Menu/sx_crafting
 --- !u!114 &810971831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2635,11 +2635,11 @@ MonoBehaviour:
     Recipe: {fileID: 11400000, guid: d6ec775fa79f271428af906f237d2e77, type: 2}
   gadgetSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 378511850
+      Data2: 1255245289
+      Data3: -1116032095
+      Data4: 877990809
+    Path: event:/Menu/sx_crafting
 --- !u!1 &828975488
 GameObject:
   m_ObjectHideFlags: 0
@@ -2653,6 +2653,7 @@ GameObject:
   - component: {fileID: 828975491}
   - component: {fileID: 828975492}
   - component: {fileID: 828975493}
+  - component: {fileID: 828975494}
   m_Layer: 5
   m_Name: UIDocument
   m_TagString: Untagged
@@ -2852,6 +2853,32 @@ MonoBehaviour:
     allowedInteractionElements:
     - btn-choose-path
     - options
+--- !u!114 &828975494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828975488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e1152ef02232e4a9a277fc71fb221c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalButtonAudio
+  hoverSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  clickSound:
+    Guid:
+      Data1: -292657007
+      Data2: 1161930628
+      Data3: 505545873
+      Data4: -1615872410
+    Path: event:/Menu/sx_interaction
 --- !u!1 &851323626
 GameObject:
   m_ObjectHideFlags: 0
@@ -2881,7 +2908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eec5d55e4f7404f8f48d19b86a3770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayAmbientTrack
-  _playOnStart: 0
+  _playOnStart: 1
   _eventReference:
     Guid:
       Data1: 1230363499
@@ -3975,6 +4002,18 @@ PrefabInstance:
     - target: {fileID: 4335006620908961584, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5898662456294313673, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5898662456294313673, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5898662456294313673, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6040056607672438406, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: steps.Array.size
@@ -5154,11 +5193,11 @@ MonoBehaviour:
   pauseKey: 27
   interactionSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -292657007
+      Data2: 1161930628
+      Data3: 505545873
+      Data4: -1615872410
+    Path: event:/Menu/sx_interaction
   sfxVcaPath: vca:/SFX
 --- !u!4 &1435208049
 Transform:
@@ -5236,11 +5275,11 @@ MonoBehaviour:
   panelAnimationDuration: 1
   interactionButtonSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -292657007
+      Data2: 1161930628
+      Data3: 505545873
+      Data4: -1615872410
+    Path: event:/Menu/sx_interaction
 --- !u!114 &1435208052
 MonoBehaviour:
   m_ObjectHideFlags: 0
