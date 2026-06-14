@@ -165,6 +165,10 @@ public class MCFormController : MonoBehaviour
         Vector3 visualStartGlobalPos = hatSlot != null ? hatSlot.position : transform.position + Vector3.up * 1.8f;
 
         droppedBodyInstance = Instantiate(conductorBodyPrefab, transform.position, transform.rotation);
+
+        if (droppedBodyInstance.TryGetComponent<BoxCollider>(out var boxCollider))
+            boxCollider.enabled = true;
+
         DisableHatOnClone(droppedBodyInstance);
 
         if (droppedBodyInstance.TryGetComponent<DroppedBody>(out var droppedBody))
