@@ -23,6 +23,7 @@ public class MCFormController : MonoBehaviour
     [SerializeField] private Transform hatSlot;
     [SerializeField] private float returnSpeedMultiplier;
     [SerializeField] private float arrivalThreshold;
+    [SerializeField] private float maxReturnTime = 5f;
 
     [Header("Visuals")]
     [SerializeField] private GameObject conductorVisual;
@@ -239,12 +240,17 @@ public class MCFormController : MonoBehaviour
         if (TryGetComponent<NavMeshAgent>(out var agent) && agent.enabled)
         {
             float originalSpeed = agent.speed;
+            int originalPriority = agent.avoidancePriority;
+
             agent.speed = originalSpeed * returnSpeedMultiplier;
+            agent.avoidancePriority = 0;
 
             agent.SetDestination(cloneTargetSlot.position);
 
             if (spiderAnimator != null)
                 spiderAnimator.SetBool(walkingBoolName, true);
+
+            float currentReturnTime = 0f;
 
             while (true)
             {
@@ -252,9 +258,25 @@ public class MCFormController : MonoBehaviour
                 {
                     if (agent.remainingDistance <= arrivalThreshold)
                         break;
+
                     if (agent.pathStatus == NavMeshPathStatus.PathInvalid)
                         break;
                 }
+
+                currentReturnTime += Time.deltaTime;
+
+                if (currentReturnTime >= maxReturnTime)
+                {
+                    Debug.LogWarning("Return to body timed out. Forcing connection.");
+                    break;
+                }
+
+                if (currentReturnTime > 0.5f && agent.velocity.sqrMagnitude < 0.01f && agent.remainingDistance > arrivalThreshold)
+                {
+                    Debug.LogWarning("Agent stuck while returning. Forcing connection.");
+                    break;
+                }
+
                 yield return null;
             }
 
@@ -265,7 +287,8 @@ public class MCFormController : MonoBehaviour
 
             agent.ResetPath();
             agent.speed = originalSpeed;
-            agent.enabled = false; 
+            agent.avoidancePriority = originalPriority;
+            agent.enabled = false;
         }
         else
         {
@@ -287,7 +310,7 @@ public class MCFormController : MonoBehaviour
         Vector3 rootStartPos = transform.position;
         Quaternion rootStartRot = transform.rotation;
         float elapsed = 0f;
-        
+
         isOverridingVisualPos = true;
 
         while (elapsed < connectAnimationDuration)
@@ -328,7 +351,7 @@ public class MCFormController : MonoBehaviour
 
         conductorVisual.transform.localPosition = defaultConductorLocalPos;
         conductorVisual.transform.localRotation = defaultConductorLocalRot;
-        
+
         spiderVisual.transform.localPosition = defaultSpiderLocalPos;
         spiderVisual.transform.localRotation = defaultSpiderLocalRot;
 
