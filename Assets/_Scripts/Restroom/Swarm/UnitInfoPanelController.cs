@@ -138,6 +138,14 @@ public class UnitInfoPanelController : MonoBehaviour
         gadgetTooltip.Show(gadget, evt.position);
     }
 
+    void ShowHoveredGadgetTooltip(PointerEnterEvent evt, GadgetSO gadget)
+    {
+        if (gadgetTooltip == null || gadget == null)
+            return;
+
+        gadgetTooltip.Show(gadget, evt.position);
+    }
+
     void MoveGadgetTooltip(PointerMoveEvent evt)
     {
         if (gadgetTooltip != null)
@@ -178,6 +186,11 @@ public class UnitInfoPanelController : MonoBehaviour
                 iconBtn.style.backgroundImage = new StyleBackground(gadget.gadgetIcon);
 
             iconBtn.clicked += () => EquipGadget(gadget);
+
+            iconBtn.RegisterCallback<PointerEnterEvent>(evt => ShowHoveredGadgetTooltip(evt, gadget));
+            iconBtn.RegisterCallback<PointerMoveEvent>(evt => MoveGadgetTooltip(evt));
+            iconBtn.RegisterCallback<PointerLeaveEvent>(evt => HideGadgetTooltip());
+
             gadgetListContainer?.Add(iconBtn);
         }
 
@@ -225,6 +238,7 @@ public class UnitInfoPanelController : MonoBehaviour
 
         RefreshGadgetSlotsUI();
         CloseGadgetPopup();
+        HideGadgetTooltip();
         UpdateStats();
 
         if (gadget != null)
