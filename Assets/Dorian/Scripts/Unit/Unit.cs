@@ -108,8 +108,10 @@ public class Unit : UnitBase, ITrackableUnit
             units.Add(this);
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         energyManager.onEnergyPercentChange -= HandleMoveSpeedBasedOnEnergy;
         energyManager.onEnergyDepleted -= HandleEnergyDepleted;
         healthManager.onHit -= HandleDamageTaken;
@@ -123,6 +125,8 @@ public class Unit : UnitBase, ITrackableUnit
 
     protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         UnitRegistry.Unregister(this);
 
         if (!miningSoundInstance.isValid())
@@ -130,6 +134,7 @@ public class Unit : UnitBase, ITrackableUnit
 
         miningSoundInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         miningSoundInstance.release();
+        miningSoundInstance.clearHandle();
     }
 
     protected override void Update()
@@ -189,7 +194,7 @@ public class Unit : UnitBase, ITrackableUnit
 
         currentMineable = null;
         currentInteractable = null;
-        AttackTarget = null;
+        StopAttacking();
         miningTimer = EMPTY_PROGRESS;
         interactionTimer = EMPTY_PROGRESS;
     }
@@ -485,9 +490,8 @@ public class Unit : UnitBase, ITrackableUnit
             miningSoundInstance = RuntimeManager.CreateInstance(soundToPlay);
         }
 
-        miningSoundInstance.getPlaybackState(out PLAYBACK_STATE playbackState);
-        if (playbackState == PLAYBACK_STATE.STOPPED)
-            miningSoundInstance.start();
+        miningSoundInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        miningSoundInstance.start();
     }
 
     private void StopMiningEffect()
