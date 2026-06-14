@@ -22,6 +22,8 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to inspect it.'
     isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 0
@@ -30,6 +32,7 @@ MonoBehaviour:
     bonusPerDamage: 10
     successOutcome:
       resultText: '___ inspected it and gathered a lot of useful minerals! '
+      keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: d676db604354311448821b99ed62f24f, type: 2}
       - {fileID: 11400000, guid: ebf4416832ea30547b3bbf74b6e30c0a, type: 2}
@@ -37,9 +40,12 @@ MonoBehaviour:
       - {fileID: 11400000, guid: f109dcbc2232dc04c84144f62f3c0047, type: 2}
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
   - optionText: '    I order ___ to mine it.'
     isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 0
@@ -48,10 +54,12 @@ MonoBehaviour:
     bonusPerDamage: 10
     successOutcome:
       resultText: ___ mined it and received a lot of useful minerals!
+      keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: ebf4416832ea30547b3bbf74b6e30c0a, type: 2}
       - {fileID: 11400000, guid: d676db604354311448821b99ed62f24f, type: 2}
       - {fileID: 11400000, guid: 844cc8e3cb9ff8549a1e991409cc5f46, type: 2}
+      - {fileID: 11400000, guid: f109dcbc2232dc04c84144f62f3c0047, type: 2}
     failureOutcome:
       resultText: '___ strikes the rock, and it repels him with unimaginable force,
         emitting sparks!
@@ -61,9 +69,12 @@ MonoBehaviour:
 
         The rock discharges
         itself.'
+      keepEventActive: 0
       actions: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 0
@@ -72,7 +83,9 @@ MonoBehaviour:
     bonusPerDamage: 10
     successOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
