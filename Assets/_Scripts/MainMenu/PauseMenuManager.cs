@@ -1,3 +1,4 @@
+using FMOD.Studio;
 using FMODUnity;
 using System;
 using UnityEngine;
@@ -11,13 +12,20 @@ public class PauseMenuManager : MonoBehaviour
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private KeyCode pauseKey = KeyCode.Escape;
     [SerializeField] private EventReference interactionSound;
+    [SerializeField] private string sfxVcaPath = "vca:/SFX";
+
+    private const float MUTED_VOLUME = 0f;
 
     private bool isPaused;
+    private VCA sfxVca;
+    private float savedVcaVolume;
 
     private void Start()
     {
         if (pausePanel != null)
             pausePanel.SetActive(false);
+
+        sfxVca = RuntimeManager.GetVCA(sfxVcaPath);
     }
 
     private void Update()
@@ -43,6 +51,9 @@ public class PauseMenuManager : MonoBehaviour
         Time.timeScale = 0f;
         OnPauseStateChanged?.Invoke(true);
 
+        sfxVca.getVolume(out savedVcaVolume);
+        sfxVca.setVolume(MUTED_VOLUME);
+
         if (pausePanel == null)
             return;
 
@@ -60,6 +71,8 @@ public class PauseMenuManager : MonoBehaviour
 
         OnPauseStateChanged?.Invoke(false);
 
+        sfxVca.setVolume(savedVcaVolume);
+
         if (pausePanel == null)
             return;
 
@@ -70,6 +83,7 @@ public class PauseMenuManager : MonoBehaviour
     public async void ReturnToMainMenu()
     {
         Time.timeScale = 1f;
+        sfxVca.setVolume(savedVcaVolume);
         AudioManager.PlayOneShot(interactionSound);
 
         if (SceneTransitionManager.Instance == null)

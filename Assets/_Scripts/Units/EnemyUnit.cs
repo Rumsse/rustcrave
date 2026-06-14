@@ -17,6 +17,9 @@ public class EnemyUnit : UnitBase
 
     private Dictionary<Unit, Action> deathCallbacks = new();
 
+    private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
+    private const float DISTANCE_TOLERANCE = 0.1f;
+
     #region Unity Lifecycle
 
     protected override void Awake()
@@ -25,13 +28,19 @@ public class EnemyUnit : UnitBase
         hasExternalController = GetComponent<UnitController>() != null;
     }
 
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        ForceStopAttackSound();
+    }
+
     protected override void OnDestroy()
     {
         base.OnDestroy();
 
         foreach (var kvp in deathCallbacks)
         {
-            if (kvp.Key)
+            if (kvp.Key != null && kvp.Key.HealthManager != null)
                 kvp.Key.HealthManager.onDeath -= kvp.Value;
         }
 
@@ -52,14 +61,14 @@ public class EnemyUnit : UnitBase
         {
             if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
             {
-                animator.SetBool("IsWalking", false);
+                animator.SetBool(IsWalkingHash, false);
                 HandleSpecialEffects();
                 return;
             }
 
-            animator.SetBool("IsWalking", true);
+            animator.SetBool(IsWalkingHash, true);
 
-            if (Vector3.Distance(agent.destination, guardPoint.position) > 0.1f)
+            if ((agent.destination - guardPoint.position).sqrMagnitude > DISTANCE_TOLERANCE * DISTANCE_TOLERANCE)
                 agent.SetDestination(guardPoint.position);
         }
     }
@@ -106,7 +115,9 @@ public class EnemyUnit : UnitBase
 
         if (deathCallbacks.TryGetValue(unit, out Action callback))
         {
-            unit.HealthManager.onDeath -= callback;
+            if (unit != null && unit.HealthManager != null)
+                unit.HealthManager.onDeath -= callback;
+
             deathCallbacks.Remove(unit);
         }
 
@@ -125,24 +136,25 @@ public class EnemyUnit : UnitBase
 
     private Unit GetClosestUnit()
     {
+        NullCleanup();
+
         if (playerUnits.Count == 0)
             return null;
 
-        Unit closest = playerUnits[0];
-        float closestDist = Vector3.Distance(transform.position, closest.transform.position);
+        Unit closest = null;
+        float closestDistSqr = float.MaxValue;
 
-        for (int i = 1; i < playerUnits.Count; i++)
+        foreach (var playerUnit in playerUnits)
         {
-            if (playerUnits[i] == null)
+            if (playerUnit == null)
                 continue;
 
-            float dist = Vector3.Distance(transform.position, playerUnits[i].transform.position);
-
-            if (dist >= closestDist)
-                continue;
-
-            closestDist = dist;
-            closest = playerUnits[i];
+            float distSqr = (transform.position - playerUnit.transform.position).sqrMagnitude;
+            if (distSqr < closestDistSqr)
+            {
+                closestDistSqr = distSqr;
+                closest = playerUnit;
+            }
         }
 
         return closest;
