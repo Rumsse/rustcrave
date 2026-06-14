@@ -2852,6 +2852,58 @@ MonoBehaviour:
     allowedInteractionElements:
     - btn-choose-path
     - options
+--- !u!1 &851323626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 851323628}
+  - component: {fileID: 851323627}
+  m_Layer: 0
+  m_Name: PlayAmbientTrack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &851323627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851323626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90eec5d55e4f7404f8f48d19b86a3770, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayAmbientTrack
+  _playOnStart: 0
+  _eventReference:
+    Guid:
+      Data1: 1230363499
+      Data2: 1135827420
+      Data3: 2095504793
+      Data4: -1079141249
+    Path: event:/Amb/mx_restroom_Amb
+--- !u!4 &851323628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851323626}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &901794515
 GameObject:
   m_ObjectHideFlags: 0
@@ -5107,6 +5159,7 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  sfxVcaPath: vca:/SFX
 --- !u!4 &1435208049
 Transform:
   m_ObjectHideFlags: 0
@@ -7120,3 +7173,4 @@ SceneRoots:
   - {fileID: 1185288736}
   - {fileID: 382865892}
   - {fileID: 1112678735}
+  - {fileID: 851323628}
