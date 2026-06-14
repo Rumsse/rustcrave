@@ -10,13 +10,20 @@ public class EnemyUnit : UnitBase
 
     public ItemSO StolenItem { get; private set; } // saves stolen item to drop later
 
+
     protected List<Unit> playerUnits = new();
-    
-    private Dictionary<Unit, Action> deathCallbacks = new();
     protected bool _available = true;
+    protected bool hasExternalController;
+
+    private Dictionary<Unit, Action> deathCallbacks = new();
 
     #region Unity Lifecycle
 
+    protected override void Awake()
+    {
+        base.Awake();
+        hasExternalController = GetComponent<UnitController>() != null;
+    }
 
     protected override void OnDestroy()
     {
@@ -35,23 +42,26 @@ public class EnemyUnit : UnitBase
     {
         base.Update();
 
-        if (!_available)
+        if (!_available || isAttacking || IsPerformingSpecial || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
             return;
 
-        if (isAttacking || IsPerformingSpecial || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
+        if (hasExternalController)
             return;
 
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (guardPoint != null)
         {
-            animator.SetBool("IsWalking", false);
-            HandleSpecialEffects();
-            return;
+            if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+            {
+                animator.SetBool("IsWalking", false);
+                HandleSpecialEffects();
+                return;
+            }
+
+            animator.SetBool("IsWalking", true);
+
+            if (Vector3.Distance(agent.destination, guardPoint.position) > 0.1f)
+                agent.SetDestination(guardPoint.position);
         }
-
-        animator.SetBool("IsWalking", true);
-
-        if (Vector3.Distance(agent.destination, guardPoint.position) > 0.1f)
-            agent.SetDestination(guardPoint.position);
     }
 
     #endregion
@@ -62,7 +72,7 @@ public class EnemyUnit : UnitBase
     {
         if (!_available || playerUnits.Contains(unit))
         {
-            Debug.Log(_available);
+            Debug.Log("Unit is unavailable.");
             return;
         }
 
@@ -84,11 +94,13 @@ public class EnemyUnit : UnitBase
 
     #endregion
 
+    #region Helper
+
     private void RemoveUnit(Unit unit)
     {
         if (!playerUnits.Remove(unit))
         {
-            Debug.Log(_available);
+            Debug.Log("Unit is unavailable.");
             return;
         }
 
@@ -110,8 +122,6 @@ public class EnemyUnit : UnitBase
     }
 
     private void RemoveOnDeath(Unit unit) => RemoveUnit(unit);
-
-    #region Helper
 
     private Unit GetClosestUnit()
     {
@@ -143,10 +153,12 @@ public class EnemyUnit : UnitBase
     #endregion
 
     #region Special Enemy Behavior
-    protected virtual void HandleSpecialReaction() {}
+
+    protected virtual void HandleSpecialReaction() { }
     public virtual void HandleSpecialEffects() { }
     public override bool SpecialReactionForUnits() => specialUnit;
     public virtual bool FarDetectEnabled() => true;
+
     #endregion
 
     #region Stolen Item
