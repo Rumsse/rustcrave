@@ -23,6 +23,8 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to puncture the tank.'
     isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 1
     baseSuccessChance: 70
     isMiningCheck: 0
@@ -36,6 +38,7 @@ MonoBehaviour:
 
         You gain 1
         Scraponite, 1Sparklite, 1 Pulsite.'
+      keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: 9aadc124edd3cce418aa655ef2690dde, type: 2}
       - {fileID: 11400000, guid: 86c2463a4b3b6b64086987ac864813fd, type: 2}
@@ -46,10 +49,13 @@ MonoBehaviour:
 
 
         ___ takes 2 DMG.'
+      keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: f4836e2eae1361143a86f8a97addf0be, type: 2}
-  - optionText: '    I order ___ to slowly dismantle the outer casing.'
+  - optionText: '    I order ___ to slowly dismantle outer casing.'
     isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 40
     isMiningCheck: 1
@@ -63,6 +69,7 @@ MonoBehaviour:
 
         You get 1-3 Scraponite, 1-3 Sparklite,
         1-3 Pulsite.'
+      keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: 447e47a564046804d8638889aa9b72f2, type: 2}
       - {fileID: 11400000, guid: 8039d4c55db3d3d43bc90b82c3680661, type: 2}
@@ -70,10 +77,13 @@ MonoBehaviour:
     failureOutcome:
       resultText: "The rusted casing collapses inward, triggering a small implosion
         that destroys the metal. \n\n___ takes 3 DMG!"
+      keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
   - optionText: '    Ignore'
     isIgnoreOption: 1
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 0
@@ -82,7 +92,9 @@ MonoBehaviour:
     bonusPerDamage: 10
     successOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []

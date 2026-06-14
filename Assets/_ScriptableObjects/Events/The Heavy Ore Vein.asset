@@ -18,8 +18,10 @@ MonoBehaviour:
     in the cavern wall. It\u2019s too large to mine with standard methods without
     causing a cave-in.\n\nWhat do you do?"
   dialogOptions:
-  - optionText: '    I order ___ to shatter it with one massive strike!'
+  - optionText: '    I order ___ to shatter it with massive strike!'
     isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 40
     isMiningCheck: 0
@@ -44,8 +46,10 @@ MonoBehaviour:
       keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: 60f3e24778620234ea4dbe0431f98a42, type: 2}
-  - optionText: '    I order ___ to carefully chip away at the edges.'
+  - optionText: '    I order ___ to carefully chip away the edges.'
     isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 1
@@ -70,6 +74,8 @@ MonoBehaviour:
       - {fileID: 11400000, guid: f4836e2eae1361143a86f8a97addf0be, type: 2}
   - optionText: '    Ignore'
     isIgnoreOption: 1
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 0

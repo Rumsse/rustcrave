@@ -23,6 +23,8 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to submerge in the pool.'
     isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 1
     baseSuccessChance: 33
     isMiningCheck: 0
@@ -32,15 +34,19 @@ MonoBehaviour:
     successOutcome:
       resultText: "The high-grade oil clears out the rust and seals the micro-fractures
         in the armour. \n\n___ is fully repaired!"
+      keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: 1ffd7838b3fc3b140a0bae00071e71f7, type: 2}
     failureOutcome:
       resultText: "The liquid is highly corrosive industrial runoff! The armor begins
         to melt. \n\n___ Health has been set to 1!"
+      keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: d6e7b9249a516c44cbf72f30ebc8a80b, type: 2}
-  - optionText: '    Safely extract a small sample from the edge.'
+  - optionText: '    Safely extract a small sample.'
     isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 0
@@ -50,6 +56,7 @@ MonoBehaviour:
     successOutcome:
       resultText: "You carefully bottle a tiny amount of the usable fluid without
         risking the machines. \n\nYou gain 1 Scraponite."
+      keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: 9aadc124edd3cce418aa655ef2690dde, type: 2}
     failureOutcome:
@@ -61,10 +68,13 @@ MonoBehaviour:
 
         The rock discharges
         itself.'
+      keepEventActive: 0
       actions:
       - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
   - optionText: '    Ignore'
     isIgnoreOption: 1
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
     isLuckCheck: 0
     baseSuccessChance: 50
     isMiningCheck: 0
@@ -73,7 +83,9 @@ MonoBehaviour:
     bonusPerDamage: 10
     successOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
