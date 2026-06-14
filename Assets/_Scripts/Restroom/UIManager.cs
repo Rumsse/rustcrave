@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] MainCraftController mainCraftController;
     [SerializeField] SwarmPanelController swarmPanelController;
     [SerializeField] EventPanelController eventPanelController;
+    [SerializeField] DisplayUnitSpawner displayUnitSpawner;
 
     VisualElement leftPanelSlot;
     VisualElement rightPanelSlot;
@@ -69,6 +70,15 @@ public class UIManager : MonoBehaviour
         var popUpButtonReference = root.Q<Button>("btn-event-pop-up");
 
         InitializeEventSystem(popUpContainerReference, popUpButtonReference);
+
+        if (displayUnitSpawner != null)
+            displayUnitSpawner.OnUnitClicked += Handle3DUnitClicked;
+    }
+
+    void OnDestroy()
+    {
+        if (displayUnitSpawner != null)
+            displayUnitSpawner.OnUnitClicked -= Handle3DUnitClicked;
     }
 
     void MapControllers()
@@ -94,6 +104,32 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region Tab Management
+
+    void Handle3DUnitClicked(SwarmUnitsData unitData)
+    {
+        if (isAnimating)
+            return;
+
+        if (activePanelKey == "swarm-panel")
+        {
+            swarmPanelController.OpenUnitDetails(unitData);
+            return;
+        }
+
+        if (activePanelKey != null)
+        {
+            CloseCurrentPanel();
+            panelLayer.schedule.Execute(() =>
+            {
+                TogglePanel("swarm-panel", swarmPanel, leftPanelSlot, SlideDirection.Left);
+                swarmPanelController.OpenUnitDetails(unitData);
+            }).StartingIn(350);
+            return;
+        }
+
+        TogglePanel("swarm-panel", swarmPanel, leftPanelSlot, SlideDirection.Left);
+        panelLayer.schedule.Execute(() => swarmPanelController.OpenUnitDetails(unitData)).StartingIn(50);
+    }
 
     void HandlePanelToggle(string key, VisualTreeAsset asset, VisualElement targetSlot, SlideDirection direction)
     {
@@ -203,18 +239,21 @@ public class UIManager : MonoBehaviour
 
     void OnScreenClicked(PointerDownEvent evt)
     {
-        if (activeSlot == null || isAnimating)
+        if (isAnimating)
             return;
 
         var target = evt.target as VisualElement;
 
-        if (activeSlot.Contains(target))
+        if (activeSlot != null && activeSlot.Contains(target))
             return;
 
         if (actionButtonsContainer != null && actionButtonsContainer.Contains(target))
             return;
 
         CloseCurrentPanel();
+
+        if (displayUnitSpawner != null)
+            displayUnitSpawner.CheckUnitClick();
     }
 
     #endregion
