@@ -4,6 +4,7 @@ using UnityEngine;
 public class EnemyConfig : BaseSpawnConfig
 {
     [SerializeField] private int maxSpawnsPerSegment = 2;
+    [SerializeField] private float falseSilenceMimicChance = 0.5f;
 
     public override int BaseMaxSpawnsPerSegment => maxSpawnsPerSegment;
 
@@ -20,6 +21,15 @@ public class EnemyConfig : BaseSpawnConfig
     {
         if (activeModifier == null)
             return entry.SpawnChance;
+
+        if (activeModifier.IsFalseSilence)
+        {
+            if (entry.SpawnTag == SpawnTag.Standard)
+                return 0f;
+
+            if (entry.SpawnTag == SpawnTag.Mimic)
+                return falseSilenceMimicChance;
+        }
 
         return entry.SpawnChance * activeModifier.EnemySpawnMultiplier;
     }

@@ -5,7 +5,8 @@ public enum SpawnTag
 {
     Standard,
     Pulsite,
-    Sparklite
+    Sparklite,
+    Mimic
 }
 
 [Serializable]

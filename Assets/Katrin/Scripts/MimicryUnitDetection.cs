@@ -6,17 +6,18 @@ public class MimicryUnitDetection : PlayerUnitDetector
     [SerializeField] private float pushForce;
     [SerializeField] private int extraDamage;
 
-    private float radius;
-    private Unit targetUnit;
+    private float _radius;
+    private Unit _targetUnit;
 
     private void Start()
     {
-        radius = GetComponent<SphereCollider>().radius;
+        _radius = GetComponent<SphereCollider>().radius;
     }
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if (!unit || unit.FarDetectEnabled()) return;
+        if (!unit || unit.FarDetectEnabled())
+            return;
 
         if (!other.CompareTag("Unit"))
             return;
@@ -26,26 +27,33 @@ public class MimicryUnitDetection : PlayerUnitDetector
 
         unit.UnitEnter(unitObj);
 
-        targetUnit = unitObj;
+        if (unit is MimicryEnemy mimic)
+            mimic.PrepareUnit();
+
+        _targetUnit = unitObj;
         PushUnit();
     }
 
+    protected override void OnTriggerExit(Collider other)
+    {
+        _targetUnit = null;
+    }
+
+    #region Combat Logic
+
     private void PushUnit()
     {
-        if(Vector3.Distance(transform.position, targetUnit.transform.position) > radius)
+        if (Vector3.Distance(transform.position, _targetUnit.transform.position) > _radius)
             return;
 
         Vector3 pushDir = -unit.transform.forward.normalized;
 
-        targetUnit.TryGetComponent(out HealthManager targetHealth);
-        targetUnit.TryGetComponent(out IPushable targetAgent);
+        _targetUnit.TryGetComponent(out HealthManager targetHealth);
+        _targetUnit.TryGetComponent(out IPushable targetAgent);
 
         targetAgent?.ApplyPush(pushDir, pushForce);
         targetHealth?.Damage(new DamageInfo(extraDamage, AttackType.Physical, DeliveryMethod.Melee));
     }
 
-    protected override void OnTriggerExit(Collider other)
-    {
-        targetUnit = null;
-    }
+    #endregion
 }

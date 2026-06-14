@@ -6,5 +6,6 @@ public enum PathModifier
     SparkliteDouble,
     NoEnemiesNoResources,
     UnstableCamera,
-    VoidChase
+    VoidChase,
+    FalseSilence
 }
