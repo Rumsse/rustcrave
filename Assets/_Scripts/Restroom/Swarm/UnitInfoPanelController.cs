@@ -34,6 +34,8 @@ public class UnitInfoPanelController : MonoBehaviour
     Button btnClosePopup;
     List<Button> gadgetSlots = new();
 
+    GadgetTooltipController gadgetTooltip;
+
     SwarmUnitsData currentUnit;
     IVisualElementScheduledItem updateTask;
     int currentEditingSlotIndex = -1;
@@ -73,6 +75,11 @@ public class UnitInfoPanelController : MonoBehaviour
             btnCharge.clicked += HandleChargeClick;
         }
 
+        var tooltipPanel = root.Q<VisualElement>("gadget-tooltip");
+
+        if (tooltipPanel != null)
+            gadgetTooltip = new GadgetTooltipController(tooltipPanel);
+
         InitializeGadgetUI(root);
     }
 
@@ -101,10 +108,46 @@ public class UnitInfoPanelController : MonoBehaviour
             slot.clicked -= () => OpenGadgetPopup(index);
             slot.clicked += () => OpenGadgetPopup(index);
 
+            slot.RegisterCallback<PointerEnterEvent>(evt => ShowGadgetTooltip(evt, index));
+            slot.RegisterCallback<PointerMoveEvent>(evt => MoveGadgetTooltip(evt));
+            slot.RegisterCallback<PointerLeaveEvent>(evt => HideGadgetTooltip());
+
             gadgetSlots.Add(slot);
         }
 
         CloseGadgetPopup();
+    }
+
+    #endregion
+
+    #region Tooltip Logic
+
+    void ShowGadgetTooltip(PointerEnterEvent evt, int slotIndex)
+    {
+        if (gadgetTooltip == null || currentUnit == null)
+            return;
+
+        if (slotIndex >= currentUnit.assignedGadgets.Count)
+            return;
+
+        var gadget = currentUnit.assignedGadgets[slotIndex];
+
+        if (gadget == null)
+            return;
+
+        gadgetTooltip.Show(gadget, evt.position);
+    }
+
+    void MoveGadgetTooltip(PointerMoveEvent evt)
+    {
+        if (gadgetTooltip != null)
+            gadgetTooltip.UpdatePosition(evt.position);
+    }
+
+    void HideGadgetTooltip()
+    {
+        if (gadgetTooltip != null)
+            gadgetTooltip.Hide();
     }
 
     #endregion
@@ -249,6 +292,7 @@ public class UnitInfoPanelController : MonoBehaviour
     public void ClosePanel()
     {
         CloseGadgetPopup();
+        HideGadgetTooltip();
         updateTask?.Pause();
         currentUnit = null;
     }
