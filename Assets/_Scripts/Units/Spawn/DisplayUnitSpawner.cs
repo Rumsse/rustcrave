@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 public class DisplayUnitSpawner : MonoBehaviour
 {
     public event Action<Transform> OnNewUnitSpawned;
+    public event Action<SwarmUnitsData> OnUnitClicked;
 
     [SerializeField] SwarmState swarmState;
     [SerializeField] Transform unitsParent;
@@ -14,8 +16,11 @@ public class DisplayUnitSpawner : MonoBehaviour
     readonly Dictionary<SwarmUnitsData, Transform> spawnedModels = new();
 
     int currentSpawnIndex = 0;
+    Camera mainCamera;
 
     #region Unity Lifecycle
+
+    void Awake() => mainCamera = Camera.main;
 
     void OnEnable()
     {
@@ -51,10 +56,8 @@ public class DisplayUnitSpawner : MonoBehaviour
         currentSpawnIndex = 0;
 
         foreach (var swarmUnit in swarmState.SwarmUnits)
-        {
             if (swarmUnit.isAlive)
                 SpawnSingleUnit(swarmUnit);
-        }
     }
 
     void HandleSwarmChanged()
@@ -118,9 +121,9 @@ public class DisplayUnitSpawner : MonoBehaviour
         if (agent != null)
             DestroyImmediate(agent);
 
-        var colliders = go.GetComponentsInChildren<Collider>(true);
-        foreach (var col in colliders)
-            DestroyImmediate(col);
+        var rigidbodies = go.GetComponentsInChildren<Rigidbody>(true);
+        foreach (var rb in rigidbodies)
+            DestroyImmediate(rb);
 
         var lights = go.GetComponentsInChildren<Light>(true);
         foreach (var light in lights)
@@ -132,11 +135,35 @@ public class DisplayUnitSpawner : MonoBehaviour
         Destroy(inactiveHolder);
 
         currentSpawnIndex++;
-
         spawnedModels[swarmUnit] = go.transform;
 
         return go.transform;
     }
 
     #endregion
+
+    #region Interaction Logic
+
+    public void CheckUnitClick()
+    {
+        if (mainCamera == null)
+            return;
+
+        var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+        if (!Physics.Raycast(ray, out var hit))
+            return;
+
+        foreach (var pair in spawnedModels)
+        {
+            if (hit.transform.IsChildOf(pair.Value))
+            {
+                OnUnitClicked?.Invoke(pair.Key);
+                return;
+            }
+        }
+    }
+
+    #endregion
+
 }
