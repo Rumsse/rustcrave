@@ -6,7 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenuManager : MonoBehaviour
 {
+    #region Events And Singleton
+
+    public static PauseMenuManager Instance { get; private set; }
     public static event Action<bool> OnPauseStateChanged;
+
+    #endregion
+
+    #region Serialized Fields
 
     [SerializeField] private string mainMenuSceneName = "Main Menu";
     [SerializeField] private GameObject pausePanel;
@@ -14,11 +21,25 @@ public class PauseMenuManager : MonoBehaviour
     [SerializeField] private EventReference interactionSound;
     [SerializeField] private string sfxVcaPath = "vca:/SFX";
 
-    private const float MUTED_VOLUME = 0f;
+    #endregion
 
-    private bool isPaused;
+    #region Private Fields
+
+    private const float MUTED_VOLUME = 0f;
     private VCA sfxVca;
     private float savedVcaVolume;
+
+    #endregion
+
+    #region Public Properties
+
+    public bool IsPaused { get; private set; }
+
+    #endregion
+
+    #region Unity Methods
+
+    private void Awake() => Instance = this;
 
     private void Start()
     {
@@ -37,9 +58,13 @@ public class PauseMenuManager : MonoBehaviour
             TogglePause();
     }
 
+    #endregion
+
+    #region Pause Logic
+
     public void TogglePause()
     {
-        if (isPaused)
+        if (IsPaused)
             Resume();
         else
             Pause();
@@ -47,7 +72,7 @@ public class PauseMenuManager : MonoBehaviour
 
     public void Pause()
     {
-        isPaused = true;
+        IsPaused = true;
         Time.timeScale = 0f;
         OnPauseStateChanged?.Invoke(true);
 
@@ -62,7 +87,7 @@ public class PauseMenuManager : MonoBehaviour
 
     public void Resume()
     {
-        isPaused = false;
+        IsPaused = false;
 
         if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialPaused)
             Time.timeScale = 0f;
@@ -70,7 +95,6 @@ public class PauseMenuManager : MonoBehaviour
             Time.timeScale = 1f;
 
         OnPauseStateChanged?.Invoke(false);
-
         sfxVca.setVolume(savedVcaVolume);
 
         if (pausePanel == null)
@@ -94,4 +118,6 @@ public class PauseMenuManager : MonoBehaviour
 
         await SceneTransitionManager.Instance.FadeToScene(mainMenuSceneName);
     }
+
+    #endregion
 }
