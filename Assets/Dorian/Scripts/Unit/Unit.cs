@@ -329,6 +329,8 @@ public class Unit : UnitBase, ITrackableUnit
     public void MoveToInteract(IInteractable interactable, Vector3 position)
     {
         HandleInterruptCurrentAction();
+        SetState(null);
+
         currentInteractable = interactable;
         interactionTimer = currentInteractable.InteractionTime;
 
@@ -343,11 +345,16 @@ public class Unit : UnitBase, ITrackableUnit
         }
         else
             agent.SetDestination(position);
+
+        if (agent.isOnNavMesh)
+            agent.isStopped = false;
     }
 
     public void MoveToMine(IMineable mineable, Vector3 position)
     {
         HandleInterruptCurrentAction();
+        SetState(null);
+
         currentMineable = mineable;
 
         float rawMiningTime = currentMineable.GetDurability() - stats.MiningPower;
@@ -365,6 +372,9 @@ public class Unit : UnitBase, ITrackableUnit
         }
         else
             agent.SetDestination(position);
+
+        if (agent.isOnNavMesh)
+            agent.isStopped = false;
     }
 
     public override void MoveToAttack(UnitBase enemy, Vector3 position)
