@@ -1,16 +1,19 @@
-using System.Collections;
+using PrimeTween;
 using UnityEngine;
 
 public class MimicryEnemy : EnemyUnit
 {
     [SerializeField] private GameObject mimicryObject;
+    [SerializeField] private GameObject legsModel;
     [SerializeField] private float offset = 1.5f;
     [SerializeField] private float duration = 0.3f;
     [SerializeField] private float magnitude = 0.001f;
+    [SerializeField] private float hiddenYOffset = -1.5f;
+    [SerializeField] private float emergeDuration = 0.5f;
 
     private Vector3 _startLocalPos;
-    private WaitForSeconds _waitOffset;
     private bool _isMimicking = true;
+    private Sequence _shakeSequence;
 
     protected override void Start()
     {
@@ -18,51 +21,51 @@ public class MimicryEnemy : EnemyUnit
 
         _isMimicking = true;
         _startLocalPos = mimicryObject.transform.localPosition;
-        _waitOffset = new WaitForSeconds(offset);
-        StartCoroutine(ShakeCoroutine());
+
+        mimicryObject.transform.localPosition = _startLocalPos + new Vector3(0, hiddenYOffset, 0);
+
+        if (legsModel)
+            legsModel.SetActive(false);
+
+        if (agent)
+            agent.enabled = false;
+
+        StartShakeSequence();
     }
 
     public override void PrepareUnit()
     {
-        if (!_isMimicking) return;
+        if (!_isMimicking)
+            return;
 
-        StopAllCoroutines();
         _isMimicking = false;
+        _shakeSequence.Stop();
+
+        if (legsModel)
+            legsModel.SetActive(true);
 
         selectedVisualObject.SetActive(true);
         animator.Play(specialAnimationName);
+
+        Tween.LocalPosition(mimicryObject.transform, _startLocalPos, emergeDuration, Ease.OutBack)
+            .OnComplete(OnEmerged);
     }
 
     public override bool FarDetectEnabled() => !_isMimicking;
 
-    #region Coroutines
+    #region Tweening
 
-    private IEnumerator ShakeCoroutine()
+    private void StartShakeSequence()
     {
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            float x = Random.Range(-1f, 1f) * magnitude;
-            float y = Random.Range(-1f, 1f) * magnitude;
-            float z = Random.Range(-1f, 1f) * magnitude;
-
-            transform.localPosition = _startLocalPos + new Vector3(x, y, z);
-
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.localPosition = _startLocalPos;
-
-        StartCoroutine(MimicryCoroutine());
+        _shakeSequence = Sequence.Create(cycles: -1)
+            .Chain(Tween.Delay(offset))
+            .Chain(Tween.ShakeLocalPosition(mimicryObject.transform, strength: new Vector3(magnitude, 0, magnitude), duration: duration));
     }
 
-    private IEnumerator MimicryCoroutine()
+    private void OnEmerged()
     {
-        yield return _waitOffset;
-
-        StartCoroutine(ShakeCoroutine());
+        if (agent)
+            agent.enabled = true;
     }
 
     #endregion
