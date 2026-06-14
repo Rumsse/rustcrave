@@ -173,6 +173,8 @@ public class SwarmPanelController : MonoBehaviour, IPanelController
         UpdateStyleSheet();
     }
 
+    public void OpenUnitDetails(SwarmUnitsData unitData) => OpenTab("unit-info-panel", unitInfoPanelAsset, unitData);
+
     #endregion
 
     #region Quick Management
