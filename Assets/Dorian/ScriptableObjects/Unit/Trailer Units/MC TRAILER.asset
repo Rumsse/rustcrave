@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 829275997c2ba9448aed1ee9f0a6735a, type: 3}
+  m_Name: MC TRAILER
+  m_EditorClassIdentifier: Assembly-CSharp::UnitSO
+  unitType: 3
+  prefab: {fileID: 6555729451623028360, guid: 00a7f43e5257a914197b8fd5fd9d5b6f, type: 3}
+  isMainCharacter: 1
+  robotName: Hollow Conductor
+  robotDescription: 'Puppet Form:
+
+    In this form, the player can issue commands
+    to other robots.
+
+
+    Spider Form:
+
+    In this form, the player can perform
+    basic actions such as fighting and digging, but loses control of the swarm. If
+    you lose the swarm, you are forced to use this form.'
+  robotSprite: {fileID: 21300000, guid: 232d47dffd669a74391071ffa43782d0, type: 3}
+  abilityDescription: 'Hollow Conductor: (active) [E]
+
+    - Disconnect :The spider
+    jumps off the puppets head, focusing the control on the orginal body losing control
+    over the swam.
+
+
+    Connect:
+
+    Jumps onto the puppets head, regaining control
+    over him and the entire swarm.'
+  moveSpeed: 3
+  maxEnergy: 100
+  maxHP: 12
+  typeImmunities: 0
+  deliveryMethodImmunities: 0
+  damage: 2
+  attacksPerSecond: 1
+  miningPower: 1
+  carryCapacity: 4
+  possibleAttacks:
+  - {fileID: 11400000, guid: 07ac743c94da40e45a1aa21d8b05eb3d, type: 2}
+  sounds:
+    attackSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    mineSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    oreMiningSounds: []
+    selectSound:
+      Guid:
+        Data1: -1202010673
+        Data2: 1191494500
+        Data3: -2103765576
+        Data4: -1565249290
+      Path: "event:/Mc_Pacyna/sx_Wyb\xF3r_jednostki"
+    takeDamageSound:
+      Guid:
+        Data1: 1671979887
+        Data2: 1327688029
+        Data3: 934013596
+        Data4: -496926011
+      Path: event:/Mc_Pacyna/sx_Dostawanie_DMG
+    deathSound:
+      Guid:
+        Data1: -523196936
+        Data2: 1134597032
+        Data3: -204623965
+        Data4: 1363850900
+      Path: "event:/Mc_Pacyna/sx_\u015Amier\u0107"
+    commandSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    orderSound:
+      Guid:
+        Data1: -152114495
+        Data2: 1096531893
+        Data3: -662483565
+        Data4: 584888760
+      Path: event:/Mc_Pacyna/sx_Rozkaz

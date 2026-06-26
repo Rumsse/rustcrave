@@ -9,11 +9,8 @@ public class DiggingState : UnitState
     {
     }
 
-    //probably i need to add actual digging as it disappears too fast
     public override void EnterState()
     {
-        Debug.Log("Digging...");
-
         _currentSpecialUnit = _unit as DiggingEnemyUnit;
 
         _unit.SetState(new IdleState(_unit));
@@ -21,8 +18,6 @@ public class DiggingState : UnitState
 
     public override void ExitState()
     {
-        Debug.Log("Finished Digging");
-
         _currentSpecialUnit?.ClearStolenItem();
         _currentSpecialUnit = null;
     }

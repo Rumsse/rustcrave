@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class ChoosePathController : MonoBehaviour
+public class ChoosePathController : MonoBehaviour, IPanelController
 {
     #region Refs
 
@@ -44,22 +44,26 @@ public class ChoosePathController : MonoBehaviour
 
     #region Initialization
 
-    public void Initialize(VisualElement panelRoot, VisualElement tooltipLayer)
+    public void Initialize(VisualElement panel, VisualElement contextLayer = null)
     {
         if (mapState.Nodes.Count == 0)
             mapState.Initialize();
 
-        nodesLayer = panelRoot.Q<VisualElement>("nodes-layer");
-        linesLayer = panelRoot.Q<VisualElement>("path-lines-layer");
+        nodesLayer = panel.Q<VisualElement>("nodes-layer");
+        linesLayer = panel.Q<VisualElement>("path-lines-layer");
 
         if (tooltipController == null)
-            tooltipController = new PathNodeTooltipController(tooltipLayer, tooltipAsset);
+            tooltipController = new PathNodeTooltipController(contextLayer, tooltipAsset);
 
         GenerateUI();
         linesLayer.generateVisualContent += OnGenerateLines;
 
         UpdateButtonStates();
     }
+
+    public void NotifyPanelOpened() { }
+
+    public void NotifyPanelClosed() { }
 
     void GenerateUI()
     {
@@ -185,7 +189,7 @@ public class ChoosePathController : MonoBehaviour
         if (!availableNodes.Any(n => n.Id == node.Id))
             return;
 
-        bool isTutorialActive = false;
+        bool isCompletingTutorialTask = false;
 
         if (TutorialTaskVerifier.Instance != null && TutorialTaskVerifier.Instance.CurrentTask == TutorialTaskType.ScanPathAndGo)
         {
@@ -195,7 +199,7 @@ public class ChoosePathController : MonoBehaviour
                 return;
             }
 
-            isTutorialActive = true;
+            isCompletingTutorialTask = true;
         }
 
         mapState.MoveToNode(node);
@@ -204,6 +208,9 @@ public class ChoosePathController : MonoBehaviour
         UpdateButtonStates();
 
         OnAnyPathNodeEntered?.Invoke();
+
+        if (isCompletingTutorialTask)
+            return;
 
         string sceneToLoad = node.Row == mapState.TotalRows - 1 ? mainBossScene : mainGameScene;
 
@@ -218,6 +225,9 @@ public class ChoosePathController : MonoBehaviour
 
     void OnNodeRightClicked(PathNodeData node)
     {
+        if (node.Row <= mapState.CurrentRow)
+            return;
+
         if (mapState.IsNodeScanned(node))
             return;
 

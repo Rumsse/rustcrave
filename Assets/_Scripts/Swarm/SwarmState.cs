@@ -69,4 +69,71 @@ public class SwarmState : ScriptableObject
     public List<SwarmUnitsData> GetAliveUnits() => swarmUnits.Where(u => u.isAlive).ToList();
 
     public void Reset() => Initialize();
+
+
+    public SwarmSaveData GetSaveData()
+    {
+        var data = new SwarmSaveData();
+
+        if (swarmUnits == null)
+            return data;
+
+        foreach (var unit in swarmUnits)
+        {
+            if (unit == null)
+                continue;
+
+            if (unit.unitType == null)
+            {
+                Debug.LogWarning("Skipping unit save: UnitType reference is missing.");
+                continue;
+            }
+
+            var unitData = new UnitSaveData
+            {
+                id = unit.id,
+                unitTypeName = unit.unitType.name,
+                currentHP = unit.currentHP,
+                currentEnergy = unit.currentEnergy,
+                isAlive = unit.isAlive
+            };
+
+            if (unit.assignedGadgets != null)
+            {
+                foreach (var gadget in unit.assignedGadgets)
+                {
+                    if (gadget == null)
+                        continue;
+
+                    unitData.assignedGadgetNames.Add(gadget.name);
+                }
+            }
+
+            data.units.Add(unitData);
+        }
+
+        return data;
+    }
+
+    public void LoadFromSave(SwarmSaveData data, GameDatabase db)
+    {
+        swarmUnits.Clear();
+
+        foreach (var unitData in data.units)
+        {
+            var unitType = db.GetUnit(unitData.unitTypeName);
+
+            if (unitType == null)
+            {
+                Debug.LogError($"Cannot load unit. {unitData.unitTypeName} is missing in GameDatabase!");
+                continue;
+            }
+
+            var restoredUnit = new SwarmUnitsData(unitType);
+            restoredUnit.LoadData(unitData, db);
+            swarmUnits.Add(restoredUnit);
+        }
+
+        OnSwarmChanged?.Invoke();
+    }
 }

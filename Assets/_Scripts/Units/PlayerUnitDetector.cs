@@ -1,13 +1,12 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerUnitDetector : MonoBehaviour
 {
-    [SerializeField] private EnemyUnit unit;
+    [SerializeField] protected EnemyUnit unit;
     
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
-        if (!unit) return;
+        if (!unit || !unit.FarDetectEnabled()) return;
         
         if (!other.CompareTag("Unit"))
             return;
@@ -18,7 +17,7 @@ public class PlayerUnitDetector : MonoBehaviour
         unit.UnitEnter(unitObj);
     }
 
-    private void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
         if (!unit) return;
 

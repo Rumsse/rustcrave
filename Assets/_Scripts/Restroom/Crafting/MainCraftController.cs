@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using PrimeTween;
 
-public class MainCraftController : MonoBehaviour
+public class MainCraftController : MonoBehaviour, IPanelController
 {
     public event Action OnCraftPanelClosed;
     public event Action OnCraftPanelOpened;
@@ -39,19 +39,19 @@ public class MainCraftController : MonoBehaviour
 
     #region Initialization
 
-    public void Initialize(VisualElement root, VisualElement craftLayer)
+    public void Initialize(VisualElement panel, VisualElement contextLayer = null)
     {
-        this.rootElement = root;
-        this.craftLayer = craftLayer;
+        rootElement = panel;
+        craftLayer = contextLayer;
 
-        contentContainer = root.Q<VisualElement>("craft-content-container");
-        leftBar = root.Q<VisualElement>("left-bar");
+        contentContainer = rootElement.Q<VisualElement>("craft-content-container");
+        leftBar = rootElement.Q<VisualElement>("left-bar");
 
-        var btnRobots = root.Q<Button>("btn-tab-robots");
-        var btnGadgets = root.Q<Button>("btn-tab-gadgets");
+        var btnRobots = rootElement.Q<Button>("btn-tab-robots");
+        var btnGadgets = rootElement.Q<Button>("btn-tab-gadgets");
 
-        btnClose = root.Q<Button>("btn-close");
-        btnBack = root.Q<Button>("btn-back");
+        btnClose = rootElement.Q<Button>("btn-close");
+        btnBack = rootElement.Q<Button>("btn-back");
 
         if (btnRobots != null)
             btnRobots.clicked += () => OpenTab("robots", robotsCraftPanel);
@@ -67,7 +67,7 @@ public class MainCraftController : MonoBehaviour
 
         rootElement.RegisterCallback<DetachFromPanelEvent>(evt => CloseCurrentTab());
 
-        UpdateSwarmUI(root);
+        UpdateSwarmUI();
     }
 
     public void NotifyPanelOpened() => OnCraftPanelOpened?.Invoke();
@@ -97,7 +97,7 @@ public class MainCraftController : MonoBehaviour
             InitializeSubController(tabKey, panel);
         }
 
-        var innerBtnBack = panel.Q<Button>("btn-back");
+        var innerBtnBack = panel.Q<Button>("btn-back-gadgets") ?? panel.Q<Button>("btn-back-robots") ?? panel.Q<Button>("btn-back");
 
         if (innerBtnBack != null)
         {
@@ -107,6 +107,9 @@ public class MainCraftController : MonoBehaviour
 
         if (btnClose != null)
             btnClose.style.display = DisplayStyle.None;
+
+        if (btnBack != null)
+            btnBack.style.display = DisplayStyle.None;
 
         contentContainer.Add(panel);
         activeTabKey = tabKey;
@@ -156,7 +159,7 @@ public class MainCraftController : MonoBehaviour
 
         swarmState.AddUnitToSwarm(unitType);
         var newUnitData = swarmState.SwarmUnits[^1];
-        AddSingleUnitToUI(newUnitData);
+        AddSingleUnitToUI(newUnitData, true);
 
         return true;
     }
@@ -185,6 +188,8 @@ public class MainCraftController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         ShowCraftPopup(gadget);
+
+        yield return new WaitForSeconds(0.4f);
         OnAnyGadgetCrafted?.Invoke();
     }
 
@@ -224,7 +229,7 @@ public class MainCraftController : MonoBehaviour
             .OnComplete(() => popup?.RemoveFromHierarchy());
     }
 
-    void AddSingleUnitToUI(SwarmUnitsData unitData)
+    void AddSingleUnitToUI(SwarmUnitsData unitData, bool playAnimation = false)
     {
         if (leftBar == null || unitContainer == null)
             return;
@@ -236,9 +241,17 @@ public class MainCraftController : MonoBehaviour
             unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.robotSprite);
 
         leftBar.Add(newUnitIcon);
+
+        if (!playAnimation)
+            return;
+
+        newUnitIcon.AddToClassList("animated-unit-slot");
+        newUnitIcon.AddToClassList("unit-slot-hidden");
+
+        newUnitIcon.schedule.Execute(() => newUnitIcon.RemoveFromClassList("unit-slot-hidden")).StartingIn(20);
     }
 
-    void UpdateSwarmUI(VisualElement root)
+    void UpdateSwarmUI()
     {
         if (swarmState == null || leftBar == null)
             return;

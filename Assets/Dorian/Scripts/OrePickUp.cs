@@ -33,7 +33,7 @@ public class OrePickUp : MonoBehaviour, IInteractable
 
     #endregion
 
-    #region Drop Spawn Animation
+    #region Logic
 
     public void SpawnDrop(Vector3 sourcePosition, Vector3 targetPosition)
     {
@@ -57,10 +57,6 @@ public class OrePickUp : MonoBehaviour, IInteractable
         .OnComplete(this, target => target.StartIdleAnimations());
     }
 
-    #endregion
-
-    #region Idle Animation Logic
-
     private void StartIdleAnimations()
     {
         Tween.LocalEulerAngles(transform, startValue: transform.localEulerAngles, endValue: transform.localEulerAngles + new Vector3(0f, 360f, 0f), duration: rotationDuration, ease: Ease.Linear, cycles: -1, cycleMode: CycleMode.Incremental);
@@ -72,11 +68,17 @@ public class OrePickUp : MonoBehaviour, IInteractable
 
     #region Interaction
 
+    public float InteractionTime => 0f;
+
     public void Interact()
     {
         onInteract?.Invoke();
         OnAnyOrePickedUp?.Invoke();
     }
+
+    public void PlayEffect() { }
+
+    public void StopEffect() { }
 
     #endregion
 }

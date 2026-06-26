@@ -5,7 +5,8 @@ public class CameraZoom : MonoBehaviour
 {
     [SerializeField] private CinemachineCamera wideCamera;
     [SerializeField] private ActiveModifier activeModifier;
-    [SerializeField] private float baseSpeed = 0.9f;
+    [SerializeField] private float baseSpeed = 0.7f;
+    [SerializeField] private float voidChaseSpeed = 1.1f;
 
     [SerializeField] private Camera mainCamera;
     [SerializeField] private float minOrthographicSize = 5f;
@@ -28,24 +29,6 @@ public class CameraZoom : MonoBehaviour
     }
 
     private void Start() => currentSpeed = baseSpeed;
-
-    private void OnEnable()
-    {
-        if (TutorialTaskVerifier.Instance == null)
-            return;
-
-        TutorialTaskVerifier.Instance.OnTaskStarted += HandleTutorialTaskStarted;
-        TutorialTaskVerifier.Instance.OnTaskEnded += HandleTutorialTaskEnded;
-    }
-
-    private void OnDisable()
-    {
-        if (TutorialTaskVerifier.Instance == null)
-            return;
-
-        TutorialTaskVerifier.Instance.OnTaskStarted -= HandleTutorialTaskStarted;
-        TutorialTaskVerifier.Instance.OnTaskEnded -= HandleTutorialTaskEnded;
-    }
 
     private void Update()
     {
@@ -72,24 +55,16 @@ public class CameraZoom : MonoBehaviour
 
     #endregion
 
-    #region Tutorial Handling
-
-    private void HandleTutorialTaskStarted(TutorialTaskType taskType)
-    {
-        if (taskType == TutorialTaskType.None)
-            return;
-
-        IsPausedForTutorial = false;
-    }
-
-    private void HandleTutorialTaskEnded(TutorialTaskType taskType) => IsPausedForTutorial = true;
-
-    #endregion
-
     #region Camera Logic
 
     private void UpdateSpeedModifier()
     {
+        if (activeModifier != null && activeModifier.IsVoidChase)
+        {
+            currentSpeed = Mathf.Lerp(currentSpeed, voidChaseSpeed, Time.deltaTime * 5f);
+            return;
+        }
+
         if (activeModifier == null || !activeModifier.IsCameraUnstable)
         {
             currentSpeed = Mathf.Lerp(currentSpeed, baseSpeed, Time.deltaTime * 5f);
@@ -110,18 +85,18 @@ public class CameraZoom : MonoBehaviour
 
         if (roll < 0.25f)
         {
-            targetSpeed = baseSpeed * -1f;
-            timer = Random.Range(0.2f, 0.7f);
+            targetSpeed = baseSpeed * Random.Range(1.5f, 1.6f);
+            timer = Random.Range(0.7f, 0.9f);
         }
         else if (roll < 0.65f)
         {
-            targetSpeed = baseSpeed * Random.Range(1.2f, 1.5f);
-            timer = Random.Range(0.7f, 2f);
+            targetSpeed = baseSpeed * Random.Range(0.8f, 1.2f);
+            timer = Random.Range(0.5f, 0.7f);
         }
         else
         {
-            targetSpeed = baseSpeed * Random.Range(0.5f, 0.7f);
-            timer = Random.Range(0.5f, 3f);
+            targetSpeed = baseSpeed * Random.Range(0.9f, 2f);
+            timer = Random.Range(0.3f, 0.5f);
         }
     }
 

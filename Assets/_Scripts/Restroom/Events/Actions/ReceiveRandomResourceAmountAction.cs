@@ -1,0 +1,18 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "ReceiveRandomResourceAmountAction", menuName = "Restroom/Events/Actions/Receive Random Resource Amount")]
+public class ReceiveRandomResourceAmountAction : EventAction
+{
+    [SerializeField] ItemSO itemToAdd;
+    [SerializeField] int minAmount = 4;
+    [SerializeField] int maxAmount = 6;
+
+    public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)
+    {
+        if (itemToAdd == null || swarmState.GlobalInventory == null)
+            return;
+
+        int amount = Random.Range(minAmount, maxAmount + 1);
+        swarmState.GlobalInventory.AddItem(itemToAdd, amount);
+    }
+}

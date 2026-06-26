@@ -1,8 +1,9 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using FMODUnity;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public struct SceneSnapshotMapping
@@ -13,25 +14,56 @@ public struct SceneSnapshotMapping
 
 public class SnapshotManager : MonoBehaviour
 {
+    public static SnapshotManager Instance { get; private set; }
+
     [SerializeField] private List<SceneSnapshotMapping> sceneSnapshots;
 
-    private FMOD.Studio.EventInstance currentSnapshotInstance;
-    private FMOD.GUID activeSnapshotGuid;
+    private FMOD.Studio.EventInstance _currentSnapshotInstance;
+    private FMOD.GUID _activeSnapshotGuid;
 
-    void OnEnable()
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private IEnumerator Start()
+    {
+        while (!RuntimeManager.IsInitialized || !RuntimeManager.HaveAllBanksLoaded)
+        {
+            yield return null;
+        }
+
+        CheckAndPlaySnapshot(SceneManager.GetActiveScene());
+    }
+
+    private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        StopSnapshot(true);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        var mapping = sceneSnapshots.FirstOrDefault(x => x.sceneName == scene.name);
+        CheckAndPlaySnapshot(scene);
+    }
+
+    private void CheckAndPlaySnapshot(Scene scene)
+    {
+        var mapping = sceneSnapshots.FirstOrDefault(x =>
+            !string.IsNullOrEmpty(x.sceneName) &&
+            string.Equals(x.sceneName.Trim(), scene.name.Trim(), System.StringComparison.OrdinalIgnoreCase));
 
         if (!string.IsNullOrEmpty(mapping.sceneName) && !mapping.snapshot.IsNull)
         {
@@ -40,33 +72,32 @@ public class SnapshotManager : MonoBehaviour
         else
         {
             StopSnapshot(false);
-            activeSnapshotGuid = new FMOD.GUID();
         }
     }
 
     private void PlaySnapshot(EventReference snapshotRef)
     {
-        if (activeSnapshotGuid.Equals(snapshotRef.Guid)) return;
+        if (_activeSnapshotGuid.Equals(snapshotRef.Guid)) return;
 
         StopSnapshot(false);
 
-        currentSnapshotInstance = RuntimeManager.CreateInstance(snapshotRef);
-        currentSnapshotInstance.start();
-        activeSnapshotGuid = snapshotRef.Guid;
+        _currentSnapshotInstance = RuntimeManager.CreateInstance(snapshotRef);
+        _currentSnapshotInstance.start();
+        _activeSnapshotGuid = snapshotRef.Guid;
     }
 
     private void StopSnapshot(bool immediate)
     {
-        if (currentSnapshotInstance.isValid())
+        if (_currentSnapshotInstance.isValid())
         {
             FMOD.Studio.STOP_MODE stopMode = immediate
                 ? FMOD.Studio.STOP_MODE.IMMEDIATE
                 : FMOD.Studio.STOP_MODE.ALLOWFADEOUT;
 
-            currentSnapshotInstance.stop(stopMode);
-            currentSnapshotInstance.release();
-            currentSnapshotInstance = default;
-            activeSnapshotGuid = new FMOD.GUID();
+            _currentSnapshotInstance.stop(stopMode);
+            _currentSnapshotInstance.release();
+            _currentSnapshotInstance = default;
+            _activeSnapshotGuid = new FMOD.GUID();
         }
     }
 }

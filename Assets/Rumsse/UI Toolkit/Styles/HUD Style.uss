@@ -17,13 +17,13 @@ VisualElement {
     width: 225px;
     align-self: center;
     align-items: center;
-    background-image: url("project://database/Assets/Graphics%202D/Restroom/Crafting/Kafelek.PNG?fileID=2800000&guid=ff4e62c733a4df04bb54d11e6c4295b9&type=3#Kafelek");
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Crafting/Kafelek%201.PNG?fileID=2800000&guid=ab9510825efd1a84a912745bd4ccf45d&type=3#Kafelek 1");
     -unity-background-scale-mode: stretch-to-fill;
-    -unity-slice-left: 45;
-    -unity-slice-top: 2;
-    -unity-slice-right: 100;
-    -unity-slice-bottom: 2;
-    -unity-slice-scale: 0.6px;
+    -unity-slice-left: 21;
+    -unity-slice-top: 21;
+    -unity-slice-right: 21;
+    -unity-slice-bottom: 21;
+    -unity-slice-scale: 0.5px;
 }
 
 .resource-item-sparklite {
@@ -84,9 +84,9 @@ VisualElement {
     background-color: rgba(0, 0, 0, 0);
     background-image: url("project://database/Assets/Dorian/Sprites/Ore/Iskryt.png?fileID=21300000&guid=1009f3db327645b4498e2a07910a4a62&type=3#Iskryt");
     margin-top: 6%;
-    margin-right: 6%;
+    margin-right: 3%;
     margin-bottom: 6%;
-    margin-left: 14%;
+    margin-left: 12%;
     height: 90%;
     width: 18%;
 }
@@ -95,9 +95,9 @@ VisualElement {
     background-color: rgba(0, 0, 0, 0);
     background-image: url("project://database/Assets/Dorian/Sprites/Ore/Zlomit.png?fileID=21300000&guid=9cca951bc49707d46bbf9274263ada91&type=3#Zlomit");
     margin-top: 6%;
-    margin-right: 6%;
+    margin-right: 3%;
     margin-bottom: 6%;
-    margin-left: 14%;
+    margin-left: 12%;
     height: 90%;
     width: 17%;
 }
@@ -106,9 +106,9 @@ VisualElement {
     background-color: rgba(0, 0, 0, 0);
     background-image: url("project://database/Assets/Dorian/Sprites/Ore/Pulsyt.png?fileID=21300000&guid=bef4e9a0e85c5e64fbab064f17f614ce&type=3#Pulsyt");
     margin-top: 6%;
-    margin-right: 6%;
+    margin-right: 3%;
     margin-bottom: 6%;
-    margin-left: 14%;
+    margin-left: 12%;
     height: 90%;
     width: 18%;
 }
@@ -116,12 +116,12 @@ VisualElement {
 .resource-amount {
     -unity-font-style: bold;
     width: 25px;
-    -unity-font-definition: url("project://database/Assets/Fonts/FhaCondensedFrenchNc-O2n3%20SDF%201.asset?fileID=11400000&guid=6b5bfbd6dafc19d4e9983ca25d6da867&type=2#FhaCondensedFrenchNc-O2n3 SDF 1");
+    -unity-font-definition: url("project://database/Assets/Fonts/LongIslandAntiqua%20SDF%201.asset?fileID=11400000&guid=d9f8222249f1f964288380e29c683609&type=2#LongIslandAntiqua SDF 1");
 }
 
 .resource-name {
     width: 90px;
-    -unity-font-definition: url("project://database/Assets/Fonts/FhaCondensedFrenchNc-O2n3%20SDF%201.asset?fileID=11400000&guid=6b5bfbd6dafc19d4e9983ca25d6da867&type=2#FhaCondensedFrenchNc-O2n3 SDF 1");
+    -unity-font-definition: url("project://database/Assets/Fonts/LongIslandAntiqua%20SDF%201.asset?fileID=11400000&guid=d9f8222249f1f964288380e29c683609&type=2#LongIslandAntiqua SDF 1");
 }
 
 .button {
@@ -143,11 +143,215 @@ VisualElement {
     border-top-color: rgba(0, 0, 0, 0);
     border-bottom-color: rgba(0, 0, 0, 0);
     background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Guziczek.PNG?fileID=2800000&guid=7d82f8beff807a5478920b9a79624bca&type=3#Guziczek");
-    -unity-slice-scale: 0;
-    -unity-slice-left: 0;
-    -unity-slice-top: 0;
-    -unity-slice-right: 0;
-    -unity-slice-bottom: 0;
+    -unity-slice-scale: 0.2px;
+    -unity-slice-left: 20;
+    -unity-slice-top: 20;
+    -unity-slice-right: 20;
+    -unity-slice-bottom: 20;
+    color: rgb(17, 17, 17);
+    transition: -unity-background-image-tint-color 0.1s ease-out;
+}
+
+.button:hover {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Guziczek%202B.png?fileID=2800000&guid=16277382a42740e49a2076c0f75b51e3&type=3#Guziczek 2B");
+    color: rgb(30, 30, 30);
+}
+
+.button:active {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Guziczek%203.PNG?fileID=21300000&guid=41f9aba0b2af0ac4eb269f458f3a2b3b&type=3#Guziczek 3");
+    color: rgb(10, 10, 10);
+}
+
+.btn-back {
+    border-top-left-radius: 127px;
+    border-top-right-radius: 127px;
+    border-bottom-right-radius: 127px;
+    border-bottom-left-radius: 127px;
+    border-left-color: rgba(72, 72, 72, 0);
+    border-right-color: rgba(72, 72, 72, 0);
+    border-top-color: rgba(72, 72, 72, 0);
+    border-bottom-color: rgba(72, 72, 72, 0);
+    background-color: rgba(27, 27, 27, 0);
+    color: rgb(255, 244, 232);
+    width: 40px;
+    height: 40px;
+    margin-top: 23px;
+    margin-right: 23px;
+    margin-bottom: 23px;
+    margin-left: 23px;
+    align-self: flex-start;
+    position: absolute;
+    top: 10px;
+    left: 701px;
+    align-items: auto;
+    align-content: center;
+    justify-content: flex-start;
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/X.PNG?fileID=2800000&guid=cb89d58f426c8b549a79aa764ec1ad30&type=3#X");
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+.btn-back:hover {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/X%201.PNG?fileID=21300000&guid=e7d64c12ab6462f46a46b47c1d93d5d2&type=3#X 1");
+    color: rgb(40, 40, 40);
+}
+
+.btn-back:active {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/X%202.PNG?fileID=21300000&guid=8667edbbe41b8bc48a293306267316ac&type=3#X 2");
+    color: rgb(0, 0, 0);
+}
+
+.button-options {
+    flex-grow: 1;
+    background-color: rgba(117, 105, 33, 0);
+    border-top-left-radius: 47px;
+    border-top-right-radius: 47px;
+    border-bottom-right-radius: 47px;
+    border-bottom-left-radius: 47px;
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Opcje.PNG?fileID=2800000&guid=32792510caebf5e438129c369b52276d&type=3#Opcje");
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgba(149, 149, 149, 0);
+    border-right-color: rgba(149, 149, 149, 0);
+    border-top-color: rgba(149, 149, 149, 0);
+    border-bottom-color: rgba(149, 149, 149, 0);
+}
+
+.button-options:hover {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Opcje%201.PNG?fileID=21300000&guid=ee4cdd7dff4fc904a9bb73e7073514fa&type=3#Opcje 1");
+    color: rgb(40, 40, 40);
+}
+
+.button-options:active {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Opcje%202.PNG?fileID=21300000&guid=baffe61fe73a8da499b1c2d9a897d0d7&type=3#Opcje 2");
+    color: rgb(0, 0, 0);
+}
+
+.btn-close {
+    background-color: rgba(27, 27, 27, 0);
+    color: rgb(255, 244, 232);
+    width: 40px;
+    height: 40px;
+    margin-top: 23px;
+    margin-right: 23px;
+    margin-bottom: 23px;
+    margin-left: 23px;
+    align-self: flex-start;
+    position: absolute;
+    top: 10px;
+    left: 845px;
+    align-items: auto;
+    align-content: center;
+    justify-content: flex-start;
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/X.PNG?fileID=2800000&guid=cb89d58f426c8b549a79aa764ec1ad30&type=3#X");
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgba(149, 149, 149, 0);
+    border-right-color: rgba(149, 149, 149, 0);
+    border-top-color: rgba(149, 149, 149, 0);
+    border-bottom-color: rgba(149, 149, 149, 0);
+}
+
+.btn-close:hover {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/X%201.PNG?fileID=21300000&guid=e7d64c12ab6462f46a46b47c1d93d5d2&type=3#X 1");
+    color: rgb(40, 40, 40);
+}
+
+.btn-close:active {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/X%202.PNG?fileID=21300000&guid=8667edbbe41b8bc48a293306267316ac&type=3#X 2");
+    color: rgb(0, 0, 0);
+}
+
+.gear-craft-btn {
+    flex-shrink: 1;
+    width: 120px;
+    height: 120px;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 20px;
+    color: rgb(255, 244, 232);
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Z%C4%99batka.PNG?fileID=2800000&guid=b925647b772ca984f8c8632b42dd99ff&type=3#Zębatka");
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgba(149, 149, 149, 0);
+    border-right-color: rgba(149, 149, 149, 0);
+    border-top-color: rgba(149, 149, 149, 0);
+    border-bottom-color: rgba(149, 149, 149, 0);
+    flex-grow: 1;
+    border-top-left-radius: 75px;
+    border-top-right-radius: 75px;
+    border-bottom-right-radius: 75px;
+    border-bottom-left-radius: 75px;
+}
+
+.gear-craft-btn:hover {
+    scale: 1.05;
+}
+
+.standard-robot-craft-btn {
+    flex-shrink: 1;
+    width: 90px;
+    height: 90px;
+    background-color: rgb(0, 0, 0);
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    font-size: 20px;
+    color: rgb(255, 244, 232);
+}
+
+.btn-quick-repair-charge {
+    justify-content: space-evenly;
+    align-self: center;
+    align-items: stretch;
+    align-content: center;
+    display: flex;
+    width: 110px;
+    height: 40px;
+    font-size: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: rgba(116, 105, 33, 0);
+    border-left-color: rgb(75, 64, 57);
+    border-right-color: rgb(75, 64, 57);
+    border-top-color: rgb(75, 64, 57);
+    border-bottom-color: rgb(75, 64, 57);
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Guziczek.PNG?fileID=2800000&guid=7d82f8beff807a5478920b9a79624bca&type=3#Guziczek");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    color: rgb(12, 12, 12);
+    -unity-slice-scale: 0.1px;
+    -unity-slice-left: 3;
+    -unity-slice-top: 3;
+    -unity-slice-right: 3;
+    -unity-slice-bottom: 3;
+}
+
+.btn-quick-repair-charge:hover {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Guziczek%202B.png?fileID=2800000&guid=16277382a42740e49a2076c0f75b51e3&type=3#Guziczek 2B");
+    color: rgb(18, 18, 18);
+}
+
+.btn-quick-repair-charge:active {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/General/Guziczek%203.PNG?fileID=21300000&guid=41f9aba0b2af0ac4eb269f458f3a2b3b&type=3#Guziczek 3");
+    color: rgb(8, 8, 8);
 }
 
 .standard-event-popup-background {
@@ -179,21 +383,8 @@ VisualElement {
     color: rgb(166, 150, 126);
 }
 
-.standard-robot-craft-btn {
-    flex-shrink: 1;
-    width: 90px;
-    height: 90px;
-    background-color: rgb(0, 0, 0);
-    border-top-left-radius: 50px;
-    border-top-right-radius: 50px;
-    border-bottom-right-radius: 50px;
-    border-bottom-left-radius: 50px;
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    font-size: 20px;
-    color: rgb(255, 244, 232);
+.standard-event-popup-background:hover {
+    background-image: url("project://database/Assets/Graphics%202D/UI%20tunnel/Ramka_2%201.PNG?fileID=21300000&guid=47af5f5dfa8e8cc4b95eac004c741fdd&type=3#Ramka_2 1");
 }
 
 .QM-btn {
@@ -216,24 +407,37 @@ VisualElement {
     font-size: 27px;
 }
 
-.unit-image {
-    width: 150px;
-    height: 150px;
+.standard-btn-q-management {
+    justify-content: flex-end;
     align-self: center;
-    background-color: rgb(61, 54, 17);
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    background-image: none;
-    border-left-color: rgb(61, 54, 17);
-    border-right-color: rgb(61, 54, 17);
-    border-top-color: rgb(61, 54, 17);
-    border-bottom-color: rgb(61, 54, 17);
+    align-items: stretch;
+    align-content: center;
+    background-color: rgba(92, 82, 26, 0);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    width: 40%;
+    height: 20%;
+    color: rgb(190, 172, 144);
+    font-size: 27px;
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Map%20&%20Events/Okno_wybor%C3%B3w.PNG?fileID=2800000&guid=b3384c6617274914b9b5733c72795ef9&type=3#Okno_wyborów");
+    -unity-slice-left: 235;
+    -unity-slice-top: 235;
+    -unity-slice-right: 235;
+    -unity-slice-bottom: 235;
+}
+
+.standard-btn-q-management:hover {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Map%20&%20Events/Okno_wybor%C3%B3w%201.PNG?fileID=21300000&guid=fd4bfefb319265d47afb026fb7c4042c&type=3#Okno_wyborów 1");
+}
+
+.standard-btn-q-management:active {
+    background-image: url("project://database/Assets/Graphics%202D/Restroom/Map%20&%20Events/Okno_wybor%C3%B3w%202.PNG?fileID=21300000&guid=774c82f62787e87449cf05935924a498&type=3#Okno_wyborów 2");
 }
 
 .standard-gadget-slot-0 {
@@ -256,28 +460,7 @@ VisualElement {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    background-image: url("project://database/Assets/Graphics%202D/Restroom/Crafting/Kafelek.PNG?fileID=2800000&guid=ff4e62c733a4df04bb54d11e6c4295b9&type=3#Kafelek");
-}
-
-.standard-btn-q-management {
-    justify-content: flex-end;
-    align-self: center;
-    align-items: stretch;
-    align-content: center;
-    background-color: rgba(92, 82, 26, 0);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    width: 40%;
-    height: 20%;
-    color: rgb(190, 172, 144);
-    font-size: 27px;
-    background-image: url("project://database/Assets/Graphics%202D/Restroom/Okno_wybor%C3%B3w.PNG?fileID=2800000&guid=b3384c6617274914b9b5733c72795ef9&type=3#Okno_wyborów");
+    background-image: none;
 }
 
 .standard-gadget-slot-1 {
@@ -288,9 +471,81 @@ VisualElement {
     margin-bottom: 10px;
     margin-left: 10px;
     background-color: rgba(117, 105, 33, 0);
-    background-image: url("project://database/Assets/Graphics%202D/Restroom/Crafting/Kafelek.PNG?fileID=2800000&guid=ff4e62c733a4df04bb54d11e6c4295b9&type=3#Kafelek");
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
+    background-image: none;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.background-gadget-slot {
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    align-self: center;
+    flex-direction: row;
+    height: 100px;
+    background-image: url("project://database/Assets/Graphics%202D/UI%20tunnel/Co%C5%9B.PNG?fileID=2800000&guid=e3a836109981a4144a4bf211a5372bea&type=3#Coś");
+    margin-top: 0;
+    margin-right: 10px;
+    margin-bottom: 0;
+    margin-left: 10px;
+    width: 100px;
+    align-content: center;
+    -unity-background-image-tint-color: rgb(174, 174, 174);
+}
+
+.background-gadget-slot:hover {
+    scale: 1.02;
+}
+
+.background-gadget-slot:active {
+    scale: 1;
+}
+
+.unit-image {
+    width: 150px;
+    height: 150px;
+    align-self: center;
+    background-color: rgb(61, 54, 17);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-image: none;
+    border-left-color: rgb(61, 54, 17);
+    border-right-color: rgb(61, 54, 17);
+    border-top-color: rgb(61, 54, 17);
+    border-bottom-color: rgb(61, 54, 17);
+}
+
+.unit-image-swarm {
+    margin-top: 5px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    background-color: rgba(188, 188, 188, 0);
+    height: 95%;
+    width: 100%;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgba(149, 149, 149, 0);
+    border-right-color: rgba(149, 149, 149, 0);
+    border-top-color: rgba(149, 149, 149, 0);
+    border-bottom-color: rgba(149, 149, 149, 0);
+    transition: scale 0.1s ease-out;
+}
+
+.unit-image-swarm:hover {
+    scale: 1.1;
 }

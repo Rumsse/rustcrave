@@ -15,6 +15,7 @@ public class MenuOptionsSound : MonoBehaviour
 
     private const string MusicVolumeKey = "MusicVolume";
     private const string SfxVolumeKey = "SfxVolume";
+    private const float DefaultVolume = 1f;
 
     private void Start()
     {
@@ -30,9 +31,7 @@ public class MenuOptionsSound : MonoBehaviour
         if (slider == null)
             return;
 
-        float savedVolume = PlayerPrefs.GetFloat(prefsKey, 1f);
-        slider.value = savedVolume;
-        vca.setVolume(savedVolume);
+        slider.value = PlayerPrefs.GetFloat(prefsKey, DefaultVolume);
 
         slider.onValueChanged.AddListener(value => SetVolume(vca, value, prefsKey));
     }

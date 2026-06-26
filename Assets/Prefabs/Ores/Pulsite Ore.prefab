@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: OreDescription
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
-  m_sharedMaterial: {fileID: -4099103005339705998, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
+  m_sharedMaterial: {fileID: -3239495174496214396, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -102,10 +102,10 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 7
+  m_characterSpacing: -2
   m_characterHorizontalScale: 1
-  m_wordSpacing: 10
-  m_lineSpacing: 80
+  m_wordSpacing: -7
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -5134,7 +5134,7 @@ ParticleSystemRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_MaskInteraction: 0
   m_RenderMode: 5
   m_MeshDistribution: 0
@@ -10070,8 +10070,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: OreName
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
-  m_sharedMaterial: {fileID: -4099103005339705998, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
+  m_sharedMaterial: {fileID: -3239495174496214396, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -10105,10 +10105,10 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 7
+  m_characterSpacing: -2
   m_characterHorizontalScale: 1
-  m_wordSpacing: 10
-  m_lineSpacing: 20
+  m_wordSpacing: -7
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -10194,7 +10194,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4155341592664663432, guid: 04892f284489c9a4797b234f819827d6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4832201149529906761, guid: 04892f284489c9a4797b234f819827d6, type: 3}
       propertyPath: playOnAwake
@@ -10227,20 +10227,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 43ae940763f22e34caaece6bf6af1b8c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.053
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 43ae940763f22e34caaece6bf6af1b8c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.053
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 43ae940763f22e34caaece6bf6af1b8c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.6003
+      value: 1.053
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43ae940763f22e34caaece6bf6af1b8c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.101
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43ae940763f22e34caaece6bf6af1b8c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.92
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43ae940763f22e34caaece6bf6af1b8c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 41.583
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43ae940763f22e34caaece6bf6af1b8c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -10347,6 +10355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f0e1bb79601ee5468d291efeb408f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OreNode
+  activeModifier: {fileID: 11400000, guid: d373c29c877b50b43b30a9a517ecce77, type: 2}
   ore: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
   oreTooltip: {fileID: 9069345422006425008}
   amount: 1
@@ -10427,7 +10436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4865135451303388, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.6248828
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4865135451303388, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10552,6 +10561,22 @@ PrefabInstance:
     - target: {fileID: 198856239026640498, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
       propertyPath: ColorModule.gradient.maxGradient.m_ColorSpace
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199517807662331752, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 199692936812960994, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 199705480155003442, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 199756426985724656, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 199756426985724656, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
       propertyPath: m_MaxParticleSize

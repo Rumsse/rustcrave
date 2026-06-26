@@ -398,8 +398,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: OreDescription
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
-  m_sharedMaterial: {fileID: -4099103005339705998, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
+  m_sharedMaterial: {fileID: -3239495174496214396, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -433,10 +433,10 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 7
+  m_characterSpacing: -2
   m_characterHorizontalScale: 1
-  m_wordSpacing: 10
-  m_lineSpacing: 80
+  m_wordSpacing: -7
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -535,8 +535,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: OreName
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
-  m_sharedMaterial: {fileID: -4099103005339705998, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
+  m_sharedMaterial: {fileID: -3239495174496214396, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -570,10 +570,10 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 7
+  m_characterSpacing: -2
   m_characterHorizontalScale: 1
-  m_wordSpacing: 10
-  m_lineSpacing: 20
+  m_wordSpacing: -7
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1131,6 +1131,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 7063568351721737118, guid: 2a5fd328be822b543bbd2d8068bebe67, type: 3}
+      propertyPath: m_SortingOrder
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 8666561404615602688, guid: 2a5fd328be822b543bbd2d8068bebe67, type: 3}
       propertyPath: m_Name
       value: sparklite_Lightning
@@ -1153,6 +1157,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9073681842128739386}
     m_Modifications:
+    - target: {fileID: 577526660719123766, guid: 5a936c83b1746f14f9100db745e94f04, type: 3}
+      propertyPath: m_SortingOrder
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 577526660719123766, guid: 5a936c83b1746f14f9100db745e94f04, type: 3}
       propertyPath: m_MaxParticleSize
       value: 0.2
@@ -1288,19 +1296,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2feaaae2ed37c474ba4be2c923a72ff6, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.7016
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2feaaae2ed37c474ba4be2c923a72ff6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.660557
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2feaaae2ed37c474ba4be2c923a72ff6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2feaaae2ed37c474ba4be2c923a72ff6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 40.27281
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2feaaae2ed37c474ba4be2c923a72ff6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1405,6 +1413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f0e1bb79601ee5468d291efeb408f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OreNode
+  activeModifier: {fileID: 11400000, guid: d373c29c877b50b43b30a9a517ecce77, type: 2}
   ore: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
   oreTooltip: {fileID: 5627086372929835659}
   amount: 1

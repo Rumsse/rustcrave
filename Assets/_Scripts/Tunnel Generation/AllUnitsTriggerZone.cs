@@ -7,6 +7,7 @@ public class AllUnitsTriggerZone : MonoBehaviour
     public static event Action OnTunnelEndReached;
 
     [SerializeField] private SwarmState swarmState;
+    [SerializeField] private EventState eventState;
     [SerializeField] private string sceneToLoad;
     [SerializeField] private Collider triggerCollider;
     [SerializeField] private float energyRestorePercentage = 0.5f;
@@ -64,8 +65,6 @@ public class AllUnitsTriggerZone : MonoBehaviour
         if (swarmState == null)
             return;
 
-        Debug.Log($"[AllUnitsTriggerZone] Units in zone: {unitsInZone.Count} / Required alive units: {swarmState.AliveCount}");
-
         if (unitsInZone.Count < swarmState.AliveCount)
             return;
 
@@ -76,8 +75,21 @@ public class AllUnitsTriggerZone : MonoBehaviour
         }
 
         isTransitioning = true;
+
+        foreach (var unit in unitsInZone)
+        {
+            if (unit != null)
+                unit.SyncDataToState();
+        }
+
+        if (eventState != null)
+            eventState.Reset();
+
         OnTunnelEndReached?.Invoke();
         RestoreEnergy();
+
+        if (TutorialManager.Instance == null)
+            SaveManager.Instance.AutoSaveGame();
 
         if (SceneTransitionManager.Instance != null)
             await SceneTransitionManager.Instance.FadeToScene(sceneToLoad);

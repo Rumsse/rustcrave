@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: A Rusted Survivor
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: A RUSTED SURVIVOR
+  eventIcon: {fileID: 21300000, guid: a8f1cd40abafe4b4ca84e8e798d871a8, type: 3}
+  eventDescription: 'You find a severely damaged automaton leaning against the Asylum
+    wall. Its core is flickering erratically, on the verge of critical failure.
+
+
+    What
+    do you do?
+
+'
+  dialogOptions:
+  - optionText: '    I order ___ to carefully stabilize its core.'
+    isIgnoreOption: 0
+    isLuckCheck: 1
+    baseSuccessChance: 40
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 0
+    bonusPerDamage: 0
+    successOutcome:
+      resultText: "___ manages to bypass the corrupted circuits and stabilize the
+        core just in time! The robot boots up and joins your swarm. \n\nYou receive
+        1 random slighty damaged Robot."
+      actions:
+      - {fileID: 11400000, guid: 5e5eb3fafdadbf043a7ee96ddff33958, type: 2}
+    failureOutcome:
+      resultText: " ___ crosses the wrong wires! The core destabilizes completely
+        and detonates with a blinding flash! \n\nAll robots in the Swarm take 2 DMG,
+        but Hollow Conductor avoided it. "
+      actions:
+      - {fileID: 11400000, guid: cd15431a8544b88408126be7466b6ca2, type: 2}
+  - optionText: '    I order ___ to brutally dismantle it for parts. '
+    isIgnoreOption: 0
+    isLuckCheck: 0
+    baseSuccessChance: 30
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 1
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: " ___ swiftly tears out the usable components before the core completely
+        dies. \n\nYou gain 3 Scraponite and 1 Sparklite."
+      actions:
+      - {fileID: 11400000, guid: f30bea91743c9d14e8146d92ff6a9375, type: 2}
+      - {fileID: 11400000, guid: 2ddf85a815085ab4e8639bf421d58d0e, type: 2}
+    failureOutcome:
+      resultText: "The fragile chassis crumbles into useless dust and rusted flakes
+        the moment ___ touches it. \n\nYou get nothing."
+      actions: []
+  - optionText: '    Ignore'
+    isIgnoreOption: 1
+    isLuckCheck: 0
+    baseSuccessChance: 30
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 1
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: "___ strikes fast, pinning the Swindler down and tearing its stash
+        away before it can escape! \n\nYou receive 1 Random Gadget and 2 of each
+        resource (Scraponite, Sparklite, Pulsite)."
+      actions:
+      - {fileID: 11400000, guid: daac291cfeb22004a84e6d24933f6181, type: 2}
+    failureOutcome:
+      resultText: 'The Swindler is too quick! He dodges your attack ___ and vanishes
+        into the shadows, stealing the scraps from your pocket!
+
+
+        You lose
+        your entire random resource.'
+      actions:
+      - {fileID: 11400000, guid: 29e6e5689c9826b4aab1629db62ce2d6, type: 2}

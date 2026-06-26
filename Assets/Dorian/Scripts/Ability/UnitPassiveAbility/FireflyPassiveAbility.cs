@@ -24,7 +24,6 @@ public class FireflyPassiveAbility : PassiveAbility
             maxIntensity = auraLight.intensity;
             auraLight.intensity = 0f;
             auraLight.enabled = false;
-            auraLight.range = auraRadius;
         }
 
         auraCoroutine = StartCoroutine(AuraRoutine());
@@ -180,6 +179,16 @@ public class FireflyPassiveAbility : PassiveAbility
             RemoveBuffFromUnit(buffedUnit);
 
         activeBuffs.Clear();
+    }
+
+    #endregion
+
+    #region Debug
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, auraRadius);
     }
 
     #endregion

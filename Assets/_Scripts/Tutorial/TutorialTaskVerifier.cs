@@ -13,6 +13,8 @@ public class TutorialTaskVerifier : MonoBehaviour
     private TutorialTaskType currentTask = TutorialTaskType.None;
     private Action onTaskCompleted;
 
+    #region Unity Lifecycle
+
     private void Awake()
     {
         if (Instance != null)
@@ -26,7 +28,6 @@ public class TutorialTaskVerifier : MonoBehaviour
 
     private void OnEnable()
     {
-        HealthManagerEvents.OnAnyDeath += OnTargetKilled;
         OrePickUp.OnAnyOrePickedUp += OnResourceGathered;
         TunnelEnd.OnTunnelEndReached += OnTunnelEndReached;
         EventPanelController.OnAnyEventResolved += OnEventResolved;
@@ -40,7 +41,6 @@ public class TutorialTaskVerifier : MonoBehaviour
 
     private void OnDisable()
     {
-        HealthManagerEvents.OnAnyDeath -= OnTargetKilled;
         OrePickUp.OnAnyOrePickedUp -= OnResourceGathered;
         TunnelEnd.OnTunnelEndReached -= OnTunnelEndReached;
         EventPanelController.OnAnyEventResolved -= OnEventResolved;
@@ -51,6 +51,10 @@ public class TutorialTaskVerifier : MonoBehaviour
         ChoosePathController.OnAnyPathNodeEntered -= OnPathEntered;
         DestructibleWall.OnAnyWallDestroyed -= OnWallDestroyed;
     }
+
+    #endregion
+
+    #region Task Management
 
     public void StartTask(TutorialTaskType taskType, Action onCompleted)
     {
@@ -65,13 +69,36 @@ public class TutorialTaskVerifier : MonoBehaviour
         CompleteTask();
     }
 
-    private void OnTargetKilled()
+    public void CompleteTask()
     {
-        if (currentTask != TutorialTaskType.KillEnemy)
+        if (currentTask == TutorialTaskType.None)
+            return;
+
+        TutorialTaskType finishedTask = currentTask;
+        currentTask = TutorialTaskType.None;
+
+        OnTaskEnded?.Invoke(finishedTask);
+
+        Action temp = onTaskCompleted;
+        onTaskCompleted = null;
+        temp?.Invoke();
+    }
+
+    public void NotifyTaskConditionMet(TutorialTaskType taskType)
+    {
+        if (currentTask != taskType)
             return;
 
         CompleteTask();
     }
+
+    public void NotifyKillEnemyTaskMet() => NotifyTaskConditionMet(TutorialTaskType.KillEnemy);
+
+    public void NotifyUIClicked() => NotifyTaskConditionMet(TutorialTaskType.ClickOnUI);
+
+    #endregion
+
+    #region Event Handlers
 
     private void OnResourceGathered()
     {
@@ -123,8 +150,10 @@ public class TutorialTaskVerifier : MonoBehaviour
 
     private void OnEnergyRestored()
     {
-        if (CurrentTask == TutorialTaskType.RestoreEnergy)
-            CompleteTask();
+        if (currentTask != TutorialTaskType.RestoreEnergy)
+            return;
+
+        CompleteTask();
     }
 
     private void OnGadgetEquipped()
@@ -143,18 +172,5 @@ public class TutorialTaskVerifier : MonoBehaviour
         CompleteTask();
     }
 
-    public void CompleteTask()
-    {
-        if (currentTask == TutorialTaskType.None)
-            return;
-
-        TutorialTaskType finishedTask = currentTask;
-        currentTask = TutorialTaskType.None;
-
-        OnTaskEnded?.Invoke(finishedTask);
-
-        Action temp = onTaskCompleted;
-        onTaskCompleted = null;
-        temp?.Invoke();
-    }
+    #endregion
 }

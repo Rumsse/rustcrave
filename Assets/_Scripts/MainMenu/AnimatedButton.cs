@@ -2,38 +2,66 @@ using PrimeTween;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class AnimatedTextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private TMP_Text targetText;
-    [SerializeField] private Vector3 hoverScale = new Vector3(1.05f, 1.05f, 1.05f);
-    [SerializeField] private Color hoverColor = Color.white;
-    [SerializeField] private float tweenDuration = 0.15f;
+    [SerializeField] TMP_Text targetText;
+    [SerializeField] Button buttonComponent;
+    [SerializeField] Vector3 hoverScale = new Vector3(1.05f, 1.05f, 1.05f);
+    [SerializeField] Color hoverColor = Color.white;
+    [SerializeField] Color disabledColor = new Color(0.4f, 0.4f, 0.4f, 0.6f);
+    [SerializeField] float tweenDuration = 0.15f;
 
-    private Vector3 defaultScale;
-    private Color defaultColor;
+    Vector3 defaultScale;
+    Color defaultColor;
+    bool isInteractable = true;
 
-    private void Awake()
+    void Awake()
     {
         defaultScale = transform.localScale;
 
+        if (buttonComponent == null)
+            buttonComponent = GetComponent<Button>();
+
+        if (targetText != null)
+            defaultColor = targetText.color;
+    }
+
+    public void SetInteractable(bool state)
+    {
+        isInteractable = state;
+
+        if (buttonComponent != null)
+            buttonComponent.interactable = state;
+
         if (targetText == null)
             return;
 
-        defaultColor = targetText.color;
+        Tween.StopAll(targetText);
+        Tween.StopAll(transform);
+
+        targetText.color = state ? defaultColor : disabledColor;
+        transform.localScale = defaultScale;
     }
 
-    public void OnPointerEnter(PointerEventData eventData) => Animate(hoverScale, hoverColor);
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (isInteractable)
+            Animate(hoverScale, hoverColor);
+    }
 
-    public void OnPointerExit(PointerEventData eventData) => Animate(defaultScale, defaultColor);
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (isInteractable)
+            Animate(defaultScale, defaultColor);
+    }
 
-    private void Animate(Vector3 targetScale, Color targetColor)
+    void Animate(Vector3 targetScale, Color targetColor)
     {
         Tween.Scale(transform, targetScale, tweenDuration, Ease.OutQuad, useUnscaledTime: true);
 
-        if (targetText == null)
-            return;
-
-        Tween.Color(targetText, targetColor, tweenDuration, Ease.OutQuad, useUnscaledTime: true);
+        if (targetText != null)
+            Tween.Color(targetText, targetColor, tweenDuration, Ease.OutQuad, useUnscaledTime: true);
     }
 }

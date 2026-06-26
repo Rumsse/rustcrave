@@ -93,6 +93,8 @@ public class InventorySO : ScriptableObject
 
     public void TransferTo(GlobalInventorySO targetInventory)
     {
+        Debug.Log($"[InventorySO] TransferTo called. Items to transfer: {inventoryItemList.Count}");
+
         if (inventoryItemList.Count == 0)
             return;
 
@@ -106,6 +108,44 @@ public class InventorySO : ScriptableObject
     public void ForceRefresh() => OnInventoryChanged?.Invoke(this, EventArgs.Empty);
 
     public void Reset() => inventoryItemList.Clear();
+
+
+    public InventorySaveData GetSaveData()
+    {
+        var data = new InventorySaveData();
+
+        foreach (var slot in inventoryItemList)
+        {
+            data.slots.Add(new SlotSaveData
+            {
+                itemName = slot.item.name,
+                amount = slot.amount
+            });
+        }
+
+        return data;
+    }
+
+    public void LoadFromSave(InventorySaveData data, GameDatabase db)
+    {
+        inventoryItemList.Clear();
+
+        foreach (var slotData in data.slots)
+        {
+            var item = db.GetItem(slotData.itemName);
+
+            if (item == null)
+            {
+                Debug.LogError($"Cannot load item. {slotData.itemName} is missing in GameDatabaseSO!");
+                continue;
+            }
+
+            inventoryItemList.Add(new InventorySlot(item, slotData.amount));
+        }
+
+        ForceRefresh();
+    }
+
 }
 
 

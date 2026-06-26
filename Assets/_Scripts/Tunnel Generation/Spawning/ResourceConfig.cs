@@ -26,6 +26,9 @@ public class ResourceConfig : BaseSpawnConfig
         if (entry.SpawnTag == SpawnTag.Pulsite)
             modifiedChance *= activeModifier.PulsiteSpawnMultiplier;
 
+        if (entry.SpawnTag == SpawnTag.Sparklite)
+            modifiedChance *= activeModifier.SparkliteSpawnMultiplier;
+
         return modifiedChance;
     }
 }

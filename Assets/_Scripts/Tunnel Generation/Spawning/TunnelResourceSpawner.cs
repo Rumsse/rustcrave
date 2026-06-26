@@ -27,7 +27,8 @@ public class TunnelResourceSpawner : MonoBehaviour
                 if (prefab == null)
                     continue;
 
-                Instantiate(prefab, point.transform.position, point.transform.rotation, segment.transform);
+                Quaternion randomRotation = point.transform.rotation * Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+                Instantiate(prefab, point.transform.position, randomRotation, segment.transform);
             }
         }
     }

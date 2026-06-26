@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: The Forgotten Dispenser
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: THE FORGOTTEN DISPENSER
+  eventIcon: {fileID: 21300000, guid: 93efccb006893c142ac1b367efe9eae9, type: 3}
+  eventDescription: 'A dusty, heavily armored vending terminal meant for ancient
+    miners. Its screen flickers with a faint, inviting glow, asking for a deposit.
+
+
+    What
+    do you do?'
+  dialogOptions:
+  - optionText: '    Insert 1 Pulsite and pull the rusty lever.'
+    isIgnoreOption: 0
+    requiredItem: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+    requiredItemAmount: 1
+    isLuckCheck: 1
+    baseSuccessChance: 70
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 0
+    bonusPerDamage: 0
+    successOutcome:
+      resultText: "The machine whirs to life, gears grinding loudly, and drops premium
+        materials! \n\nYou gain 4 Sparklite and 4 Scraponite."
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: 5b5ce88409a1f3244a54e295ecc35436, type: 2}
+      - {fileID: 11400000, guid: b46d935199a114b4bb6fdabd926dff52, type: 2}
+      - {fileID: 11400000, guid: 96cd1ecdd5346de4ab41d76527e3174b, type: 2}
+    failureOutcome:
+      resultText: 'The machine jams.
+
+
+        You got nothing.'
+      keepEventActive: 0
+      actions: []
+  - optionText: '    I order ___ to smash the vault open!'
+    isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
+    isLuckCheck: 0
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 1
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: "___ shatters the reinforced glass and loots the internal bins.
+        \n\nYou gain 2-3 Pulsite."
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: 2e0c88f9289a84f47bd7b1fe91ce7076, type: 2}
+    failureOutcome:
+      resultText: "An anti-theft taser deploys, frying ___'s circuits! \n\n___ loses
+        30% Energy and the machine completely locks down."
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: 2b190937f5cd4ac42992e6ced1baa234, type: 2}
+  - optionText: '    Ignore'
+    isIgnoreOption: 1
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
+    isLuckCheck: 0
+    baseSuccessChance: 30
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 1
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: "___ strikes fast, pinning the Swindler down and tearing its stash
+        away before it can escape! \n\nYou receive 1 Random Gadget and 2 of each
+        resource (Scraponite, Sparklite, Pulsite)."
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: daac291cfeb22004a84e6d24933f6181, type: 2}
+    failureOutcome:
+      resultText: 'The Swindler is too quick! He dodges your attack ___ and vanishes
+        into the shadows, stealing the scraps from your pocket!
+
+
+        You lose
+        your entire random resource.'
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: 29e6e5689c9826b4aab1629db62ce2d6, type: 2}

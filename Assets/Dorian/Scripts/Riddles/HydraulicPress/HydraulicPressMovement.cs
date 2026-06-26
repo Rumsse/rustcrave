@@ -1,39 +1,115 @@
+using FMODUnity;
+using PrimeTween;
 using UnityEngine;
-using System.Collections;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
+[RequireComponent(typeof(Collider))]
 public class HydraulicPressMovement : MonoBehaviour
 {
+    #region Inspector Fields
+
+    [Header("Press Setup")]
     [SerializeField] private Transform pressTransform;
-    [SerializeField] private Transform topPosition;
+    [SerializeField] private MeshRenderer pressVisualRenderer;
     [SerializeField] private Transform bottomPosition;
     [SerializeField] private float smashSpeed = 20f;
-    [SerializeField] private float retractSpeed = 3f;
-    [SerializeField] private float waitTimeAtTop = 4f;
-    [SerializeField] private float waitTimeAtBottom = 0.5f;
+    [SerializeField] private ParticleSystem impactParticles;
+    [SerializeField] private ParticleSystem debrisParticles;
+    [SerializeField] private string targetTag = "Unit";
 
-    private void Start()
+    [Header("Warning Shadow Setup")]
+    [SerializeField] private DecalProjector shadowDecalProjector;
+    [SerializeField] private float initialShadowFade = 0.3f;
+    [SerializeField] private float maxShadowFade = 1f;
+    [SerializeField] private float shadowFadeOutDuration = 0.5f;
+
+    [Header("Audio Setup")]
+    [SerializeField] private EventReference fallingSound;
+    [SerializeField] private EventReference impactSound;
+
+    #endregion
+
+    #region Private Fields
+
+    private Vector3 _targetBottomLocal;
+    private bool _hasTriggered;
+    private const float TargetFadeOutValue = 0f;
+
+    #endregion
+
+    #region Unity Lifecycle
+
+    private void Awake()
     {
-        StartCoroutine(PressRoutine());
+        _targetBottomLocal = pressTransform.parent.InverseTransformPoint(bottomPosition.position);
+        SetupInitialShadowState();
+
+        if (pressVisualRenderer)
+            pressVisualRenderer.shadowCastingMode = ShadowCastingMode.Off;
     }
 
-    private IEnumerator PressRoutine()
+    private void OnTriggerEnter(Collider other)
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(waitTimeAtTop);
-            yield return StartCoroutine(MovePress(bottomPosition.position, smashSpeed));
+        if (_hasTriggered)
+            return;
 
-            yield return new WaitForSeconds(waitTimeAtBottom);
-            yield return StartCoroutine(MovePress(topPosition.position, retractSpeed));
-        }
+        if (!other.CompareTag(targetTag))
+            return;
+
+        _hasTriggered = true;
+
+        if (debrisParticles)
+            debrisParticles.Play();
+
+        ExecuteSmash();
     }
 
-    private IEnumerator MovePress(Vector3 targetPosition, float speed)
+    #endregion
+
+    #region Logic
+
+    private void SetupInitialShadowState()
     {
-        while (pressTransform.position != targetPosition)
-        {
-            pressTransform.position = Vector3.MoveTowards(pressTransform.position, targetPosition, speed * Time.deltaTime);
-            yield return null;
-        }
+        if (!shadowDecalProjector)
+            return;
+
+        shadowDecalProjector.gameObject.SetActive(true);
+        shadowDecalProjector.fadeFactor = initialShadowFade;
     }
+
+    private void ExecuteSmash()
+    {
+        float distance = Vector3.Distance(pressTransform.localPosition, _targetBottomLocal);
+        float smashDuration = distance / smashSpeed;
+
+        AudioManager.PlayOneShot(fallingSound);
+
+        if (shadowDecalProjector)
+            Tween.Custom(shadowDecalProjector, initialShadowFade, maxShadowFade, smashDuration, SetDecalFade, Ease.InCubic);
+
+        Tween.LocalPosition(pressTransform, _targetBottomLocal, smashDuration, Ease.InCubic)
+            .OnComplete(HandleImpact);
+    }
+
+    private void HandleImpact()
+    {
+        AudioManager.PlayOneShot(impactSound);
+
+        if (impactParticles)
+            impactParticles.Play();
+
+        if (pressVisualRenderer)
+            pressVisualRenderer.shadowCastingMode = ShadowCastingMode.On;
+
+        if (shadowDecalProjector)
+            Tween.Custom(shadowDecalProjector, maxShadowFade, TargetFadeOutValue, shadowFadeOutDuration, SetDecalFade, Ease.InQuad)
+                .OnComplete(HideDecal);
+    }
+
+    private void SetDecalFade(DecalProjector decal, float fade) => decal.fadeFactor = fade;
+
+    private void HideDecal() => shadowDecalProjector.gameObject.SetActive(false);
+
+    #endregion
 }

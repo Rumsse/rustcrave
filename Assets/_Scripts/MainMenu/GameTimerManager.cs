@@ -4,10 +4,14 @@ public class GameTimerManager : MonoBehaviour
 {
     public static GameTimerManager Instance { get; private set; }
 
-    public float TotalPlayTime { get; private set; }
-    private bool isTimerRunning;
+    [SerializeField] bool showDebugTimer;
 
-    private void Awake()
+    public float TotalPlayTime { get; private set; }
+    bool isTimerRunning;
+
+    #region Unity Lifecycle
+
+    void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -19,13 +23,30 @@ public class GameTimerManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Update()
+    void Update()
     {
         if (!isTimerRunning)
             return;
 
         TotalPlayTime += Time.deltaTime;
     }
+
+    void OnGUI()
+    {
+        if (!showDebugTimer)
+            return;
+
+        GUIStyle style = new GUIStyle(GUI.skin.label)
+        {
+            fontSize = 30,
+            fontStyle = FontStyle.Bold
+        };
+        style.normal.textColor = Color.yellow;
+
+        GUI.Label(new Rect(20, 20, 400, 50), $"{GetFormattedTime()}", style);
+    }
+
+    #endregion
 
     #region Public API
 
@@ -50,6 +71,14 @@ public class GameTimerManager : MonoBehaviour
 
         return string.Format("{0:00}:{1:00}", minutes, seconds);
     }
+
+    #endregion
+
+    #region Save System
+
+    public float GetSaveData() => TotalPlayTime;
+
+    public void LoadFromSave(float savedTime) => TotalPlayTime = savedTime;
 
     #endregion
 }
