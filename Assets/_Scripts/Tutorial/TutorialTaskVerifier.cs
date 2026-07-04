@@ -31,7 +31,7 @@ public class TutorialTaskVerifier : MonoBehaviour
         OrePickUp.OnAnyOrePickedUp += OnResourceGathered;
         TunnelEnd.OnTunnelEndReached += OnTunnelEndReached;
         EventPanelController.OnAnyEventResolved += OnEventResolved;
-        CameraCraftingController.OnCameraReachedCraftedRobot += OnRobotCrafted;
+        MainCraftController.OnAnyRobotCrafted += OnRobotCrafted;
         MainCraftController.OnAnyGadgetCrafted += OnGadgetCrafted;
         UnitMaintanceController.OnAnyUnitCharged += OnEnergyRestored;
         UnitInfoPanelController.OnAnyGadgetEquipped += OnGadgetEquipped;
@@ -44,7 +44,7 @@ public class TutorialTaskVerifier : MonoBehaviour
         OrePickUp.OnAnyOrePickedUp -= OnResourceGathered;
         TunnelEnd.OnTunnelEndReached -= OnTunnelEndReached;
         EventPanelController.OnAnyEventResolved -= OnEventResolved;
-        CameraCraftingController.OnCameraReachedCraftedRobot -= OnRobotCrafted;
+        MainCraftController.OnAnyRobotCrafted -= OnRobotCrafted;
         MainCraftController.OnAnyGadgetCrafted -= OnGadgetCrafted;
         UnitMaintanceController.OnAnyUnitCharged -= OnEnergyRestored;
         UnitInfoPanelController.OnAnyGadgetEquipped -= OnGadgetEquipped;

@@ -56,9 +56,6 @@ public class CameraCraftingController : MonoBehaviour
 
     void OnEnable()
     {
-        if (unitSpawner != null)
-            unitSpawner.OnNewUnitSpawned += ZoomToCraftedRobot;
-
         if (craftController != null)
         {
             craftController.OnCraftPanelClosed += HandleCraftClosed;
@@ -76,9 +73,6 @@ public class CameraCraftingController : MonoBehaviour
 
     void OnDisable()
     {
-        if (unitSpawner != null)
-            unitSpawner.OnNewUnitSpawned -= ZoomToCraftedRobot;
-
         if (craftController != null)
         {
             craftController.OnCraftPanelClosed -= HandleCraftClosed;
@@ -163,8 +157,6 @@ public class CameraCraftingController : MonoBehaviour
             currentOnComplete = null;
         }
     }
-
-    void ZoomToCraftedRobot(Transform target) => ExecuteZoom(target, robotZoomOffset, robotFramingOffset, () => OnCameraReachedCraftedRobot?.Invoke());
 
     void ZoomToPlayer()
     {

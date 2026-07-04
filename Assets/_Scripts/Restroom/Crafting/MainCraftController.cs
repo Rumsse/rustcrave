@@ -160,6 +160,7 @@ public class MainCraftController : MonoBehaviour, IPanelController
         swarmState.AddUnitToSwarm(unitType);
         var newUnitData = swarmState.SwarmUnits[^1];
         AddSingleUnitToUI(newUnitData, true);
+        Tween.Delay(1f, () => OnAnyRobotCrafted?.Invoke(), useUnscaledTime: true);
 
         return true;
     }
