@@ -15,7 +15,7 @@ public class PauseMenuManager : MonoBehaviour
 
     #region Serialized Fields
 
-    [SerializeField] private string mainMenuSceneName = "Main Menu";
+    [SerializeField, SceneName] private string mainMenuSceneName = "Main Menu";
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private KeyCode pauseKey = KeyCode.Escape;
     [SerializeField] private EventReference interactionSound;

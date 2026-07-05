@@ -70,7 +70,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private ActiveModifier globalActiveModifier;
     [SerializeField] private PathModifierData calmModifierData;
 
-    [SerializeField] private string mainMenuSceneName = "Main Menu";
+    [SerializeField, SceneName] private string mainMenuSceneName = "Main Menu";
 
     private int currentStepIndex = 0;
     private int currentPageIndex = 0;

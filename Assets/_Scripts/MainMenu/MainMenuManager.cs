@@ -7,8 +7,8 @@ public class MainMenuManager : MonoBehaviour
 {
     #region Serialized Fields
 
-    [SerializeField] private string gameSceneName;
-    [SerializeField] private string tutorialSceneName;
+    [SerializeField, SceneName] private string gameSceneName;
+    [SerializeField, SceneName] private string tutorialSceneName;
     [SerializeField] private GameObject optionsPanelMainMenuOnly;
     [SerializeField] private GameObject creditsPanel;
     [SerializeField] private CreditsController creditsController;
