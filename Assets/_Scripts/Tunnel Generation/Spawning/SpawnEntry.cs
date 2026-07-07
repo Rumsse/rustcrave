@@ -6,7 +6,8 @@ public enum SpawnTag
     Standard,
     Pulsite,
     Sparklite,
-    Mimic
+    Mimic,
+    Mole
 }
 
 [Serializable]
