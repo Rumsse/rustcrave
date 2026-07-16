@@ -21,7 +21,15 @@ public class OreNode : MonoBehaviour, IMineable
 
     #region Unity Lifecycle
 
-    private void OnMouseEnter()
+    private void Start()
+    {
+        if (activeModifier != null && activeModifier.IsFragileCrust)
+        {
+            amount = Mathf.CeilToInt(amount * 0.5f);
+        }
+    }
+
+    private void OnMouseEnter()
     {
         if (Time.timeScale == 0f)
             return;

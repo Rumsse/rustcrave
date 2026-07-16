@@ -8,5 +8,6 @@ public enum PathModifier
     UnstableCamera,
     VoidChase,
     FalseSilence,
-    MoleTerritory
+    MoleTerritory,
+    FragileCrust
 }
