@@ -12,6 +12,8 @@ public class PathModifierData : ScriptableObject
     [SerializeField] bool isCameraUnstable;
     [SerializeField] bool isVoidChase;
     [SerializeField] bool isFalseSilence;
+    [SerializeField] bool isMoleTerritory;
+    [SerializeField] bool isFragileCrust;
 
     [SerializeField] string displayName;
     [SerializeField] string description;
@@ -26,6 +28,8 @@ public class PathModifierData : ScriptableObject
     public bool IsCameraUnstable => isCameraUnstable;
     public bool IsVoidChase => isVoidChase;
     public bool IsFalseSilence => isFalseSilence;
+    public bool IsMoleTerritory => isMoleTerritory;
+    public bool IsFragileCrust => isFragileCrust;
     public string DisplayName => displayName;
     public string Description => description;
     public Sprite Icon => icon;

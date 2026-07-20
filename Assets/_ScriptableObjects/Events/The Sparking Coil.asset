@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: The Sparking Coil
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: THE SPARKING COIL
+  eventIcon: {fileID: 21300000, guid: 54630d81cb166ff46bb2ef2dd87bb859, type: 3}
+  eventDescription: 'An ancient, exposed tesla coil arcs with erratic electricity
+    in the middle of the room. It could provide a massive power boost to your Swarm,
+    but the voltage is wildly unstable.
+
+
+    What do you do?'
+  dialogOptions:
+  - optionText: '    I order ___ to hook up to the coil.'
+    isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
+    isLuckCheck: 1
+    baseSuccessChance: 70
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 0
+    bonusPerDamage: 0
+    successOutcome:
+      resultText: "___ grounds itself and absorbs the wild energy perfectly! \n\n___
+        restores 50% Energy and gains +1 Max Energy for the rest of the run."
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: a1424a64057dcab4c917269329c1f0f3, type: 2}
+      - {fileID: 11400000, guid: 3da0e2df671f88643b6e94ef458f3a85, type: 2}
+    failureOutcome:
+      resultText: "The power surge is too violent! It overloads the internal circuits.
+        \n\n___ takes 3 DMG and loses 30% Energy."
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
+      - {fileID: 11400000, guid: 2b190937f5cd4ac42992e6ced1baa234, type: 2}
+  - optionText: '    Harvest the copper wiring from its base.'
+    isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
+    isLuckCheck: 0
+    baseSuccessChance: 100
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 0
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: "ou safely dismantle the inactive base for valuable parts without
+        touching the live wire. \n\nYou gain 2 Sparklite."
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: 5ba1a516aa2e9a243ba84b7ec2126fe7, type: 2}
+    failureOutcome:
+      resultText: 'The Swindler is too quick! He dodges your attack ___ and vanishes
+        into the shadows, stealing the scraps from your pocket!
+
+
+        You lose
+        your entire randomly picked resource.'
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: a3486f44c853d4a438bd7c7d2eb0c717, type: 2}
+  - optionText: '    Ignore'
+    isIgnoreOption: 1
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
+    isLuckCheck: 0
+    baseSuccessChance: 30
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 1
+    bonusPerDamage: 10
+    successOutcome:
+      resultText: "___ strikes fast, pinning the Swindler down and tearing its stash
+        away before it can escape! \n\nYou receive 1 Random Gadget and 2 of each
+        resource (Scraponite, Sparklite, Pulsite)."
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: daac291cfeb22004a84e6d24933f6181, type: 2}
+    failureOutcome:
+      resultText: 'The Swindler is too quick! He dodges your attack ___ and vanishes
+        into the shadows, stealing the scraps from your pocket!
+
+
+        You lose
+        your entire random resource.'
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: 29e6e5689c9826b4aab1629db62ce2d6, type: 2}

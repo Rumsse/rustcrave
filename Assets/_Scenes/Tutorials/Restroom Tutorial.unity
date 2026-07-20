@@ -3963,6 +3963,10 @@ PrefabInstance:
       propertyPath: m_lineSpacing
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4178475956220298150, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4335006620908961584, guid: 3ddfb414c2d6e1d429b1218438d32362, type: 3}
       propertyPath: m_LocalPosition.x
       value: -198.62878
@@ -5252,8 +5256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d933d09dc364cf047bf169e100cec284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
-  gameSceneName: 
-  tutorialSceneName: 
+  gameSceneName: Main Menu
+  tutorialSceneName: Tutorial
   optionsPanelMainMenuOnly: {fileID: 0}
   creditsPanel: {fileID: 0}
   creditsController: {fileID: 0}
@@ -6245,7 +6249,7 @@ MonoBehaviour:
   swarmFramingOffset: {x: -1, y: 2.3, z: -0.15}
   unitZoomOffset: {x: 0, y: 1.15, z: 2}
   unitFramingOffset: {x: 0.75, y: 0.8, z: 0}
-  transitionSpeed: 5
+  smoothTime: 0.35
 --- !u!1 &1851331453
 GameObject:
   m_ObjectHideFlags: 0

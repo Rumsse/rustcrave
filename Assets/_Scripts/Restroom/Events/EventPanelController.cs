@@ -360,7 +360,7 @@ public class EventPanelController : MonoBehaviour
 
     EventOutcome DetermineOutcome(DialogOption option, SwarmUnitsData robot)
     {
-        if (!option.isMiningCheck && !option.isAttackCheck && !option.isLuckCheck)
+        if (!option.isMiningCheck && !option.isAttackCheck && !option.isLuckCheck && !option.isCapacityCheck)
             return option.successOutcome;
 
         int statValue = 0;
@@ -375,6 +375,11 @@ public class EventPanelController : MonoBehaviour
         {
             statValue = robot != null && robot.unitType != null ? robot.unitType.damage : 0;
             finalChance += statValue * option.bonusPerDamage;
+        }
+        else if (option.isCapacityCheck)
+        {
+            statValue = robot != null ? robot.GetTotalCapacity() : 0;
+            finalChance += statValue * option.bonusPerCapacity;
         }
 
         int roll = Random.Range(1, 101);

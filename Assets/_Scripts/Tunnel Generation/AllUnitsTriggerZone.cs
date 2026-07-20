@@ -8,7 +8,7 @@ public class AllUnitsTriggerZone : MonoBehaviour
 
     [SerializeField] private SwarmState swarmState;
     [SerializeField] private EventState eventState;
-    [SerializeField] private string sceneToLoad;
+    [SerializeField, SceneName] private string sceneToLoad;
     [SerializeField] private Collider triggerCollider;
     [SerializeField] private float energyRestorePercentage = 0.5f;
 

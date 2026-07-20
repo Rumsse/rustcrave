@@ -13,6 +13,8 @@ public class ActiveModifier : ScriptableObject
     public bool IsCameraUnstable => current != null && current.IsCameraUnstable;
     public bool IsVoidChase => current != null && current.IsVoidChase;
     public bool IsFalseSilence => current != null && current.IsFalseSilence;
+    public bool IsMoleTerritory => current != null && current.IsMoleTerritory;
+    public bool IsFragileCrust => current != null && current.IsFragileCrust;
 
     public void Set(PathModifierData modifier) => current = modifier;
 

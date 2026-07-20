@@ -36,8 +36,14 @@ public class DestructibleWall : MonoBehaviour, IMineable
 
     private void Start()
     {
-        if (activeModifier != null && activeModifier.IsVoidChase)
-            amount = voidChaseAmount;
+        if (activeModifier != null)
+        {
+            if (activeModifier.IsVoidChase)
+                amount = voidChaseAmount;
+
+            if (activeModifier.IsFragileCrust)
+                amount = Mathf.CeilToInt(amount * 0.5f);
+        }
     }
 
     #endregion

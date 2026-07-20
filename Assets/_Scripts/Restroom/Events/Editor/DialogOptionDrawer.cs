@@ -23,10 +23,15 @@ public class DialogOptionDrawer : PropertyDrawer
         var reqAmountProp = property.FindPropertyRelative("requiredItemAmount");
 
         var isLuckProp = property.FindPropertyRelative("isLuckCheck");
+
         var isMiningProp = property.FindPropertyRelative("isMiningCheck");
         var bonusMiningProp = property.FindPropertyRelative("bonusPerMiningPower");
+
         var isAttackProp = property.FindPropertyRelative("isAttackCheck");
         var bonusAttackProp = property.FindPropertyRelative("bonusPerDamage");
+
+        var isCapacityProp = property.FindPropertyRelative("isCapacityCheck");
+        var bonusCapacityProp = property.FindPropertyRelative("bonusPerCapacity");
 
         var baseChanceProp = property.FindPropertyRelative("baseSuccessChance");
         var successProp = property.FindPropertyRelative("successOutcome");
@@ -39,11 +44,15 @@ public class DialogOptionDrawer : PropertyDrawer
         var isIgnoreField = new PropertyField(isIgnoreProp);
         var reqItemField = new PropertyField(reqItemProp, "Required Item");
         var reqAmountField = new PropertyField(reqAmountProp, "Required Amount");
+
         var isLuckField = new PropertyField(isLuckProp);
         var isMiningField = new PropertyField(isMiningProp);
         var bonusMiningField = new PropertyField(bonusMiningProp);
         var isAttackField = new PropertyField(isAttackProp);
         var bonusAttackField = new PropertyField(bonusAttackProp);
+        var isCapacityField = new PropertyField(isCapacityProp);
+        var bonusCapacityField = new PropertyField(bonusCapacityProp);
+
         var baseChanceField = new PropertyField(baseChanceProp);
         var successField = new PropertyField(successProp, "Outcome");
         var failureField = new PropertyField(failureProp);
@@ -57,6 +66,8 @@ public class DialogOptionDrawer : PropertyDrawer
         foldout.Add(bonusMiningField);
         foldout.Add(isAttackField);
         foldout.Add(bonusAttackField);
+        foldout.Add(isCapacityField);
+        foldout.Add(bonusCapacityField);
         foldout.Add(baseChanceField);
         foldout.Add(successField);
         foldout.Add(failureField);
@@ -67,30 +78,39 @@ public class DialogOptionDrawer : PropertyDrawer
             bool isLuck = isLuckProp.boolValue;
             bool isMining = isMiningProp.boolValue;
             bool isAttack = isAttackProp.boolValue;
+            bool isCapacity = isCapacityProp.boolValue;
 
-            if (isLuck && (isMining || isAttack))
+            if (isLuck && (isMining || isAttack || isCapacity))
             {
                 isMiningProp.boolValue = false;
                 isAttackProp.boolValue = false;
+                isCapacityProp.boolValue = false;
                 property.serializedObject.ApplyModifiedProperties();
-                isMining = false;
-                isAttack = false;
+                isMining = isAttack = isCapacity = false;
             }
-            else if (isMining && (isLuck || isAttack))
+            else if (isMining && (isLuck || isAttack || isCapacity))
             {
                 isLuckProp.boolValue = false;
                 isAttackProp.boolValue = false;
+                isCapacityProp.boolValue = false;
                 property.serializedObject.ApplyModifiedProperties();
-                isLuck = false;
-                isAttack = false;
+                isLuck = isAttack = isCapacity = false;
             }
-            else if (isAttack && (isLuck || isMining))
+            else if (isAttack && (isLuck || isMining || isCapacity))
             {
                 isLuckProp.boolValue = false;
                 isMiningProp.boolValue = false;
+                isCapacityProp.boolValue = false;
                 property.serializedObject.ApplyModifiedProperties();
-                isLuck = false;
-                isMining = false;
+                isLuck = isMining = isCapacity = false;
+            }
+            else if (isCapacity && (isLuck || isMining || isAttack))
+            {
+                isLuckProp.boolValue = false;
+                isMiningProp.boolValue = false;
+                isAttackProp.boolValue = false;
+                property.serializedObject.ApplyModifiedProperties();
+                isLuck = isMining = isAttack = false;
             }
 
             reqItemField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
@@ -99,15 +119,17 @@ public class DialogOptionDrawer : PropertyDrawer
             isLuckField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
             isMiningField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
             isAttackField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
+            isCapacityField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
             successField.style.display = isIgnore ? DisplayStyle.None : DisplayStyle.Flex;
 
-            bool isAnyCheck = !isIgnore && (isLuck || isMining || isAttack);
+            bool isAnyCheck = !isIgnore && (isLuck || isMining || isAttack || isCapacity);
 
             baseChanceField.style.display = isAnyCheck ? DisplayStyle.Flex : DisplayStyle.None;
             failureField.style.display = isAnyCheck ? DisplayStyle.Flex : DisplayStyle.None;
 
             bonusMiningField.style.display = (!isIgnore && isMining) ? DisplayStyle.Flex : DisplayStyle.None;
             bonusAttackField.style.display = (!isIgnore && isAttack) ? DisplayStyle.Flex : DisplayStyle.None;
+            bonusCapacityField.style.display = (!isIgnore && isCapacity) ? DisplayStyle.Flex : DisplayStyle.None;
 
             successField.label = isAnyCheck ? "Success Outcome" : "Outcome";
         }
@@ -117,6 +139,7 @@ public class DialogOptionDrawer : PropertyDrawer
         foldout.TrackPropertyValue(isLuckProp, _ => UpdateVisibility());
         foldout.TrackPropertyValue(isMiningProp, _ => UpdateVisibility());
         foldout.TrackPropertyValue(isAttackProp, _ => UpdateVisibility());
+        foldout.TrackPropertyValue(isCapacityProp, _ => UpdateVisibility());
 
         UpdateVisibility();
 

@@ -29,6 +29,9 @@ public class DialogOption
     public bool isAttackCheck;
     public int bonusPerDamage = 10;
 
+    public bool isCapacityCheck;
+    public int bonusPerCapacity = 10;
+
     public EventOutcome successOutcome;
     public EventOutcome failureOutcome;
 }

@@ -28,6 +28,7 @@ public class HealthManager : MonoBehaviour, IDamageable
     [SerializeField] private ParticleSystem _hitEffect;
     [SerializeField] private DeathEffect _deathEffectPrefab;
     [SerializeField] private GameObject _healthBarRoot;
+    [SerializeField] private ActiveModifier activeModifier;
 
     #endregion
 
@@ -89,7 +90,11 @@ public class HealthManager : MonoBehaviour, IDamageable
 
         _hitEffect?.Play();
 
-        _currentHP -= damage.Value;
+        int finalDamage = damage.Value;
+        if (activeModifier != null && activeModifier.IsFragileCrust)
+            finalDamage *= 2;
+
+        _currentHP -= finalDamage;
         UpdateHealthVisuals();
 
         OnHealthPercentChange((float)_currentHP / MaxHp);

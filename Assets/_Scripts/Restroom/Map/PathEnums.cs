@@ -7,5 +7,7 @@ public enum PathModifier
     NoEnemiesNoResources,
     UnstableCamera,
     VoidChase,
-    FalseSilence
+    FalseSilence,
+    MoleTerritory,
+    FragileCrust
 }
