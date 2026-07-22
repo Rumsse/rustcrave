@@ -26,6 +26,7 @@ public class SettingsManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         LoadSettings();
+        ApplyResolution();
     }
 
     private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
@@ -52,9 +53,35 @@ public class SettingsManager : MonoBehaviour
         SaveSettings();
     }
 
+    public void SetResolution(int index)
+    {
+        Resolution[] resolutions = Screen.resolutions;
+
+        if (index < 0 || index >= resolutions.Length)
+            return;
+
+        Resolution res = resolutions[index];
+        Screen.SetResolution(res.width, res.height, Screen.fullScreenMode, res.refreshRateRatio);
+
+        CurrentSettings.resolutionIndex = index;
+        SaveSettings();
+    }
+
     #endregion
 
     #region Logic
+
+    private void ApplyResolution()
+    {
+        Resolution[] resolutions = Screen.resolutions;
+        int resIndex = CurrentSettings.resolutionIndex;
+
+        if (resIndex >= 0 && resIndex < resolutions.Length)
+        {
+            Resolution res = resolutions[resIndex];
+            Screen.SetResolution(res.width, res.height, Screen.fullScreenMode, res.refreshRateRatio);
+        }
+    }
 
     private void ApplyAntiAliasingToCamera()
     {
@@ -101,6 +128,7 @@ public class SettingsManager : MonoBehaviour
         if (!File.Exists(SettingsPath))
         {
             Debug.LogWarning("[SettingsManager] No settings file found, using defaults.");
+            CurrentSettings.resolutionIndex = Screen.resolutions.Length - 1;
             return;
         }
 
@@ -112,6 +140,9 @@ public class SettingsManager : MonoBehaviour
             Debug.LogError("[SettingsManager] Failed to parse settings data!");
             CurrentSettings = new SettingsData();
         }
+
+        if (CurrentSettings.resolutionIndex == -1 || CurrentSettings.resolutionIndex >= Screen.resolutions.Length)
+            CurrentSettings.resolutionIndex = Screen.resolutions.Length - 1;
     }
 
     #endregion
@@ -123,5 +154,6 @@ public enum AAMode { Off, Low_FXAA, High_SMAA }
 public class SettingsData
 {
     public float brightness = 0f;
-    public AAMode antiAliasing = AAMode.High_SMAA; 
+    public AAMode antiAliasing = AAMode.High_SMAA;
+    public int resolutionIndex = -1;
 }
