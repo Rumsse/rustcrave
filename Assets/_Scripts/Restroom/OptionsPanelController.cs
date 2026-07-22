@@ -14,8 +14,7 @@ public class OptionsPanelController : MonoBehaviour
         if (uiDocument == null)
             return;
 
-        var root = uiDocument.rootVisualElement;
-        openButton = root.Q<Button>(buttonName);
+        openButton = uiDocument.rootVisualElement.Q<Button>(buttonName);
 
         if (openButton == null)
             return;
@@ -31,8 +30,15 @@ public class OptionsPanelController : MonoBehaviour
         openButton.clicked -= OpenOptions;
     }
 
-    void OpenOptions() 
+    void OpenOptions()
     {
         optionsPanel.SetActive(true);
-    } 
+        Time.timeScale = 0f;
+    }
+
+    public void CloseOptions()
+    {
+        optionsPanel.SetActive(false);
+        Time.timeScale = 1f;
+    }
 }

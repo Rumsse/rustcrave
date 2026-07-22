@@ -7,8 +7,8 @@ public class MainMenuManager : MonoBehaviour
 {
     #region Serialized Fields
 
-    [SerializeField] private string gameSceneName;
-    [SerializeField] private string tutorialSceneName;
+    [SerializeField, SceneName] private string gameSceneName;
+    [SerializeField, SceneName] private string tutorialSceneName;
     [SerializeField] private GameObject optionsPanelMainMenuOnly;
     [SerializeField] private GameObject creditsPanel;
     [SerializeField] private CreditsController creditsController;
@@ -36,7 +36,11 @@ public class MainMenuManager : MonoBehaviour
 
     #endregion
 
+    #region Public Properties
+
     public static bool IsAnimating { get; private set; }
+
+    #endregion
 
     #region Unity Methods
 
@@ -115,7 +119,13 @@ public class MainMenuManager : MonoBehaviour
         StartCoroutine(PlayAnimationAndExecute("CAPOFF 0", () => ActivatePanel(optionsPanelMainMenuOnly)));
     }
 
-    public void CloseOptions() => SetPanelState(optionsPanelMainMenuOnly, false);
+    public void CloseOptions()
+    {
+        if (PauseMenuManager.Instance != null && PauseMenuManager.Instance.IsPaused)
+            PauseMenuManager.Instance.Resume();
+        else
+            SetPanelState(optionsPanelMainMenuOnly, false);
+    }
 
     public void OpenCredits()
     {
@@ -194,8 +204,7 @@ public class MainMenuManager : MonoBehaviour
         }
 
         characterAnimator.Play(animationStateName);
-
-        yield return new WaitForSeconds(panelAnimationDuration);
+        yield return new WaitForSecondsRealtime(panelAnimationDuration);
 
         IsAnimating = false;
         onComplete?.Invoke();
@@ -217,13 +226,13 @@ public class MainMenuManager : MonoBehaviour
         characterTransform.rotation = Quaternion.LookRotation(target.position - characterTransform.position);
         characterAnimator.SetTrigger("PrepareToWalk");
 
-        yield return new WaitForSeconds(prepareAnimationDuration);
+        yield return new WaitForSecondsRealtime(prepareAnimationDuration);
 
         characterAnimator.SetBool("IsWalking", true);
 
         while (Vector3.Distance(characterTransform.position, target.position) > 0.1f)
         {
-            characterTransform.position = Vector3.MoveTowards(characterTransform.position, target.position, moveSpeed * Time.deltaTime);
+            characterTransform.position = Vector3.MoveTowards(characterTransform.position, target.position, moveSpeed * Time.unscaledDeltaTime);
             yield return null;
         }
 
@@ -238,6 +247,8 @@ public class MainMenuManager : MonoBehaviour
             GameTimerManager.Instance.ResetTimer();
             GameTimerManager.Instance.StartTimer();
         }
+
+        Time.timeScale = 1f;
 
         swarmState.Initialize();
         mapState.Initialize();
@@ -255,7 +266,7 @@ public class MainMenuManager : MonoBehaviour
 #endif
     }
 
-    void StopTimer()
+    private void StopTimer()
     {
         if (GameTimerManager.Instance != null)
             GameTimerManager.Instance.StopTimer();

@@ -36,6 +36,7 @@ public class EventPanelController : MonoBehaviour
 
     bool isShowingResult;
     bool isAnimating;
+    bool currentOutcomeResolvesEvent = true;
     const string PLACEHOLDER = "___";
 
     #region Initialization
@@ -103,6 +104,7 @@ public class EventPanelController : MonoBehaviour
     public void TryTriggerRandomEvent()
     {
         isShowingResult = false;
+        currentOutcomeResolvesEvent = true;
 
         if (popUpContainer != null)
             popUpContainer.style.display = DisplayStyle.None;
@@ -257,7 +259,18 @@ public class EventPanelController : MonoBehaviour
             if (i >= currentEvent.dialogOptions.Count)
                 continue;
 
-            var optionText = currentEvent.dialogOptions[i].optionText;
+            var option = currentEvent.dialogOptions[i];
+            var optionText = option.optionText;
+
+            bool canAfford = true;
+
+            if (option.requiredItem != null && option.requiredItemAmount > 0)
+            {
+                var slot = swarmState.GlobalInventory.inventoryItemList.FirstOrDefault(s => s.item == option.requiredItem);
+                canAfford = slot != null && slot.amount >= option.requiredItemAmount;
+            }
+
+            optionButtons[i].SetEnabled(canAfford);
             optionButtons[i].text = string.IsNullOrEmpty(optionText) ? "" : optionText.Replace(PLACEHOLDER, displayName);
         }
     }
@@ -283,6 +296,8 @@ public class EventPanelController : MonoBehaviour
 
         var outcome = DetermineOutcome(selectedOption, currentSelectedRobot);
 
+        currentOutcomeResolvesEvent = !outcome.keepEventActive;
+
         ApplyOutcome(outcome);
         ShowResultScreen(outcome.resultText);
     }
@@ -299,6 +314,7 @@ public class EventPanelController : MonoBehaviour
             if (i == 0)
             {
                 optionButtons[i].text = "   Continue.";
+                optionButtons[i].SetEnabled(true);
                 optionButtons[i].style.display = DisplayStyle.Flex;
             }
             else
@@ -318,7 +334,7 @@ public class EventPanelController : MonoBehaviour
     {
         if (isShowingResult)
         {
-            if (eventState != null)
+            if (eventState != null && currentOutcomeResolvesEvent)
             {
                 eventState.isResolved = true;
 
@@ -344,7 +360,7 @@ public class EventPanelController : MonoBehaviour
 
     EventOutcome DetermineOutcome(DialogOption option, SwarmUnitsData robot)
     {
-        if (!option.isMiningCheck && !option.isAttackCheck && !option.isLuckCheck)
+        if (!option.isMiningCheck && !option.isAttackCheck && !option.isLuckCheck && !option.isCapacityCheck)
             return option.successOutcome;
 
         int statValue = 0;
@@ -359,6 +375,11 @@ public class EventPanelController : MonoBehaviour
         {
             statValue = robot != null && robot.unitType != null ? robot.unitType.damage : 0;
             finalChance += statValue * option.bonusPerDamage;
+        }
+        else if (option.isCapacityCheck)
+        {
+            statValue = robot != null ? robot.GetTotalCapacity() : 0;
+            finalChance += statValue * option.bonusPerCapacity;
         }
 
         int roll = Random.Range(1, 101);

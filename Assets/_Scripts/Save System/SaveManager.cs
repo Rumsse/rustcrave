@@ -136,6 +136,8 @@ public class SaveManager : MonoBehaviour
         if (GameTimerManager.Instance != null)
             GameTimerManager.Instance.LoadFromSave(data.totalPlayTime);
 
+        Time.timeScale = 1f;
+
         Debug.Log($"[SaveManager] Loaded Slot {slot} successfully.");
     }
 

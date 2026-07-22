@@ -6,6 +6,7 @@ using UnityEngine;
 public class EventOutcome
 {
     [TextArea(3, 5)] public string resultText;
+    public bool keepEventActive;
     public List<EventAction> actions = new();
 }
 
@@ -14,6 +15,9 @@ public class DialogOption
 {
     public string optionText;
     public bool isIgnoreOption;
+
+    public ItemSO requiredItem;
+    public int requiredItemAmount = 1;
 
     public bool isLuckCheck;
 
@@ -24,6 +28,9 @@ public class DialogOption
 
     public bool isAttackCheck;
     public int bonusPerDamage = 10;
+
+    public bool isCapacityCheck;
+    public int bonusPerCapacity = 10;
 
     public EventOutcome successOutcome;
     public EventOutcome failureOutcome;

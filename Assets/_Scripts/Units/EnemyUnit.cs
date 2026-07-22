@@ -10,13 +10,29 @@ public class EnemyUnit : UnitBase
 
     public ItemSO StolenItem { get; private set; } // saves stolen item to drop later
 
+
     protected List<Unit> playerUnits = new();
-    
-    private Dictionary<Unit, Action> deathCallbacks = new();
     protected bool _available = true;
+    protected bool hasExternalController;
+
+    private Dictionary<Unit, Action> deathCallbacks = new();
+
+    private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
+    private const float DISTANCE_TOLERANCE = 0.1f;
 
     #region Unity Lifecycle
 
+    protected override void Awake()
+    {
+        base.Awake();
+        hasExternalController = GetComponent<UnitController>() != null;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        ForceStopAttackSound();
+    }
 
     protected override void OnDestroy()
     {
@@ -24,7 +40,7 @@ public class EnemyUnit : UnitBase
 
         foreach (var kvp in deathCallbacks)
         {
-            if (kvp.Key)
+            if (kvp.Key != null && kvp.Key.HealthManager != null)
                 kvp.Key.HealthManager.onDeath -= kvp.Value;
         }
 
@@ -35,23 +51,26 @@ public class EnemyUnit : UnitBase
     {
         base.Update();
 
-        if (!_available)
+        if (!_available || isAttacking || IsPerformingSpecial || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
             return;
 
-        if (isAttacking || IsPerformingSpecial || Stats.PossibleAttacks.Count == 0 || !agent.enabled)
+        if (hasExternalController)
             return;
 
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (guardPoint != null)
         {
-            animator.SetBool("IsWalking", false);
-            HandleSpecialEffects();
-            return;
+            if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+            {
+                animator.SetBool(IsWalkingHash, false);
+                HandleSpecialEffects();
+                return;
+            }
+
+            animator.SetBool(IsWalkingHash, true);
+
+            if ((agent.destination - guardPoint.position).sqrMagnitude > DISTANCE_TOLERANCE * DISTANCE_TOLERANCE)
+                agent.SetDestination(guardPoint.position);
         }
-
-        animator.SetBool("IsWalking", true);
-
-        if (Vector3.Distance(agent.destination, guardPoint.position) > 0.1f)
-            agent.SetDestination(guardPoint.position);
     }
 
     #endregion
@@ -62,7 +81,7 @@ public class EnemyUnit : UnitBase
     {
         if (!_available || playerUnits.Contains(unit))
         {
-            Debug.Log(_available);
+            Debug.Log("Unit is unavailable.");
             return;
         }
 
@@ -84,17 +103,21 @@ public class EnemyUnit : UnitBase
 
     #endregion
 
+    #region Helper
+
     private void RemoveUnit(Unit unit)
     {
         if (!playerUnits.Remove(unit))
         {
-            Debug.Log(_available);
+            Debug.Log("Unit is unavailable.");
             return;
         }
 
         if (deathCallbacks.TryGetValue(unit, out Action callback))
         {
-            unit.HealthManager.onDeath -= callback;
+            if (unit != null && unit.HealthManager != null)
+                unit.HealthManager.onDeath -= callback;
+
             deathCallbacks.Remove(unit);
         }
 
@@ -111,28 +134,27 @@ public class EnemyUnit : UnitBase
 
     private void RemoveOnDeath(Unit unit) => RemoveUnit(unit);
 
-    #region Helper
-
     private Unit GetClosestUnit()
     {
+        NullCleanup();
+
         if (playerUnits.Count == 0)
             return null;
 
-        Unit closest = playerUnits[0];
-        float closestDist = Vector3.Distance(transform.position, closest.transform.position);
+        Unit closest = null;
+        float closestDistSqr = float.MaxValue;
 
-        for (int i = 1; i < playerUnits.Count; i++)
+        foreach (var playerUnit in playerUnits)
         {
-            if (playerUnits[i] == null)
+            if (playerUnit == null)
                 continue;
 
-            float dist = Vector3.Distance(transform.position, playerUnits[i].transform.position);
-
-            if (dist >= closestDist)
-                continue;
-
-            closestDist = dist;
-            closest = playerUnits[i];
+            float distSqr = (transform.position - playerUnit.transform.position).sqrMagnitude;
+            if (distSqr < closestDistSqr)
+            {
+                closestDistSqr = distSqr;
+                closest = playerUnit;
+            }
         }
 
         return closest;
@@ -143,10 +165,12 @@ public class EnemyUnit : UnitBase
     #endregion
 
     #region Special Enemy Behavior
-    protected virtual void HandleSpecialReaction() {}
+
+    protected virtual void HandleSpecialReaction() { }
     public virtual void HandleSpecialEffects() { }
     public override bool SpecialReactionForUnits() => specialUnit;
     public virtual bool FarDetectEnabled() => true;
+
     #endregion
 
     #region Stolen Item

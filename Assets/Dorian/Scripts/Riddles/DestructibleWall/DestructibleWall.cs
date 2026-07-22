@@ -12,23 +12,39 @@ public class DestructibleWall : MonoBehaviour, IMineable
 
     #region Configuration
 
+    [SerializeField] private ActiveModifier activeModifier;
     [SerializeField] private OreSO wallOreSO;
     [SerializeField] private int amount;
+    [SerializeField] private int voidChaseAmount = 5;
     [SerializeField] private ParticleSystem miningEffect;
     [SerializeField] private ParticleSystem destructionEffect;
     [SerializeField] private float sinkDistance = 1.5f;
     [SerializeField] private float shrinkDuration = 0.5f;
 
-    [Header("Mining Shake")]
     [SerializeField] private float miningShakeStrength = 0.05f;
     [SerializeField] private float miningShakeDuration = 0.15f;
 
-    [Header("Destruction Shake")]
     [SerializeField] private float destructionShakeStrength = 0.25f;
     [SerializeField] private float destructionShakeDuration = 0.4f;
     [SerializeField] private float sinkingShakeStrength = 0.1f;
 
     private bool isDestroying;
+
+    #endregion
+
+    #region Unity Lifecycle
+
+    private void Start()
+    {
+        if (activeModifier != null)
+        {
+            if (activeModifier.IsVoidChase)
+                amount = voidChaseAmount;
+
+            if (activeModifier.IsFragileCrust)
+                amount = Mathf.CeilToInt(amount * 0.5f);
+        }
+    }
 
     #endregion
 

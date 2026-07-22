@@ -365,8 +365,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 131.719, y: -44.664993}
-  m_SizeDelta: {x: 492.569, y: 47.936}
+  m_AnchoredPosition: {x: 124.399925, y: -44.664993}
+  m_SizeDelta: {x: 499.85, y: 47.936}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1722403108680464617
 CanvasRenderer:
@@ -398,8 +398,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: OreDescription
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
-  m_sharedMaterial: {fileID: -4099103005339705998, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
+  m_sharedMaterial: {fileID: -3239495174496214396, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -423,8 +423,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15
-  m_fontSizeBase: 15
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -433,10 +433,10 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 7
+  m_characterSpacing: -2
   m_characterHorizontalScale: 1
-  m_wordSpacing: 10
-  m_lineSpacing: 80
+  m_wordSpacing: -7
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -502,7 +502,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8, y: 74}
+  m_AnchoredPosition: {x: -8.71884, y: 74}
   m_SizeDelta: {x: 325.2, y: 21.9348}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2050268871018696125
@@ -535,8 +535,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: OreName
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
-  m_sharedMaterial: {fileID: -4099103005339705998, guid: 4987f747a1d16d94ab01c614fe81fdd5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
+  m_sharedMaterial: {fileID: -3239495174496214396, guid: 3a18462cc0cb9d347a06992a5ad34aa2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -570,10 +570,10 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 7
+  m_characterSpacing: -2
   m_characterHorizontalScale: 1
-  m_wordSpacing: 10
-  m_lineSpacing: 20
+  m_wordSpacing: -7
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1413,6 +1413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f0e1bb79601ee5468d291efeb408f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OreNode
+  activeModifier: {fileID: 11400000, guid: d373c29c877b50b43b30a9a517ecce77, type: 2}
   ore: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
   oreTooltip: {fileID: 5627086372929835659}
   amount: 1

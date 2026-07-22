@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f347c9dca12e0464da81ba9e3d41a00e, type: 3}
+  m_Name: The Bio-Mechanical Egg
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEvent
+  eventTitle: THE BIO-MECHANICAL EGG
+  eventIcon: {fileID: 21300000, guid: 54630d81cb166ff46bb2ef2dd87bb859, type: 3}
+  eventDescription: 'A pulsating, fleshy egg intertwined with copper wires rests
+    in the corner. It hums with a strange, biological frequency.
+
+
+    What do you
+    do?'
+  dialogOptions:
+  - optionText: '    I order ___ to carefully pick it up.'
+    isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
+    isLuckCheck: 0
+    baseSuccessChance: 50
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 0
+    bonusPerDamage: 0
+    isCapacityCheck: 1
+    bonusPerCapacity: 10
+    successOutcome:
+      resultText: ___ secures the egg. It acts as a strange parasite, adding +2 inventory
+        slots to ___.
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: 7e263d26df17002409741b57429d098e, type: 2}
+    failureOutcome:
+      resultText: "As ___ touches it, the egg rots and dissolves into a puddle of
+        foul-smelling, harmless sludge. \n\nNothing happens."
+      keepEventActive: 0
+      actions: []
+  - optionText: '    I order ___ to destroy the egg!'
+    isIgnoreOption: 0
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
+    isLuckCheck: 0
+    baseSuccessChance: 40
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 1
+    bonusPerDamage: 10
+    isCapacityCheck: 0
+    bonusPerCapacity: 10
+    successOutcome:
+      resultText: "___ smashes the egg open! Inside, you find undigested, valuable
+        materials. \n\nYou gain 1 to 4 Random Resources."
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: bca3bc06c3831774fbff77b1c84c2c45, type: 2}
+    failureOutcome:
+      resultText: "The egg is highly volatile! \n\nIt explodes violently upon impact,
+        covering ___ in acidic slime. ___ takes 4 DMG!"
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: 067efb633a65ab045beb47e6411d8bda, type: 2}
+  - optionText: '    Ignore'
+    isIgnoreOption: 1
+    requiredItem: {fileID: 0}
+    requiredItemAmount: 1
+    isLuckCheck: 0
+    baseSuccessChance: 30
+    isMiningCheck: 0
+    bonusPerMiningPower: 0
+    isAttackCheck: 1
+    bonusPerDamage: 10
+    isCapacityCheck: 0
+    bonusPerCapacity: 10
+    successOutcome:
+      resultText: "___ strikes fast, pinning the Swindler down and tearing its stash
+        away before it can escape! \n\nYou receive 1 Random Gadget and 2 of each
+        resource (Scraponite, Sparklite, Pulsite)."
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: daac291cfeb22004a84e6d24933f6181, type: 2}
+    failureOutcome:
+      resultText: 'The Swindler is too quick! He dodges your attack ___ and vanishes
+        into the shadows, stealing the scraps from your pocket!
+
+
+        You lose
+        your entire random resource.'
+      keepEventActive: 0
+      actions:
+      - {fileID: 11400000, guid: 29e6e5689c9826b4aab1629db62ce2d6, type: 2}

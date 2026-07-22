@@ -132,11 +132,11 @@ public class DisplayUnitSpawner : MonoBehaviour
         Destroy(inactiveHolder);
 
         currentSpawnIndex++;
-
         spawnedModels[swarmUnit] = go.transform;
 
         return go.transform;
     }
 
     #endregion
+
 }

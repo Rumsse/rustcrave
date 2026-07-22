@@ -34,6 +34,8 @@ public class UnitInfoPanelController : MonoBehaviour
     Button btnClosePopup;
     List<Button> gadgetSlots = new();
 
+    GadgetTooltipController gadgetTooltip;
+
     SwarmUnitsData currentUnit;
     IVisualElementScheduledItem updateTask;
     int currentEditingSlotIndex = -1;
@@ -73,6 +75,11 @@ public class UnitInfoPanelController : MonoBehaviour
             btnCharge.clicked += HandleChargeClick;
         }
 
+        var tooltipPanel = root.Q<VisualElement>("gadget-tooltip");
+
+        if (tooltipPanel != null)
+            gadgetTooltip = new GadgetTooltipController(tooltipPanel);
+
         InitializeGadgetUI(root);
     }
 
@@ -101,10 +108,54 @@ public class UnitInfoPanelController : MonoBehaviour
             slot.clicked -= () => OpenGadgetPopup(index);
             slot.clicked += () => OpenGadgetPopup(index);
 
+            slot.RegisterCallback<PointerEnterEvent>(evt => ShowGadgetTooltip(evt, index));
+            slot.RegisterCallback<PointerMoveEvent>(evt => MoveGadgetTooltip(evt));
+            slot.RegisterCallback<PointerLeaveEvent>(evt => HideGadgetTooltip());
+
             gadgetSlots.Add(slot);
         }
 
         CloseGadgetPopup();
+    }
+
+    #endregion
+
+    #region Tooltip Logic
+
+    void ShowGadgetTooltip(PointerEnterEvent evt, int slotIndex)
+    {
+        if (gadgetTooltip == null || currentUnit == null)
+            return;
+
+        if (slotIndex >= currentUnit.assignedGadgets.Count)
+            return;
+
+        var gadget = currentUnit.assignedGadgets[slotIndex];
+
+        if (gadget == null)
+            return;
+
+        gadgetTooltip.Show(gadget, evt.position);
+    }
+
+    void ShowHoveredGadgetTooltip(PointerEnterEvent evt, GadgetSO gadget)
+    {
+        if (gadgetTooltip == null || gadget == null)
+            return;
+
+        gadgetTooltip.Show(gadget, evt.position);
+    }
+
+    void MoveGadgetTooltip(PointerMoveEvent evt)
+    {
+        if (gadgetTooltip != null)
+            gadgetTooltip.UpdatePosition(evt.position);
+    }
+
+    void HideGadgetTooltip()
+    {
+        if (gadgetTooltip != null)
+            gadgetTooltip.Hide();
     }
 
     #endregion
@@ -135,6 +186,11 @@ public class UnitInfoPanelController : MonoBehaviour
                 iconBtn.style.backgroundImage = new StyleBackground(gadget.gadgetIcon);
 
             iconBtn.clicked += () => EquipGadget(gadget);
+
+            iconBtn.RegisterCallback<PointerEnterEvent>(evt => ShowHoveredGadgetTooltip(evt, gadget));
+            iconBtn.RegisterCallback<PointerMoveEvent>(evt => MoveGadgetTooltip(evt));
+            iconBtn.RegisterCallback<PointerLeaveEvent>(evt => HideGadgetTooltip());
+
             gadgetListContainer?.Add(iconBtn);
         }
 
@@ -182,6 +238,7 @@ public class UnitInfoPanelController : MonoBehaviour
 
         RefreshGadgetSlotsUI();
         CloseGadgetPopup();
+        HideGadgetTooltip();
         UpdateStats();
 
         if (gadget != null)
@@ -249,6 +306,7 @@ public class UnitInfoPanelController : MonoBehaviour
     public void ClosePanel()
     {
         CloseGadgetPopup();
+        HideGadgetTooltip();
         updateTask?.Pause();
         currentUnit = null;
     }

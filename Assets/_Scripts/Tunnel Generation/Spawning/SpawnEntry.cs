@@ -4,7 +4,10 @@ using UnityEngine;
 public enum SpawnTag
 {
     Standard,
-    Pulsite
+    Pulsite,
+    Sparklite,
+    Mimic,
+    Mole
 }
 
 [Serializable]
