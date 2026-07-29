@@ -4,6 +4,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
 
+public enum AAMode { Off, Low_FXAA, High_SMAA }
+public enum VSyncMode { Off, On }
+
+[Serializable]
+public class SettingsData
+{
+    public float brightness = 0f;
+    public AAMode antiAliasing = AAMode.High_SMAA;
+    public int resolutionIndex = -1;
+    public VSyncMode vsync = VSyncMode.On;
+    public int fpsLimit = 60;
+}
+
 public class SettingsManager : MonoBehaviour
 {
     public static event Action<float> OnBrightnessChanged;
@@ -27,6 +40,7 @@ public class SettingsManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         LoadSettings();
         ApplyResolution();
+        ApplyFramerateSettings();
     }
 
     private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
@@ -67,6 +81,20 @@ public class SettingsManager : MonoBehaviour
         SaveSettings();
     }
 
+    public void SetVSync(VSyncMode mode)
+    {
+        CurrentSettings.vsync = mode;
+        ApplyFramerateSettings();
+        SaveSettings();
+    }
+
+    public void SetFPSLimit(int limit)
+    {
+        CurrentSettings.fpsLimit = limit;
+        ApplyFramerateSettings();
+        SaveSettings();
+    }
+
     #endregion
 
     #region Logic
@@ -76,11 +104,11 @@ public class SettingsManager : MonoBehaviour
         Resolution[] resolutions = Screen.resolutions;
         int resIndex = CurrentSettings.resolutionIndex;
 
-        if (resIndex >= 0 && resIndex < resolutions.Length)
-        {
-            Resolution res = resolutions[resIndex];
-            Screen.SetResolution(res.width, res.height, Screen.fullScreenMode, res.refreshRateRatio);
-        }
+        if (resIndex < 0 || resIndex >= resolutions.Length)
+            return;
+
+        Resolution res = resolutions[resIndex];
+        Screen.SetResolution(res.width, res.height, Screen.fullScreenMode, res.refreshRateRatio);
     }
 
     private void ApplyAntiAliasingToCamera()
@@ -112,6 +140,12 @@ public class SettingsManager : MonoBehaviour
         }
     }
 
+    private void ApplyFramerateSettings()
+    {
+        QualitySettings.vSyncCount = CurrentSettings.vsync == VSyncMode.On ? 1 : 0;
+        Application.targetFrameRate = CurrentSettings.fpsLimit;
+    }
+
     #endregion
 
     #region Save & Load
@@ -120,14 +154,14 @@ public class SettingsManager : MonoBehaviour
     {
         string json = JsonUtility.ToJson(CurrentSettings, true);
         File.WriteAllText(SettingsPath, json);
-        Debug.Log("[SettingsManager] Settings saved globally.");
+        Debug.Log("Settings saved globally.");
     }
 
     void LoadSettings()
     {
         if (!File.Exists(SettingsPath))
         {
-            Debug.LogWarning("[SettingsManager] No settings file found, using defaults.");
+            Debug.LogWarning("No settings file found, using defaults.");
             CurrentSettings.resolutionIndex = Screen.resolutions.Length - 1;
             return;
         }
@@ -137,7 +171,7 @@ public class SettingsManager : MonoBehaviour
 
         if (CurrentSettings == null)
         {
-            Debug.LogError("[SettingsManager] Failed to parse settings data!");
+            Debug.LogError("Failed to parse settings data.");
             CurrentSettings = new SettingsData();
         }
 
@@ -146,14 +180,4 @@ public class SettingsManager : MonoBehaviour
     }
 
     #endregion
-}
-
-public enum AAMode { Off, Low_FXAA, High_SMAA }
-
-[Serializable]
-public class SettingsData
-{
-    public float brightness = 0f;
-    public AAMode antiAliasing = AAMode.High_SMAA;
-    public int resolutionIndex = -1;
 }
