@@ -25,56 +25,51 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to carefully stabilize its core.'
     isIgnoreOption: 0
-    isLuckCheck: 1
-    baseSuccessChance: 40
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 0
+    check:
+      rid: 7221758439618510971
     successOutcome:
       resultText: "___ manages to bypass the corrupted circuits and stabilize the
         core just in time! The robot boots up and joins your swarm. \n\nYou receive
         1 random slighty damaged Robot."
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 5e5eb3fafdadbf043a7ee96ddff33958, type: 2}
+      - rid: -2
     failureOutcome:
       resultText: " ___ crosses the wrong wires! The core destabilizes completely
         and detonates with a blinding flash! \n\nAll robots in the Swarm take 2 DMG,
         but Hollow Conductor avoided it. "
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: cd15431a8544b88408126be7466b6ca2, type: 2}
+      - rid: -2
+    requirements: []
   - optionText: '    I order ___ to brutally dismantle it for parts. '
     isIgnoreOption: 0
-    isLuckCheck: 0
-    baseSuccessChance: 30
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 1
-    bonusPerDamage: 10
+    check:
+      rid: 7221758439618510968
     successOutcome:
       resultText: " ___ swiftly tears out the usable components before the core completely
         dies. \n\nYou gain 3 Scraponite and 1 Sparklite."
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: f30bea91743c9d14e8146d92ff6a9375, type: 2}
-      - {fileID: 11400000, guid: 2ddf85a815085ab4e8639bf421d58d0e, type: 2}
+      - rid: -2
+      - rid: -2
     failureOutcome:
       resultText: "The fragile chassis crumbles into useless dust and rusted flakes
         the moment ___ touches it. \n\nYou get nothing."
+      keepEventActive: 0
       actions: []
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    isLuckCheck: 0
-    baseSuccessChance: 30
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 1
-    bonusPerDamage: 10
+    check:
+      rid: 7221758439618510969
     successOutcome:
       resultText: "___ strikes fast, pinning the Swindler down and tearing its stash
         away before it can escape! \n\nYou receive 1 Random Gadget and 2 of each
         resource (Scraponite, Sparklite, Pulsite)."
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: daac291cfeb22004a84e6d24933f6181, type: 2}
+      - rid: -2
     failureOutcome:
       resultText: 'The Swindler is too quick! He dodges your attack ___ and vanishes
         into the shadows, stealing the scraps from your pocket!
@@ -82,5 +77,24 @@ MonoBehaviour:
 
         You lose
         your entire random resource.'
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 29e6e5689c9826b4aab1629db62ce2d6, type: 2}
+      - rid: -2
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 7221758439618510968
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 7221758439618510969
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 7221758439618510971
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50

@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-[CreateAssetMenu(fileName = "LoseRandomResourceAction", menuName = "Restroom/Events/Actions/Lose Random Resource")]
+[Serializable]
 public class LoseRandomResourceAction : EventAction
 {
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)

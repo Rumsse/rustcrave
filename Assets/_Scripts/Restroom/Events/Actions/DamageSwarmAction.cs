@@ -1,7 +1,8 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DamageSwarmAction", menuName = "Restroom/Events/Actions/Damage Swarm")]
+[Serializable]
 public class DamageSwarmAction : EventAction
 {
     public int damageAmount = 2;

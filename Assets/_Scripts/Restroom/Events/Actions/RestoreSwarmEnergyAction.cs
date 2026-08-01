@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RestoreSwarmEnergyAction", menuName = "Restroom/Events/Actions/Restore Swarm Energy")]
+[Serializable]
 public class RestoreSwarmEnergyAction : EventAction
 {
     [SerializeField] float percentage = 0.1f;

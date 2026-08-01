@@ -1,6 +1,7 @@
-using UnityEngine;
+using System;
 
-public abstract class EventAction : ScriptableObject
+[Serializable]
+public abstract class EventAction
 {
     public abstract void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState);
 }

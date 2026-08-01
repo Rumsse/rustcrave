@@ -23,26 +23,17 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to puncture the tank.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 1
-    baseSuccessChance: 70
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 7221758439618510881
     successOutcome:
       resultText: 'A stream of usable raw materials pours out of the hole! ___ quickly
         gathers them up, but most of them fall and crumble.
 
 
         You gain 1
-        Scraponite, 1Sparklite, 1 Pulsite.'
+        Scraponite, 1 Sparklite, 1 Pulsite.'
       keepEventActive: 0
-      actions:
-      - {fileID: 11400000, guid: 9aadc124edd3cce418aa655ef2690dde, type: 2}
-      - {fileID: 11400000, guid: 86c2463a4b3b6b64086987ac864813fd, type: 2}
-      - {fileID: 11400000, guid: f30bea91743c9d14e8146d92ff6a9375, type: 2}
+      actions: []
     failureOutcome:
       resultText: 'The vibrations destabilize the ceiling! A heavy chunk of rock
         falls directly onto ___''s chassis.
@@ -50,18 +41,12 @@ MonoBehaviour:
 
         ___ takes 2 DMG.'
       keepEventActive: 0
-      actions:
-      - {fileID: 11400000, guid: f4836e2eae1361143a86f8a97addf0be, type: 2}
+      actions: []
+    requirements: []
   - optionText: '    I order ___ to slowly dismantle outer casing.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 40
-    isMiningCheck: 1
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 7221758439618510882
     successOutcome:
       resultText: '___ strips the high-quality metal from the outside without breaching
         the dangerous container.
@@ -70,26 +55,17 @@ MonoBehaviour:
         You get 1-3 Scraponite, 1-3 Sparklite,
         1-3 Pulsite.'
       keepEventActive: 0
-      actions:
-      - {fileID: 11400000, guid: 447e47a564046804d8638889aa9b72f2, type: 2}
-      - {fileID: 11400000, guid: 8039d4c55db3d3d43bc90b82c3680661, type: 2}
-      - {fileID: 11400000, guid: f5f71e98984faaf498ea5657027a824c, type: 2}
+      actions: []
     failureOutcome:
       resultText: "The rusted casing collapses inward, triggering a small implosion
         that destroys the metal. \n\n___ takes 3 DMG!"
       keepEventActive: 0
-      actions:
-      - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
+      actions: []
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 7221758439618510883
     successOutcome:
       resultText: 
       keepEventActive: 0
@@ -98,3 +74,19 @@ MonoBehaviour:
       resultText: 
       keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 7221758439618510881
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 7221758439618510882
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 7221758439618510883
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50

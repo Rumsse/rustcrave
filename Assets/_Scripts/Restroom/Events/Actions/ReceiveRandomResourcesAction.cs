@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-[CreateAssetMenu(fileName = "ReceiveRandomResourcesAction", menuName = "Restroom/Events/Actions/Receive Random Resources")]
+[Serializable]
 public class ReceiveRandomResourcesAction : EventAction
 {
     [SerializeField] List<ItemSO> resourcePool = new();
@@ -12,14 +14,14 @@ public class ReceiveRandomResourcesAction : EventAction
     {
         if (resourcePool.Count == 0 || swarmState.GlobalInventory == null)
             return;
-
+            
         int totalAmount = Random.Range(minAmount, maxAmount + 1);
-
+        
         for (int i = 0; i < totalAmount; i++)
         {
             int randomIndex = Random.Range(0, resourcePool.Count);
             var item = resourcePool[randomIndex];
-
+            
             if (item != null)
                 swarmState.GlobalInventory.AddItem(item, 1);
         }

@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CloneUnitAction", menuName = "Restroom/Events/Actions/Clone Unit")]
+[Serializable]
 public class CloneUnitAction : EventAction
 {
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)

@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ClearInventoryAction", menuName = "Restroom/Events/Actions/Clear Inventory")]
+[Serializable]
 public class ClearInventoryAction : EventAction
 {
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)
