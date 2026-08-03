@@ -55,7 +55,7 @@ public class UnitSpawner : MonoBehaviour
             /*if (swarmUnit.unitType?.Prefab == null)
                 continue;*/
 
-            var go = Instantiate(swarmUnit.unitType.Prefab, hit.position, Quaternion.identity, unitsParent != null ? unitsParent : transform);
+            var go = Instantiate(swarmUnit.unitType.UnitPrefab, hit.position, Quaternion.identity, unitsParent != null ? unitsParent : transform);
             var unit = go.GetComponent<Unit>();
             unit.Initialize(swarmUnit, swarmState);
             spawnIndex++;

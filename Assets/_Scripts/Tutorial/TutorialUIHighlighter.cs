@@ -126,7 +126,7 @@ public class TutorialUIHighlighter : MonoBehaviour
         }
 
         evt.StopImmediatePropagation();
-        evt.PreventDefault();
+        //evt.PreventDefault();
     }
 
     #endregion

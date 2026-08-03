@@ -9,7 +9,7 @@ public class EnergyManager : MonoBehaviour
     public float CurrentEnergy => currentEnergy;
     public int MaxEnergy => maxEnergy;
 
-    [SerializeField] private UnitSO stats;
+    [SerializeField] private UnitData stats;
 
     [Header("Energy Drain")]
     [SerializeField] private float idleDrain;

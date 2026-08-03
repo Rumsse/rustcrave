@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 [Serializable]
 public class ReceiveRandomRobotAction : EventAction
 {
-    [SerializeField] List<UnitSO> possibleRobots = new();
+    [SerializeField] List<UnitData> possibleRobots = new();
     [SerializeField] int startingHP = 2;
     [SerializeField, Range(0f, 1f)] float startingEnergyPercent = 0.4f;
 

@@ -65,8 +65,8 @@ public class RobotHUD : MonoBehaviour
     public void Setup(SwarmUnitsData data)
     {
         unitData = data;
-        nameText.text = unitData.unitType.robotName;
-        icon.sprite = unitData.unitType.robotSprite;
+        nameText.text = unitData.unitType.unitName;
+        icon.sprite = unitData.unitType.unitIcon;
         lastDisplayedHP = -1;
         lastDisplayedEnergy = -1;
 
@@ -177,10 +177,10 @@ public class RobotHUD : MonoBehaviour
 
     #region Event Handlers
 
-    private void HandleFormChanged(UnitSO newStats)
+    private void HandleFormChanged(UnitData newStats)
     {
-        nameText.text = newStats.robotName;
-        icon.sprite = newStats.robotSprite;
+        nameText.text = newStats.unitName;
+        icon.sprite = newStats.unitIcon;
     }
 
     private void HandleHealthChanged(float percent)

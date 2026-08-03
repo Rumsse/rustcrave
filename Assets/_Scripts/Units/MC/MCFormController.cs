@@ -10,7 +10,7 @@ public class MCFormController : MonoBehaviour
 
     public static MCFormController Instance { get; private set; }
 
-    public event Action<UnitSO> OnFormChanged;
+    public event Action<UnitData> OnFormChanged;
     public bool IsTransitioning => isTransitioning;
 
     [Header("Settings")]
@@ -31,8 +31,8 @@ public class MCFormController : MonoBehaviour
     [SerializeField] private GameObject activeHat;
 
     [Header("Stats")]
-    [SerializeField] private UnitSO conductorStats;
-    [SerializeField] private UnitSO spiderStats;
+    [SerializeField] private UnitData conductorStats;
+    [SerializeField] private UnitData spiderStats;
 
     [Header("Sounds")]
     [SerializeField] private EventReference connectSound;
@@ -433,7 +433,7 @@ public class MCFormController : MonoBehaviour
         }
     }
 
-    private void ApplyStats(UnitSO newStats)
+    private void ApplyStats(UnitData newStats)
     {
         if (statsManager != null)
             statsManager.ChangeStats(newStats);

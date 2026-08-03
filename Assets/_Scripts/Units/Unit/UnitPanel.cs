@@ -150,7 +150,7 @@ public class UnitPanel : MonoBehaviour
 
     #region UI Updates
 
-    private void HandleFormChanged(UnitSO newStats)
+    private void HandleFormChanged(UnitData newStats)
     {
         sprite.sprite = currentStatsManager.RobotSprite;
         UpdateFullUI();

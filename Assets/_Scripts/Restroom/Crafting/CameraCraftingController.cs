@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CameraCraftingController : MonoBehaviour
 {
-    public static event Action OnCameraReachedCraftedRobot;
+    //public static event Action OnCameraReachedCraftedRobot;
 
     [SerializeField] Camera mainCamera;
     [SerializeField] Transform defaultCameraTransform;

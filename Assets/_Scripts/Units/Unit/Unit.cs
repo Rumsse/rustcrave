@@ -477,7 +477,7 @@ public class Unit : UnitBase, ITrackableUnit
 
             if (targetOre != null && stats.Sounds.oreMiningSounds != null)
             {
-                foreach (OreMiningSound oreSound in stats.Sounds.oreMiningSounds)
+                foreach (OreMiningSounds oreSound in stats.Sounds.oreMiningSounds)
                 {
                     if (oreSound.ore != targetOre)
                         continue;

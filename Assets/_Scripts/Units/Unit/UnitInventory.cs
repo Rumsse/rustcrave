@@ -7,7 +7,7 @@ public class UnitInventory : MonoBehaviour
     public InventorySO InventorySO => inventorySO;
 
     [SerializeField] protected InventorySO inventorySO;
-    [SerializeField] private UnitSO unitSO;
+    [SerializeField] private UnitData unitSO;
 
     private StatsManager statsManager;
 

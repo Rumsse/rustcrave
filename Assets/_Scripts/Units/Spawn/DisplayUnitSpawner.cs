@@ -108,7 +108,7 @@ public class DisplayUnitSpawner : MonoBehaviour
         GameObject inactiveHolder = new GameObject("InactiveHolder");
         inactiveHolder.SetActive(false);
 
-        var go = Instantiate(swarmUnit.unitType.Prefab, spawnPoint.position, spawnPoint.rotation, inactiveHolder.transform);
+        var go = Instantiate(swarmUnit.unitType.UnitPrefab, spawnPoint.position, spawnPoint.rotation, inactiveHolder.transform);
 
         var allScripts = go.GetComponentsInChildren<MonoBehaviour>(true);
         foreach (var script in allScripts)

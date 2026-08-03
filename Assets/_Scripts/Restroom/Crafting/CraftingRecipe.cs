@@ -7,7 +7,7 @@ using UnityEngine;
 public class CraftingRecipe : ScriptableObject
 {
     [Header("Unit")]
-    public UnitSO CraftedUnit;
+    public UnitData CraftedUnit;
 
     [Header("Restoration")]
     public int healthRestoreAmount;

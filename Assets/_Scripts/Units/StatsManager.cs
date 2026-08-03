@@ -5,24 +5,24 @@ using System.Collections.Generic;
 
 public class StatsManager : MonoBehaviour
 {
-    [SerializeField] private UnitSO _baseData;
+    [SerializeField] private UnitData _baseData;
 
     public Transform PrefabT
     {
         get
         {
-            if (_baseData.Prefab)
-                return _baseData.Prefab.transform;
+            if (_baseData.UnitPrefab)
+                return _baseData.UnitPrefab.transform;
 
             return null;
         }
     }
 
-    public string RobotName => _baseData.robotName;
-    public Sprite RobotSprite => _baseData.robotSprite;
-    public UnitType UnitType => _baseData.unitType;
+    public string RobotName => _baseData.unitName;
+    public Sprite RobotSprite => _baseData.unitIcon;
+    public UnitRole UnitType => _baseData.unitRole;
     public AttackType TypeImmunities => _baseData.typeImmunities;
-    public DeliveryMethod DeliveryMethodImmunities => _baseData.deliveryMethodImmunities;
+    public DeliveryMethod DeliveryMethodImmunities => _baseData.deliveryImmunities;
 
     public int MaxHP => Mathf.RoundToInt((_baseData.maxHP + GetFlatStatModifier(StatsType.MaxHP)) * GetStatModifier(StatsType.MaxHP));
     public float MoveSpeed => (_baseData.moveSpeed + GetFlatStatModifier(StatsType.Speed)) * GetStatModifier(StatsType.Speed);
@@ -32,7 +32,7 @@ public class StatsManager : MonoBehaviour
     public int CarryCapacity => Mathf.RoundToInt((_baseData.carryCapacity + GetFlatStatModifier(StatsType.CarryCapacity)) * GetStatModifier(StatsType.CarryCapacity));
     public List<AttackBase> PossibleAttacks => _baseData.possibleAttacks;
     public int MaxEnergy => Mathf.RoundToInt((_baseData.maxEnergy + GetFlatStatModifier(StatsType.MaxEnergy)) * GetStatModifier(StatsType.MaxEnergy));
-    public UnitSounds Sounds => _baseData.sounds;
+    public UnitAudio Sounds => _baseData.audioSettings;
     
     private Dictionary<StatsType, float> _statsModifiers = new();
     private Dictionary<StatsType, float> _flatStatsModifiers = new();
@@ -42,7 +42,7 @@ public class StatsManager : MonoBehaviour
         if (_baseData != null) { Initialize(_baseData); }
     }
 
-    public void Initialize(UnitSO data)
+    public void Initialize(UnitData data)
     {
         _baseData = data;
 
@@ -76,7 +76,7 @@ public class StatsManager : MonoBehaviour
     public void RemoveFlatStatModifier(StatsType stat, float amount) => _flatStatsModifiers[stat] -= amount;
     public float GetFlatStatModifier(StatsType stat) => _flatStatsModifiers.GetValueOrDefault(stat, 0f);
 
-    public void ChangeStats(UnitSO stats) => _baseData = stats;
+    public void ChangeStats(UnitData stats) => _baseData = stats;
 }
 
 [Serializable]

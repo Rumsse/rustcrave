@@ -198,7 +198,7 @@ public class EventPanelController : MonoBehaviour
 
         foreach (var robot in activeRobots)
         {
-            string baseName = robot.unitType != null ? robot.unitType.robotName : "Robot";
+            string baseName = robot.unitType != null ? robot.unitType.unitName : "Robot";
             string uniqueName = $"{baseName} #{counter}";
             robotDropdownMap.Add(uniqueName, robot);
             counter++;

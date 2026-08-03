@@ -17,7 +17,7 @@ public class DamageSwarmAction : EventAction
             if (!unit.isAlive)
                 continue;
 
-            if (excludeMC && unit.unitType != null && unit.unitType.unitType == UnitType.Conductor)
+            if (excludeMC && unit.unitType != null && unit.unitType.unitRole == UnitRole.Conductor)
                 continue;
 
             unit.currentHP -= damageAmount;
