@@ -23,33 +23,55 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    Hook the Swarm up to the generator.'
     isIgnoreOption: 0
-    isLuckCheck: 1
-    baseSuccessChance: 70
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 7221758598679363717
     successOutcome:
       resultText: "The generator purrs smoothly, feeding a clean current into your
         machines! \n\nAll robots restore 33% of their Max Energy."
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: c93a5b4afe818054697d433210534bbd, type: 2}
+      - rid: 7221758598679363720
     failureOutcome:
       resultText: "A massive short circuit sparks across the rusted cables! \n\nAll
         robots are violently shocked, losing 33% of their Energy."
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: cb07c7a5b6cb4634e92f74a85147f8f8, type: 2}
+      - rid: 7221758598679363721
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 7221758598679363722
     successOutcome:
       resultText: 
-      actions: []
+      keepEventActive: 0
+      actions:
+      - rid: -2
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 7221758598679363717
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 7221758598679363720
+      type: {class: RestoreSwarmEnergyAction, ns: , asm: Assembly-CSharp}
+      data:
+        percentage: 0.33
+    - rid: 7221758598679363721
+      type: {class: RestoreSwarmEnergyAction, ns: , asm: Assembly-CSharp}
+      data:
+        percentage: -0.33
+    - rid: 7221758598679363722
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+        stat: 1
+        bonusPerPoint: 10

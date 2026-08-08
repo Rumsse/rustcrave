@@ -23,35 +23,49 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to enter the pod.'
     isIgnoreOption: 0
-    isLuckCheck: 0
-    baseSuccessChance: 0
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 0
+    check:
+      rid: 7221758598679363584
     successOutcome:
       resultText: "The machine seals shut and whirs loudly, violently rewriting ___'s
         code! \n\nEvery core stat (Max HP, Max Energy, DMG, DIG, Speed) is permanently
         and individually modified by +1 or -1."
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: ef651e2586efb974fbb68b802f612101, type: 2}
+      - rid: 7221758598679363586
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    isLuckCheck: 0
-    baseSuccessChance: 0
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 0
+    check:
+      rid: 7221758598679363585
     successOutcome:
       resultText: "The machine seals shut and whirs loudly, violently rewriting ___'s
         code! \n\nEvery core stat (Max HP, Max Energy, DMG, DIG, Speed) is permanently
         and individually modified by +1 or -1."
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: ef651e2586efb974fbb68b802f612101, type: 2}
+      - rid: -2
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 7221758598679363584
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 100
+    - rid: 7221758598679363585
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 7221758598679363586
+      type: {class: ChangeStatsAction, ns: , asm: Assembly-CSharp}
+      data: 
