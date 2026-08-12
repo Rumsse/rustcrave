@@ -6,13 +6,13 @@ public class CameraZoom : MonoBehaviour
     [SerializeField] private CinemachineCamera wideCamera;
     [SerializeField] private ActiveModifier activeModifier;
     [SerializeField] private float baseSpeed = 0.7f;
-    [SerializeField] private float voidChaseSpeed = 1.1f;
+    [SerializeField] private float voidChaseSpeed;
 
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private float minOrthographicSize = 5f;
-    [SerializeField] private float maxOrthographicSize = 12f;
-    [SerializeField] private float maxFogDensity = 0.015f;
-    [SerializeField] private float minFogDensity = 0.002f;
+    [SerializeField] private float minOrthographicSize;
+    [SerializeField] private float maxOrthographicSize;
+    [SerializeField] private float maxFogDensity;
+    [SerializeField] private float minFogDensity;
 
     public bool IsPausedForTutorial { get; set; } = false;
 

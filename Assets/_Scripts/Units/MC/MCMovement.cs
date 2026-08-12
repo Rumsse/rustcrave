@@ -7,6 +7,7 @@ public class MCMovement : MonoBehaviour
 
     [SerializeField] private float minimumMoveThreshold = 0.1f;
     [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private float screenEdgeMargin = 0.05f;
 
     #endregion
 
@@ -85,7 +86,22 @@ public class MCMovement : MonoBehaviour
         cameraRight.Normalize();
 
         Vector3 movement = (cameraForward * currentInput.y + cameraRight * currentInput.x).normalized;
-        transform.Translate(movement * (currentSpeed * Time.deltaTime), Space.World);
+        Vector3 targetPos = transform.position + movement * (currentSpeed * Time.deltaTime);
+        Vector3 viewportPos = mainCamera.WorldToViewportPoint(targetPos);
+
+        if (viewportPos.x < screenEdgeMargin || viewportPos.x > 1f - screenEdgeMargin || viewportPos.y < screenEdgeMargin || viewportPos.y > 1f - screenEdgeMargin)
+        {
+            viewportPos.x = Mathf.Clamp(viewportPos.x, screenEdgeMargin, 1f - screenEdgeMargin);
+            viewportPos.y = Mathf.Clamp(viewportPos.y, screenEdgeMargin, 1f - screenEdgeMargin);
+
+            Ray ray = mainCamera.ViewportPointToRay(viewportPos);
+            Plane groundPlane = new Plane(Vector3.up, new Vector3(0f, transform.position.y, 0f));
+
+            if (groundPlane.Raycast(ray, out float distance))
+                targetPos = ray.GetPoint(distance);
+        }
+
+        transform.position = targetPos;
 
         if (movement != Vector3.zero)
         {
