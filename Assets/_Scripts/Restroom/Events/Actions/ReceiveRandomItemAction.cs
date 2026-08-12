@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-[CreateAssetMenu(fileName = "ReceiveRandomItemAction", menuName = "Restroom/Events/Actions/Receive Random Item")]
+[Serializable]
 public class ReceiveRandomItemAction : EventAction
 {
     [SerializeField] List<ItemSO> possibleItems = new();

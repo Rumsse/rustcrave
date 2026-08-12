@@ -3,37 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class EventOutcome
-{
-    [TextArea(3, 5)] public string resultText;
-    public bool keepEventActive;
-    public List<EventAction> actions = new();
-}
-
-[Serializable]
 public class DialogOption
 {
     public string optionText;
     public bool isIgnoreOption;
 
-    public ItemSO requiredItem;
-    public int requiredItemAmount = 1;
-
-    public bool isLuckCheck;
-
-    [Range(0, 100)] public int baseSuccessChance = 50;
-
-    public bool isMiningCheck;
-    public int bonusPerMiningPower = 10;
-
-    public bool isAttackCheck;
-    public int bonusPerDamage = 10;
-
-    public bool isCapacityCheck;
-    public int bonusPerCapacity = 10;
+    [SerializeReference, EventActionPicker]
+    public EventCheck check = new LuckCheck();
 
     public EventOutcome successOutcome;
     public EventOutcome failureOutcome;
+
+    [SerializeReference, EventActionPicker]
+    public List<EventRequirement> requirements = new();
+}
+
+[Serializable]
+public class EventOutcome
+{
+    [TextArea(3, 5)] public string resultText;
+    public bool keepEventActive;
+
+    [SerializeReference, EventActionPicker]
+    public List<EventAction> actions = new();
 }
 
 [CreateAssetMenu(fileName = "NewRandomEvent", menuName = "Restroom/Events/Random Event")]

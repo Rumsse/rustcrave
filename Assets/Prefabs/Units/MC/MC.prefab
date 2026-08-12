@@ -15740,7 +15740,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MCFormController
   currentForm: 0
-  switchKey: 101
   conductorBodyPrefab: {fileID: 3785565532985694201}
   returnTargetBoneName: CAP_on_head_pose (1)
   spiderDropForwardOffset: 2
@@ -15748,6 +15747,7 @@ MonoBehaviour:
   hatSlot: {fileID: 2374922274528656194}
   returnSpeedMultiplier: 6
   arrivalThreshold: 0.1
+  maxReturnTime: 5
   conductorVisual: {fileID: 3785565532985694201}
   spiderVisual: {fileID: 8398009392491789184}
   activeHat: {fileID: 8938640113200057252}
@@ -15788,6 +15788,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MCMovement
   minimumMoveThreshold: 0.1
   rotationSpeed: 10
+  screenEdgeMargin: 0.01
 --- !u!1001 &4055612523596884648
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -172,7 +172,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8357770213619696641
 RectTransform:
   m_ObjectHideFlags: 0
@@ -845,7 +845,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3077343761403282166, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
       propertyPath: m_Name
-      value: vfx_Impact_01
+      value: impact
       objectReference: {fileID: 0}
     - target: {fileID: 3629607765504587410, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
       propertyPath: m_MaxParticleSize
@@ -993,84 +993,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5521277632010768499, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
   m_PrefabInstance: {fileID: 1625878072880469840}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &2865986767261890662
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 9073681842128739386}
-    m_Modifications:
-    - target: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.018
-      objectReference: {fileID: 0}
-    - target: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.233
-      objectReference: {fileID: 0}
-    - target: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.024
-      objectReference: {fileID: 0}
-    - target: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4155341592664663432, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_Name
-      value: SmokeEffect 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4155341592664663432, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4832201149529906761, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6834650665853763450, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 255a230a9b9b54a4d93cc3e80389093b, type: 2}
-    - target: {fileID: 8462851649968506833, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 04892f284489c9a4797b234f819827d6, type: 3}
---- !u!4 &884870203933462226 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3134988045990065844, guid: 04892f284489c9a4797b234f819827d6, type: 3}
-  m_PrefabInstance: {fileID: 2865986767261890662}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8230393109486570185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1165,6 +1087,10 @@ PrefabInstance:
       propertyPath: m_MaxParticleSize
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 577526660719123766, guid: 5a936c83b1746f14f9100db745e94f04, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: aa7d72cafc5a84a438045479e407a6ea, type: 2}
     - target: {fileID: 4316839822185376087, guid: 5a936c83b1746f14f9100db745e94f04, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.1591
@@ -1219,7 +1145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4503612902121041701, guid: 5a936c83b1746f14f9100db745e94f04, type: 3}
       propertyPath: m_Name
-      value: vfx_Sparks_01
+      value: Sparks
       objectReference: {fileID: 0}
     - target: {fileID: 7440191685052868192, guid: 5a936c83b1746f14f9100db745e94f04, type: 3}
       propertyPath: playOnAwake
@@ -1354,9 +1280,6 @@ PrefabInstance:
       addedObject: {fileID: 8357770213619696641}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2feaaae2ed37c474ba4be2c923a72ff6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 884870203933462226}
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2feaaae2ed37c474ba4be2c923a72ff6, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6110600364011949919}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2feaaae2ed37c474ba4be2c923a72ff6, type: 3}
       insertIndex: -1
@@ -1421,7 +1344,7 @@ MonoBehaviour:
   miningEffect: {fileID: 1241467310038922700}
   minDropRadius: 0.1
   maxDropRadius: 1
-  navMeshSampleDistance: 2
+  navMeshSampleDistance: 1.2
   dropAmount: 1
 --- !u!208 &5573487094661026039
 NavMeshObstacle:

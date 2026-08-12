@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RestoreEnergyAction", menuName = "Restroom/Events/Actions/Restore Energy")]
+[Serializable]
 public class RestoreEnergyAction : EventAction
 {
     [SerializeField] float percentage = 1.0f;

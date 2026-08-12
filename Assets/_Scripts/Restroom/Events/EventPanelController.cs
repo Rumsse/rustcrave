@@ -23,7 +23,6 @@ public class EventPanelController : MonoBehaviour
     Label descriptionLabel;
     DropdownField robotDropdown;
     VisualElement buttonsContainer;
-
     VisualElement mainIcon;
     VisualElement popUpIcon;
 
@@ -37,6 +36,7 @@ public class EventPanelController : MonoBehaviour
     bool isShowingResult;
     bool isAnimating;
     bool currentOutcomeResolvesEvent = true;
+
     const string PLACEHOLDER = "___";
 
     #region Initialization
@@ -67,7 +67,6 @@ public class EventPanelController : MonoBehaviour
         mainIcon = root.Q<VisualElement>("icon");
 
         var closeBtn = root.Q<Button>("btn-close");
-
         if (closeBtn != null)
             closeBtn.clicked += ClosePanel;
 
@@ -86,7 +85,6 @@ public class EventPanelController : MonoBehaviour
         if (buttonsContainer != null)
         {
             optionButtons = buttonsContainer.Query<Button>().ToList();
-
             for (int i = 0; i < optionButtons.Count; i++)
             {
                 int index = i;
@@ -200,9 +198,8 @@ public class EventPanelController : MonoBehaviour
 
         foreach (var robot in activeRobots)
         {
-            string baseName = robot.unitType != null ? robot.unitType.robotName : "Robot";
+            string baseName = robot.unitType != null ? robot.unitType.unitName : "Robot";
             string uniqueName = $"{baseName} #{counter}";
-
             robotDropdownMap.Add(uniqueName, robot);
             counter++;
         }
@@ -263,11 +260,19 @@ public class EventPanelController : MonoBehaviour
             var optionText = option.optionText;
 
             bool canAfford = true;
-
-            if (option.requiredItem != null && option.requiredItemAmount > 0)
+            if (option.requirements != null)
             {
-                var slot = swarmState.GlobalInventory.inventoryItemList.FirstOrDefault(s => s.item == option.requiredItem);
-                canAfford = slot != null && slot.amount >= option.requiredItemAmount;
+                foreach (var req in option.requirements)
+                {
+                    if (req == null)
+                        continue;
+
+                    if (!req.IsMet(swarmState))
+                    {
+                        canAfford = false;
+                        break;
+                    }
+                }
             }
 
             optionButtons[i].SetEnabled(canAfford);
@@ -295,7 +300,6 @@ public class EventPanelController : MonoBehaviour
         }
 
         var outcome = DetermineOutcome(selectedOption, currentSelectedRobot);
-
         currentOutcomeResolvesEvent = !outcome.keepEventActive;
 
         ApplyOutcome(outcome);
@@ -360,28 +364,10 @@ public class EventPanelController : MonoBehaviour
 
     EventOutcome DetermineOutcome(DialogOption option, SwarmUnitsData robot)
     {
-        if (!option.isMiningCheck && !option.isAttackCheck && !option.isLuckCheck && !option.isCapacityCheck)
+        if (option.check == null)
             return option.successOutcome;
 
-        int statValue = 0;
-        int finalChance = option.baseSuccessChance;
-
-        if (option.isMiningCheck)
-        {
-            statValue = robot != null && robot.unitType != null ? (int)robot.unitType.miningPower : 0;
-            finalChance += statValue * option.bonusPerMiningPower;
-        }
-        else if (option.isAttackCheck)
-        {
-            statValue = robot != null && robot.unitType != null ? robot.unitType.damage : 0;
-            finalChance += statValue * option.bonusPerDamage;
-        }
-        else if (option.isCapacityCheck)
-        {
-            statValue = robot != null ? robot.GetTotalCapacity() : 0;
-            finalChance += statValue * option.bonusPerCapacity;
-        }
-
+        int finalChance = option.check.GetFinalChance(robot);
         int roll = Random.Range(1, 101);
 
         if (roll <= finalChance)
@@ -422,8 +408,8 @@ public class EventPanelController : MonoBehaviour
 
         Vector2 buttonCenterWorld = popUpButton.worldBound.center;
         Vector2 originInLayer = eventLayer.WorldToLocal(buttonCenterWorld);
-        mainPanelInstance.style.transformOrigin = new TransformOrigin(new Length(originInLayer.x, LengthUnit.Pixel), new Length(originInLayer.y, LengthUnit.Pixel));
 
+        mainPanelInstance.style.transformOrigin = new TransformOrigin(new Length(originInLayer.x, LengthUnit.Pixel), new Length(originInLayer.y, LengthUnit.Pixel));
         mainPanelInstance.AddToClassList("event-hidden-state");
         eventLayer.style.display = DisplayStyle.Flex;
 
@@ -443,8 +429,8 @@ public class EventPanelController : MonoBehaviour
 
         Vector2 buttonCenterWorld = popUpButton.worldBound.center;
         Vector2 originInLayer = eventLayer.WorldToLocal(buttonCenterWorld);
-        mainPanelInstance.style.transformOrigin = new TransformOrigin(new Length(originInLayer.x, LengthUnit.Pixel), new Length(originInLayer.y, LengthUnit.Pixel));
 
+        mainPanelInstance.style.transformOrigin = new TransformOrigin(new Length(originInLayer.x, LengthUnit.Pixel), new Length(originInLayer.y, LengthUnit.Pixel));
         mainPanelInstance.AddToClassList("event-hidden-state");
 
         mainPanelInstance.schedule.Execute(() =>

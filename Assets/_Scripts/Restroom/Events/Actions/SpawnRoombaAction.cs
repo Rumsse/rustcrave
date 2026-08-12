@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ActivateObjectAction", menuName = "Restroom/Events/Actions/Activate Object")]
+[Serializable]
 public class ActivateObjectAction : EventAction
 {
     [SerializeField] private string targetTag;

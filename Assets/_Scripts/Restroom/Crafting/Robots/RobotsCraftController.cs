@@ -18,11 +18,11 @@ public class RobotsCraftController : MonoBehaviour
     [SerializeField] private List<RobotCraftData> robotsCraftDataList;
     [SerializeField] private EventReference craftSound;
 
-    private Func<UnitSO, bool> requestCraftRobot;
+    private Func<UnitData, bool> requestCraftRobot;
     private GlobalInventorySO globalInventory;
     private InfoTooltipController infoTooltip;
 
-    public void Initialize(VisualElement root, Func<UnitSO, bool> onCraftRequested, GlobalInventorySO inventory)
+    public void Initialize(VisualElement root, Func<UnitData, bool> onCraftRequested, GlobalInventorySO inventory)
     {
         requestCraftRobot = onCraftRequested;
         globalInventory = inventory;

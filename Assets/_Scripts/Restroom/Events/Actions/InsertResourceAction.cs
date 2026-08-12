@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "InsertResourceAction", menuName = "Restroom/Events/Actions/Insert Resource")]
+[Serializable]
 public class InsertResourceAction : EventAction
 {
     [SerializeField] ItemSO itemToInsert;

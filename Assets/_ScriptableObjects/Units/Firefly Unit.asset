@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b364ca3dfde6614e845a9423d23b6be, type: 3}
+  m_Name: Firefly Unit
+  m_EditorClassIdentifier: Assembly-CSharp::UnitSO
+  unitRole: 2
+  unitPrefab: {fileID: 3240033704538847185, guid: 5d6d82e7a5b17334c94757bdcc04765d, type: 3}
+  unitIcon: {fileID: 21300000, guid: bb523d5f735db0149885412bb139fc7a, type: 3}
+  isMainCharacter: 0
+  unitName: Firefly
+  unitDescription: Fireflies are one of my Mother's favourite insects, because their
+    light and the energy they share remind her of a time when the swarm could live
+    freely.
+  abilityDescription: "Light in the Tunnel \n(passive: activates only when moving)\n\nWhile
+    moving, emits light around itself granting all allied robots within range +DIG
+    +ATK based on the stats of the Firefly."
+  maxHP: 7
+  maxEnergy: 150
+  moveSpeed: 3
+  damage: 1
+  attacksPerSecond: 1
+  miningPower: 2
+  carryCapacity: 6
+  typeImmunities: 0
+  deliveryImmunities: 0
+  possibleAttacks:
+  - {fileID: 11400000, guid: 07ac743c94da40e45a1aa21d8b05eb3d, type: 2}
+  audioSettings:
+    attackSound:
+      Guid:
+        Data1: -1175292134
+        Data2: 1174470109
+        Data3: -1585813860
+        Data4: 2002159353
+      Path: "event:/\u015Awietlik/sx_Atak"
+    mineSound:
+      Guid:
+        Data1: 3170390
+        Data2: 1214008144
+        Data3: 1729514662
+        Data4: 1663717759
+      Path: "event:/\u015Awietlik/sx_Kopanie_v1"
+    oreMiningSounds:
+    - ore: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+      sound:
+        Guid:
+          Data1: 3170390
+          Data2: 1214008144
+          Data3: 1729514662
+          Data4: 1663717759
+        Path: "event:/\u015Awietlik/sx_Kopanie_v1"
+    selectSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    takeDamageSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    deathSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    commandSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    orderSound:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 

@@ -284,14 +284,14 @@ public class UnitInfoPanelController : MonoBehaviour
         if (currentUnit.assignedGadgets == null)
             currentUnit.assignedGadgets = new List<GadgetSO>();
 
-        if (unitImage != null && currentUnit.unitType.robotSprite != null)
-            unitImage.style.backgroundImage = new StyleBackground(currentUnit.unitType.robotSprite);
+        if (unitImage != null && currentUnit.unitType.unitIcon != null)
+            unitImage.style.backgroundImage = new StyleBackground(currentUnit.unitType.unitIcon);
 
         if (nameLabel != null)
-            nameLabel.text = currentUnit.unitType.robotName;
+            nameLabel.text = currentUnit.unitType.unitName;
 
         if (descriptionLabel != null)
-            descriptionLabel.text = currentUnit.unitType.robotDescription;
+            descriptionLabel.text = currentUnit.unitType.unitDescription;
 
         if (abilityDescriptionLabel != null)
             abilityDescriptionLabel.text = currentUnit.unitType.abilityDescription;

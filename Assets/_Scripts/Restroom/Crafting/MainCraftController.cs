@@ -149,7 +149,7 @@ public class MainCraftController : MonoBehaviour, IPanelController
 
     #region Swarm & Crafting UI
 
-    bool HandleRobotCraftRequest(UnitSO unitType)
+    bool HandleRobotCraftRequest(UnitData unitType)
     {
         if (swarmState == null)
             return false;
@@ -238,8 +238,8 @@ public class MainCraftController : MonoBehaviour, IPanelController
         var newUnitIcon = unitContainer.CloneTree();
         var unitImage = newUnitIcon.Q<VisualElement>("unit-image");
 
-        if (unitData.unitType != null && unitData.unitType.robotSprite != null)
-            unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.robotSprite);
+        if (unitData.unitType != null && unitData.unitType.unitIcon != null)
+            unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.unitIcon);
 
         leftBar.Add(newUnitIcon);
 

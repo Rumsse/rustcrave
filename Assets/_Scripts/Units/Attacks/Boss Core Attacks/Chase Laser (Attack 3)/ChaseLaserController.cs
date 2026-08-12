@@ -126,7 +126,7 @@ public class ChaseLaserController : MonoBehaviour
         Color startColor = toEndValue ? _attackData.startColor : _attackData.endColor;
         Color endColor = toEndValue ? _attackData.endColor : _attackData.startColor;
 
-        _colorTween = Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, SetColors);
+        _colorTween = Tween.Custom(this, new TweenSettings<Color>(startColor, endColor, _attackData.colorTweenSettings), (target, color) => target.SetColors(color));
     }
 
     #region Scale

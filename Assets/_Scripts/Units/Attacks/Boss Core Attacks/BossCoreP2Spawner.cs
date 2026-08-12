@@ -38,7 +38,7 @@ public class BossCoreP2Spawner : MonoBehaviour
     [SerializeField] private float _dissolveEndValue = 1.2f;
 
     [Header("Unit")]
-    [SerializeField] private UnitSO _unit;
+    [SerializeField] private UnitData _unit;
 
     #endregion
 

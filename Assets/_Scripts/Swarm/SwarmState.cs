@@ -10,7 +10,7 @@ public class SwarmState : ScriptableObject
     public event Action<SwarmUnitsData> OnUnitAdded;
     public event Action<SwarmUnitsData> OnUnitRemoved;
 
-    [SerializeField] private List<UnitSO> startingSwarm = new();
+    [SerializeField] private List<UnitData> startingSwarm = new();
     [SerializeField] private List<SwarmUnitsData> swarmUnits = new();
     [SerializeField] private int maxSwarmSize = 8;
     [SerializeField] private GlobalInventorySO globalInventory;
@@ -33,7 +33,7 @@ public class SwarmState : ScriptableObject
         OnSwarmChanged?.Invoke();
     }
 
-    public void AddUnitToSwarm(UnitSO type)
+    public void AddUnitToSwarm(UnitData type)
     {
         if (AliveCount >= maxSwarmSize)
             return;

@@ -1,6 +1,6 @@
-using UnityEngine;
+using System;
 
-[CreateAssetMenu(fileName = "AddCapacityAction", menuName = "Restroom/Events/Actions/Add Capacity")]
+[Serializable]
 public class AddMaxCapacityAction : EventAction
 {
     public int capacityToAdd = 2;

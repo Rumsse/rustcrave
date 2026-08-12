@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-[CreateAssetMenu(fileName = "ReceiveRandomResourceAmountAction", menuName = "Restroom/Events/Actions/Receive Random Resource Amount")]
+[Serializable]
 public class ReceiveRandomResourceAmountAction : EventAction
 {
     [SerializeField] ItemSO itemToAdd;

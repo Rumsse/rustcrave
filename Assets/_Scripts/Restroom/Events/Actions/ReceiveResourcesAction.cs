@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ReceiveResourcesAction", menuName = "Restroom/Events/Actions/Receive Resources")]
+[Serializable]
 public class ReceiveResourcesAction : EventAction
 {
     [SerializeField] OreSO Oretype;
