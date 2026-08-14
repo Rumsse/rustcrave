@@ -24,8 +24,8 @@ public class ChoosePathController : MonoBehaviour, IPanelController
     [SerializeField] VisualTreeAsset nodeButtonAsset;
     [SerializeField] VisualTreeAsset tooltipAsset;
 
-    [SerializeField] string mainGameScene = "new Tunel Generation Rumsse";
-    [SerializeField] string mainBossScene = "boss map";
+    [SerializeField, SceneName] string mainGameScene;
+    [SerializeField, SceneName] string mainBossScene;
 
     [SerializeField] Sprite unknownIcon;
     [SerializeField] Sprite bossIcon;

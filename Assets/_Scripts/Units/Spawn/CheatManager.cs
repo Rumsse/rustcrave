@@ -8,7 +8,7 @@ public class CheatManager : MonoBehaviour
 
     void OnDisable() => CheatUnitSpawner.OnCheatSpawnRequested -= HandleCheatSpawn;
 
-    void HandleCheatSpawn(UnitSO unit)
+    void HandleCheatSpawn(UnitData unit)
     {
         if (swarmState == null)
         {

@@ -6,5 +6,5 @@ public class BossPhase : ScriptableObject
 {
     public float healthPercent;
     public string animationTrigger;
-    public UnitSO newStats;
+    public UnitData newStats;
 }

@@ -1,7 +1,8 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DoubleInventoryAction", menuName = "Restroom/Events/Actions/Double Inventory")]
+[Serializable]
 public class DoubleInventoryAction : EventAction
 {
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)

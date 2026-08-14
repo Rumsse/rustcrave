@@ -19,7 +19,7 @@ public class RainLaserController : MonoBehaviour
     [SerializeField] private float _shakeIntensity = 1f;
     [SerializeField] private float _shakeDuration = 0.2f;
     [SerializeField] private float _sphereRadiusDivider = 2f;
-    [SerializeField] private float _sequenceBuffer = 0.1f;
+    // [SerializeField] private float _sequenceBuffer = 0.1f;
     [SerializeField] private float _scaleMultiplier = 2f;
 
     private RainLaserAttack _attackData;
@@ -209,7 +209,7 @@ public class RainLaserController : MonoBehaviour
         Color startColor = toEndValue ? _attackData.startColor : _attackData.endColor;
         Color endColor = toEndValue ? _attackData.endColor : _attackData.startColor;
 
-        _colorTween = Tween.Custom(startColor, endColor, _attackData.colorTweenSettings, color => SetColor(laser, color));
+        _colorTween = Tween.Custom(laser, new TweenSettings<Color>(startColor, endColor, _attackData.colorTweenSettings), (target, color) => SetColor(target, color));
     }
 
     #region Scale

@@ -20,60 +20,25 @@ MonoBehaviour:
 
     What do you do?'
   dialogOptions:
-  - optionText: '    I order ___ to approach and get it.'
+  - optionText: 
     isIgnoreOption: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
-    successOutcome:
-      resultText: "___ dig up the pile of scrap and a rusted roomba appeared from
-        underneath. \n\nA roomba started driving around us, happily. It looks familar.
-        I must know it from somewhere... Oh I know! It's a robot that have been figting
-        in Robots Fights. Poor thing... "
-      actions:
-      - {fileID: 11400000, guid: 3969a1b94fca13745a08e87d68045603, type: 2}
-    failureOutcome:
-      resultText: 
-      actions: []
-  - optionText: '    I order ___ to acquire scrap.'
-    isIgnoreOption: 0
-    baseSuccessChance: 50
-    isMiningCheck: 1
-    bonusPerMiningPower: 5
-    isAttackCheck: 0
-    bonusPerDamage: 10
-    successOutcome:
-      resultText: '___ was able to acquire a bit of useful scrap while scavenging
-        the pile.
-
-
-        You receive 4 scraponite.'
-      actions:
-      - {fileID: 11400000, guid: b46d935199a114b4bb6fdabd926dff52, type: 2}
-    failureOutcome:
-      resultText: '___ got a big scratch from a sharp piece of metal while trying
-        to pick up some scrap.
-
-        ___ He takes 1 DMG.
-
-
-        You receive
-        only 1 scraponite.'
-      actions:
-      - {fileID: 11400000, guid: 1454c54381b0f924285e9d7433f73c3b, type: 2}
-      - {fileID: 11400000, guid: 9aadc124edd3cce418aa655ef2690dde, type: 2}
-  - optionText: '    Ignore'
-    isIgnoreOption: 1
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 8139907356865855614
     successOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 8139907356865855614
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+        stat: 1
+        bonusPerPoint: 10

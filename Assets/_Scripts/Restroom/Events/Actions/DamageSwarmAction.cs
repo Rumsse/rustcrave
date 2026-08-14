@@ -1,7 +1,8 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DamageSwarmAction", menuName = "Restroom/Events/Actions/Damage Swarm")]
+[Serializable]
 public class DamageSwarmAction : EventAction
 {
     public int damageAmount = 2;
@@ -16,7 +17,7 @@ public class DamageSwarmAction : EventAction
             if (!unit.isAlive)
                 continue;
 
-            if (excludeMC && unit.unitType != null && unit.unitType.unitType == UnitType.Conductor)
+            if (excludeMC && unit.unitType != null && unit.unitType.unitRole == UnitRole.Conductor)
                 continue;
 
             unit.currentHP -= damageAmount;

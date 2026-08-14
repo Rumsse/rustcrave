@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-[CreateAssetMenu(fileName = "ChangeStatsAction", menuName = "Restroom/Events/Actions/Change Stats")]
+[Serializable]
 public class ChangeStatsAction : EventAction
 {
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)

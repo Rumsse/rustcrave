@@ -248,7 +248,7 @@ public abstract class UnitBase : MonoBehaviour
         }
     }
 
-    public void ChangeStats(UnitSO newStats)
+    public void ChangeStats(UnitData newStats)
     {
         stats.ChangeStats(newStats);
         RollAttackPhaseChange();

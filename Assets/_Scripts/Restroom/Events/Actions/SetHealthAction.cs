@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SetHealthAction", menuName = "Restroom/Events/Actions/Set Health")]
+[Serializable]
 public class SetHealthAction : EventAction
 {
     public int targetHealth = 1;

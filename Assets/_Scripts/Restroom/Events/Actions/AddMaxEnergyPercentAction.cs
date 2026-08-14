@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "AddMaxEnergyPercentAction", menuName = "Restroom/Events/Actions/Add Max Energy Percent")]
+[Serializable]
 public class AddMaxEnergyPercentAction : EventAction
 {
     public float percentage = 0.1f;

@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class CheatUnitSpawner : MonoBehaviour
 {
-    public static event Action<UnitSO> OnCheatSpawnRequested;
+    public static event Action<UnitData> OnCheatSpawnRequested;
 
-    [SerializeField] private UnitSO minerUnit;
-    [SerializeField] private UnitSO warriorUnit;
-    [SerializeField] private UnitSO specialistUnit;
+    [SerializeField] private UnitData minerUnit;
+    [SerializeField] private UnitData warriorUnit;
+    [SerializeField] private UnitData specialistUnit;
 
     void Update()
     {
@@ -21,7 +21,7 @@ public class CheatUnitSpawner : MonoBehaviour
             TrySpawnUnit(specialistUnit, "Specialist");
     }
 
-    void TrySpawnUnit(UnitSO unit, string unitName)
+    void TrySpawnUnit(UnitData unit, string unitName)
     {
         if (unit == null)
         {

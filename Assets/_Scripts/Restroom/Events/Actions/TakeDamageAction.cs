@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DamageAction", menuName = "Restroom/Events/Actions/Take Damage")]
+[Serializable]
 public class DamageEventAction : EventAction
 {
     [SerializeField] public int damageAmount = 10;

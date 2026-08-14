@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RestoreHealthAction", menuName = "Restroom/Events/Actions/Restore Health")]
+[Serializable]
 public class RestoreHealthAction : EventAction
 {
     [Range(0f, 1f)] public float percentage = 1.0f;

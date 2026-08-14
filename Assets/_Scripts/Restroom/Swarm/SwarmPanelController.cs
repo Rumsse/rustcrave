@@ -285,8 +285,8 @@ public class SwarmPanelController : MonoBehaviour, IPanelController
             unitImage?.AddToClassList("normal-manage-target");
         }
 
-        if (unitData.unitType != null && unitData.unitType.robotSprite != null)
-            unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.robotSprite);
+        if (unitData.unitType != null && unitData.unitType.unitIcon != null)
+            unitImage.style.backgroundImage = new StyleBackground(unitData.unitType.unitIcon);
 
         if (unitImage != null)
             unitImage.RegisterCallback<PointerUpEvent>(evt => HandleSlotInteraction(evt, unitData));

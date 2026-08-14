@@ -16,13 +16,13 @@ public class SwarmUnitsData
     public int bonusCarryCapacity;
 
     public string id;
-    public UnitSO unitType;
+    public UnitData unitType;
     public int currentHP;
     public float currentEnergy;
     public bool isAlive;
     public List<GadgetSO> assignedGadgets = new List<GadgetSO>();
 
-    public SwarmUnitsData(UnitSO type)
+    public SwarmUnitsData(UnitData type)
     {
         id = Guid.NewGuid().ToString();
         unitType = type;
@@ -30,7 +30,7 @@ public class SwarmUnitsData
         currentEnergy = type.maxEnergy;
         isAlive = true;
 
-        var defaultEquipment = type.Prefab.GetComponentInChildren<UnitEquipment>();
+        var defaultEquipment = type.UnitPrefab.GetComponentInChildren<UnitEquipment>();
         if (defaultEquipment != null)
             assignedGadgets.AddRange(defaultEquipment.GetEquippedGadgets());
     }
