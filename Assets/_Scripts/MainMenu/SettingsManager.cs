@@ -19,6 +19,7 @@ public class SettingsData
     public string inputOverrides = "";
 }
 
+[DefaultExecutionOrder(-100)]
 public class SettingsManager : MonoBehaviour
 {
     public static event Action<float> OnBrightnessChanged;
@@ -27,6 +28,7 @@ public class SettingsManager : MonoBehaviour
     public SettingsData CurrentSettings { get; private set; } = new SettingsData();
 
     [SerializeField] private InputActionAsset inputActions;
+    public InputActionAsset InputActions => inputActions;
 
     private string SettingsPath => Path.Combine(Application.persistentDataPath, "settings.json");
 

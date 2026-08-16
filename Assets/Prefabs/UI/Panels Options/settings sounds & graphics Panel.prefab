@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 3465657493081125876}
   - component: {fileID: 4265430580281632669}
   - component: {fileID: 343651501945257095}
+  - component: {fileID: 5992604320536205834}
   m_Layer: 5
   m_Name: Controls panel btn
   m_TagString: Untagged
@@ -111,7 +112,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 12, y: 62}
+  m_AnchoredPosition: {x: -358, y: -466}
   m_SizeDelta: {x: 450, y: 105.5398}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3465657493081125876
@@ -208,6 +209,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5992604320536205834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139470544648690046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca6c9ed16069904d8784e56e7e60f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedTextButton
+  targetText: {fileID: 5777307775838712681}
+  buttonComponent: {fileID: 343651501945257095}
+  hoverScale: {x: 1.1, y: 1.1, z: 1.1}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.6}
+  tweenDuration: 0.15
 --- !u!1 &175916916276884220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1161,10 +1180,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb5f58afa1a6c14eb9d9d1df373fc34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RebindButton
-  targetAction: {fileID: 0}
+  actionName: Gameplay/Move
   bindingIndex: 1
   buttonText: {fileID: 1349252296738492136}
-  waitingText: Listening...
+  waitingText: ...
 --- !u!1 &865362767154275432
 GameObject:
   m_ObjectHideFlags: 0
@@ -3736,10 +3755,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb5f58afa1a6c14eb9d9d1df373fc34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RebindButton
-  targetAction: {fileID: 0}
+  actionName: Gameplay/Move
   bindingIndex: 2
   buttonText: {fileID: 3162654112030491807}
-  waitingText: Listening...
+  waitingText: ...
 --- !u!1 &3706677149297518911
 GameObject:
   m_ObjectHideFlags: 0
@@ -4162,10 +4181,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb5f58afa1a6c14eb9d9d1df373fc34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RebindButton
-  targetAction: {fileID: 0}
+  actionName: Gameplay/Move
   bindingIndex: 4
   buttonText: {fileID: 4966000389324988461}
-  waitingText: Listening...
+  waitingText: ...
 --- !u!1 &4075227484592857514
 GameObject:
   m_ObjectHideFlags: 0
@@ -5521,9 +5540,6 @@ GameObject:
   - component: {fileID: 4841207375280176560}
   - component: {fileID: 2865542514831669308}
   - component: {fileID: 2136593153795040478}
-  - component: {fileID: 4405059052535981470}
-  - component: {fileID: 2425539237922977066}
-  - component: {fileID: 5437776353659239021}
   m_Layer: 5
   m_Name: Bindings Panel
   m_TagString: Untagged
@@ -5596,56 +5612,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4405059052535981470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5510865220157424547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c98fa87944da6b4fbd13330436b574e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MenuOptionsSound
-  musicVCAPath: vca:/Amb
-  sfxVCAPath: vca:/SFX
-  musicSlider: {fileID: 0}
-  sfxSlider: {fileID: 0}
---- !u!114 &2425539237922977066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5510865220157424547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe670cde057691a41af9a50fa09cd69e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SettingsMenuController
-  brightnessVolume: {fileID: 0}
-  brightnessSlider: {fileID: 0}
-  aaDropdown: {fileID: 0}
-  resolutionDropdown: {fileID: 0}
-  vsyncToggle: {fileID: 0}
-  fpsLimitDropdown: {fileID: 0}
-  bindingsPanel: {fileID: 0}
-  openBindingsButton: {fileID: 0}
-  closeBindingsButton: {fileID: 0}
---- !u!114 &5437776353659239021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5510865220157424547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb91b670cbf47ee47a6a36409ea3d42a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SettingsManager
-  inputActions: {fileID: -944628639613478452, guid: 5b63950ef2e72ed42bfde965e83b8879, type: 3}
 --- !u!1 &5593521148505924045
 GameObject:
   m_ObjectHideFlags: 0
@@ -5893,10 +5859,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb5f58afa1a6c14eb9d9d1df373fc34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RebindButton
-  targetAction: {fileID: 0}
+  actionName: Gameplay/SwitchForm
   bindingIndex: 0
   buttonText: {fileID: 6395595829203566413}
-  waitingText: Listening...
+  waitingText: ...
 --- !u!1 &5698907001256743921
 GameObject:
   m_ObjectHideFlags: 0
@@ -6360,7 +6326,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: -2
@@ -6706,7 +6672,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -21, y: -70}
+  m_AnchoredPosition: {x: -21, y: 63}
   m_SizeDelta: {x: 1128.1648, y: 165.083}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6347540218798547260
@@ -7119,11 +7085,11 @@ RectTransform:
   - {fileID: 255158221468993126}
   - {fileID: 488068745169573250}
   - {fileID: 1741345269269201252}
-  - {fileID: 2097925140467730809}
   - {fileID: 7878389436847999171}
   - {fileID: 3806339124874580303}
   - {fileID: 5752405644979413975}
   - {fileID: 8552803237995524301}
+  - {fileID: 2097925140467730809}
   - {fileID: 4829740668822835347}
   - {fileID: 2042496566338860549}
   - {fileID: 4841207375280176560}
@@ -7207,8 +7173,6 @@ MonoBehaviour:
   vsyncToggle: {fileID: 2651519451152070149}
   fpsLimitDropdown: {fileID: 7059405488562328610}
   bindingsPanel: {fileID: 5510865220157424547}
-  openBindingsButton: {fileID: 343651501945257095}
-  closeBindingsButton: {fileID: 5539462925593427741}
 --- !u!114 &3171369041129865735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7493,7 +7457,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -21, y: -333.97275}
+  m_AnchoredPosition: {x: -21, y: -200.97272}
   m_SizeDelta: {x: 1128.1648, y: 165.083}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7330634604322553784
@@ -7667,10 +7631,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb5f58afa1a6c14eb9d9d1df373fc34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RebindButton
-  targetAction: {fileID: 0}
+  actionName: Gameplay/Move
   bindingIndex: 3
   buttonText: {fileID: 8216124637998305916}
-  waitingText: Listening...
+  waitingText: ...
 --- !u!1 &7571030261508234255
 GameObject:
   m_ObjectHideFlags: 0
@@ -8094,10 +8058,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb5f58afa1a6c14eb9d9d1df373fc34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RebindButton
-  targetAction: {fileID: 0}
+  actionName: Gameplay/Ability
   bindingIndex: 0
   buttonText: {fileID: 3580829404390954834}
-  waitingText: Listening...
+  waitingText: ...
 --- !u!1 &7673037422579092305
 GameObject:
   m_ObjectHideFlags: 0
@@ -8660,7 +8624,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -21, y: -203.00008}
+  m_AnchoredPosition: {x: -21, y: -70.000046}
   m_SizeDelta: {x: 1128.1648, y: 165.083}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8437730686639208435
@@ -9000,7 +8964,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 314.4, y: -470.6}
+  m_AnchoredPosition: {x: 314.4, y: -337.59998}
   m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2651519451152070149
