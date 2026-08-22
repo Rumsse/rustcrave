@@ -55,7 +55,7 @@ public class UnitPanel : MonoBehaviour
     private void Start()
     {
         if (UnitSelectionSystem.Instance != null)
-            UnitSelectionSystem.Instance.OnSelectedUnitChanged += HandleSelectionChanged;
+            UnitSelectionSystem.Instance.OnSelectedUnitsChanged += HandleSelectionChanged;
 
         gameObject.SetActive(false);
     }
@@ -63,7 +63,7 @@ public class UnitPanel : MonoBehaviour
     private void OnDestroy()
     {
         if (UnitSelectionSystem.Instance != null)
-            UnitSelectionSystem.Instance.OnSelectedUnitChanged -= HandleSelectionChanged;
+            UnitSelectionSystem.Instance.OnSelectedUnitsChanged -= HandleSelectionChanged;
 
         UnbindUnit();
     }
@@ -84,7 +84,7 @@ public class UnitPanel : MonoBehaviour
         BindUnit(unit);
     }
 
-    private void HandleSelectionChanged(object sender, EventArgs e) => BindUnit(UnitSelectionSystem.Instance.GetSelectedUnit());
+    private void HandleSelectionChanged(object sender, EventArgs e) => BindUnit(UnitSelectionSystem.Instance.GetPrimarySelectedUnit());
 
     private void BindUnit(Unit unit)
     {

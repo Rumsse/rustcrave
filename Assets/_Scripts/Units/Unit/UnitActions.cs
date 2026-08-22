@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using FMODUnity;
@@ -32,12 +33,17 @@ public class UnitActions : MonoBehaviour
     [SerializeField] private float unitSoundDelay = 0.3f;
     [SerializeField] private float commandAnimationCooldown = 0.5f;
 
+    [Header("Formation")]
+    [SerializeField] private float formationSpacing = 1.5f;
+
     #endregion
 
     #region State
 
     private PlayerControls input;
+
     private const float PAUSED_TIME_SCALE = 0f;
+
     private bool isDraggingCommand;
     private float lastDragSoundTime;
     private float lastExecutionSoundTime;
@@ -70,12 +76,12 @@ public class UnitActions : MonoBehaviour
         if (!isDraggingCommand || Time.timeScale == PAUSED_TIME_SCALE)
             return;
 
-        Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
+        Unit primaryUnit = UnitSelectionSystem.Instance.GetPrimarySelectedUnit();
 
-        if (!unit || !commandVisualizer)
+        if (!primaryUnit || !commandVisualizer)
             return;
 
-        commandVisualizer.UpdateVisuals(unit);
+        commandVisualizer.UpdateVisuals(primaryUnit);
         TryPlayDragSound();
     }
 
@@ -88,10 +94,13 @@ public class UnitActions : MonoBehaviour
         if (Time.timeScale == PAUSED_TIME_SCALE)
             return;
 
-        Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
+        List<Unit> units = UnitSelectionSystem.Instance.GetSelectedUnits();
 
-        if (unit && unit.enabled && unit.TryGetComponent<ActiveAbility>(out var ability))
-            ability.TryExecute();
+        foreach (Unit unit in units)
+        {
+            if (unit && unit.enabled && unit.TryGetComponent<ActiveAbility>(out var ability))
+                ability.TryExecute();
+        }
     }
 
     private void OnCommandStarted(InputAction.CallbackContext context)
@@ -99,27 +108,26 @@ public class UnitActions : MonoBehaviour
         if (Time.timeScale == PAUSED_TIME_SCALE)
             return;
 
-        Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
+        List<Unit> units = UnitSelectionSystem.Instance.GetSelectedUnits();
 
-        if (!unit)
+        if (units.Count == 0)
         {
             ResetDragState();
             return;
         }
 
-        if (!unit.IsMainCharacter && MCFormController.Instance && MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider)
+        Unit primaryUnit = units[0];
+
+        if (!primaryUnit.IsMainCharacter && MCFormController.Instance && MCFormController.Instance.GetCurrentForm() == CharacterForm.Spider)
         {
             ResetDragState();
             return;
         }
-
-        if (!unit.enabled)
-            return;
 
         isDraggingCommand = true;
 
         if (commandVisualizer)
-            commandVisualizer.StartVisuals(unit);
+            commandVisualizer.StartVisuals(primaryUnit);
     }
 
     private void OnCommandCanceled(InputAction.CallbackContext context)
@@ -127,14 +135,14 @@ public class UnitActions : MonoBehaviour
         if (!isDraggingCommand)
             return;
 
-        Unit unit = UnitSelectionSystem.Instance.GetSelectedUnit();
+        List<Unit> units = UnitSelectionSystem.Instance.GetSelectedUnits();
         ResetDragState();
 
-        if (unit && CanUnitReceiveCommands(unit))
-        {
-            TryPlayExecutionSound(unit);
-            ExecuteCommand(unit);
-        }
+        if (units.Count == 0)
+            return;
+
+        TryPlayExecutionSound(units[0]);
+        ExecuteCommand(units);
     }
 
     #endregion
@@ -163,85 +171,115 @@ public class UnitActions : MonoBehaviour
         return true;
     }
 
-    private void ExecuteCommand(Unit unit)
+    private void ExecuteCommand(List<Unit> units)
     {
-        if (HandleMining(unit))
-        {
-            PlayMCCommandAnimation(unit);
-            return;
-        }
+        if (HandleMining(units)) return;
+        if (HandleInteraction(units)) return;
+        if (HandleAttack(units)) return;
 
-        if (HandleInteraction(unit))
-        {
-            PlayMCCommandAnimation(unit);
-            return;
-        }
-
-        if (HandleAttack(unit))
-        {
-            PlayMCCommandAnimation(unit);
-            return;
-        }
-
-        if (HandleMovement(unit))
-            PlayMCCommandAnimation(unit);
+        HandleMovement(units);
     }
 
-    private bool HandleInteraction(Unit unit)
+    private bool HandleInteraction(List<Unit> units)
     {
-        if (TryGetTargetUnderPointer<IInteractable>(interactableLayerMask, out var interactable, out Vector3 hitPoint, out Transform targetTransform))
-        {
-            unit.MoveToInteract(interactable, hitPoint);
-            ShowActionFeedback(interactFeedbackPrefab, targetTransform);
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool HandleAttack(Unit unit)
-    {
-        if (unit.IsMainCharacter && MCFormController.Instance && MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor)
+        if (!TryGetTargetUnderPointer<IInteractable>(interactableLayerMask, out var interactable, out Vector3 hitPoint, out Transform targetTransform))
             return false;
 
-        if (TryGetTargetUnderPointer<EnemyUnit>(unitLayerMask, out var enemy, out Vector3 hitPoint, out Transform targetTransform))
+        foreach (Unit unit in units)
         {
-            unit.MoveToAttack(enemy, hitPoint);
-            ShowActionFeedback(attackFeedbackPrefab, targetTransform);
-            return true;
+            if (CanUnitReceiveCommands(unit))
+                unit.MoveToInteract(interactable, hitPoint);
         }
 
-        return false;
+        ShowActionFeedback(interactFeedbackPrefab, targetTransform);
+        PlayMCCommandAnimation(units[0]);
+        return true;
     }
 
-    private bool HandleMining(Unit unit)
+    private bool HandleAttack(List<Unit> units)
     {
-        if (unit.IsMainCharacter && MCFormController.Instance && MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor)
+        if (!TryGetTargetUnderPointer<EnemyUnit>(unitLayerMask, out var enemy, out Vector3 hitPoint, out Transform targetTransform))
             return false;
 
-        if (TryGetTargetUnderPointer<IMineable>(oreLayerMask, out var mineable, out Vector3 hitPoint, out Transform targetTransform))
+        foreach (Unit unit in units)
         {
-            unit.MoveToMine(mineable, hitPoint);
-            ShowActionFeedback(mineFeedbackPrefab, targetTransform);
-            return true;
+            if (unit.IsMainCharacter && MCFormController.Instance && MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor)
+                continue;
+
+            if (CanUnitReceiveCommands(unit))
+                unit.MoveToAttack(enemy, hitPoint);
         }
 
-        return false;
+        ShowActionFeedback(attackFeedbackPrefab, targetTransform);
+        PlayMCCommandAnimation(units[0]);
+        return true;
     }
 
-    private bool HandleMovement(Unit unit)
+    private bool HandleMining(List<Unit> units)
+    {
+        if (!TryGetTargetUnderPointer<IMineable>(oreLayerMask, out var mineable, out Vector3 hitPoint, out Transform targetTransform))
+            return false;
+
+        foreach (Unit unit in units)
+        {
+            if (unit.IsMainCharacter && MCFormController.Instance && MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor)
+                continue;
+
+            if (CanUnitReceiveCommands(unit))
+                unit.MoveToMine(mineable, hitPoint);
+        }
+
+        ShowActionFeedback(mineFeedbackPrefab, targetTransform);
+        PlayMCCommandAnimation(units[0]);
+        return true;
+    }
+
+    private bool HandleMovement(List<Unit> units)
     {
         Vector2 pointerPos = input.Gameplay.PointerPosition.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(pointerPos);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, mouseWorldLayerMask))
+        if (!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, mouseWorldLayerMask))
+            return false;
+
+        List<Vector3> formationPositions = CalculateFormationPositions(hit.point, units.Count);
+
+        for (int i = 0; i < units.Count; i++)
         {
-            unit.HandleMovement(hit.point);
-            ShowMoveIndicator(hit.point);
-            return true;
+            if (CanUnitReceiveCommands(units[i]))
+                units[i].HandleMovement(formationPositions[i]);
         }
 
-        return false;
+        ShowMoveIndicator(hit.point);
+        PlayMCCommandAnimation(units[0]);
+        return true;
+    }
+
+    private List<Vector3> CalculateFormationPositions(Vector3 targetPosition, int unitCount)
+    {
+        List<Vector3> positions = new();
+
+        if (unitCount == 1)
+        {
+            positions.Add(targetPosition);
+            return positions;
+        }
+
+        int rows = Mathf.CeilToInt(Mathf.Sqrt(unitCount));
+        int cols = Mathf.CeilToInt((float)unitCount / rows);
+
+        float startX = -(cols - 1) * formationSpacing / 2f;
+        float startZ = -(rows - 1) * formationSpacing / 2f;
+
+        for (int i = 0; i < unitCount; i++)
+        {
+            int row = i / cols;
+            int col = i % cols;
+            Vector3 pos = targetPosition + new Vector3(startX + col * formationSpacing, 0f, startZ + row * formationSpacing);
+            positions.Add(pos);
+        }
+
+        return positions;
     }
 
     private bool TryGetTargetUnderPointer<T>(LayerMask mask, out T targetComponent, out Vector3 point, out Transform targetTransform) where T : class

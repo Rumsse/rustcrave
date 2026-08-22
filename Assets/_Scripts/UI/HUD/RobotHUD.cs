@@ -83,7 +83,7 @@ public class RobotHUD : MonoBehaviour
         UnitRegistry.OnUnitRegistered += OnUnitRegistered;
 
         if (UnitSelectionSystem.Instance != null)
-            UnitSelectionSystem.Instance.OnSelectedUnitChanged += HandleSelectionChanged;
+            UnitSelectionSystem.Instance.OnSelectedUnitsChanged += HandleSelectionChanged;
     }
 
     private void TryAssignUnit()
@@ -263,7 +263,7 @@ public class RobotHUD : MonoBehaviour
         if (outline == null || selectedUnit == null || UnitSelectionSystem.Instance == null)
             return;
 
-        bool isSelected = UnitSelectionSystem.Instance.GetSelectedUnit() == selectedUnit;
+        bool isSelected = UnitSelectionSystem.Instance.GetSelectedUnits().Contains(selectedUnit);
         outline.effectColor = isSelected ? selectedOutlineColor : defaultOutlineColor;
     }
 
@@ -272,7 +272,7 @@ public class RobotHUD : MonoBehaviour
         if (selectionBackground == null || selectedUnit == null || UnitSelectionSystem.Instance == null)
             return;
 
-        bool isSelected = UnitSelectionSystem.Instance.GetSelectedUnit() == selectedUnit;
+        bool isSelected = UnitSelectionSystem.Instance.GetSelectedUnits().Contains(selectedUnit);
 
         if (selectionBackground.enabled != isSelected)
             selectionBackground.enabled = isSelected;
@@ -359,7 +359,7 @@ public class RobotHUD : MonoBehaviour
         UnitRegistry.OnUnitRegistered -= OnUnitRegistered;
 
         if (UnitSelectionSystem.Instance != null)
-            UnitSelectionSystem.Instance.OnSelectedUnitChanged -= HandleSelectionChanged;
+            UnitSelectionSystem.Instance.OnSelectedUnitsChanged -= HandleSelectionChanged;
 
         if (currentInventory != null)
         {
