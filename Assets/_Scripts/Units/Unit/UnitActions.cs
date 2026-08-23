@@ -177,7 +177,7 @@ public class UnitActions : MonoBehaviour
         if (HandleInteraction(units)) return;
         if (HandleAttack(units)) return;
 
-        HandleMovement(units);
+        HandleMovementCommand(units);
     }
 
     private bool HandleInteraction(List<Unit> units)
@@ -185,10 +185,16 @@ public class UnitActions : MonoBehaviour
         if (!TryGetTargetUnderPointer<IInteractable>(interactableLayerMask, out var interactable, out Vector3 hitPoint, out Transform targetTransform))
             return false;
 
-        foreach (Unit unit in units)
+        List<Vector3> formationPositions = CalculateFormationPositions(hitPoint, units.Count);
+
+        for (int i = 0; i < units.Count; i++)
         {
-            if (CanUnitReceiveCommands(unit))
-                unit.MoveToInteract(interactable, hitPoint);
+            Unit unit = units[i];
+
+            if (!CanUnitReceiveCommands(unit))
+                continue;
+
+            unit.MoveToInteract(interactable, hitPoint);
         }
 
         ShowActionFeedback(interactFeedbackPrefab, targetTransform);
@@ -201,13 +207,22 @@ public class UnitActions : MonoBehaviour
         if (!TryGetTargetUnderPointer<EnemyUnit>(unitLayerMask, out var enemy, out Vector3 hitPoint, out Transform targetTransform))
             return false;
 
-        foreach (Unit unit in units)
+        List<Vector3> formationPositions = CalculateFormationPositions(hitPoint, units.Count);
+
+        for (int i = 0; i < units.Count; i++)
         {
-            if (unit.IsMainCharacter && MCFormController.Instance && MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor)
+            Unit unit = units[i];
+
+            if (!CanUnitReceiveCommands(unit))
                 continue;
 
-            if (CanUnitReceiveCommands(unit))
-                unit.MoveToAttack(enemy, hitPoint);
+            if (unit.IsMainCharacter && MCFormController.Instance && MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor)
+            {
+                unit.HandleMovement(formationPositions[i]);
+                continue;
+            }
+
+            unit.MoveToAttack(enemy, hitPoint);
         }
 
         ShowActionFeedback(attackFeedbackPrefab, targetTransform);
@@ -220,13 +235,22 @@ public class UnitActions : MonoBehaviour
         if (!TryGetTargetUnderPointer<IMineable>(oreLayerMask, out var mineable, out Vector3 hitPoint, out Transform targetTransform))
             return false;
 
-        foreach (Unit unit in units)
+        List<Vector3> formationPositions = CalculateFormationPositions(hitPoint, units.Count);
+
+        for (int i = 0; i < units.Count; i++)
         {
-            if (unit.IsMainCharacter && MCFormController.Instance && MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor)
+            Unit unit = units[i];
+
+            if (!CanUnitReceiveCommands(unit))
                 continue;
 
-            if (CanUnitReceiveCommands(unit))
-                unit.MoveToMine(mineable, hitPoint);
+            if (unit.IsMainCharacter && MCFormController.Instance && MCFormController.Instance.GetCurrentForm() == CharacterForm.Conductor)
+            {
+                unit.HandleMovement(formationPositions[i]);
+                continue;
+            }
+
+            unit.MoveToMine(mineable, hitPoint);
         }
 
         ShowActionFeedback(mineFeedbackPrefab, targetTransform);
@@ -234,7 +258,7 @@ public class UnitActions : MonoBehaviour
         return true;
     }
 
-    private bool HandleMovement(List<Unit> units)
+    private bool HandleMovementCommand(List<Unit> units)
     {
         Vector2 pointerPos = input.Gameplay.PointerPosition.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(pointerPos);

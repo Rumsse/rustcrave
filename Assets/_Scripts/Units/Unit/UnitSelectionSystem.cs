@@ -14,9 +14,10 @@ public class UnitSelectionSystem : MonoBehaviour
     [SerializeField] private RectTransform selectionBox;
     [SerializeField] private LayerMask unitLayerMask;
 
-    [Header("Frame Visuals")]
-    [SerializeField] private Color frameColor = new Color(0.2f, 0.8f, 0.2f, 1f);
-    [SerializeField] private float frameThickness = 2f;
+    [Header("Box Visuals")]
+    [SerializeField] private Color fillColor = new Color(0.2f, 0.8f, 0.2f, 0.2f);
+    [SerializeField] private Color borderColor = new Color(0.2f, 0.8f, 0.2f, 1f);
+    [SerializeField] private float borderThickness = 2f;
 
     private List<Unit> selectedUnits = new();
     private Vector2 startMousePosition;
@@ -30,7 +31,7 @@ public class UnitSelectionSystem : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        SetupSelectionFrame();
+        SetupSelectionVisuals();
     }
 
     private void Update()
@@ -45,15 +46,35 @@ public class UnitSelectionSystem : MonoBehaviour
 
     #region Visual Setup
 
-    private void SetupSelectionFrame()
+    private void SetupSelectionVisuals()
     {
         if (selectionBox.TryGetComponent(out Image img))
             Destroy(img);
 
-        CreateBorder("Top", new Vector2(0, 1), new Vector2(1, 1), new Vector2(0, -frameThickness / 2f), new Vector2(0, frameThickness));
-        CreateBorder("Bottom", new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, frameThickness / 2f), new Vector2(0, frameThickness));
-        CreateBorder("Left", new Vector2(0, 0), new Vector2(0, 1), new Vector2(frameThickness / 2f, 0), new Vector2(frameThickness, 0));
-        CreateBorder("Right", new Vector2(1, 0), new Vector2(1, 1), new Vector2(-frameThickness / 2f, 0), new Vector2(frameThickness, 0));
+        foreach (Transform child in selectionBox)
+            Destroy(child.gameObject);
+
+        CreateFill();
+        CreateBorder("Top", new Vector2(0, 1), new Vector2(1, 1), new Vector2(0, -borderThickness / 2f), new Vector2(0, borderThickness));
+        CreateBorder("Bottom", new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, borderThickness / 2f), new Vector2(0, borderThickness));
+        CreateBorder("Left", new Vector2(0, 0), new Vector2(0, 1), new Vector2(borderThickness / 2f, 0), new Vector2(borderThickness, 0));
+        CreateBorder("Right", new Vector2(1, 0), new Vector2(1, 1), new Vector2(-borderThickness / 2f, 0), new Vector2(borderThickness, 0));
+    }
+
+    private void CreateFill()
+    {
+        GameObject fillObj = new GameObject("Fill");
+        fillObj.transform.SetParent(selectionBox, false);
+
+        Image image = fillObj.AddComponent<Image>();
+        image.color = fillColor;
+        image.raycastTarget = false;
+
+        RectTransform rect = fillObj.GetComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = Vector2.zero;
     }
 
     private void CreateBorder(string edgeName, Vector2 anchorMin, Vector2 anchorMax, Vector2 anchoredPos, Vector2 sizeDelta)
@@ -62,7 +83,7 @@ public class UnitSelectionSystem : MonoBehaviour
         edge.transform.SetParent(selectionBox, false);
 
         Image image = edge.AddComponent<Image>();
-        image.color = frameColor;
+        image.color = borderColor;
         image.raycastTarget = false;
 
         RectTransform rect = edge.GetComponent<RectTransform>();
