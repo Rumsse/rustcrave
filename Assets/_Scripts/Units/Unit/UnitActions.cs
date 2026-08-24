@@ -186,6 +186,8 @@ public class UnitActions : MonoBehaviour
             return false;
 
         List<Vector3> formationPositions = CalculateFormationPositions(hitPoint, units.Count);
+        bool isOrePickup = interactable is OrePickUp;
+        bool hasAssignedPickup = false;
 
         for (int i = 0; i < units.Count; i++)
         {
@@ -194,7 +196,18 @@ public class UnitActions : MonoBehaviour
             if (!CanUnitReceiveCommands(unit))
                 continue;
 
-            unit.MoveToInteract(interactable, hitPoint);
+            if (isOrePickup)
+            {
+                if (!hasAssignedPickup)
+                {
+                    unit.MoveToInteract(interactable, hitPoint);
+                    hasAssignedPickup = true;
+                }
+                else
+                    unit.HandleMovement(formationPositions[i]);
+            }
+            else
+                unit.MoveToInteract(interactable, hitPoint);
         }
 
         ShowActionFeedback(interactFeedbackPrefab, targetTransform);

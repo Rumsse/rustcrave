@@ -16,6 +16,8 @@ public class OrePickUp : MonoBehaviour, IInteractable
     public ItemSO item;
     public int oreValueAmount;
 
+    public bool IsPickedUp { get; private set; }
+
     [Header("Visual Effects")]
     [SerializeField] private float rotationDuration = 2f;
     [SerializeField] private float hoverDuration = 1.5f;
@@ -72,6 +74,11 @@ public class OrePickUp : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        if (IsPickedUp)
+            return;
+
+        IsPickedUp = true;
+
         onInteract?.Invoke();
         OnAnyOrePickedUp?.Invoke();
     }
