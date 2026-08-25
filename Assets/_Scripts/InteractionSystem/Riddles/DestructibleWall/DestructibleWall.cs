@@ -15,6 +15,7 @@ public class DestructibleWall : MonoBehaviour, IMineable
     [SerializeField] private ActiveModifier activeModifier;
     [SerializeField] private OreSO wallOreSO;
     [SerializeField] private int amount;
+    [Tooltip("Its for making wall less durable as void chase moves screen faster, so its more fair and easier to destroy")] // todo change it to durability in wallSO, not amount.
     [SerializeField] private int voidChaseAmount = 5;
     [SerializeField] private ParticleSystem miningEffect;
     [SerializeField] private ParticleSystem destructionEffect;
