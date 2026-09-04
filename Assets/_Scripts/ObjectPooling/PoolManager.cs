@@ -14,14 +14,14 @@ public class PoolManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public T Get<T>(T obj) where T: Component
+    public T Get<T>(T obj, int defaultCapacity = 20, int maxSize = 50) where T : Component
     {
         if (!_pools.TryGetValue(obj, out var pool))
         {
-            pool = CreateNewPool(obj);
+            pool = CreateNewPool(obj, defaultCapacity, maxSize);
             _pools[obj] = pool;
         }
-        
+
         return (T)_pools[obj].Get();
     }
 
@@ -31,7 +31,7 @@ public class PoolManager : MonoBehaviour
         else Destroy(instance.gameObject);
     }
 
-    private IObjectPool<Component> CreateNewPool<T>(T obj) where T : Component
+    private IObjectPool<Component> CreateNewPool<T>(T obj, int defaultCapacity, int maxSize) where T : Component
     {
         return new ObjectPool<Component>(
             createFunc: () => Instantiate(obj),
@@ -39,8 +39,8 @@ public class PoolManager : MonoBehaviour
             actionOnRelease: (proj) => proj.gameObject.SetActive(false),
             actionOnDestroy: (proj) => Destroy(proj.gameObject),
             collectionCheck: true,
-            defaultCapacity: 20,
-            maxSize: 50
+            defaultCapacity: defaultCapacity,
+            maxSize: maxSize
         );
     }
 }

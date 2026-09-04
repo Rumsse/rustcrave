@@ -407,14 +407,30 @@ public class UnitActions : MonoBehaviour
 
     private void ShowMoveIndicator(Vector3 position)
     {
-        if (moveIndicatorPrefab)
-            Instantiate(moveIndicatorPrefab, position + new Vector3(0f, indicatorYOffset, 0f), Quaternion.identity);
+        if (!moveIndicatorPrefab)
+            return;
+
+        if (!moveIndicatorPrefab.TryGetComponent(out MoveIndicator prefabComponent))
+            return;
+
+        MoveIndicator indicator = PoolManager.Instance.Get(prefabComponent, prefabComponent.DefaultPoolCapacity, prefabComponent.MaxPoolSize);
+        indicator.transform.position = position + new Vector3(0f, indicatorYOffset, 0f);
+        indicator.Initialize(prefabComponent);
     }
 
     private void ShowActionFeedback(GameObject prefab, Transform target)
     {
-        if (prefab && target)
-            Instantiate(prefab, target.position, Quaternion.identity, target);
+        if (!prefab || !target)
+            return;
+
+        if (!prefab.TryGetComponent(out MoveIndicator prefabComponent))
+            return;
+
+        MoveIndicator effect = PoolManager.Instance.Get(prefabComponent, prefabComponent.DefaultPoolCapacity, prefabComponent.MaxPoolSize);
+        effect.transform.position = target.position;
+        effect.transform.rotation = Quaternion.identity;
+        effect.transform.SetParent(target);
+        effect.Initialize(prefabComponent);
     }
 
     #endregion
