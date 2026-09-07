@@ -1,52 +1,44 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MCMovement : MonoBehaviour
 {
-    #region Configuration
-
     [SerializeField] private float minimumMoveThreshold = 0.1f;
     [SerializeField] private float rotationSpeed = 10f;
-    [SerializeField] private float screenEdgeMargin = 0.05f;
 
-    #endregion
-
-    #region State
-
-    private PlayerControls input;
+    private InputAction moveAction;
     private float currentSpeed;
     private Animator animator;
     private Camera mainCamera;
     private Unit unit;
     private Vector2 currentInput;
     private bool isMoving;
+    private bool isInitialized;
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
 
-    #endregion
+    private void Awake() => mainCamera = Camera.main;
 
-    #region Unity Lifecycle
-
-    private void Awake()
+    private IEnumerator Start()
     {
-        mainCamera = Camera.main;
-        input = new PlayerControls();
-    }
+        unit = GetComponent<Unit>();
 
-    private void Start() => unit = GetComponent<Unit>();
+        yield return new WaitUntil(() => SettingsManager.Instance != null && SettingsManager.Instance.InputActions != null);
+
+        moveAction = SettingsManager.Instance.InputActions.FindAction("Gameplay/Move");
+        isInitialized = true;
+
+        if (isActiveAndEnabled)
+            SubscribeInput();
+    }
 
     private void OnEnable()
     {
-        input.Enable();
-        input.Gameplay.Move.performed += OnMove;
-        input.Gameplay.Move.canceled += OnMove;
+        if (isInitialized)
+            SubscribeInput();
     }
 
-    private void OnDisable()
-    {
-        input.Disable();
-        input.Gameplay.Move.performed -= OnMove;
-        input.Gameplay.Move.canceled -= OnMove;
-    }
+    private void OnDisable() => UnsubscribeInput();
 
     private void Update()
     {
@@ -56,9 +48,24 @@ public class MCMovement : MonoBehaviour
         HandleMovement();
     }
 
-    #endregion
+    private void SubscribeInput()
+    {
+        if (moveAction == null)
+            return;
 
-    #region Movement Logic
+        moveAction.Enable();
+        moveAction.performed += OnMove;
+        moveAction.canceled += OnMove;
+    }
+
+    private void UnsubscribeInput()
+    {
+        if (moveAction == null)
+            return;
+
+        moveAction.performed -= OnMove;
+        moveAction.canceled -= OnMove;
+    }
 
     private void OnMove(InputAction.CallbackContext context)
     {
@@ -86,22 +93,7 @@ public class MCMovement : MonoBehaviour
         cameraRight.Normalize();
 
         Vector3 movement = (cameraForward * currentInput.y + cameraRight * currentInput.x).normalized;
-        Vector3 targetPos = transform.position + movement * (currentSpeed * Time.deltaTime);
-        Vector3 viewportPos = mainCamera.WorldToViewportPoint(targetPos);
-
-        if (viewportPos.x < screenEdgeMargin || viewportPos.x > 1f - screenEdgeMargin || viewportPos.y < screenEdgeMargin || viewportPos.y > 1f - screenEdgeMargin)
-        {
-            viewportPos.x = Mathf.Clamp(viewportPos.x, screenEdgeMargin, 1f - screenEdgeMargin);
-            viewportPos.y = Mathf.Clamp(viewportPos.y, screenEdgeMargin, 1f - screenEdgeMargin);
-
-            Ray ray = mainCamera.ViewportPointToRay(viewportPos);
-            Plane groundPlane = new Plane(Vector3.up, new Vector3(0f, transform.position.y, 0f));
-
-            if (groundPlane.Raycast(ray, out float distance))
-                targetPos = ray.GetPoint(distance);
-        }
-
-        transform.position = targetPos;
+        transform.Translate(movement * (currentSpeed * Time.deltaTime), Space.World);
 
         if (movement != Vector3.zero)
         {
@@ -122,6 +114,4 @@ public class MCMovement : MonoBehaviour
 
         animator = newAnimator;
     }
-
-    #endregion
 }

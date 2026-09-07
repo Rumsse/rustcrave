@@ -4,24 +4,32 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-
 public class SettingsMenuController : MonoBehaviour
 {
+    #region Configuration
+
     [SerializeField] private Volume brightnessVolume;
     [SerializeField] private Slider brightnessSlider;
     [SerializeField] private TMP_Dropdown aaDropdown;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
     [SerializeField] private Toggle vsyncToggle;
     [SerializeField] private TMP_Dropdown fpsLimitDropdown;
+    [SerializeField] private GameObject bindingsPanel;
+
+    #endregion
+
+    #region State
 
     private Resolution[] resolutions;
     private readonly int[] fpsLimits = { 30, 60, 120, 144, 240, -1 };
+
+    #endregion
 
     #region Unity Lifecycle
 
     private void Start()
     {
-        if (brightnessVolume == null || brightnessSlider == null || aaDropdown == null || resolutionDropdown == null || vsyncToggle == null || fpsLimitDropdown == null)
+        if (!brightnessVolume || !brightnessSlider || !aaDropdown || !resolutionDropdown || !vsyncToggle || !fpsLimitDropdown)
         {
             Debug.LogError("SettingsMenuController references are missing.");
             return;
@@ -46,23 +54,26 @@ public class SettingsMenuController : MonoBehaviour
         aaDropdown.value = (int)SettingsManager.Instance.CurrentSettings.antiAliasing;
         vsyncToggle.isOn = SettingsManager.Instance.CurrentSettings.vsync == VSyncMode.On;
         SetFPSDropdownValue(SettingsManager.Instance.CurrentSettings.fpsLimit);
+
+        if (bindingsPanel)
+            bindingsPanel.SetActive(false);
     }
 
     private void OnDestroy()
     {
-        if (brightnessSlider != null)
+        if (brightnessSlider)
             brightnessSlider.onValueChanged.RemoveListener(OnBrightnessChanged);
 
-        if (aaDropdown != null)
+        if (aaDropdown)
             aaDropdown.onValueChanged.RemoveListener(OnAAChanged);
 
-        if (resolutionDropdown != null)
+        if (resolutionDropdown)
             resolutionDropdown.onValueChanged.RemoveListener(OnResolutionChanged);
 
-        if (vsyncToggle != null)
+        if (vsyncToggle)
             vsyncToggle.onValueChanged.RemoveListener(OnVSyncChanged);
 
-        if (fpsLimitDropdown != null)
+        if (fpsLimitDropdown)
             fpsLimitDropdown.onValueChanged.RemoveListener(OnFPSLimitChanged);
 
         SettingsManager.OnBrightnessChanged -= UpdateVolume;
@@ -71,6 +82,25 @@ public class SettingsMenuController : MonoBehaviour
     #endregion
 
     #region UI Callbacks
+
+    public void OpenBindingsPanel()
+    {
+        if (!bindingsPanel)
+        {
+            Debug.LogWarning("Bindings Panel reference is missing in SettingsMenuController!");
+            return;
+        }
+
+        bindingsPanel.SetActive(true);
+    }
+
+    public void CloseBindingsPanel()
+    {
+        if (!bindingsPanel)
+            return;
+
+        bindingsPanel.SetActive(false);
+    }
 
     private void OnBrightnessChanged(float value) => SettingsManager.Instance.SetBrightness(value);
 

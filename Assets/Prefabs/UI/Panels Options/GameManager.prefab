@@ -89,14 +89,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d34a43baa4c1bba449372908aca57f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitSelectionSystem
-  selectedUnit: {fileID: 0}
+  selectionBox: {fileID: 0}
   unitLayerMask:
     serializedVersion: 2
     m_Bits: 128
-  mouseWorldLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  moveIndicatorPrefab: {fileID: 0}
+  fillColor: {r: 0.6509434, g: 0.5311213, b: 0.19344072, a: 0.039215688}
+  borderColor: {r: 0.5566038, g: 0.5135293, b: 0.39119795, a: 0.8}
+  borderThickness: 2.5
 --- !u!1 &3888120499338879284
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,6 +205,7 @@ MonoBehaviour:
       Data3: 177183113
       Data4: 1071439846
     Path: "event:/Mr\xF3wka/sx_Dostawanie_DMG"
+  sfxVcaPath: vca:/SFX
 --- !u!114 &5288244655795018124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,8 +218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d933d09dc364cf047bf169e100cec284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
-  gameSceneName: 
-  tutorialSceneName: 
+  gameSceneName: Main Menu
+  tutorialSceneName: Main Menu
   optionsPanelMainMenuOnly: {fileID: 0}
   creditsPanel: {fileID: 0}
   creditsController: {fileID: 0}
@@ -231,6 +231,7 @@ MonoBehaviour:
   globalInventory: {fileID: 11400000, guid: f715252bf3a047d429a856ce045a8873, type: 2}
   gadgetsInventory: {fileID: 11400000, guid: 5820305f0014e82429e867a180d2aa24, type: 2}
   eventState: {fileID: 11400000, guid: 4e27fb4b292f4114189da164c0e9d0f0, type: 2}
+  continueButton: {fileID: 0}
   characterAnimator: {fileID: 0}
   characterTransform: {fileID: 0}
   startGameTarget: {fileID: 0}
@@ -284,9 +285,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96e8fe82494949145be3e0c8c1254ca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuidePanelsManager
-  controlsPanel: {fileID: 0}
-  restroomPanel: {fileID: 0}
-  bossPanel: {fileID: 0}
+  categoriesPanel: {fileID: 0}
+  closeEntireGuideBtn: {fileID: 0}
+  pagedGuidePanel: {fileID: 0}
+  titleText: {fileID: 0}
+  explanationText: {fileID: 0}
+  pageNumberText: {fileID: 0}
+  previousBtn: {fileID: 0}
+  nextBtn: {fileID: 0}
+  backToCategoriesBtn: {fileID: 0}
+  guideEntries: []
   interactionSound:
     Guid:
       Data1: 1895508101
