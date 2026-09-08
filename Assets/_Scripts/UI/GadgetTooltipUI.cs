@@ -16,7 +16,7 @@ public class GadgetTooltipUI : MonoBehaviour
         HideTooltip();
     }
 
-    public void ShowTooltip(GadgetSO gadget)
+    public void ShowTooltip(GadgetData gadget)
     {
         tooltipPanel.SetActive(true);
         titleText.text = gadget.name;

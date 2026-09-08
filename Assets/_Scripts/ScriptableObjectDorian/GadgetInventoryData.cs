@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GadgetInventorySO", menuName = "Scriptable Objects/GadgetInventorySO")]
-public class GadgetInventorySO : InventorySO, INotifyPropertyChanged
+[CreateAssetMenu(fileName = "GadgetInventoryData", menuName = "Swarm/Inventory/GadgetInventoryData")]
+public class GadgetInventoryData : InventoryData, INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -15,15 +15,15 @@ public class GadgetInventorySO : InventorySO, INotifyPropertyChanged
 
     void NotifyChanges(object sender, EventArgs e) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
 
-    public List<GadgetSO> GetAllAvailableGadgets()
+    public List<GadgetData> GetAllAvailableGadgets()
     {
         return inventoryItemList
-            .Where(slot => slot.item is GadgetSO)
-            .Select(slot => slot.item as GadgetSO)
+            .Where(slot => slot.item is GadgetData)
+            .Select(slot => slot.item as GadgetData)
             .ToList();
     }
 
-    public int GetGadgetAmount(GadgetSO gadget)
+    public int GetGadgetAmount(GadgetData gadget)
     {
         var slot = inventoryItemList.FirstOrDefault(s => s.item == gadget);
 

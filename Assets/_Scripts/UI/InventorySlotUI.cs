@@ -6,7 +6,7 @@ public class InventorySlotUI : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private Image iconImage;
 
-    public void SetItem(ItemSO item)
+    public void SetItem(ItemData item)
     {
         if (item.itemSprite != null)
         {

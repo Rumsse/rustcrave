@@ -138,7 +138,7 @@ public class UnitInfoPanelController : MonoBehaviour
         gadgetTooltip.Show(gadget, evt.position);
     }
 
-    void ShowHoveredGadgetTooltip(PointerEnterEvent evt, GadgetSO gadget)
+    void ShowHoveredGadgetTooltip(PointerEnterEvent evt, GadgetData gadget)
     {
         if (gadgetTooltip == null || gadget == null)
             return;
@@ -197,9 +197,9 @@ public class UnitInfoPanelController : MonoBehaviour
         gadgetPopup.style.display = DisplayStyle.Flex;
     }
 
-    List<GadgetSO> GetAvailableGadgets()
+    List<GadgetData> GetAvailableGadgets()
     {
-        var available = new List<GadgetSO>(gadgetsGlobalInventory.unlockedGadgets);
+        var available = new List<GadgetData>(gadgetsGlobalInventory.unlockedGadgets);
 
         if (swarmState == null)
             return available;
@@ -226,7 +226,7 @@ public class UnitInfoPanelController : MonoBehaviour
         currentEditingSlotIndex = -1;
     }
 
-    void EquipGadget(GadgetSO gadget)
+    void EquipGadget(GadgetData gadget)
     {
         if (currentUnit == null || currentEditingSlotIndex < 0)
             return;
@@ -252,7 +252,7 @@ public class UnitInfoPanelController : MonoBehaviour
 
         for (int i = 0; i < gadgetSlots.Count; i++)
         {
-            GadgetSO gadget = null;
+            GadgetData gadget = null;
 
             if (i < currentUnit.assignedGadgets.Count)
                 gadget = currentUnit.assignedGadgets[i];
@@ -282,7 +282,7 @@ public class UnitInfoPanelController : MonoBehaviour
         currentUnit = unitData;
 
         if (currentUnit.assignedGadgets == null)
-            currentUnit.assignedGadgets = new List<GadgetSO>();
+            currentUnit.assignedGadgets = new List<GadgetData>();
 
         if (unitImage != null && currentUnit.unitType.unitIcon != null)
             unitImage.style.backgroundImage = new StyleBackground(currentUnit.unitType.unitIcon);

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "InventorySO", menuName = "Scriptable Objects/InventorySO")]
-public class InventorySO : ScriptableObject
+[CreateAssetMenu(fileName = "InventoryData", menuName = "Swarm/Inventory/InventoryData")]
+public class InventoryData : ScriptableObject
 {
     public int maxCapacity;
 
@@ -11,7 +11,7 @@ public class InventorySO : ScriptableObject
 
     public event EventHandler OnInventoryChanged;
 
-    public bool AddItem(ItemSO item, int amount)
+    public bool AddItem(ItemData item, int amount)
     {
         int currentAmount = GetTotalAmount();
 
@@ -43,7 +43,7 @@ public class InventorySO : ScriptableObject
         return true;
     }
 
-    public bool RemoveItem(ItemSO item, int amount)
+    public bool RemoveItem(ItemData item, int amount)
     {
         for (int i = 0; i < inventoryItemList.Count; i++)
         {
@@ -67,13 +67,13 @@ public class InventorySO : ScriptableObject
     }
 
     // Logic to steal random item from inventory, used in steal attack
-    public ItemSO StealRandomItem()
+    public ItemData StealRandomItem()
     {
         if (inventoryItemList.Count == 0)
             return null;
 
         int randomIndex = UnityEngine.Random.Range(0, inventoryItemList.Count);
-        ItemSO stolenItem = inventoryItemList[randomIndex].item;
+        ItemData stolenItem = inventoryItemList[randomIndex].item;
 
         RemoveItem(stolenItem, 1);
         return stolenItem;
@@ -91,7 +91,7 @@ public class InventorySO : ScriptableObject
         return total;
     }
 
-    public void TransferTo(GlobalInventorySO targetInventory)
+    public void TransferTo(GlobalInventoryData targetInventory)
     {
         Debug.Log($"[InventorySO] TransferTo called. Items to transfer: {inventoryItemList.Count}");
 
@@ -152,9 +152,9 @@ public class InventorySO : ScriptableObject
 [System.Serializable]
 public class InventorySlot
 {
-    public ItemSO item;
+    public ItemData item;
     public int amount;
-    public InventorySlot(ItemSO item, int amount)
+    public InventorySlot(ItemData item, int amount)
     {
         this.item = item;
         this.amount = amount;

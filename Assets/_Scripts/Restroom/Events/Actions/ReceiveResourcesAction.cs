@@ -4,7 +4,7 @@ using UnityEngine;
 [Serializable]
 public class ReceiveResourcesAction : EventAction
 {
-    [SerializeField] OreSO Oretype;
+    [SerializeField] OreData Oretype;
     [SerializeField] int amount = 2;
 
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)

@@ -4,9 +4,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GadgetsGlobalInventory", menuName = "Restroom/Swarm/GadgetsGlobalInventory")]
 public class GadgetsGlobalInventory : ScriptableObject
 {
-    public List<GadgetSO> unlockedGadgets = new();
+    public List<GadgetData> unlockedGadgets = new();
 
-    public void AddGadget(GadgetSO gadget)
+    public void AddGadget(GadgetData gadget)
     {
         if (gadget == null)
             return;

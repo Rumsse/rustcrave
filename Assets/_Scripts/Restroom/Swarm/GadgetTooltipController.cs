@@ -29,7 +29,7 @@ public class GadgetTooltipController
             SetAllChildrenNonPicking(child);
     }
 
-    public void Show(GadgetSO gadget, Vector2 position)
+    public void Show(GadgetData gadget, Vector2 position)
     {
         if (gadget == null)
             return;

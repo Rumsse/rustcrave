@@ -12,7 +12,7 @@ public enum SlideDirection
 public class UIManager : MonoBehaviour
 {
     [SerializeField] UIDocument uiDocument;
-    [SerializeField] GlobalInventorySO globalInventory;
+    [SerializeField] GlobalInventoryData globalInventory;
     [SerializeField] VisualTreeAsset choosePathPanel;
     [SerializeField] VisualTreeAsset mainCraftPanel;
     [SerializeField] VisualTreeAsset swarmPanel;

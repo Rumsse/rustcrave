@@ -4,8 +4,8 @@ using System.Linq;
 using Unity.Properties;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GlobalInventorySO", menuName = "Scriptable Objects/GlobalInventorySO")]
-public class GlobalInventorySO : InventorySO, INotifyPropertyChanged
+[CreateAssetMenu(fileName = "GlobalInventoryData", menuName = "Swarm/Inventory/GlobalInventoryData")]
+public class GlobalInventoryData : InventoryData, INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -21,7 +21,7 @@ public class GlobalInventorySO : InventorySO, INotifyPropertyChanged
 
     int GetItemAmount(string id)
     {
-        var slot = inventoryItemList.FirstOrDefault(s => s.item is OreSO ore && ore.oreName.ToLower() == id);
+        var slot = inventoryItemList.FirstOrDefault(s => s.item is OreData ore && ore.oreName.ToLower() == id);
 
         if (slot == null)
             return 0;

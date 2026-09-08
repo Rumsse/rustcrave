@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "OreSO", menuName = "Scriptable Objects/OreSO")]
-public class OreSO : ItemSO
+[CreateAssetMenu(fileName = "OreData", menuName = "Swarm/Inventory/OreData")]
+public class OreData : ItemData
 {
     public float oreDurability;
     public string oreName;

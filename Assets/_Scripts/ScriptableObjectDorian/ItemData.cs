@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ItemSO", menuName = "Scriptable Objects/ItemSO")]
-public abstract class ItemSO : ScriptableObject
+[CreateAssetMenu(fileName = "ItemData", menuName = "Swarm/Inventory/ItemData")]
+public abstract class ItemData : ScriptableObject
 {
     public Sprite itemSprite;
     public Color itemColor;

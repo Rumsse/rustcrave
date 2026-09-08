@@ -17,7 +17,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject quittingPanel;
     [SerializeField] private SwarmState swarmState;
     [SerializeField] private MapState mapState;
-    [SerializeField] private GlobalInventorySO globalInventory;
+    [SerializeField] private GlobalInventoryData globalInventory;
     [SerializeField] private GadgetsGlobalInventory gadgetsInventory;
     [SerializeField] private EventState eventState;
     [SerializeField] private AnimatedTextButton continueButton;

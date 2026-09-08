@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GadgetSO", menuName = "Scriptable Objects/GadgetSO")]
-public class GadgetSO : ItemSO
+[CreateAssetMenu(fileName = "GadgetData", menuName = "Swarm/Inventory/GadgetData")]
+public class GadgetData : ItemData
 {
     public StatsType modifiedStat;
     public float statIncreaseAmount;

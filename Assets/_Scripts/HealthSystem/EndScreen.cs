@@ -12,7 +12,7 @@ public class EndScreen : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timeResultText;
     [SerializeField] private MapState mapState;
     [SerializeField] private SwarmState swarmState;
-    [SerializeField] private GlobalInventorySO globalInventory;
+    [SerializeField] private GlobalInventoryData globalInventory;
     [SerializeField] private GadgetsGlobalInventory gadgetsGlobalInventory;
     [SerializeField] private PauseMenuManager pauseMenuManager;
 

@@ -8,7 +8,7 @@ public class EnemyUnit : UnitBase
     [SerializeField] protected bool specialUnit;
     [SerializeField] protected string specialAnimationName;
 
-    public ItemSO StolenItem { get; private set; } // saves stolen item to drop later
+    public ItemData StolenItem { get; private set; } // saves stolen item to drop later
 
 
     protected List<Unit> playerUnits = new();
@@ -176,7 +176,7 @@ public class EnemyUnit : UnitBase
     #region Stolen Item
 
     //managing stolen item 
-    public virtual void StealItem(ItemSO item)
+    public virtual void StealItem(ItemData item)
     {
         StolenItem = item;
     }

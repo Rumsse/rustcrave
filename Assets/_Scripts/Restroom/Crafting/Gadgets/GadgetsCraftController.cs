@@ -18,11 +18,11 @@ public class GadgetsCraftController : MonoBehaviour
     [SerializeField] private List<GadgetCraftData> gadgetCraftDataList;
     [SerializeField] private EventReference gadgetSound;
 
-    private Func<GadgetSO, bool> requestCraftGadget;
-    private GlobalInventorySO globalInventory;
+    private Func<GadgetData, bool> requestCraftGadget;
+    private GlobalInventoryData globalInventory;
     private InfoTooltipController infoTooltip;
 
-    public void Initialize(VisualElement root, Func<GadgetSO, bool> onCraftRequested, GlobalInventorySO inventory)
+    public void Initialize(VisualElement root, Func<GadgetData, bool> onCraftRequested, GlobalInventoryData inventory)
     {
         requestCraftGadget = onCraftRequested;
         globalInventory = inventory;
@@ -115,7 +115,7 @@ public class GadgetsCraftController : MonoBehaviour
             globalInventory.RemoveItem(cost.Ore, cost.Amount);
     }
 
-    private int GetResourceAmount(OreSO ore)
+    private int GetResourceAmount(OreData ore)
     {
         string id = ore.oreName.ToLower();
 

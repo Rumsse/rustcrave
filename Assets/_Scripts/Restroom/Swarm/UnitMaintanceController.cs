@@ -5,7 +5,7 @@ public class UnitMaintanceController : MonoBehaviour
     public static event System.Action OnAnyUnitCharged;
     public static event System.Action OnAnyUnitHealthRestored;
 
-    [SerializeField] GlobalInventorySO globalInventory;
+    [SerializeField] GlobalInventoryData globalInventory;
     [SerializeField] CraftingRecipe repairCost;
     [SerializeField] CraftingRecipe chargeCost;
 
@@ -73,7 +73,7 @@ public class UnitMaintanceController : MonoBehaviour
             globalInventory.RemoveItem(cost.Ore, cost.Amount);
     }
 
-    int GetResourceAmount(OreSO ore)
+    int GetResourceAmount(OreData ore)
     {
         if (ore == null)
             return 0;

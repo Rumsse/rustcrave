@@ -7,9 +7,9 @@ public class GadgetSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [Header("UI References")]
     [SerializeField] private Image iconImage;
 
-    private ItemSO currentItem;
+    private ItemData currentItem;
 
-    public void SetItem(ItemSO item)
+    public void SetItem(ItemData item)
     {
         currentItem = item;
 
@@ -29,7 +29,7 @@ public class GadgetSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (currentItem != null && currentItem is GadgetSO gadget)
+        if (currentItem != null && currentItem is GadgetData gadget)
         {
             GadgetTooltipUI.Instance.ShowTooltip(gadget);
         }

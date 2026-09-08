@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "MainCharacterSO", menuName = "Scriptable Objects/MainCharacterSO")]
-public class MainCharacterSO : ScriptableObject
+[CreateAssetMenu(fileName = "MainCharacterData", menuName = "Swarm/MainCharacterData")]
+public class MainCharacterData : ScriptableObject
 {
     public float moveSpeed;
     public int maxHP;

@@ -78,6 +78,6 @@ public class DropItem : MonoBehaviour
 [Serializable]
 public struct DropInstance
 {
-    public OreSO ore;
+    public OreData ore;
     public OrePickUp pickUpPrefab;
 }

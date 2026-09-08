@@ -15,7 +15,7 @@ public class MainCraftController : MonoBehaviour, IPanelController
     public static event Action OnAnyGadgetCrafted;
 
     [SerializeField] SwarmState swarmState;
-    [SerializeField] GlobalInventorySO globalInventory;
+    [SerializeField] GlobalInventoryData globalInventory;
     [SerializeField] GadgetsGlobalInventory gadgetsGlobalInventory;
 
     [SerializeField] VisualTreeAsset robotsCraftPanel;
@@ -165,7 +165,7 @@ public class MainCraftController : MonoBehaviour, IPanelController
         return true;
     }
 
-    bool HandleGadgetCraftRequest(GadgetSO gadget)
+    bool HandleGadgetCraftRequest(GadgetData gadget)
     {
         if (gadgetsGlobalInventory == null)
             return false;
@@ -183,7 +183,7 @@ public class MainCraftController : MonoBehaviour, IPanelController
         return true;
     }
 
-    IEnumerator PlayParticleAndNotifyRoutine(GadgetSO gadget)
+    IEnumerator PlayParticleAndNotifyRoutine(GadgetData gadget)
     {
         gadgetCraftParticle.Play();
         yield return new WaitForSeconds(0.1f);
@@ -194,7 +194,7 @@ public class MainCraftController : MonoBehaviour, IPanelController
         OnAnyGadgetCrafted?.Invoke();
     }
 
-    void ShowCraftPopup(GadgetSO gadget)
+    void ShowCraftPopup(GadgetData gadget)
     {
         if (popupTemplate == null)
         {

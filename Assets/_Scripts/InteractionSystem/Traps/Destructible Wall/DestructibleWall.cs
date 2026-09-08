@@ -13,7 +13,7 @@ public class DestructibleWall : MonoBehaviour, IMineable
     #region Configuration
 
     [SerializeField] private ActiveModifier activeModifier;
-    [SerializeField] private OreSO wallOreSO;
+    [SerializeField] private OreData wallOreSO;
     [SerializeField] private int amount;
     [Tooltip("Its for making wall less durable as void chase moves screen faster, so its more fair and easier to destroy")] // todo change it to durability in wallSO, not amount.
     [SerializeField] private int voidChaseAmount = 5;
@@ -51,7 +51,7 @@ public class DestructibleWall : MonoBehaviour, IMineable
 
     #region Mining Logic
 
-    public ItemSO Mine()
+    public ItemData Mine()
     {
         if (amount <= 0 || isDestroying)
             return null;
@@ -109,7 +109,7 @@ public class DestructibleWall : MonoBehaviour, IMineable
 
     public bool IsDepleted() => amount <= 0;
 
-    public OreSO GetOreData() => wallOreSO;
+    public OreData GetOreData() => wallOreSO;
 
     #endregion
 
