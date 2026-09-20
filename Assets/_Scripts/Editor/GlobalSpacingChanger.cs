@@ -11,7 +11,7 @@ public class GlobalSpacingChanger : EditorWindow
     private float lineSpacing = 20f;
     private float paragraphSpacing = 0f;
 
-    [MenuItem("Tools/Change Global Spacing")]
+    [MenuItem("Tools/Font/Change Global Spacing")]
     public static void ShowWindow() => GetWindow<GlobalSpacingChanger>("Spacing Changer");
 
     private void OnGUI()
