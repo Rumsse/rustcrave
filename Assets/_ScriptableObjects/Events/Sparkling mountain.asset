@@ -19,12 +19,8 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to touch it.'
     isIgnoreOption: 0
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: -2
     successOutcome:
       resultText: '___ touched it and the gears are working like never before!
 
@@ -33,28 +29,28 @@ MonoBehaviour:
         energy has been fully restored.
 
         The rock discharges itself.'
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 744d7bd7966d2f742babd29f2cb80932, type: 2}
+      - rid: 523417505233895443
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
+    requirements: []
   - optionText: '    I order ___ to mine it.'
     isIgnoreOption: 0
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 1
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 523417505233895441
     successOutcome:
       resultText: 'The rock cracks, and its energy spreads throughout the room!
 
 
         You
         receive 3 sparklite, and in addition all robots regain 10% of their energy.'
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 5c8529f7e765b9042ae21ce108ce8977, type: 2}
-      - {fileID: 11400000, guid: 7dae2417341a0094fb41276e25d65914, type: 2}
+      - rid: 523417505233895444
+      - rid: 523417505233895446
     failureOutcome:
       resultText: '___ strikes the rock, and it repels him with unimaginable force,
         emitting sparks!
@@ -64,19 +60,50 @@ MonoBehaviour:
 
         The rock discharges
         itself.'
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
+      - rid: 523417505233895447
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 523417505233895442
     successOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 523417505233895441
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 523417505233895442
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 523417505233895443
+      type: {class: RestoreEnergyAction, ns: , asm: Assembly-CSharp}
+      data:
+        percentage: 1
+    - rid: 523417505233895444
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 0}
+        amount: 3
+    - rid: 523417505233895446
+      type: {class: RestoreSwarmEnergyAction, ns: , asm: Assembly-CSharp}
+      data:
+        percentage: 0.1
+    - rid: 523417505233895447
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 3
