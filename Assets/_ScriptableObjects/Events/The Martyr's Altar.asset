@@ -24,37 +24,60 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to step under the hydraulic press.'
     isIgnoreOption: 0
-    isLuckCheck: 0
-    baseSuccessChance: 0
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 0
+    check:
+      rid: -2
     successOutcome:
       resultText: "The press brutally crushes ___ , but as it rises, the sacrificed
         robot breaks apart into pieces instead of succumbing to destruction! \r\n\r\n___
         is destroyed in exchange for gadgets! "
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: f44904e83ff0d404d9e34dbd253985a5, type: 2}
-      - {fileID: 11400000, guid: f51c9eeb5455c5c4a9c606a7f7b67c2c, type: 2}
+      - rid: 2077119951850176558
+      - rid: 2077119951850176561
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
+    requirements: []
   - optionText: '    Ignore.'
     isIgnoreOption: 1
-    isLuckCheck: 0
-    baseSuccessChance: 0
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 0
+    check:
+      rid: 2077119951850176519
     successOutcome:
       resultText: "The altar consumes ___ in a flash of blinding light, breaking
         the machine down to its core components. In return, the ancient mechanisms
         dispense a reward! \n\n___ is destroyed."
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: f44904e83ff0d404d9e34dbd253985a5, type: 2}
-      - {fileID: 11400000, guid: 80d9c91a11eb1be46ae38d02f21baaee, type: 2}
+      - rid: -2
+      - rid: -2
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2077119951850176519
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 2077119951850176558
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 123123
+    - rid: 2077119951850176561
+      type: {class: ReceiveRandomResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        resourcePool:
+        - {fileID: 11400000, guid: c295993f1b6b9a5408a99c373a8c9b36, type: 2}
+        - {fileID: 11400000, guid: 0a96a8035acbf3b4ea385075b38b8b2e, type: 2}
+        - {fileID: 11400000, guid: 417d6ad7e3ed87c4d9cbea193033bbef, type: 2}
+        - {fileID: 11400000, guid: 8de21312938d13042b2ae43e67d0259e, type: 2}
+        - {fileID: 11400000, guid: 04a1d4397bca50746884074fd9a4cf44, type: 2}
+        - {fileID: 11400000, guid: 48f2b1d0a4e3e22458480e1e9d692263, type: 2}
+        minAmount: 1
+        maxAmount: 3

@@ -23,51 +23,100 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to pry it open with brute force!'
     isIgnoreOption: 0
-    isLuckCheck: 0
-    baseSuccessChance: 40
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 1
-    bonusPerDamage: 10
+    check:
+      rid: 2077119951850176604
     successOutcome:
       resultText: "The hinges snap under the sheer mechanical force! \n\nYou receive
-        1 Random Gadget and 2 Scraponite."
+        1 Random Gadget and 4 Scraponite."
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 80d9c91a11eb1be46ae38d02f21baaee, type: 2}
-      - {fileID: 11400000, guid: 61e6f0e576e74584c9b22f340faefeb8, type: 2}
+      - rid: 2077119951850176605
+      - rid: 2077119951850176607
     failureOutcome:
       resultText: "The box is booby-trapped! It explodes right in ___'s face. \n\n___
         takes 2 DMG."
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: f4836e2eae1361143a86f8a97addf0be, type: 2}
+      - rid: 2077119951850176608
+    requirements: []
   - optionText: '    I order ___ to pick the lock precisely'
     isIgnoreOption: 0
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 1
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 2077119951850176609
     successOutcome:
       resultText: "___'s fine manipulators snap the locking mechanism without triggering
         the failsafe. \n\nYou receive 1 Random Gadget!"
+      keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 80d9c91a11eb1be46ae38d02f21baaee, type: 2}
+      - rid: 2077119951850176610
     failureOutcome:
       resultText: "A wrong wire is cut, and the lockbox's internal incinerator activates!
         The contents are reduced to useless ash. \n\nYou get nothing."
+      keepEventActive: 0
       actions: []
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 2077119951850176603
     successOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
     failureOutcome:
       resultText: 
+      keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 2077119951850176603
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 2077119951850176604
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 40
+        stat: 1
+        bonusPerPoint: 10
+    - rid: 2077119951850176605
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+        amount: 4
+    - rid: 2077119951850176607
+      type: {class: ReceiveRandomResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        resourcePool:
+        - {fileID: 11400000, guid: c295993f1b6b9a5408a99c373a8c9b36, type: 2}
+        - {fileID: 11400000, guid: 0a96a8035acbf3b4ea385075b38b8b2e, type: 2}
+        - {fileID: 11400000, guid: 417d6ad7e3ed87c4d9cbea193033bbef, type: 2}
+        - {fileID: 11400000, guid: 8de21312938d13042b2ae43e67d0259e, type: 2}
+        - {fileID: 11400000, guid: 04a1d4397bca50746884074fd9a4cf44, type: 2}
+        - {fileID: 11400000, guid: 48f2b1d0a4e3e22458480e1e9d692263, type: 2}
+        minAmount: 1
+        maxAmount: 1
+    - rid: 2077119951850176608
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 2
+    - rid: 2077119951850176609
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+        stat: 4
+        bonusPerPoint: 10
+    - rid: 2077119951850176610
+      type: {class: ReceiveRandomResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        resourcePool:
+        - {fileID: 11400000, guid: c295993f1b6b9a5408a99c373a8c9b36, type: 2}
+        - {fileID: 11400000, guid: 0a96a8035acbf3b4ea385075b38b8b2e, type: 2}
+        - {fileID: 11400000, guid: 417d6ad7e3ed87c4d9cbea193033bbef, type: 2}
+        - {fileID: 11400000, guid: 8de21312938d13042b2ae43e67d0259e, type: 2}
+        - {fileID: 11400000, guid: 04a1d4397bca50746884074fd9a4cf44, type: 2}
+        - {fileID: 11400000, guid: 48f2b1d0a4e3e22458480e1e9d692263, type: 2}
+        minAmount: 1
+        maxAmount: 1

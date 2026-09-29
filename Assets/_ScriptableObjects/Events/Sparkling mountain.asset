@@ -40,7 +40,7 @@ MonoBehaviour:
   - optionText: '    I order ___ to mine it.'
     isIgnoreOption: 0
     check:
-      rid: 523417505233895441
+      rid: 2077119951850176562
     successOutcome:
       resultText: 'The rock cracks, and its energy spreads throughout the room!
 
@@ -82,10 +82,6 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 523417505233895441
-      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
-      data:
-        baseSuccessChance: 50
     - rid: 523417505233895442
       type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
       data:
@@ -97,7 +93,7 @@ MonoBehaviour:
     - rid: 523417505233895444
       type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
       data:
-        Oretype: {fileID: 0}
+        Oretype: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
         amount: 3
     - rid: 523417505233895446
       type: {class: RestoreSwarmEnergyAction, ns: , asm: Assembly-CSharp}
@@ -107,3 +103,9 @@ MonoBehaviour:
       type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
       data:
         damageAmount: 3
+    - rid: 2077119951850176562
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+        stat: 4
+        bonusPerPoint: 10
