@@ -19,6 +19,7 @@ public class TunnelGenerator : MonoBehaviour
     [SerializeField] private TunnelGeneratorConfig config;
     [SerializeField] private Transform startPoint;
     [SerializeField] private Transform segmentParent;
+    [SerializeField] private MapState mapState;
 
     [Header("Modifiers")]
     [SerializeField] private List<TunnelModifierData> activeModifiers = new List<TunnelModifierData>();
@@ -112,6 +113,9 @@ public class TunnelGenerator : MonoBehaviour
             return false;
         }
 
+        if (mapState == null)
+            Debug.LogWarning("MapState is not assigned! Defaulting to normal tunnel pool.");
+
         if (cameraZoomTarget == null)
             Debug.LogWarning("Camera Zoom Target is not assigned! Connection segments won't affect camera.");
 
@@ -140,6 +144,9 @@ public class TunnelGenerator : MonoBehaviour
 
         SpawnStartSegment();
 
+        if (mapState != null && mapState.CurrentRow == 0)
+            SpawnStartSegment();
+
         currentSectionRemainingSegments = config.GetRandomSingleTunnelLength();
 
         LogDebug("Starting Tunnel Generation");
@@ -148,6 +155,8 @@ public class TunnelGenerator : MonoBehaviour
     #endregion
 
     #region Single Tunnel Generation
+
+    private TunnelPrefabPool GetMainTunnelPool() => (mapState != null && mapState.CurrentRow == 0) ? config.FirstTunnelPool : config.TunnelPool;
 
     private void ProcessSingleTunnelGeneration()
     {
@@ -177,7 +186,7 @@ public class TunnelGenerator : MonoBehaviour
 
     private void SpawnSingleTunnelSegment()
     {
-        TunnelSegment prefab = config.TunnelPool.GetRandomPrefab();
+        TunnelSegment prefab = GetMainTunnelPool().GetRandomPrefab();
         SpawnSegment(prefab, currentExitSocket);
 
         LogDebug($"Spawned Single Tunnel | Remaining in section: {currentSectionRemainingSegments}");
@@ -231,11 +240,11 @@ public class TunnelGenerator : MonoBehaviour
 
     private void SpawnParallelSegments()
     {
-        TunnelSegment leftPrefab = config.TunnelPool.GetRandomPrefab();
+        TunnelSegment leftPrefab = GetMainTunnelPool().GetRandomPrefab();
         TunnelSegment leftSegment = SpawnSegment(leftPrefab, leftExitSocket, updateMainSocket: false);
         leftExitSocket = leftSegment.ExitSocket;
 
-        TunnelSegment rightPrefab = config.TunnelPool.GetRandomPrefab();
+        TunnelSegment rightPrefab = GetMainTunnelPool().GetRandomPrefab();
         TunnelSegment rightSegment = SpawnSegment(rightPrefab, rightExitSocket, updateMainSocket: false);
         rightExitSocket = rightSegment.ExitSocket;
 
