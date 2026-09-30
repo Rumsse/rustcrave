@@ -20,23 +20,17 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to shatter it with massive strike!'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 40
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 1
-    bonusPerDamage: 10
+    check:
+      rid: 2077119951850176611
     successOutcome:
       resultText: '___ delivers a devastating blow, shattering the vein perfectly
         and revealing a hidden geode!
 
 
-        You gain 4-6 Scraponite.'
+        You gain 6-9 Scraponite.'
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 7f8657a158322d449a7d91d44eddd54c, type: 2}
+      - rid: 2077119951850176612
     failureOutcome:
       resultText: 'The brutal strike causes a localized collapse, burying the entire
         vein under tons of useless rubble.
@@ -45,24 +39,19 @@ MonoBehaviour:
         Everyone takes 2 DMG!'
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 60f3e24778620234ea4dbe0431f98a42, type: 2}
+      - rid: 2077119951850176613
+    requirements: []
   - optionText: '    I order ___ to carefully chip away the edges.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 1
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 2077119951850176614
     successOutcome:
       resultText: "___ grounds itself and absorbs the wild energy perfectly! \n\n___
-        restores 50% Energy and gains +1 Max Energy for the rest of the run."
+        restores 50% Energy and gains +20 Max Energy for the rest of the run."
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: a1424a64057dcab4c917269329c1f0f3, type: 2}
-      - {fileID: 11400000, guid: 3da0e2df671f88643b6e94ef458f3a85, type: 2}
+      - rid: 2077119951850176615
+      - rid: 2077119951850176617
     failureOutcome:
       resultText: 'The vibrations destabilize the ceiling! A heavy chunk of rock
         falls directly onto ___''s chassis.
@@ -71,17 +60,12 @@ MonoBehaviour:
         ___ takes 2 DMG.'
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: f4836e2eae1361143a86f8a97addf0be, type: 2}
+      - rid: 2077119951850176618
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 2077119951850176517
     successOutcome:
       resultText: 
       keepEventActive: 0
@@ -90,3 +74,45 @@ MonoBehaviour:
       resultText: 
       keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 2077119951850176517
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 2077119951850176611
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 40
+        stat: 1
+        bonusPerPoint: 10
+    - rid: 2077119951850176612
+      type: {class: ReceiveRandomResourceAmountAction, ns: , asm: Assembly-CSharp}
+      data:
+        itemToAdd: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+        minAmount: 6
+        maxAmount: 9
+    - rid: 2077119951850176613
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 2
+    - rid: 2077119951850176614
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+        stat: 4
+        bonusPerPoint: 10
+    - rid: 2077119951850176615
+      type: {class: RestoreEnergyAction, ns: , asm: Assembly-CSharp}
+      data:
+        percentage: 0.5
+    - rid: 2077119951850176617
+      type: {class: AddMaxEnergyPercentAction, ns: , asm: Assembly-CSharp}
+      data:
+        percentage: 0.2
+    - rid: 2077119951850176618
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 2

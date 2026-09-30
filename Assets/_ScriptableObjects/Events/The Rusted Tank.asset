@@ -24,16 +24,19 @@ MonoBehaviour:
   - optionText: '    I order ___ to puncture the tank.'
     isIgnoreOption: 0
     check:
-      rid: 7221758439618510881
+      rid: 2077119951850176575
     successOutcome:
       resultText: 'A stream of usable raw materials pours out of the hole! ___ quickly
         gathers them up, but most of them fall and crumble.
 
 
-        You gain 1
-        Scraponite, 1 Sparklite, 1 Pulsite.'
+        You gain 2
+        Scraponite, 2 Sparklite, 2 Pulsite.'
       keepEventActive: 0
-      actions: []
+      actions:
+      - rid: 2077119951850176576
+      - rid: 2077119951850176577
+      - rid: 2077119951850176578
     failureOutcome:
       resultText: 'The vibrations destabilize the ceiling! A heavy chunk of rock
         falls directly onto ___''s chassis.
@@ -41,26 +44,31 @@ MonoBehaviour:
 
         ___ takes 2 DMG.'
       keepEventActive: 0
-      actions: []
+      actions:
+      - rid: 2077119951850176579
     requirements: []
   - optionText: '    I order ___ to slowly dismantle outer casing.'
     isIgnoreOption: 0
     check:
-      rid: 7221758439618510882
+      rid: 2077119951850176580
     successOutcome:
       resultText: '___ strips the high-quality metal from the outside without breaching
         the dangerous container.
 
 
-        You get 1-3 Scraponite, 1-3 Sparklite,
-        1-3 Pulsite.'
+        You get 2-4 Scraponite, 2-4 Sparklite,
+        2-4 Pulsite.'
       keepEventActive: 0
-      actions: []
+      actions:
+      - rid: 2077119951850176584
+      - rid: 2077119951850176585
+      - rid: 2077119951850176587
     failureOutcome:
       resultText: "The rusted casing collapses inward, triggering a small implosion
         that destroys the metal. \n\n___ takes 3 DMG!"
       keepEventActive: 0
-      actions: []
+      actions:
+      - rid: 2077119951850176588
     requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
@@ -78,14 +86,57 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 7221758439618510881
+    - rid: 2077119951850176575
       type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
       data:
-        baseSuccessChance: 50
-    - rid: 7221758439618510882
-      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+        baseSuccessChance: 70
+    - rid: 2077119951850176576
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+        amount: 2
+    - rid: 2077119951850176577
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+        amount: 2
+    - rid: 2077119951850176578
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+        amount: 2
+    - rid: 2077119951850176579
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 2
+    - rid: 2077119951850176580
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
       data:
         baseSuccessChance: 50
+        stat: 4
+        bonusPerPoint: 10
+    - rid: 2077119951850176584
+      type: {class: ReceiveRandomResourceAmountAction, ns: , asm: Assembly-CSharp}
+      data:
+        itemToAdd: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+        minAmount: 2
+        maxAmount: 4
+    - rid: 2077119951850176585
+      type: {class: ReceiveRandomResourceAmountAction, ns: , asm: Assembly-CSharp}
+      data:
+        itemToAdd: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+        minAmount: 2
+        maxAmount: 4
+    - rid: 2077119951850176587
+      type: {class: ReceiveRandomResourceAmountAction, ns: , asm: Assembly-CSharp}
+      data:
+        itemToAdd: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+        minAmount: 2
+        maxAmount: 4
+    - rid: 2077119951850176588
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 3
     - rid: 7221758439618510883
       type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
       data:

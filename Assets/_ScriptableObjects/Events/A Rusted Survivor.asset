@@ -33,26 +33,26 @@ MonoBehaviour:
         1 random slighty damaged Robot."
       keepEventActive: 0
       actions:
-      - rid: -2
+      - rid: 2077119951850176589
     failureOutcome:
       resultText: " ___ crosses the wrong wires! The core destabilizes completely
         and detonates with a blinding flash! \n\nAll robots in the Swarm take 2 DMG,
         but Hollow Conductor avoided it. "
       keepEventActive: 0
       actions:
-      - rid: -2
+      - rid: 2077119951850176590
     requirements: []
   - optionText: '    I order ___ to brutally dismantle it for parts. '
     isIgnoreOption: 0
     check:
-      rid: 7221758439618510968
+      rid: 2077119951850176591
     successOutcome:
       resultText: " ___ swiftly tears out the usable components before the core completely
-        dies. \n\nYou gain 3 Scraponite and 1 Sparklite."
+        dies. \n\nYou gain 6 Scraponite and 3 Sparklite."
       keepEventActive: 0
       actions:
-      - rid: -2
-      - rid: -2
+      - rid: 2077119951850176592
+      - rid: 2077119951850176593
     failureOutcome:
       resultText: "The fragile chassis crumbles into useless dust and rusted flakes
         the moment ___ touches it. \n\nYou get nothing."
@@ -86,10 +86,36 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 7221758439618510968
-      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+    - rid: 2077119951850176589
+      type: {class: ReceiveRandomRobotAction, ns: , asm: Assembly-CSharp}
       data:
-        baseSuccessChance: 50
+        possibleRobots:
+        - {fileID: 11400000, guid: 402d9e1179d9a4f4d8071d8b65e0695f, type: 2}
+        - {fileID: 11400000, guid: c7cd6e4acf5850146998f5c63bda7c0d, type: 2}
+        - {fileID: 11400000, guid: 38f0c3753016095408b237199bc49c1e, type: 2}
+        startingHP: 2
+        startingEnergyPercent: 0.4
+    - rid: 2077119951850176590
+      type: {class: DamageSwarmAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 2
+        excludeMC: 0
+    - rid: 2077119951850176591
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 40
+        stat: 1
+        bonusPerPoint: 10
+    - rid: 2077119951850176592
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+        amount: 6
+    - rid: 2077119951850176593
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+        amount: 3
     - rid: 7221758439618510969
       type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
       data:
@@ -97,4 +123,4 @@ MonoBehaviour:
     - rid: 7221758439618510971
       type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
       data:
-        baseSuccessChance: 50
+        baseSuccessChance: 40

@@ -20,59 +20,43 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order a ___ to carefully dismantle it.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 1
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 2077119951850176550
     successOutcome:
       resultText: "___ uses its precise tools to safely unhinge the heavy plates.
         The engine block is intact! \n\nYou receive 4 Scraponite and 2 Sparklite."
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: b46d935199a114b4bb6fdabd926dff52, type: 2}
-      - {fileID: 11400000, guid: 5ba1a516aa2e9a243ba84b7ec2126fe7, type: 2}
+      - rid: 2077119951850176551
+      - rid: 2077119951850176552
     failureOutcome:
       resultText: "The rusted metal suddenly gives way, crushing ___'s tools and
         damaging its chassis! \n\n___ takes 3 DMG and the loot is destroyed."
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
+      - rid: 2077119951850176553
+    requirements: []
   - optionText: '    I order ___ to force it open with brute.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 40
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 1
-    bonusPerDamage: 10
+    check:
+      rid: 2077119951850176554
     successOutcome:
       resultText: "___ violently rips the hatch off before it can collapse! You pull
         out a pristine component from the wreckage. \n\nYou receive 1 Random Gadget."
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 80d9c91a11eb1be46ae38d02f21baaee, type: 2}
+      - rid: 2077119951850176555
     failureOutcome:
       resultText: "___ rips the hatch, but the entire structure collapses instantly,
         burying it under tons of scrap! \n\n___ is destroyed!"
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: f44904e83ff0d404d9e34dbd253985a5, type: 2}
+      - rid: 2077119951850176556
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 2077119951850176514
     successOutcome:
       resultText: 
       keepEventActive: 0
@@ -81,3 +65,54 @@ MonoBehaviour:
       resultText: 
       keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 2077119951850176514
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 2077119951850176550
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+        stat: 4
+        bonusPerPoint: 10
+    - rid: 2077119951850176551
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+        amount: 4
+    - rid: 2077119951850176552
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+        amount: 2
+    - rid: 2077119951850176553
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 3
+    - rid: 2077119951850176554
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 40
+        stat: 1
+        bonusPerPoint: 10
+    - rid: 2077119951850176555
+      type: {class: ReceiveRandomItemAction, ns: , asm: Assembly-CSharp}
+      data:
+        possibleItems:
+        - {fileID: 11400000, guid: c295993f1b6b9a5408a99c373a8c9b36, type: 2}
+        - {fileID: 11400000, guid: 0a96a8035acbf3b4ea385075b38b8b2e, type: 2}
+        - {fileID: 11400000, guid: 417d6ad7e3ed87c4d9cbea193033bbef, type: 2}
+        - {fileID: 11400000, guid: 8de21312938d13042b2ae43e67d0259e, type: 2}
+        - {fileID: 11400000, guid: 04a1d4397bca50746884074fd9a4cf44, type: 2}
+        - {fileID: 11400000, guid: 48f2b1d0a4e3e22458480e1e9d692263, type: 2}
+        minItemsToDraw: 1
+        maxItemsToDraw: 1
+        amountPerItem: 1
+    - rid: 2077119951850176556
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 123123

@@ -36,30 +36,22 @@ MonoBehaviour:
         to melt. \n\n___ Health has been set to 1!"
       keepEventActive: 0
       actions:
-      - rid: 7221758598679363714
+      - rid: 2077119951850176619
     requirements: []
   - optionText: '    Safely extract a small sample.'
     isIgnoreOption: 0
     check:
-      rid: 7221758598679363710
+      rid: -2
     successOutcome:
       resultText: "You carefully bottle a tiny amount of the usable fluid without
-        risking the machines. \n\nYou gain 1 Scraponite."
+        risking the machines. \n\nYou gain 3 Scraponite."
       keepEventActive: 0
       actions:
-      - rid: 7221758598679363715
+      - rid: 2077119951850176620
     failureOutcome:
-      resultText: '___ strikes the rock, and it repels him with unimaginable force,
-        emitting sparks!
-
-        ___ He takes 3 DMG!
-
-
-        The rock discharges
-        itself.'
+      resultText: 
       keepEventActive: 0
-      actions:
-      - rid: 7221758598679363716
+      actions: []
     requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
@@ -77,14 +69,21 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2077119951850176619
+      type: {class: SetHealthAction, ns: , asm: Assembly-CSharp}
+      data:
+        targetHealth: 1
+    - rid: 2077119951850176620
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+        amount: 3
     - rid: 7221758598679363709
       type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
       data:
-        baseSuccessChance: 50
-    - rid: 7221758598679363710
-      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
-      data:
-        baseSuccessChance: 50
+        baseSuccessChance: 80
     - rid: 7221758598679363711
       type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
       data:
@@ -93,17 +92,3 @@ MonoBehaviour:
       type: {class: RestoreHealthAction, ns: , asm: Assembly-CSharp}
       data:
         percentage: 1
-    - rid: 7221758598679363714
-      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
-      data:
-        damageAmount: 10
-    - rid: 7221758598679363715
-      type: {class: ReceiveRandomRobotAction, ns: , asm: Assembly-CSharp}
-      data:
-        possibleRobots:
-        - {fileID: 11400000, guid: 38f0c3753016095408b237199bc49c1e, type: 2}
-        startingHP: 2
-        startingEnergyPercent: 0.4
-    - rid: 7221758598679363716
-      type: {class: ClearInventoryAction, ns: , asm: Assembly-CSharp}
-      data: 

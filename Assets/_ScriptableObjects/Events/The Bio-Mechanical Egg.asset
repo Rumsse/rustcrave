@@ -23,70 +23,48 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to carefully pick it up.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 0
-    isCapacityCheck: 1
-    bonusPerCapacity: 10
+    check:
+      rid: 2077119951850176535
     successOutcome:
       resultText: ___ secures the egg. It acts as a strange parasite, adding +2 inventory
         slots to ___.
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 7e263d26df17002409741b57429d098e, type: 2}
+      - rid: 2077119951850176536
     failureOutcome:
       resultText: "As ___ touches it, the egg rots and dissolves into a puddle of
         foul-smelling, harmless sludge. \n\nNothing happens."
       keepEventActive: 0
       actions: []
+    requirements: []
   - optionText: '    I order ___ to destroy the egg!'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 40
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 1
-    bonusPerDamage: 10
-    isCapacityCheck: 0
-    bonusPerCapacity: 10
+    check:
+      rid: 2077119951850176537
     successOutcome:
       resultText: "___ smashes the egg open! Inside, you find undigested, valuable
-        materials. \n\nYou gain 1 to 4 Random Resources."
+        materials. \n\nYou gain 4 to 7 Random Resources!"
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: bca3bc06c3831774fbff77b1c84c2c45, type: 2}
+      - rid: 2077119951850176539
     failureOutcome:
       resultText: "The egg is highly volatile! \n\nIt explodes violently upon impact,
         covering ___ in acidic slime. ___ takes 4 DMG!"
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 067efb633a65ab045beb47e6411d8bda, type: 2}
+      - rid: 2077119951850176540
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 30
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 1
-    bonusPerDamage: 10
-    isCapacityCheck: 0
-    bonusPerCapacity: 10
+    check:
+      rid: 2077119951850176522
     successOutcome:
       resultText: "___ strikes fast, pinning the Swindler down and tearing its stash
         away before it can escape! \n\nYou receive 1 Random Gadget and 2 of each
         resource (Scraponite, Sparklite, Pulsite)."
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: daac291cfeb22004a84e6d24933f6181, type: 2}
+      - rid: -2
     failureOutcome:
       resultText: 'The Swindler is too quick! He dodges your attack ___ and vanishes
         into the shadows, stealing the scraps from your pocket!
@@ -96,4 +74,43 @@ MonoBehaviour:
         your entire random resource.'
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 29e6e5689c9826b4aab1629db62ce2d6, type: 2}
+      - rid: -2
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2077119951850176522
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 2077119951850176535
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+        stat: 5
+        bonusPerPoint: 10
+    - rid: 2077119951850176536
+      type: {class: AddMaxCapacityAction, ns: , asm: Assembly-CSharp}
+      data:
+        capacityToAdd: 2
+    - rid: 2077119951850176537
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 40
+        stat: 1
+        bonusPerPoint: 10
+    - rid: 2077119951850176539
+      type: {class: ReceiveRandomResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        resourcePool:
+        - {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+        - {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+        - {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+        minAmount: 4
+        maxAmount: 7
+    - rid: 2077119951850176540
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 4
