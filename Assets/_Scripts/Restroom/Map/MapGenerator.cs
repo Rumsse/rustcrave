@@ -4,14 +4,14 @@ using UnityEngine;
 
 public static class MapGenerator
 {
-    public static List<PathNodeData> Generate(int minRows, int maxRows, int minColumns, int maxColumns, int minTotalNodes, int maxTotalNodes, int modifierCount)
+    public static List<PathNodeData> Generate(int minRows, int maxRows, int minColumns, int maxColumns, int minTotalNodes, int maxTotalNodes, int modifierCount, List<int> validRow0Modifiers)
     {
         List<PathNodeData> bestGraph = null;
         int closestDifference = int.MaxValue;
 
         for (int attempt = 0; attempt < 50; attempt++)
         {
-            var nodes = GenerateRawGraph(minRows, maxRows, minColumns, maxColumns, modifierCount);
+            var nodes = GenerateRawGraph(minRows, maxRows, minColumns, maxColumns, modifierCount, validRow0Modifiers);
             PruneDeadEnds(nodes);
 
             int count = nodes.Count;
@@ -20,6 +20,7 @@ public static class MapGenerator
                 return nodes;
 
             int difference = Mathf.Min(Mathf.Abs(count - minTotalNodes), Mathf.Abs(count - maxTotalNodes));
+
             if (difference < closestDifference)
             {
                 closestDifference = difference;
@@ -33,7 +34,7 @@ public static class MapGenerator
         return bestGraph;
     }
 
-    static List<PathNodeData> GenerateRawGraph(int minRows, int maxRows, int minColumns, int maxColumns, int modifierCount)
+    static List<PathNodeData> GenerateRawGraph(int minRows, int maxRows, int minColumns, int maxColumns, int modifierCount, List<int> validRow0Modifiers)
     {
         int rows = Random.Range(minRows, maxRows + 1);
         int columns = Random.Range(minColumns, maxColumns + 1);
@@ -43,23 +44,26 @@ public static class MapGenerator
         for (int rowIndex = 0; rowIndex < rows; rowIndex++)
         {
             nodesByRow[rowIndex] = new List<PathNodeData>();
-            int nodeCountInRow = (rowIndex == rows - 1) ? 1 : Random.Range(2, columns + 1);
+            int nodeCountInRow = rowIndex == rows - 1 ? 1 : Random.Range(2, columns + 1);
             float centerColumnIndex = (columns - 1) / 2f;
 
             for (int i = 0; i < nodeCountInRow; i++)
             {
                 float columnPosition;
-                if (rowIndex == rows - 1)
-                {
-                    columnPosition = centerColumnIndex;
-                }
-                else
-                {
-                    float offsetFromCenter = (i - (nodeCountInRow - 1) / 2f);
-                    columnPosition = centerColumnIndex + offsetFromCenter;
-                }
 
-                var node = new PathNodeData(rowIndex, columnPosition, Random.Range(0, modifierCount));
+                if (rowIndex == rows - 1)
+                    columnPosition = centerColumnIndex;
+                else
+                    columnPosition = centerColumnIndex + (i - (nodeCountInRow - 1) / 2f);
+
+                int modifierIndex;
+
+                if (rowIndex == 0 && validRow0Modifiers != null && validRow0Modifiers.Count > 0)
+                    modifierIndex = validRow0Modifiers[Random.Range(0, validRow0Modifiers.Count)];
+                else
+                    modifierIndex = Random.Range(0, modifierCount);
+
+                var node = new PathNodeData(rowIndex, columnPosition, modifierIndex);
                 nodes.Add(node);
                 nodesByRow[rowIndex].Add(node);
             }
@@ -81,8 +85,6 @@ public static class MapGenerator
                 node.OverwriteConnections(verticalConnections);
             }
         }
-
-
 
         // OPTIONAL: it is for adding some horizontal connections for variety
 
@@ -119,6 +121,7 @@ public static class MapGenerator
             foreach (var node in nodes)
             {
                 var validConnections = node.ConnectedNodeIds.Where(id => validIds.Contains(id)).ToList();
+
                 if (validConnections.Count != node.ConnectedNodeIds.Count)
                 {
                     node.OverwriteConnections(validConnections);
@@ -129,10 +132,12 @@ public static class MapGenerator
             var hasIncoming = new HashSet<string>(nodes.SelectMany(n => n.ConnectedNodeIds));
 
             int removedIncoming = nodes.RemoveAll(n => n.Row > 0 && n.Row < totalRows - 1 && !hasIncoming.Contains(n.Id));
+
             if (removedIncoming > 0)
                 hasChanged = true;
 
             int removedOutgoing = nodes.RemoveAll(n => n.Row < totalRows - 1 && n.ConnectedNodeIds.Count == 0);
+
             if (removedOutgoing > 0)
                 hasChanged = true;
 
