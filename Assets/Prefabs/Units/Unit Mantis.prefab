@@ -14931,6 +14931,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       insertIndex: 13
       addedObject: {fileID: 4499729557593952421}
+    - targetCorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -3836509606879364670}
   m_SourcePrefab: {fileID: 100100000, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
 --- !u!4 &969012177437021651 stripped
 Transform:
@@ -14983,6 +14986,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MantisPassiveAbility
   strikesCount: 3
   timeBetweenStrikes: 0.3
+--- !u!114 &-3836509606879364670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536585068807582925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e144f623704eab49813d3f2609fed37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlasher
+  _healthManager: {fileID: 7047504347094395189}
+  _renderers:
+  - {fileID: 1283941561822200120}
+  _flashDuration: 0.5
+  _maxIntensity: 2
+  _flashColor: {r: 2.1185474, g: 0, b: 0, a: 1}
 --- !u!114 &5939829258672959009 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8434320555201164451, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
@@ -14994,6 +15015,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 809fc6455a6961840acfcc908ab76576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
+--- !u!114 &7047504347094395189 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+  m_PrefabInstance: {fileID: 2837895478390430338}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536585068807582925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c05d69698b3d8b47b97e3da99c45c69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthManager
 --- !u!1001 &9113767553004168168
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15049,7 +15081,7 @@ PrefabInstance:
     - target: {fileID: -1176599207355702576, guid: 06a859ab71377e6428399f0293ce2bc1, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 87588209640a6c645919c18ab8ab5074, type: 2}
+      objectReference: {fileID: 2100000, guid: fbff3f4c8c7126446ada1f6f261c81ee, type: 2}
     - target: {fileID: 919132149155446097, guid: 06a859ab71377e6428399f0293ce2bc1, type: 3}
       propertyPath: m_Name
       value: mantis_rig
@@ -15072,6 +15104,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4935910145288981350}
   m_SourcePrefab: {fileID: 100100000, guid: 06a859ab71377e6428399f0293ce2bc1, type: 3}
+--- !u!137 &1283941561822200120 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1176599207355702576, guid: 06a859ab71377e6428399f0293ce2bc1, type: 3}
+  m_PrefabInstance: {fileID: 9113767553004168168}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8267468295452909241 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 06a859ab71377e6428399f0293ce2bc1, type: 3}

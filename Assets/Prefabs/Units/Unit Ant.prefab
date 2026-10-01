@@ -5430,8 +5430,8 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 509
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 376712e948a7571438dbc663f83600c3, type: 2}
-  - {fileID: 2100000, guid: 376712e948a7571438dbc663f83600c3, type: 2}
+  - {fileID: 2100000, guid: 57bd736f66be60a4488a7dd2fb9d4809, type: 2}
+  - {fileID: 2100000, guid: 57bd736f66be60a4488a7dd2fb9d4809, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -17042,6 +17042,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7403444660189884253}
+    - targetCorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3606204023603583038}
   m_SourcePrefab: {fileID: 100100000, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
 --- !u!4 &969012177437021651 stripped
 Transform:
@@ -17097,6 +17100,24 @@ MonoBehaviour:
   antRobotName: Mrowerson
   baseBuffAmount: 1
   antBonusBuffAmount: 1
+--- !u!114 &3606204023603583038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536585068807582925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e144f623704eab49813d3f2609fed37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlasher
+  _healthManager: {fileID: 7047504347094395189}
+  _renderers:
+  - {fileID: 7240719143272327863}
+  _flashDuration: 0.5
+  _maxIntensity: 2
+  _flashColor: {r: 2.1185474, g: 0, b: 0, a: 1}
 --- !u!114 &5939829258672959009 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8434320555201164451, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
@@ -17108,3 +17129,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 809fc6455a6961840acfcc908ab76576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
+--- !u!114 &7047504347094395189 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+  m_PrefabInstance: {fileID: 2837895478390430338}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5536585068807582925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c05d69698b3d8b47b97e3da99c45c69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthManager
