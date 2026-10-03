@@ -24,7 +24,7 @@ MonoBehaviour:
   - optionText: '    I order ___ to enter the pod.'
     isIgnoreOption: 0
     check:
-      rid: -2
+      rid: 5683521885328637967
     successOutcome:
       resultText: "The machine seals shut and whirs loudly, violently rewriting ___'s
         code! \n\nEvery core stat (Max HP, Max Energy, DMG, DIG, Speed) is permanently
@@ -58,6 +58,10 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 5683521885328637967
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 100
     - rid: 7221758598679363585
       type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
       data:

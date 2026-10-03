@@ -24,73 +24,91 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to step into the scanner.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 1
-    baseSuccessChance: 30
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 0
-    isCapacityCheck: 0
-    bonusPerCapacity: 10
+    check:
+      rid: 5683521885328637952
     successOutcome:
       resultText: The scanner whirs and flashes a blinding blue light. A perfect,
         pristine replica of ___ steps out of the mirror to join your swarm!
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: b1b13b8713fd32243a04f2a7c80d7f37, type: 2}
+      - rid: 5683521885328637955
     failureOutcome:
       resultText: The mirrors glitch and shatter! The strange biological energies
         violently drain ___'s power reserves before the machine shuts down permanently.
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 2b190937f5cd4ac42992e6ced1baa234, type: 2}
+      - rid: 5683521885328637957
+    requirements: []
   - optionText: '    I order ___ to carefully pump and carry the heavy liquid mirrors.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 40
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 0
-    isCapacityCheck: 1
-    bonusPerCapacity: 10
+    check:
+      rid: 5683521885328637960
     successOutcome:
       resultText: ___ successfully utilizes its storage compartments to safely contain
         the dense, valuable liquid! You extract rare materials from the substance.
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: bca3bc06c3831774fbff77b1c84c2c45, type: 2}
+      - rid: 5683521885328637959
     failureOutcome:
       resultText: The liquid is incredibly heavy and volatile! It bursts out of ___'s
         storage tanks, causing a violent chemical explosion that damages everyone
         except The Conductor!
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: cd15431a8544b88408126be7466b6ca2, type: 2}
+      - rid: 5683521885328637961
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 0
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 0
-    isCapacityCheck: 0
-    bonusPerCapacity: 10
+    check:
+      rid: 5683521885328637954
     successOutcome:
       resultText: "The machine seals shut and whirs loudly, violently rewriting ___'s
         code! \n\nEvery core stat (Max HP, Max Energy, DMG, DIG, Speed) is permanently
         and individually modified by +1 or -1."
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: ef651e2586efb974fbb68b802f612101, type: 2}
+      - rid: -2
     failureOutcome:
       resultText: 
       keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 5683521885328637952
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 5683521885328637954
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 5683521885328637955
+      type: {class: CloneUnitAction, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5683521885328637957
+      type: {class: RestoreEnergyAction, ns: , asm: Assembly-CSharp}
+      data:
+        percentage: -0.4
+    - rid: 5683521885328637959
+      type: {class: ReceiveRandomResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        resourcePool:
+        - {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+        - {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+        minAmount: 4
+        maxAmount: 7
+    - rid: 5683521885328637960
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 60
+        stat: 5
+        bonusPerPoint: 10
+    - rid: 5683521885328637961
+      type: {class: DamageSwarmAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 2
+        excludeMC: 1

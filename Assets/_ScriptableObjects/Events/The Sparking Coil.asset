@@ -43,20 +43,15 @@ MonoBehaviour:
   - optionText: '    Harvest the copper wiring from its base.'
     isIgnoreOption: 0
     check:
-      rid: -2
+      rid: 5683521885328637962
     successOutcome:
-      resultText: "ou safely dismantle the inactive base for valuable parts without
+      resultText: "You safely dismantle the inactive base for valuable parts without
         touching the live wire. \n\nYou gain 3 Sparklite."
       keepEventActive: 0
       actions:
-      - rid: -2
+      - rid: 5683521885328637963
     failureOutcome:
-      resultText: 'The Swindler is too quick! He dodges your attack ___ and vanishes
-        into the shadows, stealing the scraps from your pocket!
-
-
-        You lose
-        your entire randomly picked resource.'
+      resultText: 
       keepEventActive: 0
       actions:
       - rid: -2
@@ -112,3 +107,12 @@ MonoBehaviour:
       type: {class: RestoreEnergyAction, ns: , asm: Assembly-CSharp}
       data:
         percentage: -0.33
+    - rid: 5683521885328637962
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 100
+    - rid: 5683521885328637963
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+        amount: 3

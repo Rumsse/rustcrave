@@ -41,7 +41,7 @@ MonoBehaviour:
   - optionText: '    Safely extract a small sample.'
     isIgnoreOption: 0
     check:
-      rid: -2
+      rid: 5683521885328637965
     successOutcome:
       resultText: "You carefully bottle a tiny amount of the usable fluid without
         risking the machines. \n\nYou gain 3 Scraponite."
@@ -69,8 +69,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 2077119951850176619
       type: {class: SetHealthAction, ns: , asm: Assembly-CSharp}
       data:
@@ -80,6 +78,10 @@ MonoBehaviour:
       data:
         Oretype: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
         amount: 3
+    - rid: 5683521885328637965
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 100
     - rid: 7221758598679363709
       type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
       data:

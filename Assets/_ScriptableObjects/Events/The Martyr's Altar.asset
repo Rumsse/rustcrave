@@ -25,7 +25,7 @@ MonoBehaviour:
   - optionText: '    I order ___ to step under the hydraulic press.'
     isIgnoreOption: 0
     check:
-      rid: -2
+      rid: 5683521885328637968
     successOutcome:
       resultText: "The press brutally crushes ___ , but as it rises, the sacrificed
         robot breaks apart into pieces instead of succumbing to destruction! \r\n\r\n___
@@ -81,3 +81,7 @@ MonoBehaviour:
         - {fileID: 11400000, guid: 48f2b1d0a4e3e22458480e1e9d692263, type: 2}
         minAmount: 1
         maxAmount: 3
+    - rid: 5683521885328637968
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 100
