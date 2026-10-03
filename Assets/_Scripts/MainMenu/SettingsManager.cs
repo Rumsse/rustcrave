@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.InputSystem;
 
 public enum AAMode { Off, Low_FXAA, High_SMAA }
 public enum VSyncMode { Off, On }
@@ -15,20 +16,25 @@ public class SettingsData
     public int resolutionIndex = -1;
     public VSyncMode vsync = VSyncMode.On;
     public int fpsLimit = 60;
+    public string inputOverrides = "";
 }
 
+[DefaultExecutionOrder(-100)]
 public class SettingsManager : MonoBehaviour
 {
     public static event Action<float> OnBrightnessChanged;
     public static SettingsManager Instance { get; private set; }
 
-    string SettingsPath => Path.Combine(Application.persistentDataPath, "settings.json");
-
     public SettingsData CurrentSettings { get; private set; } = new SettingsData();
+
+    [SerializeField] private InputActionAsset inputActions;
+    public InputActionAsset InputActions => inputActions;
+
+    private string SettingsPath => Path.Combine(Application.persistentDataPath, "settings.json");
 
     #region Unity Lifecycle
 
-    void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -95,6 +101,15 @@ public class SettingsManager : MonoBehaviour
         SaveSettings();
     }
 
+    public void SaveInputOverrides()
+    {
+        if (!inputActions)
+            return;
+
+        CurrentSettings.inputOverrides = inputActions.SaveBindingOverridesAsJson();
+        SaveSettings();
+    }
+
     #endregion
 
     #region Logic
@@ -115,12 +130,12 @@ public class SettingsManager : MonoBehaviour
     {
         Camera mainCam = Camera.main;
 
-        if (mainCam == null)
+        if (!mainCam)
             return;
 
         var cameraData = mainCam.GetComponent<UniversalAdditionalCameraData>();
 
-        if (cameraData == null)
+        if (!cameraData)
         {
             Debug.LogWarning("Main Camera is missing UniversalAdditionalCameraData.");
             return;
@@ -146,18 +161,29 @@ public class SettingsManager : MonoBehaviour
         Application.targetFrameRate = CurrentSettings.fpsLimit;
     }
 
+    private void ApplyInputOverrides()
+    {
+        if (!inputActions)
+            return;
+
+        if (string.IsNullOrEmpty(CurrentSettings.inputOverrides))
+            return;
+
+        inputActions.LoadBindingOverridesFromJson(CurrentSettings.inputOverrides);
+    }
+
     #endregion
 
     #region Save & Load
 
-    void SaveSettings()
+    private void SaveSettings()
     {
         string json = JsonUtility.ToJson(CurrentSettings, true);
         File.WriteAllText(SettingsPath, json);
         Debug.Log("Settings saved globally.");
     }
 
-    void LoadSettings()
+    private void LoadSettings()
     {
         if (!File.Exists(SettingsPath))
         {
@@ -177,6 +203,8 @@ public class SettingsManager : MonoBehaviour
 
         if (CurrentSettings.resolutionIndex == -1 || CurrentSettings.resolutionIndex >= Screen.resolutions.Length)
             CurrentSettings.resolutionIndex = Screen.resolutions.Length - 1;
+
+        ApplyInputOverrides();
     }
 
     #endregion
