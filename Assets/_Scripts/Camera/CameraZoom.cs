@@ -3,34 +3,41 @@ using UnityEngine;
 
 public class CameraZoom : MonoBehaviour
 {
-    [SerializeField] private CinemachineCamera wideCamera;
-    [SerializeField] private ActiveModifier activeModifier;
-    [SerializeField] private float baseSpeed = 0.7f;
-    [SerializeField] private float voidChaseSpeed;
+    #region Refs
 
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private float minOrthographicSize;
-    [SerializeField] private float maxOrthographicSize;
-    [SerializeField] private float maxFogDensity;
-    [SerializeField] private float minFogDensity;
+    [SerializeField] CinemachineCamera wideCamera;
+    [SerializeField] ActiveModifier activeModifier;
+    [SerializeField] MapState mapState;
+    
+    [SerializeField] float[] tunnelSpeeds = { 0.5f, 0.55f, 0.6f };
+    [SerializeField] float bossSpeed = 0.65f;
+    [SerializeField] float voidChaseSpeed;
 
-    public bool IsPausedForTutorial { get; set; } = false;
+    [SerializeField] Camera mainCamera;
+    [SerializeField] float minOrthographicSize;
+    [SerializeField] float maxOrthographicSize;
+    [SerializeField] float maxFogDensity;
+    [SerializeField] float minFogDensity;
 
-    private float currentSpeed;
-    private float targetSpeed;
-    private float timer;
+    #endregion
+
+    public bool IsPausedForTutorial { get; set; }
+
+    float currentSpeed;
+    float targetSpeed;
+    float timer;
 
     #region Unity Lifecycle
 
-    private void Awake()
+    void Awake()
     {
         if (mainCamera == null)
             mainCamera = Camera.main;
     }
 
-    private void Start() => currentSpeed = baseSpeed;
+    void Start() => currentSpeed = GetCurrentBaseSpeed();
 
-    private void Update()
+    void Update()
     {
         if (Time.timeScale == 0f)
             return;
@@ -44,7 +51,7 @@ public class CameraZoom : MonoBehaviour
         transform.Translate(Vector3.right * currentSpeed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("ZoomOutZone"))
             ZoomOut();
@@ -57,13 +64,31 @@ public class CameraZoom : MonoBehaviour
 
     #region Camera Logic
 
-    private void UpdateSpeedModifier()
+    float GetCurrentBaseSpeed()
+    {
+        if (mapState == null || mapState.CurrentRow < 0)
+            return tunnelSpeeds[0];
+
+        int currentRow = mapState.CurrentRow;
+
+        if (mapState.TotalRows > 0 && currentRow >= mapState.TotalRows - 1)
+            return bossSpeed;
+
+        if (currentRow < tunnelSpeeds.Length)
+            return tunnelSpeeds[currentRow];
+
+        return tunnelSpeeds[^1];
+    }
+
+    void UpdateSpeedModifier()
     {
         if (activeModifier != null && activeModifier.IsVoidChase)
         {
             currentSpeed = Mathf.Lerp(currentSpeed, voidChaseSpeed, Time.deltaTime * 5f);
             return;
         }
+
+        float baseSpeed = GetCurrentBaseSpeed();
 
         if (activeModifier == null || !activeModifier.IsCameraUnstable)
         {
@@ -74,12 +99,12 @@ public class CameraZoom : MonoBehaviour
         timer -= Time.deltaTime;
 
         if (timer <= 0f)
-            CalculateNextSpeedVariation();
+            CalculateNextSpeedVariation(baseSpeed);
 
         currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 18f);
     }
 
-    private void CalculateNextSpeedVariation()
+    void CalculateNextSpeedVariation(float baseSpeed)
     {
         float roll = Random.value;
 
@@ -100,7 +125,7 @@ public class CameraZoom : MonoBehaviour
         }
     }
 
-    private void UpdateFog()
+    void UpdateFog()
     {
         if (mainCamera == null)
             return;

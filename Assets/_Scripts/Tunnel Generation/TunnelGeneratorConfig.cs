@@ -5,6 +5,7 @@ public class TunnelGeneratorConfig : ScriptableObject
 {
     [Header("Tunnel Pools")]
     [SerializeField] private TunnelPrefabPool startTunnelPool;
+    [SerializeField] private TunnelPrefabPool firstTunnelPool;
     [SerializeField] private TunnelPrefabPool tunnelPool;
     [SerializeField] private TunnelPrefabPool linkStartPool;
     [SerializeField] private TunnelPrefabPool linkEndPool;
@@ -28,6 +29,7 @@ public class TunnelGeneratorConfig : ScriptableObject
     [SerializeField] private bool autoValidateOnLoad = true;
 
     public TunnelPrefabPool StartTunnelPool => startTunnelPool;
+    public TunnelPrefabPool FirstTunnelPool => firstTunnelPool;
     public TunnelPrefabPool TunnelPool => tunnelPool;
     public TunnelPrefabPool LinkStartPool => linkStartPool;
     public TunnelPrefabPool LinkEndPool => linkEndPool;
@@ -36,7 +38,6 @@ public class TunnelGeneratorConfig : ScriptableObject
     public float DoubleTunnelSpawnChance => doubleTunnelSpawnChance;
     public int TotalSegmentsToGenerate => totalSegmentsToGenerate;
     public bool CanSpawnDoubleTunnel => doubleTunnelSpawnChance > 0f;
-
 
     public int GetRandomSingleTunnelLength()
     {
@@ -74,6 +75,14 @@ public class TunnelGeneratorConfig : ScriptableObject
         else
             isValid &= startTunnelPool.Validate();
 
+        if (firstTunnelPool == null)
+        {
+            Debug.LogError("First Tunnel Pool is not assigned!");
+            isValid = false;
+        }
+        else
+            isValid &= firstTunnelPool.Validate();
+
         if (tunnelPool == null)
         {
             Debug.LogError("Tunnel Pool is not assigned!");
@@ -81,6 +90,8 @@ public class TunnelGeneratorConfig : ScriptableObject
         }
         else
             isValid &= tunnelPool.Validate();
+
+
 
 
 
@@ -107,14 +118,13 @@ public class TunnelGeneratorConfig : ScriptableObject
 
 
 
+
+
         if (tunnelEndPrefab == null)
         {
             Debug.LogError("Tunnel End Prefab is not assigned!");
             isValid = false;
         }
-
-
-
 
         if (minSingleTunnelSegments > maxSingleTunnelSegments)
         {

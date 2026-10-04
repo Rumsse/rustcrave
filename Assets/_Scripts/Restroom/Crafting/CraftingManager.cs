@@ -7,7 +7,7 @@ public interface ICraftingService
 
 public class CraftingManager : MonoBehaviour, ICraftingService // chyba nieaktualny, stary kod lol
 {
-    [SerializeField] GlobalInventorySO globalInventory;
+    [SerializeField] GlobalInventoryData globalInventory;
 
     public bool TryCraft(CraftingRecipe recipe)
     {
@@ -38,7 +38,7 @@ public class CraftingManager : MonoBehaviour, ICraftingService // chyba nieaktua
             globalInventory.RemoveItem(cost.Ore, cost.Amount);
     }
 
-    int GetResourceAmount(OreSO ore)
+    int GetResourceAmount(OreData ore)
     {
         string id = ore.oreName.ToLower();
 

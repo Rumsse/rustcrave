@@ -22,44 +22,31 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to inspect it.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 8646743091439468634
     successOutcome:
       resultText: '___ inspected it and gathered a lot of useful minerals! '
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: d676db604354311448821b99ed62f24f, type: 2}
-      - {fileID: 11400000, guid: ebf4416832ea30547b3bbf74b6e30c0a, type: 2}
-      - {fileID: 11400000, guid: 844cc8e3cb9ff8549a1e991409cc5f46, type: 2}
-      - {fileID: 11400000, guid: f109dcbc2232dc04c84144f62f3c0047, type: 2}
+      - rid: 8646743091439468637
+      - rid: 8646743091439468638
+      - rid: 8646743091439468639
     failureOutcome:
       resultText: 
       keepEventActive: 0
       actions: []
+    requirements: []
   - optionText: '    I order ___ to mine it.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 8646743091439468643
     successOutcome:
       resultText: ___ mined it and received a lot of useful minerals!
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: ebf4416832ea30547b3bbf74b6e30c0a, type: 2}
-      - {fileID: 11400000, guid: d676db604354311448821b99ed62f24f, type: 2}
-      - {fileID: 11400000, guid: 844cc8e3cb9ff8549a1e991409cc5f46, type: 2}
-      - {fileID: 11400000, guid: f109dcbc2232dc04c84144f62f3c0047, type: 2}
+      - rid: 8646743091439468640
+      - rid: 8646743091439468641
+      - rid: 8646743091439468642
     failureOutcome:
       resultText: '___ strikes the rock, and it repels him with unimaginable force,
         emitting sparks!
@@ -71,16 +58,11 @@ MonoBehaviour:
         itself.'
       keepEventActive: 0
       actions: []
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 50
-    isMiningCheck: 0
-    bonusPerMiningPower: 10
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 8646743091439468636
     successOutcome:
       resultText: 
       keepEventActive: 0
@@ -89,3 +71,51 @@ MonoBehaviour:
       resultText: 
       keepEventActive: 0
       actions: []
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 8646743091439468634
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 100
+    - rid: 8646743091439468636
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 8646743091439468637
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+        amount: 50
+    - rid: 8646743091439468638
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+        amount: 50
+    - rid: 8646743091439468639
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+        amount: 50
+    - rid: 8646743091439468640
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+        amount: 50
+    - rid: 8646743091439468641
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: 869d5c6dbbbd7de4c961358db794396c, type: 2}
+        amount: 50
+    - rid: 8646743091439468642
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: 1d9faabf5d9f73049888656ec7b6bddc, type: 2}
+        amount: 50
+    - rid: 8646743091439468643
+      type: {class: StatCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+        stat: 4
+        bonusPerPoint: 10

@@ -8,7 +8,7 @@ public class OreTooltip : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private Image oreIcon;
-    [SerializeField] private OreSO oreSO;
+    [SerializeField] private OreData oreSO;
     private void Awake()
     {
         descriptionText.text = oreSO.description;

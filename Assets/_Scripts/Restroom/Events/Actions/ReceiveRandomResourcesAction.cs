@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 [Serializable]
 public class ReceiveRandomResourcesAction : EventAction
 {
-    [SerializeField] List<ItemSO> resourcePool = new();
+    [SerializeField] List<ItemData> resourcePool = new();
     [SerializeField] int minAmount = 1;
     [SerializeField] int maxAmount = 4;
 

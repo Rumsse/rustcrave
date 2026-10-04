@@ -1,9 +1,9 @@
 public interface IMineable
 {
-    ItemSO Mine();
+    ItemData Mine();
     float GetDurability();
     bool IsDepleted();
     void PlayEffect();
     void StopEffect();
-    OreSO GetOreData();
+    OreData GetOreData();
 }

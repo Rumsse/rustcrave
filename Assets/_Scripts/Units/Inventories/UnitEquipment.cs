@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class UnitEquipment : MonoBehaviour
 {
     [SerializeField] private int maxGadgetSlots = 2;
-    [SerializeField] private List<GadgetSO> equippedGadgets = new List<GadgetSO>();
+    [SerializeField] private List<GadgetData> equippedGadgets = new List<GadgetData>();
 
     private StatsManager statsManager;
     private Unit unit;
@@ -17,7 +17,7 @@ public class UnitEquipment : MonoBehaviour
         unitInventory = GetComponent<UnitInventory>();
     }
 
-    public void Initialize(List<GadgetSO> savedGadgets)
+    public void Initialize(List<GadgetData> savedGadgets)
     {
         foreach (var gadget in equippedGadgets)
             RemoveGadgetStats(gadget);
@@ -54,7 +54,7 @@ public class UnitEquipment : MonoBehaviour
             }
         }*/
 
-    public bool TryEquipGadget(GadgetSO gadget)
+    public bool TryEquipGadget(GadgetData gadget)
     {
         if (equippedGadgets.Count >= maxGadgetSlots)
         {
@@ -66,7 +66,7 @@ public class UnitEquipment : MonoBehaviour
         return true;
     }
 
-    public void UnequipGadget(GadgetSO gadget)
+    public void UnequipGadget(GadgetData gadget)
     {
         if (equippedGadgets.Remove(gadget))
         {
@@ -74,7 +74,7 @@ public class UnitEquipment : MonoBehaviour
         }
     }
 
-    private void ApplyGadgetStats(GadgetSO gadget)
+    private void ApplyGadgetStats(GadgetData gadget)
     {
         if (statsManager != null)
         {
@@ -84,7 +84,7 @@ public class UnitEquipment : MonoBehaviour
         }
     }
 
-    private void RemoveGadgetStats(GadgetSO gadget)
+    private void RemoveGadgetStats(GadgetData gadget)
     {
         if (statsManager != null)
         {
@@ -94,7 +94,7 @@ public class UnitEquipment : MonoBehaviour
         }
     }
 
-    public List<GadgetSO> GetEquippedGadgets()
+    public List<GadgetData> GetEquippedGadgets()
     {
         return equippedGadgets;
     }

@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 [Serializable]
 public class ReceiveRandomItemAction : EventAction
 {
-    [SerializeField] List<ItemSO> possibleItems = new();
+    [SerializeField] List<ItemData> possibleItems = new();
     [SerializeField] int minItemsToDraw = 1;
     [SerializeField] int maxItemsToDraw = 1;
     [SerializeField] int amountPerItem = 1;
@@ -26,7 +26,7 @@ public class ReceiveRandomItemAction : EventAction
             if (itemToGive == null)
                 continue;
 
-            if (itemToGive is GadgetSO gadget)
+            if (itemToGive is GadgetData gadget)
             {
                 if (swarmState.GlobalGadgetsInventory != null)
                     swarmState.GlobalGadgetsInventory.AddGadget(gadget);

@@ -6,7 +6,7 @@ public class OreNode : MonoBehaviour, IMineable
     #region Configuration
 
     [SerializeField] private ActiveModifier activeModifier;
-    [SerializeField] private OreSO ore;
+    [SerializeField] private OreData ore;
     [SerializeField] private OreTooltip oreTooltip;
     [SerializeField] private int amount;
     [SerializeField] private OrePickUp dropPrefab;
@@ -43,7 +43,7 @@ public class OreNode : MonoBehaviour, IMineable
 
     #region Mining Logic
 
-    public ItemSO Mine()
+    public ItemData Mine()
     {
         if (amount <= 0)
             return null;
@@ -87,7 +87,7 @@ public class OreNode : MonoBehaviour, IMineable
 
     public bool IsDepleted() => amount <= 0;
 
-    public OreSO GetOreData() => ore;
+    public OreData GetOreData() => ore;
 
     #endregion
 

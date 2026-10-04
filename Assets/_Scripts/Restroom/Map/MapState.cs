@@ -29,7 +29,17 @@ public class MapState : ScriptableObject
 
     public void Initialize()
     {
-        internalNodes = MapGenerator.Generate(minRows, maxRows, minColumns, maxColumns, minTotalNodes, maxTotalNodes, availableModifiers.Count);
+        var validRow0Indices = new List<int>();
+
+        for (int i = 0; i < availableModifiers.Count; i++)
+        {
+            var type = availableModifiers[i].Type;
+
+            if (type != PathModifier.FalseSilence && type != PathModifier.VoidChase && type != PathModifier.UnstableCamera && type != PathModifier.EnemiesDouble)
+                validRow0Indices.Add(i);
+        }
+
+        internalNodes = MapGenerator.Generate(minRows, maxRows, minColumns, maxColumns, minTotalNodes, maxTotalNodes, availableModifiers.Count, validRow0Indices);
         ResetProgress();
     }
 
@@ -76,6 +86,12 @@ public class MapState : ScriptableObject
         internalScannedNodeIds.Clear();
         internalVisitedNodeIds.Clear();
         CurrentNodeId = string.Empty;
+
+        foreach (var node in internalNodes)
+        {
+            if (node.Row == 0)
+                ScanNode(node);
+        }
     }
 
     int GetCurrentRow()

@@ -14,7 +14,7 @@ public class CraftingRecipe : ScriptableObject
     public int energyRestorePercentage;
 
     [Header("Gadgets")]
-    public GadgetSO CraftedGadget;
+    public GadgetData CraftedGadget;
 
     [Header("Costs")]
     public List<ResourceCost> Costs;
@@ -42,6 +42,6 @@ public class CraftingRecipe : ScriptableObject
 [Serializable]
 public struct ResourceCost
 {
-    public OreSO Ore;
+    public OreData Ore;
     public int Amount;
 }

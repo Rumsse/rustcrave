@@ -72,7 +72,7 @@ public class DiggingEnemyUnit : EnemyUnit
 
     #region Stolen Item
 
-    public override void StealItem(ItemSO item)
+    public override void StealItem(ItemData item)
     {
         _available = false;
         base.StealItem(item);

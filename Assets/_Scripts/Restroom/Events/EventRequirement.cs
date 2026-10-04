@@ -10,7 +10,7 @@ public abstract class EventRequirement
 [Serializable]
 public class ItemRequirement : EventRequirement
 {
-    public ItemSO item;
+    public ItemData item;
     public int amount = 1;
 
     public override bool IsMet(SwarmState swarmState)

@@ -14993,8 +14993,8 @@ Light:
   serializedVersion: 12
   m_Type: 0
   m_Color: {r: 1, g: 0.95564896, b: 0.8632076, a: 1}
-  m_Intensity: 10
-  m_Range: 11
+  m_Intensity: 11
+  m_Range: 12.065728
   m_SpotAngle: 19.930635
   m_InnerSpotAngle: 11.895953
   m_CookieSize2D: {x: 0.5, y: 0.5}
@@ -15177,6 +15177,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 810208561944590896}
     - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      propertyPath: activeModifier
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: _deathSound.Path
       value: "event:/\u015Awietlik/sx_\u015Amier\u0107"
       objectReference: {fileID: 0}
@@ -15254,7 +15258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: m_Name
-      value: Unit Swietliczek
+      value: Unit Firefly
       objectReference: {fileID: 0}
     - target: {fileID: 8052947992562257757, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       propertyPath: mineFeedbackPrefab
@@ -15310,7 +15314,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
       insertIndex: 12
       addedObject: {fileID: 2972273649052201584}
+    - targetCorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3320595915362270122}
   m_SourcePrefab: {fileID: 100100000, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+--- !u!114 &139273388190362153 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5093563737838924727, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
+  m_PrefabInstance: {fileID: 5134443681036851614}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3240033704538847185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c05d69698b3d8b47b97e3da99c45c69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthManager
 --- !u!1 &3240033704538847185 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7761914581179952719, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
@@ -15333,6 +15351,24 @@ MonoBehaviour:
   updateInterval: 0.2
   statsSharePercentage: 1
   lightFadeSpeed: 30
+--- !u!114 &3320595915362270122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3240033704538847185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e144f623704eab49813d3f2609fed37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlasher
+  _healthManager: {fileID: 139273388190362153}
+  _renderers:
+  - {fileID: 881854078124639302}
+  _flashDuration: 0.5
+  _maxIntensity: 2
+  _flashColor: {r: 2.1185474, g: 0, b: 0, a: 1}
 --- !u!114 &3624707793698237757 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8434320555201164451, guid: ee8847095f041fe4d90ba5444a4d0cbe, type: 3}
@@ -15422,11 +15458,19 @@ PrefabInstance:
       value: 509
       objectReference: {fileID: 0}
     - target: {fileID: 7110508324506525772, guid: 082ca60f80bbd4b4ead597688228a405, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7110508324506525772, guid: 082ca60f80bbd4b4ead597688228a405, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 72846f4501120544eb638133e0bca008, type: 2}
+      objectReference: {fileID: 2100000, guid: ba560dfebc2ffb141b64c2779c888576, type: 2}
     - target: {fileID: 7110508324506525772, guid: 082ca60f80bbd4b4ead597688228a405, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: dc1a10adee16d4c47bfd45dc313da7a4, type: 2}
+    - target: {fileID: 7110508324506525772, guid: 082ca60f80bbd4b4ead597688228a405, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
       value: 
       objectReference: {fileID: 2100000, guid: dc1a10adee16d4c47bfd45dc313da7a4, type: 2}
     m_RemovedComponents: []
@@ -15446,6 +15490,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4453517171604553489}
   m_SourcePrefab: {fileID: 100100000, guid: 082ca60f80bbd4b4ead597688228a405, type: 3}
+--- !u!137 &881854078124639302 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7110508324506525772, guid: 082ca60f80bbd4b4ead597688228a405, type: 3}
+  m_PrefabInstance: {fileID: 7967255015753655306}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7084173108524816731 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 082ca60f80bbd4b4ead597688228a405, type: 3}

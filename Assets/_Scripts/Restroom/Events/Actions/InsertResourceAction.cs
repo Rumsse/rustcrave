@@ -4,7 +4,7 @@ using UnityEngine;
 [Serializable]
 public class InsertResourceAction : EventAction
 {
-    [SerializeField] ItemSO itemToInsert;
+    [SerializeField] ItemData itemToInsert;
     [SerializeField] int amount = 1;
 
     public override void Execute(SwarmUnitsData selectedUnit, SwarmState swarmState)

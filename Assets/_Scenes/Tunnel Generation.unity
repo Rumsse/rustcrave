@@ -75325,7 +75325,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraZoom
   wideCamera: {fileID: 1572376364}
   activeModifier: {fileID: 11400000, guid: d373c29c877b50b43b30a9a517ecce77, type: 2}
-  baseSpeed: 0.7
+  mapState: {fileID: 11400000, guid: 18f918ded4fcc85458c274981b815dda, type: 2}
+  tunnelSpeeds:
+  - 0.5
+  - 0.55
+  - 0.6
+  bossSpeed: 0.65
   voidChaseSpeed: 1
   mainCamera: {fileID: 1938636560}
   minOrthographicSize: 5
@@ -101527,7 +101532,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: de55702b33a1b394c8ac6eca2a33a7bc, type: 2}
+  sharedProfile: {fileID: 11400000, guid: b1681f883a6db9a4ba5f403e93780829, type: 2}
 --- !u!4 &1472970640
 Transform:
   m_ObjectHideFlags: 0
@@ -132251,6 +132256,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: aa7da74d77cc2604e9f6446ebd3b0245, type: 2}
   startPoint: {fileID: 253964578}
   segmentParent: {fileID: 253964578}
+  mapState: {fileID: 11400000, guid: 18f918ded4fcc85458c274981b815dda, type: 2}
   activeModifiers: []
   cullingSystem: {fileID: 1830855795}
   cameraZoomTarget: {fileID: 783335247}
@@ -167211,6 +167217,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 942371805218114901, guid: fa8e32c014ec2474fb4552b61ac58abd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1490752620668633167, guid: fa8e32c014ec2474fb4552b61ac58abd, type: 3}
       propertyPath: m_VertexColorAlwaysGammaSpace
       value: 1
@@ -167227,6 +167237,22 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 24
       objectReference: {fileID: 0}
+    - target: {fileID: 3558025260720418246, guid: fa8e32c014ec2474fb4552b61ac58abd, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.111835
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558025260720418246, guid: fa8e32c014ec2474fb4552b61ac58abd, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.111835
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558025260720418246, guid: fa8e32c014ec2474fb4552b61ac58abd, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.111835
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558025260720418246, guid: fa8e32c014ec2474fb4552b61ac58abd, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -100
+      objectReference: {fileID: 0}
     - target: {fileID: 4116219564280692584, guid: fa8e32c014ec2474fb4552b61ac58abd, type: 3}
       propertyPath: m_fontSize
       value: 24
@@ -167239,6 +167265,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -236.6
       objectReference: {fileID: 0}
+    - target: {fileID: 4435775204399396129, guid: fa8e32c014ec2474fb4552b61ac58abd, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0c42b090fdd17dd4db43e42a430d898c, type: 3}
     - target: {fileID: 6838027108410713127, guid: fa8e32c014ec2474fb4552b61ac58abd, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.81659156

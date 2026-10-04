@@ -23,71 +23,50 @@ MonoBehaviour:
   dialogOptions:
   - optionText: '    I order ___ to hook up to the coil.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 1
-    baseSuccessChance: 70
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 0
+    check:
+      rid: 2077119951850176594
     successOutcome:
       resultText: "___ grounds itself and absorbs the wild energy perfectly! \n\n___
-        restores 50% Energy and gains +1 Max Energy for the rest of the run."
+        restores 50% Energy and gains +20 Max Energy for the rest of the run."
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: a1424a64057dcab4c917269329c1f0f3, type: 2}
-      - {fileID: 11400000, guid: 3da0e2df671f88643b6e94ef458f3a85, type: 2}
+      - rid: 2077119951850176597
+      - rid: 2077119951850176598
     failureOutcome:
       resultText: "The power surge is too violent! It overloads the internal circuits.
         \n\n___ takes 3 DMG and loses 30% Energy."
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: e8b3aaeefb814e24c8a3f7286af696ff, type: 2}
-      - {fileID: 11400000, guid: 2b190937f5cd4ac42992e6ced1baa234, type: 2}
+      - rid: 2077119951850176599
+      - rid: 2077119951850176600
+    requirements: []
   - optionText: '    Harvest the copper wiring from its base.'
     isIgnoreOption: 0
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 100
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 0
-    bonusPerDamage: 10
+    check:
+      rid: 5683521885328637962
     successOutcome:
-      resultText: "ou safely dismantle the inactive base for valuable parts without
-        touching the live wire. \n\nYou gain 2 Sparklite."
+      resultText: "You safely dismantle the inactive base for valuable parts without
+        touching the live wire. \n\nYou gain 3 Sparklite."
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 5ba1a516aa2e9a243ba84b7ec2126fe7, type: 2}
+      - rid: 5683521885328637963
     failureOutcome:
-      resultText: 'The Swindler is too quick! He dodges your attack ___ and vanishes
-        into the shadows, stealing the scraps from your pocket!
-
-
-        You lose
-        your entire randomly picked resource.'
+      resultText: 
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: a3486f44c853d4a438bd7c7d2eb0c717, type: 2}
+      - rid: -2
+    requirements: []
   - optionText: '    Ignore'
     isIgnoreOption: 1
-    requiredItem: {fileID: 0}
-    requiredItemAmount: 1
-    isLuckCheck: 0
-    baseSuccessChance: 30
-    isMiningCheck: 0
-    bonusPerMiningPower: 0
-    isAttackCheck: 1
-    bonusPerDamage: 10
+    check:
+      rid: 2077119951850176596
     successOutcome:
       resultText: "___ strikes fast, pinning the Swindler down and tearing its stash
         away before it can escape! \n\nYou receive 1 Random Gadget and 2 of each
         resource (Scraponite, Sparklite, Pulsite)."
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: daac291cfeb22004a84e6d24933f6181, type: 2}
+      - rid: -2
     failureOutcome:
       resultText: 'The Swindler is too quick! He dodges your attack ___ and vanishes
         into the shadows, stealing the scraps from your pocket!
@@ -97,4 +76,43 @@ MonoBehaviour:
         your entire random resource.'
       keepEventActive: 0
       actions:
-      - {fileID: 11400000, guid: 29e6e5689c9826b4aab1629db62ce2d6, type: 2}
+      - rid: -2
+    requirements: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2077119951850176594
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 70
+    - rid: 2077119951850176596
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 50
+    - rid: 2077119951850176597
+      type: {class: RestoreEnergyAction, ns: , asm: Assembly-CSharp}
+      data:
+        percentage: 50
+    - rid: 2077119951850176598
+      type: {class: AddMaxEnergyPercentAction, ns: , asm: Assembly-CSharp}
+      data:
+        percentage: 0.2
+    - rid: 2077119951850176599
+      type: {class: DamageEventAction, ns: , asm: Assembly-CSharp}
+      data:
+        damageAmount: 3
+    - rid: 2077119951850176600
+      type: {class: RestoreEnergyAction, ns: , asm: Assembly-CSharp}
+      data:
+        percentage: -0.33
+    - rid: 5683521885328637962
+      type: {class: LuckCheck, ns: , asm: Assembly-CSharp}
+      data:
+        baseSuccessChance: 100
+    - rid: 5683521885328637963
+      type: {class: ReceiveResourcesAction, ns: , asm: Assembly-CSharp}
+      data:
+        Oretype: {fileID: 11400000, guid: cf540542fbc5d9040a3c362eccffa2a0, type: 2}
+        amount: 3

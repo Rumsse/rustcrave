@@ -21,7 +21,7 @@ public class StealAttack : AttackBase // logic for stealing random item from the
         Unit unitTarget = target as Unit;
         EnemyUnit attackerUnit = attacker as EnemyUnit;
 
-        ItemSO stolenItem = unitTarget?.Inventory.InventorySO.StealRandomItem();
+        ItemData stolenItem = unitTarget?.Inventory.InventorySO.StealRandomItem();
         attackerUnit?.StealItem(stolenItem);
 
     }

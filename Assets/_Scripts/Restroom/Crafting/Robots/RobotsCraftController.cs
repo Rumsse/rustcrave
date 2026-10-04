@@ -19,10 +19,10 @@ public class RobotsCraftController : MonoBehaviour
     [SerializeField] private EventReference craftSound;
 
     private Func<UnitData, bool> requestCraftRobot;
-    private GlobalInventorySO globalInventory;
+    private GlobalInventoryData globalInventory;
     private InfoTooltipController infoTooltip;
 
-    public void Initialize(VisualElement root, Func<UnitData, bool> onCraftRequested, GlobalInventorySO inventory)
+    public void Initialize(VisualElement root, Func<UnitData, bool> onCraftRequested, GlobalInventoryData inventory)
     {
         requestCraftRobot = onCraftRequested;
         globalInventory = inventory;
@@ -115,7 +115,7 @@ public class RobotsCraftController : MonoBehaviour
             globalInventory.RemoveItem(cost.Ore, cost.Amount);
     }
 
-    private int GetResourceAmount(OreSO ore)
+    private int GetResourceAmount(OreData ore)
     {
         string id = ore.oreName.ToLower();
 

@@ -315,7 +315,7 @@ public class Unit : UnitBase, ITrackableUnit
         if (miningTimer > EMPTY_PROGRESS)
             return;
 
-        ItemSO item = currentMineable.Mine();
+        ItemData item = currentMineable.Mine();
 
         if (item != null && !currentMineable.Equals(null) && !currentMineable.IsDepleted())
         {
@@ -473,7 +473,7 @@ public class Unit : UnitBase, ITrackableUnit
         if (!miningSoundInstance.isValid())
         {
             EventReference soundToPlay = stats.Sounds.mineSound;
-            OreSO targetOre = currentMineable.GetOreData();
+            OreData targetOre = currentMineable.GetOreData();
 
             if (targetOre != null && stats.Sounds.oreMiningSounds != null)
             {

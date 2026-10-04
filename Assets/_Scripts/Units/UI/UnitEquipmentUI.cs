@@ -26,7 +26,7 @@ public class UnitEquipmentUI : MonoBehaviour
             return;
         }
 
-        List<GadgetSO> gadgets = equipment.GetEquippedGadgets();
+        List<GadgetData> gadgets = equipment.GetEquippedGadgets();
         int maxSlots = equipment.GetMaxSlots();
 
         for (int i = 0; i < spawnedSlots.Count; i++)

@@ -70,7 +70,7 @@ public class UnitData : ScriptableObject
 [Serializable]
 public struct OreMiningSounds
 {
-    public OreSO ore;
+    public OreData ore;
     public EventReference sound;
 }
 

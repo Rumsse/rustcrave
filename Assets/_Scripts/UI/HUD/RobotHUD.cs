@@ -32,10 +32,19 @@ public class RobotHUD : MonoBehaviour
     [SerializeField] private float slotGap = 0.01f;
     [SerializeField] private float startAngleOffset = 0f;
 
+    #region Popups
+
     [SerializeField] private GameObject fullInventoryPopup;
     [SerializeField] private float popupStayTime = 1.5f;
     [SerializeField] private float popupShakeStrength = 12f;
     [SerializeField] private float popupShakeDuration = 0.4f;
+
+    [Header("Beam Settings")]
+    [SerializeField] private GameObject beamObject;
+    [SerializeField] private float beamTravelDistance = 500f;
+    [SerializeField] private float beamDuration = 0.8f;
+
+    #endregion
 
     #endregion
 
@@ -53,14 +62,24 @@ public class RobotHUD : MonoBehaviour
 
     private int lastDisplayedHP = -1;
     private int lastDisplayedEnergy = -1;
+    private bool wasInventoryFull;
 
     private List<InventorySlotUI> uiSlots = new List<InventorySlotUI>();
     private List<CircularInventorySlot> circularSlots = new List<CircularInventorySlot>();
+
     private Sequence popupSequence;
+    private Sequence beamSequence;
+    private Vector3 initialBeamLocalPos;
 
     #endregion
 
     #region Initialization
+
+    private void Awake()
+    {
+        if (beamObject != null)
+            initialBeamLocalPos = beamObject.transform.localPosition;
+    }
 
     public void Setup(SwarmUnitsData data)
     {
@@ -331,23 +350,36 @@ public class RobotHUD : MonoBehaviour
 
     public void ShowFullInventoryPopup()
     {
-        if (fullInventoryPopup == null)
+        if (fullInventoryPopup != null)
+        {
+            if (popupSequence.isAlive)
+                popupSequence.Stop();
+
+            fullInventoryPopup.SetActive(true);
+            fullInventoryPopup.transform.localScale = Vector3.zero;
+            fullInventoryPopup.transform.localRotation = Quaternion.identity;
+
+            popupSequence = Sequence.Create()
+                .Chain(Tween.Scale(fullInventoryPopup.transform, 1.2f, 0.25f, Ease.OutQuad))
+                .Chain(Tween.Scale(fullInventoryPopup.transform, 1f, 0.15f, Ease.InOutSine))
+                .Chain(Tween.ShakeLocalRotation(fullInventoryPopup.transform, new Vector3(0f, 0f, popupShakeStrength), popupShakeDuration, 6))
+                .ChainDelay(popupStayTime)
+                .Chain(Tween.Scale(fullInventoryPopup.transform, 0f, 0.2f, Ease.InBack))
+                .OnComplete(() => fullInventoryPopup.SetActive(false));
+        }
+
+        if (beamObject == null)
             return;
 
-        if (popupSequence.isAlive)
-            popupSequence.Stop();
+        if (beamSequence.isAlive)
+            beamSequence.Stop();
 
-        fullInventoryPopup.SetActive(true);
-        fullInventoryPopup.transform.localScale = Vector3.zero;
-        fullInventoryPopup.transform.localRotation = Quaternion.identity;
+        beamObject.SetActive(true);
+        beamObject.transform.localPosition = initialBeamLocalPos;
 
-        popupSequence = Sequence.Create()
-            .Chain(Tween.Scale(fullInventoryPopup.transform, 1.2f, 0.25f, Ease.OutQuad))
-            .Chain(Tween.Scale(fullInventoryPopup.transform, 1f, 0.15f, Ease.InOutSine))
-            .Chain(Tween.ShakeLocalRotation(fullInventoryPopup.transform, new Vector3(0f, 0f, popupShakeStrength), popupShakeDuration, 6))
-            .ChainDelay(popupStayTime)
-            .Chain(Tween.Scale(fullInventoryPopup.transform, 0f, 0.2f, Ease.InBack))
-            .OnComplete(() => fullInventoryPopup.SetActive(false));
+        beamSequence = Sequence.Create()
+            .Chain(Tween.LocalPositionY(beamObject.transform, initialBeamLocalPos.y + beamTravelDistance, beamDuration, Ease.OutCubic))
+            .OnComplete(() => beamObject.SetActive(false));
     }
 
     #endregion

@@ -20,7 +20,7 @@ public class SwarmUnitsData
     public int currentHP;
     public float currentEnergy;
     public bool isAlive;
-    public List<GadgetSO> assignedGadgets = new List<GadgetSO>();
+    public List<GadgetData> assignedGadgets = new List<GadgetData>();
 
     public SwarmUnitsData(UnitData type)
     {

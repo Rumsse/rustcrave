@@ -8,7 +8,7 @@ public class GlobalFontChanger : EditorWindow
 
     private TMP_FontAsset targetFont;
 
-    [MenuItem("Tools/Change Global Font")]
+    [MenuItem("Tools/Font/Change Global Font")]
     public static void ShowWindow() => GetWindow<GlobalFontChanger>("Font Changer");
 
     private void OnGUI()

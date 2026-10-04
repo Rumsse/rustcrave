@@ -13,7 +13,7 @@ public class OrePickUp : MonoBehaviour, IInteractable
 
     #region Configuration
 
-    public ItemSO item;
+    public ItemData item;
     public int oreValueAmount;
 
     public bool IsPickedUp { get; private set; }

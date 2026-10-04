@@ -19,8 +19,8 @@ public class ChoosePathController : MonoBehaviour, IPanelController
 
     [SerializeField] MapState mapState;
     [SerializeField] ActiveModifier activeModifier;
-    [SerializeField] GlobalInventorySO globalInventory;
-    [SerializeField] OreSO pulsiteOre;
+    [SerializeField] GlobalInventoryData globalInventory;
+    [SerializeField] OreData pulsiteOre;
     [SerializeField] VisualTreeAsset nodeButtonAsset;
     [SerializeField] VisualTreeAsset tooltipAsset;
 

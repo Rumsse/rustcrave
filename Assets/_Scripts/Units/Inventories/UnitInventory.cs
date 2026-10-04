@@ -4,9 +4,9 @@ using UnityEngine;
 public class UnitInventory : MonoBehaviour
 {
     public event Action OnInventoryFullAttempt;
-    public InventorySO InventorySO => inventorySO;
+    public InventoryData InventorySO => inventorySO;
 
-    [SerializeField] protected InventorySO inventorySO;
+    [SerializeField] protected InventoryData inventorySO;
     [SerializeField] private UnitData unitSO;
 
     private StatsManager statsManager;

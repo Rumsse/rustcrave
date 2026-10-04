@@ -12,7 +12,7 @@ public class SaveManager : MonoBehaviour
     [SerializeField] bool useEncryption = true;
     [SerializeField] GameDatabase database;
     [SerializeField] SwarmState swarmState;
-    [SerializeField] GlobalInventorySO globalInventory;
+    [SerializeField] GlobalInventoryData globalInventory;
     [SerializeField] GadgetsGlobalInventory gadgetsInventory;
     [SerializeField] MapState mapState;
     [SerializeField] EventState eventState;
