@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using FMODUnity;
 
 public class UnitActions : MonoBehaviour
@@ -89,23 +90,12 @@ public class UnitActions : MonoBehaviour
 
     #region Input Handlers
 
-    private void OnAbilityPerformed(InputAction.CallbackContext context)
+    private void OnCommandStarted(InputAction.CallbackContext context)
     {
         if (Time.timeScale == PAUSED_TIME_SCALE)
             return;
 
-        List<Unit> units = UnitSelectionSystem.Instance.GetSelectedUnits();
-
-        foreach (Unit unit in units)
-        {
-            if (unit && unit.enabled && unit.TryGetComponent<ActiveAbility>(out var ability))
-                ability.TryExecute();
-        }
-    }
-
-    private void OnCommandStarted(InputAction.CallbackContext context)
-    {
-        if (Time.timeScale == PAUSED_TIME_SCALE)
+        if (IsPointerOverUI())
             return;
 
         List<Unit> units = UnitSelectionSystem.Instance.GetSelectedUnits();
@@ -130,6 +120,23 @@ public class UnitActions : MonoBehaviour
             commandVisualizer.StartVisuals(primaryUnit);
     }
 
+    private void OnAbilityPerformed(InputAction.CallbackContext context)
+    {
+        if (Time.timeScale == PAUSED_TIME_SCALE)
+            return;
+
+        if (IsPointerOverUI())
+            return;
+
+        List<Unit> units = UnitSelectionSystem.Instance.GetSelectedUnits();
+
+        foreach (Unit unit in units)
+        {
+            if (unit && unit.enabled && unit.TryGetComponent<ActiveAbility>(out var ability))
+                ability.TryExecute();
+        }
+    }
+
     private void OnCommandCanceled(InputAction.CallbackContext context)
     {
         if (!isDraggingCommand)
@@ -143,6 +150,24 @@ public class UnitActions : MonoBehaviour
 
         TryPlayExecutionSound(units[0]);
         ExecuteCommand(units);
+    }
+
+    private bool IsPointerOverUI()
+    {
+        if (EventSystem.current == null)
+            return false;
+
+        Vector2 pointerPos = input.Gameplay.PointerPosition.ReadValue<Vector2>();
+
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = pointerPos
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        return results.Count > 0;
     }
 
     #endregion

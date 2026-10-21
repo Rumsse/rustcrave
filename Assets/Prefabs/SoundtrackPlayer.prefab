@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5830213184877260570}
   - component: {fileID: 8527338575433856996}
   - component: {fileID: 6275000145855149899}
+  - component: {fileID: 2704056872783468871}
   m_Layer: 0
   m_Name: SoundtrackPlayer
   m_TagString: Untagged
@@ -57,17 +58,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3facb8cab36396489d147b2ce74c783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SnapshotManager
-  bossSnapshot:
+  sceneSnapshots:
+  - sceneName: Boss Scene
+    snapshot:
+      Guid:
+        Data1: -411648686
+        Data2: 1296148019
+        Data3: 1745815445
+        Data4: 1350202312
+      Path: snapshot:/On_Boss
+  - sceneName: Tunnel Generation
+    snapshot:
+      Guid:
+        Data1: -54421717
+        Data2: 1133649935
+        Data3: 1723399060
+        Data4: 973716370
+      Path: snapshot:/On_Biom
+  - sceneName: Tutorial
+    snapshot:
+      Guid:
+        Data1: -54421717
+        Data2: 1133649935
+        Data3: 1723399060
+        Data4: 973716370
+      Path: snapshot:/On_Biom
+  - sceneName: testing tunnels
+    snapshot:
+      Guid:
+        Data1: -54421717
+        Data2: 1133649935
+        Data3: 1723399060
+        Data4: 973716370
+      Path: snapshot:/On_Biom
+  - sceneName: Main Menu
+    snapshot:
+      Guid:
+        Data1: -1664585057
+        Data2: 1124836867
+        Data3: 1782293387
+        Data4: 1040904718
+      Path: snapshot:/On_Main_Menu
+--- !u!114 &2704056872783468871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7889279152679419266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90eec5d55e4f7404f8f48d19b86a3770, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayAmbientTrack
+  _playOnStart: 1
+  _eventReference:
     Guid:
-      Data1: -411648686
-      Data2: 1296148019
-      Data3: 1745815445
-      Data4: 1350202312
-    Path: snapshot:/On_Boss
-  biomSnapshot:
-    Guid:
-      Data1: -54421717
-      Data2: 1133649935
-      Data3: 1723399060
-      Data4: 973716370
-    Path: snapshot:/On_Biom
+      Data1: 1230363499
+      Data2: 1135827420
+      Data3: 2095504793
+      Data4: -1079141249
+    Path: event:/Amb/mx_restroom_Amb

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UnitSelectionSystem : MonoBehaviour
 {
@@ -37,6 +38,9 @@ public class UnitSelectionSystem : MonoBehaviour
     private void Update()
     {
         if (Time.timeScale == 0)
+            return;
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             return;
 
         HandleSelectionInput();

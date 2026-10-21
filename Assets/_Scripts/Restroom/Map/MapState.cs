@@ -88,10 +88,7 @@ public class MapState : ScriptableObject
         CurrentNodeId = string.Empty;
 
         foreach (var node in internalNodes)
-        {
-            if (node.Row == 0)
-                ScanNode(node);
-        }
+            ScanNode(node);
     }
 
     int GetCurrentRow()

@@ -269,6 +269,9 @@ public class MCFormController : MonoBehaviour
 
         if (mcMovement)
             mcMovement.enabled = true;
+
+        if (TryGetComponent<Unit>(out var unit))
+            UnitSelectionSystem.Instance.SetSelectedUnit(unit);
     }
 
     private IEnumerator SwitchToConductorRoutine()
